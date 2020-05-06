@@ -145,7 +145,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
     settings-apply_on_test_code = abap_true.
-    settings-documentation = 'https://github.wdf.sap.corp/CleanCode/code-pal/blob/master/docs/check_documentation.md' ##NO_TEXT.
+    settings-documentation = 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/check_documentation.md' ##NO_TEXT.
 
     has_attributes = do_attributes_exist( ).
 
