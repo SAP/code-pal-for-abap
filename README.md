@@ -43,9 +43,9 @@ https://docs.abapgit.org/
 Start transaction SCI and tick the newly added Clean Code Checks in the "Check Management" section (Ctrl+Shift+F5):
 ![Screenshot of Code Inspector](./img/SCI_Check_Management.jpg)
 
-(In some system releases, the path to the Check Managment might differ from the screenshot.)
+(In some system releases, the path to the Check Management might differ from the screenshot.)
 
-`Y_CHECK_CATEGORY` is prerequisite for all checks and should be activated first. When `Y_CHECK_CATEGORY` is activated, tick all the other checks and activate them, too.
+Please make sure to activate `Y_CHECK_CATEGORY` first and alone; since it is a prerequisite of all checks. Afterwards, you might activate all checks you wish in any sequence/order.
 ![Screenshot of Code Inspector Check Activation](./img/SCI_Check_Management_Checks.jpg)
 
 ## How to use Code Pal
