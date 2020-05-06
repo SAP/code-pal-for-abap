@@ -45,7 +45,7 @@ Start transaction SCI and tick the newly added Clean Code Checks in the "Check M
 
 (In some system releases, the path to the Check Management might differ from the screenshot.)
 
-Please make sure to activate `Y_CHECK_CATEGORY` first and alone; since it is a prerequisite of all checks. Afterwards, you might activate all checks you wish in any sequence/order.
+Please make sure to activate `Y_CHECK_CATEGORY` first and alone, since it is a prerequisite of all checks. Afterwards, you might activate all checks you wish in any sequence/order.
 ![Screenshot of Code Inspector Check Activation](./img/SCI_Check_Management_Checks.jpg)
 
 ## How to use Code Pal
