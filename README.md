@@ -6,14 +6,14 @@ Code Pal is a tool which supports you in writing clean ABAP code. Clean Code all
 
 Furthermore... It's free and open source: Code Pal is licensed under the Apache License, Version 2.0 - see [license.txt](license.txt)
 
-* [Features](##features)
-* [How to bring Code Pal into your system?](##how-to-bring-code-pal-into-your-system)
-  * [1. Create a local package](###1.-create-a-local-package)
-  * [2. Start Transaction ZABAPGIT](###2-start-transaction-zabapgit)
-  * [3. Include the new Checks into Code Inspector](3-include-the-new-checks-into-code-inspector)
-* [How to use Code Pal](##how-to-use-code-pal)
-* [Further Reading](##further-reading)
-* [Other interesting projects](##other-interesting-projects)
+* [Features](#features)
+* [How to bring Code Pal into your system?](#how-to-bring-code-pal-into-your-system)
+  * [1. Create a local package](#1.-create-a-local-package)
+  * [2. Start Transaction ZABAPGIT](#2-start-transaction-zabapgit)
+  * [3. Include the new Checks into Code Inspector](#3-include-the-new-checks-into-code-inspector)
+* [How to use Code Pal](#how-to-use-code-pal)
+* [Further Reading](#further-reading)
+* [Other interesting projects](#other-interesting-projects)
 
 ## Features
 - Checks can be executed via Code Inspector and via ATC (e.g. within SE80, Eclipse)
