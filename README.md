@@ -2,9 +2,9 @@
 
 ***Note: Netweaver release 7.40 or higher is required.***
 
-Code Pal is a tool which supports you in writing clean ABAP code. Clean Code allows you to read your code like well-written prose, it is easily understandable, maintainable and extensible. In addition, you can write high quality and reliable Unit Tests without hurdles and hereby reduce the total cost of ownership of the software.
+Code pal is a tool which supports you in writing clean ABAP code. Clean Code allows you to read your code like well-written prose, it is easily understandable, maintainable and extensible. In addition, you can write high quality and reliable Unit Tests without hurdles and hereby reduce the total cost of ownership of the software.
 
-Furthermore... It's free and open source: Code Pal is licensed under the Apache License, Version 2.0 - see [license.txt](license.txt)
+Furthermore... It's free and open source: code pal is licensed under the Apache License, Version 2.0 - see [license.txt](license.txt)
 
 * [Features](#features)
 * [How to bring Code Pal into your system?](#how-to-bring-code-pal-into-your-system)
@@ -45,7 +45,7 @@ Start transaction SCI and tick the newly added Clean Code Checks in the "Check M
 ![Screenshot of Code Inspector Check Activation](./img/SCI_Check_Management_Checks.jpg)
 
 ## How to use Code Pal
-When Code Pal is in your system, just go to Transaction `SCI` or `SCII` and execute the Checks with your prefered Thresholds. To have a consistent set of Checks and Thresholds you can always create a Code Inspector Variant.
+When code pal is in your system, just go to Transaction `SCI` or `SCII` and execute the Checks with your prefered Thresholds. To have a consistent set of Checks and Thresholds you can always create a Code Inspector Variant.
 
 To understand how the checks work, please refer to the [Check Documentation](/docs/check_documentation.md).
 ![Screenshot of Check Execution](./img/SCI_Check_Execution.jpg)
