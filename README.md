@@ -2,18 +2,18 @@
 
 ***Note: Netweaver release 7.40 or higher is required.***
 
-Code Pal is a tool which supports you in writing clean ABAP code. Clean Code allows you to read your code like well-written prose, it is easily understandable, maintainable and extensible. In addition, you can write high quality and reliable Unit Tests without hurdles and hereby reduce the total cost of ownership of the software.
+Code pal is a tool which supports you in writing clean ABAP code. Clean Code allows you to read your code like well-written prose, it is easily understandable, maintainable and extensible. In addition, you can write high quality and reliable Unit Tests without hurdles and hereby reduce the total cost of ownership of the software.
 
-Furthermore... It's free and open source: Code Pal is licensed under the Apache License, Version 2.0 - see [license.txt](license.txt)
+Furthermore... It's free and open source: code pal is licensed under the Apache License, Version 2.0 - see [license.txt](license.txt)
 
-* [Features](##features)
-* [How to bring Code Pal into your system?](##how-to-bring-code-pal-into-your-system)
-  * [1. Create a local package](###1.-create-a-local-package)
-  * [2. Start Transaction ZABAPGIT](###2-start-transaction-zabapgit)
-  * [3. Include the new Checks into Code Inspector](3-include-the-new-checks-into-code-inspector)
-* [How to use Code Pal](##how-to-use-code-pal)
-* [Further Reading](##further-reading)
-* [Other interesting projects](##other-interesting-projects)
+* [Features](#features)
+* [How to bring Code Pal into your system?](#how-to-bring-code-pal-into-your-system)
+  * [1. Create a local package](#1-create-a-local-package)
+  * [2. Start Transaction ZABAPGIT](#2-start-transaction-zabapgit)
+  * [3. Include the new Checks into Code Inspector](#3-include-the-new-checks-into-code-inspector)
+* [How to use Code Pal](#how-to-use-code-pal)
+* [Further Reading](#further-reading)
+* [Other interesting projects](#other-interesting-projects)
 
 ## Features
 - Checks can be executed via Code Inspector and via ATC (e.g. within SE80, Eclipse)
@@ -42,10 +42,14 @@ https://docs.abapgit.org/
 ### 3. Include the new Checks into Code Inspector
 Start transaction SCI and tick the newly added Clean Code Checks in the "Check Management" section (Ctrl+Shift+F5):
 ![Screenshot of Code Inspector](./img/SCI_Check_Management.jpg)
+
+(In some system releases, the path to the Check Management might differ from the screenshot.)
+
+Please make sure to activate `Y_CHECK_CATEGORY` first and alone, since it is a prerequisite of all checks. Afterwards, you might activate all checks you wish in any sequence/order.
 ![Screenshot of Code Inspector Check Activation](./img/SCI_Check_Management_Checks.jpg)
 
 ## How to use Code Pal
-When Code Pal is in your system, just go to Transaction `SCI` or `SCII` and execute the Checks with your prefered Thresholds. To have a consistent set of Checks and Thresholds you can always create a Code Inspector Variant.
+When code pal is in your system, just go to Transaction `SCI` or `SCII` and execute the Checks with your prefered Thresholds. To have a consistent set of Checks and Thresholds you can always create a Code Inspector Variant.
 
 To understand how the checks work, please refer to the [Check Documentation](/docs/check_documentation.md).
 ![Screenshot of Check Execution](./img/SCI_Check_Execution.jpg)
