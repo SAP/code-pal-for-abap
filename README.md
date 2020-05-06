@@ -8,7 +8,7 @@ Furthermore... It's free and open source: Code Pal is licensed under the Apache 
 
 * [Features](#features)
 * [How to bring Code Pal into your system?](#how-to-bring-code-pal-into-your-system)
-  * [1. Create a local package](#1.-create-a-local-package)
+  * [1. Create a local package](#1-create-a-local-package)
   * [2. Start Transaction ZABAPGIT](#2-start-transaction-zabapgit)
   * [3. Include the new Checks into Code Inspector](#3-include-the-new-checks-into-code-inspector)
 * [How to use Code Pal](#how-to-use-code-pal)
