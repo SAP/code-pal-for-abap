@@ -128,7 +128,8 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
             type EQ scan_token_type-pragma.
 
       IF strlen( token->*-str ) GE minimum_comment_length AND
-         token->*-str+0(minimum_comment_length) NE `*"*`.
+         token->*-str+0(minimum_comment_length) NE `*"*` AND
+         token->*-str CP '"' && object_name && '*.'.
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
