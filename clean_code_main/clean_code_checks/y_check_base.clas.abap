@@ -531,6 +531,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
                          p_attributes = sci_attributes
                          p_message    = message
                          p_display    = p_display ) = abap_true.
+        attributes_ok = abap_true.
         RETURN.
       ENDIF.
       IF check_configuration-apply_on_productive_code = abap_false AND
