@@ -58,33 +58,51 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
+    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 7 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '2' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHOD' type = 'I' row = 1 )
-                      ( str = 'CHECK'  type = 'I' row = 2 ) ).
-  ENDMETHOD.
-
-  METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 5 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 5 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 7 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
                           ( level = 1 from = '2' to = '2' type = 'K' )
                           ( level = 1 from = '3' to = '3' type = 'K' )
                           ( level = 1 from = '4' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '5' type = 'K' ) ).
+                          ( level = 1 from = '5' to = '5' type = 'C' )
+                          ( level = 1 from = '6' to = '6' type = 'K' )
+                          ( level = 1 from = '7' to = '7' type = 'K' )
+                          ( level = 1 from = '8' to = '8' type = 'K' )
+                          ( level = 1 from = '9' to = '9' type = 'K' ) ).
+
+    tokens = VALUE #( ( str = 'METHOD'     type = 'I' row = 1 )
+                      ( str = 'TYPES'      type = 'I' row = 2 )
+                      ( str = 'DATA'       type = 'I' row = 3 )
+                      ( str = 'DATA(name)' type = 'I' row = 4 )
+                      ( str = '"comment'   type = 'C' row = 5 )
+                      ( str = 'CHECK'      type = 'I' row = 6 )
+                      ( str = 'CHECK'      type = 'I' row = 7 )
+                      ( str = 'CHECK'      type = 'I' row = 8 )
+                      ( str = 'CHECK'      type = 'I' row = 9 ) ).
+  ENDMETHOD.
+
+  METHOD set_data_for_error.
+    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 7 name = 'ZTEST' type = 'P' ) ).
+
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 7 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+
+    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
+                          ( level = 1 from = '2' to = '2' type = 'K' )
+                          ( level = 1 from = '3' to = '3' type = 'K' )
+                          ( level = 1 from = '4' to = '4' type = 'K' )
+                          ( level = 1 from = '5' to = '5' type = 'K' )
+                          ( level = 1 from = '6' to = '6' type = 'K' )
+                          ( level = 1 from = '7' to = '7' type = 'K' ) ).
 
     tokens = VALUE #( ( str = 'METHOD' type = 'I' row = 1 )
-                      ( str = 'CODE'   type = 'I' row = 2 )
+                      ( str = 'CHECK'  type = 'I' row = 2 )
                       ( str = 'CHECK'  type = 'I' row = 3 )
                       ( str = 'CODE'   type = 'I' row = 4 )
-                      ( str = 'CHECK'  type = 'I' row = 5 ) ).
+                      ( str = 'CHECK'  type = 'I' row = 5 )
+                      ( str = 'CODE'   type = 'I' row = 6 )
+                      ( str = 'CHECK'  type = 'I' row = 7 ) ).
   ENDMETHOD.
 
   METHOD set_check_pseudo_comment_ok.

@@ -123,13 +123,14 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
       abs_statement_number = abs_statement_number + ( statement-to - statement-from ).
     ENDIF.
 
-    LOOP AT ref_scan_manager->get_tokens( ) REFERENCE INTO DATA(token) FROM statement-from TO statement-to
+    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+      FROM statement-from TO statement-to
       WHERE type EQ scan_token_type-comment OR
             type EQ scan_token_type-pragma.
 
-      IF strlen( token->*-str ) GE minimum_comment_length AND
-         token->*-str+0(minimum_comment_length) NE `*"*` AND
-         token->*-str CP '"' && object_name && '*.'.
+      IF ( strlen( <token>-str ) GE minimum_comment_length AND
+           <token>-str+0(minimum_comment_length) NE `*"*` ) OR
+         <token>-str CP '"' && object_name && '*.'.
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.

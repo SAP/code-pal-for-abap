@@ -85,7 +85,17 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK is_token_excluded( get_token_abs( statement-from ) ) EQ abap_false.
+    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+      FROM statement-from TO statement-from
+      WHERE type NE scan_token_type-comment AND
+            type NE scan_token_type-pragma.
+      IF is_token_excluded( <token>-str ) EQ abap_true.
+        RETURN.
+      ENDIF.
+    ENDLOOP.
+    IF sy-subrc NE 0.
+      RETURN.
+    ENDIF.
 
     statement_index = statement_index + 1.
 
@@ -94,7 +104,6 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
 
       DATA(check_configuration) = detect_check_configuration( threshold = 0
                                                               include = get_include( p_level = statement_for_message-level ) ).
-
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.
@@ -116,6 +125,10 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
     result = xsdbool( token_str EQ 'METHOD' OR
                       token_str EQ 'FORM' OR
                       token_str EQ 'FUNCTION' OR
-                      token_str EQ 'MODULE').
+                      token_str EQ 'MODULE' OR
+                      token_str EQ 'DATA' OR
+                      token_str EQ 'TYPES' OR
+                      token_str CP 'DATA(*)' OR
+                      ( token_str EQ 'CHECK' AND statement_index EQ 0 ) ).
   ENDMETHOD.
 ENDCLASS.
