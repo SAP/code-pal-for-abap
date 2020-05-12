@@ -101,10 +101,9 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                           ( level = 1 from = '5' to = '5' type = 'K' )
                           ( level = 1 from = '6' to = '6' type = 'K' )
                           ( level = 1 from = '7' to = '7' type = 'K' )
-                          ( level = 1 from = '8' to = '8' type = 'K' )
-                          ( level = 1 from = '9' to = '10' type = 'K' )
-                          ( level = 1 from = '11' to = '11' type = 'P' )
-                          ( level = 1 from = '12' to = '12' type = 'P' ) ).
+                          ( level = 1 from = '8' to = '8' type = 'P' )
+                          ( level = 1 from = '9' to = '9' type = 'P' )
+                          ( level = 1 from = '10' to = '10' type = 'P' ) ).
 
     tokens = VALUE #( ( str = 'SOME_CODE'  type = 'I' row = 1 )
                       ( str = 'SOME_CODE'  type = 'I' row = 2 )
@@ -113,11 +112,9 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'SOME_CODE'  type = 'I' row = 5 )
                       ( str = 'SOME_CODE'  type = 'I' row = 6 )
                       ( str = 'SOME_CODE'  type = 'I' row = 7 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 8 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 9 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 9 )
-                      ( str = '"COMMENT'   type = 'C' row = 10 )
-                      ( str = '"COMMENT'   type = 'C' row = 11 ) ).
+                      ( str = '"COMMENT'   type = 'C' row = 8 )
+                      ( str = '"COMMENT'   type = 'C' row = 9 )
+                      ( str = '"COMMENT'   type = 'C' row = 10 ) ).
   ENDMETHOD.
 ENDCLASS.
 
