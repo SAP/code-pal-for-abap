@@ -59,10 +59,13 @@ CLASS y_check_method_return_bool IMPLEMENTATION.
     APPEND 'CAN_' TO good_method_names_beginning.
     APPEND 'HAVE_' TO good_method_names_beginning.
     APPEND 'MUST_' TO good_method_names_beginning.
+    APPEND 'STARTS_' TO good_method_names_beginning.
+    APPEND 'ENDS_' TO good_method_names_beginning.
     APPEND 'SHOULD_' TO good_method_names_beginning.
-    APPEND 'CONTAINS_' TO good_method_names_beginning.
 
     APPEND 'EXIST' TO good_method_names_containing.
+    APPEND 'EQUAL' TO good_method_names_containing.
+    APPEND 'CONTAIN' TO good_method_names_containing.
   ENDMETHOD.
 
 
