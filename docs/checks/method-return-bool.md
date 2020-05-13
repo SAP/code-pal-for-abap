@@ -12,12 +12,15 @@ The check searches for methods with a boolean returning value and checks then, i
 * `try_`
 * `can_`
 * `have_`
+* `starts_`
+* `ends_`
 * `must_`
 * `should_`
-* `contains_`
 
 or if the name contains one of the following words:
 * `exist`
+* `equal`
+* `contain`
 
 ## Which attributes can be maintained?
 ![Attributes](./img/method_name_returning_boolean.png)
