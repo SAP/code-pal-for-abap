@@ -155,16 +155,15 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 5 name = 'ZTEST' type = 'P' ) ).
+    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 5 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition )
-                          ( stmnt_from = 1 stmnt_to = 5 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-interface ) ).
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition )
+                          ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-interface ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '6' type = 'K' )
                           ( level = 1 from = '7' to = '12' type = 'K' )
                           ( level = 1 from = '13' to = '18' type = 'K' )
-                          ( level = 1 from = '19' to = '24' type = 'K' )
-                          ( level = 1 from = '25' to = '30' type = 'K' ) ).
+                          ( level = 1 from = '19' to = '24' type = 'K' ) ).
 
     tokens = VALUE #( ( str = 'METHODS'       type = 'I' row = 1 )
                       ( str = 'I_NAME'        type = 'I' row = 1 )
@@ -190,12 +189,6 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'VALUE(RESULT)' type = 'I' row = 4 )
                       ( str = 'TYPE'          type = 'I' row = 4 )
                       ( str = 'ABAP_BOOL'     type = 'I' row = 4 )
-                      ( str = 'METHODS'       type = 'I' row = 5 )
-                      ( str = 'CONTAIN_NAME'  type = 'I' row = 5 )
-                      ( str = 'RETURNING'     type = 'I' row = 5 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 5 )
-                      ( str = 'TYPE'          type = 'I' row = 5 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 5 )
                       ).
   ENDMETHOD.
 
@@ -277,7 +270,7 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD check_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 10 ).
+    assert_errors( 8 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
