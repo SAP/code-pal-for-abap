@@ -48,6 +48,7 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
     settings-pseudo_comment = '"#EC EMPTY_PROCEDURE' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-prio = 'W'.
 
     y_message_registration=>add_message(
       EXPORTING

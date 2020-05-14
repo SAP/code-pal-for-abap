@@ -114,7 +114,6 @@ CLASS y_check_base DEFINITION ABSTRACT
     METHODS keyword
         REDEFINITION .
   PRIVATE SECTION.
-
     METHODS do_attributes_exist
       RETURNING
         VALUE(result) TYPE abap_bool .
@@ -140,8 +139,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    settings-object_created_on = '19000101'.
-    settings-prio = 'W'.
+    settings-object_created_on = '20160101'.
+    settings-prio = 'E'.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
     settings-apply_on_test_code = abap_true.
@@ -211,11 +210,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         CREATE OBJECT profile_manager TYPE (`Y_PROFILE_MANAGER`).
 
         DATA(ptab) = VALUE abap_parmbind_tab( ( name  = 'USERNAME'
-                                                      kind  = cl_abap_objectdescr=>exporting
-                                                      value = REF #( sy-uname ) )
-                                                    ( name  = 'RESULT'
-                                                      kind  = cl_abap_objectdescr=>returning
-                                                      value = REF #( <profiles> ) ) ).
+                                                kind  = cl_abap_objectdescr=>exporting
+                                                value = REF #( sy-uname ) )
+                                              ( name  = 'RESULT'
+                                                kind  = cl_abap_objectdescr=>returning
+                                                value = REF #( <profiles> ) ) ).
 
         CALL METHOD profile_manager->('Y_IF_PROFILE_MANAGER~SELECT_PROFILES')
           PARAMETER-TABLE ptab.

@@ -63,6 +63,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
     has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC CI_CYCLO' ##NO_TEXT.
+    settings-threshold = 10.
 
     y_message_registration=>add_message(
       EXPORTING

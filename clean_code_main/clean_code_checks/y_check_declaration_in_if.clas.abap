@@ -13,7 +13,6 @@ CLASS y_check_declaration_in_if DEFINITION
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-
     DATA branch_counter TYPE i VALUE 0 ##NO_TEXT.
     CONSTANTS first_if TYPE i VALUE 1 ##NO_TEXT.
 
@@ -39,6 +38,7 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
     settings-pseudo_comment = '"#EC DECL_IN_IF' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-prio = 'W'.
 
     y_message_registration=>add_message(
       EXPORTING
