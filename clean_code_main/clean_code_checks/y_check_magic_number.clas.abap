@@ -50,6 +50,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
     settings-pseudo_comment = '"#EC CI_MAGIC' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-apply_on_test_code = abap_false.
 
     y_message_registration=>add_message(
       EXPORTING

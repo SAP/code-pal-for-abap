@@ -28,7 +28,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_method_return_bool IMPLEMENTATION.
+CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -43,6 +43,7 @@ CLASS y_check_method_return_bool IMPLEMENTATION.
     settings-pseudo_comment = '"#EC METH_RET_BOOL' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-prio = 'W'.
 
     y_message_registration=>add_message(
       EXPORTING

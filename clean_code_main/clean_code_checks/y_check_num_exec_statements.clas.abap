@@ -53,6 +53,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
     has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC CI_NOES' ##NO_TEXT.
+    settings-threshold = 40.
 
     add_obj_type( c_type_program ).
 

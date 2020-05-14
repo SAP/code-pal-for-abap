@@ -84,6 +84,7 @@ CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
     has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC NUMBER_ATTR' ##NO_TEXT.
+    settings-threshold = 12.
 
     y_message_registration=>add_message(
       EXPORTING

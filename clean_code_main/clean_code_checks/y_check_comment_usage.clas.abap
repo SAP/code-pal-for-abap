@@ -69,6 +69,9 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
     version = '0000'.
     has_documentation = abap_true.
 
+    settings-prio = 'N'.
+    settings-threshold = 10.
+
     y_message_registration=>add_message(
       EXPORTING
         check_name     = me->myname

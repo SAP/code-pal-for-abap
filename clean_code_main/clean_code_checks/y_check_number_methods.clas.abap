@@ -1,19 +1,19 @@
-class Y_CHECK_NUMBER_METHODS definition
-  public
-  inheriting from Y_CHECK_BASE
-  create public .
+CLASS y_check_number_methods DEFINITION
+  PUBLIC
+  INHERITING FROM y_check_base
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  constants C_MYNAME type SCI_CHK value 'Y_CHECK_NUMBER_METHODS' ##NO_TEXT.
+    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_NUMBER_METHODS' ##NO_TEXT.
 
-  methods CONSTRUCTOR .
-PROTECTED SECTION.
+    METHODS constructor .
+  PROTECTED SECTION.
 
-  METHODS execute_check
-      REDEFINITION .
-  METHODS inspect_tokens
-      REDEFINITION .
+    METHODS execute_check
+        REDEFINITION .
+    METHODS inspect_tokens
+        REDEFINITION .
   PRIVATE SECTION.
     DATA method_counter TYPE i VALUE 0.
 
@@ -59,6 +59,7 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
     check_name = c_myname.
 
     settings-pseudo_comment = '"#EC NUMBER_METHODS' ##NO_TEXT.
+    settings-threshold = 20.
 
     y_message_registration=>add_message(
       EXPORTING

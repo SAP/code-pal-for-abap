@@ -55,6 +55,7 @@ CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
     has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC NMBR_INTERFACES' ##NO_TEXT.
+    settings-threshold = 4.
 
     y_message_registration=>add_message(
       EXPORTING
