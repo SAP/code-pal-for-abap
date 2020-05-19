@@ -14,15 +14,20 @@ CLASS y_check_comment_usage DEFINITION
 
   PRIVATE SECTION.
 
-    CONSTANTS minimum_comment_length TYPE i VALUE 3.
     DATA abs_statement_number TYPE i VALUE 0.
     DATA comment_number TYPE i VALUE 0.
     DATA percentage_of_comments TYPE decfloat16 VALUE 0.
+    DATA is_function_module TYPE abap_bool.
 
     METHODS calc_percentage_of_comments .
     METHODS checkif_error
       IMPORTING
         !index TYPE i .
+
+    METHODS is_code_disabled
+      IMPORTING structure     TYPE sstruc
+                statement     TYPE sstmnt
+      RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -110,7 +115,8 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
 
       LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
         FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-        inspect_tokens( statement = <statement> ).
+        inspect_tokens( statement = <statement>
+                        structure = <structure> ).
       ENDLOOP.
 
       calc_percentage_of_comments( ).
@@ -120,6 +126,9 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
+    CHECK is_code_disabled( statement = statement
+                            structure = structure ) EQ abap_false.
+
     IF statement-to EQ statement-from.
       abs_statement_number = abs_statement_number + 1.
     ELSE.
@@ -128,14 +137,28 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
 
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to
-      WHERE type EQ scan_token_type-comment OR
-            type EQ scan_token_type-pragma.
+      WHERE type EQ scan_token_type-comment.
 
-      IF ( strlen( <token>-str ) GE minimum_comment_length AND
-           <token>-str+0(minimum_comment_length) NE `*"*` ) OR
-         <token>-str CP '"' && object_name && '*.'.
+      IF strlen( <token>-str ) GE 2 AND NOT
+         ( <token>-str+0(2) EQ |*"| OR
+           <token>-str+0(3) EQ |"#E| OR
+           <token>-str+0(2) EQ |##| OR
+           <token>-str CP '"' && object_name && '*.' ).
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD is_code_disabled.
+    CHECK structure-stmnt_type EQ scan_struc_stmnt_type-function.
+
+    IF get_token_abs( statement-from ) EQ if_kaizen_keywords_c=>gc_function.
+      is_function_module = abap_true.
+    ELSEIF get_token_abs( statement-from ) EQ if_kaizen_keywords_c=>gc_endfunction.
+      is_function_module = abap_false.
+    ENDIF.
+
+    result = xsdbool( is_function_module EQ abap_false ).
   ENDMETHOD.
 ENDCLASS.
