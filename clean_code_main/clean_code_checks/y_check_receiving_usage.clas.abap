@@ -43,6 +43,8 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
+    CHECK get_token_abs( statement-from + 1 ) NE 'BADI'.
+
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to WHERE str EQ 'RECEIVING'.
 
