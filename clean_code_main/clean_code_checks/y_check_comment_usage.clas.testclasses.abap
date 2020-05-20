@@ -89,7 +89,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = '"COMMENT'    type = 'C' row = 10 )
                       ( str = '*"*COMMENT'  type = 'C' row = 11 )
                       ( str = '*"'          type = 'C' row = 12 )
-                      ( str = '*!'          type = 'C' row = 13 )
+                      ( str = '"! docu'     type = 'C' row = 13 )
                       ( str = 'ENDFUNCTION' type = 'I' row = 14 )
                       ( str = '"COMMENT'    type = 'C' row = 15 ) ).
   ENDMETHOD.
