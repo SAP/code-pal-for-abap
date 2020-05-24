@@ -129,18 +129,14 @@ CLASS lcl_pseudo_comment_detector IMPLEMENTATION.
       IF smsg-pcom_alt IS NOT INITIAL.
         pcom_alt = smsg-pcom_alt.
       ENDIF.
+    ELSEIF suppress IS INITIAL.
+      pcom = suppress.
+    ELSEIF suppress CS lif_pseudo_comment_detector=>ec_comment.
+      pcom = suppress+5.
+    ELSEIF suppress CS lif_pseudo_comment_detector=>ec_prefix.
+      pcom = suppress+4.
     ELSE.
-      IF suppress IS INITIAL.
-        pcom = suppress.
-      ELSE.
-        IF suppress CS lif_pseudo_comment_detector=>ec_comment.
-          pcom = suppress+5.
-        ELSEIF suppress CS lif_pseudo_comment_detector=>ec_prefix.
-          pcom = suppress+4.
-        ELSE.
-          pcom = suppress.
-        ENDIF.
-      ENDIF.
+      pcom = suppress.
     ENDIF.
   ENDMETHOD.
 ENDCLASS.
@@ -149,12 +145,10 @@ CLASS lcl_statistics IMPLEMENTATION.
   METHOD y_if_scan_statistics~collect.
     IF pc = cl_ci_test_root=>c_pc_exceptn_exists.
       number_pseudo_comments = number_pseudo_comments + 1.
-    ELSE.
-      IF kind = y_check_base=>c_error.
-        number_errors = number_errors + 1.
-      ELSEIF kind = y_check_base=>c_warning.
-        number_warnings = number_warnings + 1.
-      ENDIF.
+    ELSEIF kind = y_check_base=>c_error.
+      number_errors = number_errors + 1.
+    ELSEIF kind = y_check_base=>c_warning.
+      number_warnings = number_warnings + 1.
     ENDIF.
   ENDMETHOD.
 
