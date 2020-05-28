@@ -25,7 +25,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
+CLASS y_check_num_output_parameter IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -39,6 +39,7 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
     settings-pseudo_comment = '"#EC NUM_OUTPUT_PARA' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
+    settings-documentation = |{ c_docs_path-checks }number-output-parameter.md|.
 
     y_message_registration=>add_message(
       EXPORTING

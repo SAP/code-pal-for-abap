@@ -23,7 +23,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
+CLASS y_check_number_methods IMPLEMENTATION.
 
 
   METHOD checkif_error.
@@ -60,6 +60,7 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC NUMBER_METHODS' ##NO_TEXT.
     settings-threshold = 20.
+    settings-documentation = |{ c_docs_path-checks }number-methods.md|.
 
     y_message_registration=>add_message(
       EXPORTING

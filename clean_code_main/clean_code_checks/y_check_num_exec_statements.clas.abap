@@ -40,7 +40,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
+CLASS y_check_num_exec_statements IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -54,6 +54,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC CI_NOES' ##NO_TEXT.
     settings-threshold = 40.
+    settings-documentation = |{ c_docs_path-checks }number-executable-statements.md|.
 
     add_obj_type( c_type_program ).
 

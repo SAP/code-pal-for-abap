@@ -31,7 +31,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
+CLASS y_check_cyclomatic_complexity IMPLEMENTATION.
 
 
   METHOD compute_cyclomatic_complexity.
@@ -64,6 +64,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC CI_CYCLO' ##NO_TEXT.
     settings-threshold = 10.
+    settings-documentation = |{ c_docs_path-checks }cyclomatic-complexity.md|.
 
     y_message_registration=>add_message(
       EXPORTING

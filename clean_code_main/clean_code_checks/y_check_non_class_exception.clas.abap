@@ -17,7 +17,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
+CLASS y_check_non_class_exception IMPLEMENTATION.
 
 
   METHOD checkif_error.
@@ -51,6 +51,7 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
     settings-pseudo_comment = '"#EC NON_CL_EXCEPT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }non-class-exception.md|.
 
     y_message_registration=>add_message(
       EXPORTING

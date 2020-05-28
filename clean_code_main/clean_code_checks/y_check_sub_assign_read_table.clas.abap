@@ -18,7 +18,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
+CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -33,6 +33,7 @@ CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
     settings-pseudo_comment = '"#EC SUB_ASSIGN' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }sub-assign-read-table.md|.
 
     y_message_registration=>add_message(
       EXPORTING

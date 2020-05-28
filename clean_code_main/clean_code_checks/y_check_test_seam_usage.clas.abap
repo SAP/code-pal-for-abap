@@ -16,7 +16,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
+CLASS y_check_test_seam_usage IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -31,6 +31,7 @@ CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
     settings-pseudo_comment = '"#EC TEST_SEAM_USAGE' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }test-seam-usage.md|.
 
     y_message_registration=>add_message(
       EXPORTING

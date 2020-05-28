@@ -35,7 +35,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
+CLASS y_check_magic_number IMPLEMENTATION.
 
 
   METHOD constructor .
@@ -51,6 +51,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_false.
+    settings-documentation = |{ c_docs_path-checks }magic-number.md|.
 
     y_message_registration=>add_message(
       EXPORTING

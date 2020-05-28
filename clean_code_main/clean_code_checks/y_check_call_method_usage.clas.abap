@@ -15,7 +15,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_CALL_METHOD_USAGE IMPLEMENTATION.
+CLASS y_check_call_method_usage IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -30,6 +30,7 @@ CLASS Y_CHECK_CALL_METHOD_USAGE IMPLEMENTATION.
     settings-pseudo_comment = '"#EC CALL_METH_USAGE' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }call-method-usage.md|.
 
     y_message_registration=>add_message(
       EXPORTING
