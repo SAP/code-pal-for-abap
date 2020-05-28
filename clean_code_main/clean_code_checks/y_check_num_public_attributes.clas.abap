@@ -37,7 +37,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
+CLASS y_check_num_public_attributes IMPLEMENTATION.
 
 
   METHOD checkif_attribute_in_structure.
@@ -91,6 +91,7 @@ CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
     settings-pseudo_comment = '"#EC NUM_PUBLIC_ATTR' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }number-public-attributes.md|.
 
     y_message_registration=>add_message(
       EXPORTING

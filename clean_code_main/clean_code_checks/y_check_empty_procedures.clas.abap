@@ -33,7 +33,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
+CLASS y_check_empty_procedures IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -49,6 +49,7 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-prio = 'W'.
+    settings-documentation = |{ c_docs_path-checks }empty-procedure.md|.
 
     y_message_registration=>add_message(
       EXPORTING

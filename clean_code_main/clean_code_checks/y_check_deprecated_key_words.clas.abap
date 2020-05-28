@@ -18,7 +18,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
+CLASS y_check_deprecated_key_words IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -33,6 +33,7 @@ CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
     settings-pseudo_comment = '"#EC DEPRECATED_KEY' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }deprecated-key-word.md|.
 
     y_message_registration=>add_message(
       EXPORTING

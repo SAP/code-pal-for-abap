@@ -28,7 +28,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
+CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -47,6 +47,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_productive_code = abap_false.
     settings-apply_on_test_code = abap_true.
+    settings-documentation = |{ c_docs_path-checks }db-access-in-ut.md|.
 
     y_message_registration=>add_message(
       EXPORTING

@@ -32,7 +32,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
+CLASS y_check_comment_usage IMPLEMENTATION.
 
 
   METHOD calc_percentage_of_comments.
@@ -76,6 +76,7 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
 
     settings-prio = 'N'.
     settings-threshold = 10.
+    settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
 
     y_message_registration=>add_message(
       EXPORTING

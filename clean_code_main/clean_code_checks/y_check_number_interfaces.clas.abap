@@ -21,7 +21,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
+CLASS y_check_number_interfaces IMPLEMENTATION.
 
 
   METHOD checkif_error.
@@ -56,6 +56,7 @@ CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC NMBR_INTERFACES' ##NO_TEXT.
     settings-threshold = 4.
+    settings-documentation = |{ c_docs_path-checks }number-interfaces.md|.
 
     y_message_registration=>add_message(
       EXPORTING

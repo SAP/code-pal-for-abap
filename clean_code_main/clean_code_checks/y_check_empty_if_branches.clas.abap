@@ -38,7 +38,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
+CLASS y_check_empty_if_branches IMPLEMENTATION.
 
 
   METHOD begin_of_statement.
@@ -96,6 +96,7 @@ CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
     settings-pseudo_comment = '"#EC EMPTY_IF_BRANCH' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }empty-if-branches.md|.
 
     y_message_registration=>add_message(
       EXPORTING

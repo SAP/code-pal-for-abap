@@ -31,7 +31,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
+CLASS y_check_number_attributes IMPLEMENTATION.
 
 
   METHOD checkif_attribute_found.
@@ -85,6 +85,7 @@ CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC NUMBER_ATTR' ##NO_TEXT.
     settings-threshold = 12.
+    settings-documentation = |{ c_docs_path-checks }number-attributes.md|.
 
     y_message_registration=>add_message(
       EXPORTING
