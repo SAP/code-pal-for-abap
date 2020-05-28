@@ -69,37 +69,31 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
+    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )  ).
+                          ( level = 1 from = '2' to = '2' type = 'K' )  ).
 
     tokens = VALUE #( ( str = 'MOVE'        type = 'I' row = 1 )
-                      ( str = 'TRANSLATE'   type = 'I' row = 2 )
-                      ( str = 'CONCATENATE' type = 'I' row = 3 ) ).
+                      ( str = 'TRANSLATE'   type = 'I' row = 2 ) ).
   ENDMETHOD.
 
   METHOD set_check_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 6 name = 'ZTEST' type = 'P' ) ).
+    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 6 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
                           ( level = 1 from = '2' to = '2' type = 'P' )
                           ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' )
-                          ( level = 1 from = '5' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '6' type = 'P' ) ).
+                          ( level = 1 from = '4' to = '4' type = 'P' ) ).
 
     tokens = VALUE #( ( str = 'MOVE'                type = 'I' row = 1 )
                       ( str = '"#EC DEPRECATED_KEY' type = 'C' row = 1 )
                       ( str = 'TRANSLATE'           type = 'I' row = 2 )
-                      ( str = '"#EC DEPRECATED_KEY' type = 'C' row = 2 )
-                      ( str = 'CONCATENATE'         type = 'I' row = 3 )
-                      ( str = '"#EC DEPRECATED_KEY' type = 'C' row = 3 ) ).
+                      ( str = '"#EC DEPRECATED_KEY' type = 'C' row = 2 ) ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -163,7 +157,7 @@ CLASS ltc_deprecated_key_words IMPLEMENTATION.
   METHOD check_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 3 ).
+    assert_errors( 2 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -171,7 +165,7 @@ CLASS ltc_deprecated_key_words IMPLEMENTATION.
     ref_scan_manager_double->set_check_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_pseudo_comments( 3 ).
+    assert_pseudo_comments( 2 ).
   ENDMETHOD.
 
   METHOD assert_errors.

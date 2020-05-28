@@ -11,6 +11,9 @@ CLASS y_check_deprecated_key_words DEFINITION
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
+    METHODS check_if_error
+      IMPORTING index   TYPE i
+                keyword TYPE string.
 ENDCLASS.
 
 
@@ -42,27 +45,31 @@ CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA(key_word) = get_token_abs( statement-from ).
-
-    CASE key_word.
-      WHEN 'MOVE' OR 'TRANSLATE' OR 'CONCATENATE'.
+    DATA(keyword) = get_token_abs( statement-from ).
+    CASE keyword.
+      WHEN 'MOVE' OR 'TRANSLATE'.
         statement_for_message = statement.
-
-        DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                                include = get_include( p_level = statement_for_message-level ) ).
-        IF check_configuration IS INITIAL.
-          RETURN.
-        ENDIF.
-
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_for_message-level
-                     p_position     = index
-                     p_from         = statement_for_message-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_suppress     = settings-pseudo_comment
-                     p_param_1      = |{ key_word }| ).
+        check_if_error( index   = index
+                        keyword = keyword ).
     ENDCASE.
+  ENDMETHOD.
+
+
+  METHOD check_if_error.
+    DATA(check_configuration) = detect_check_configuration( threshold = 0
+                                                                include = get_include( p_level = statement_for_message-level ) ).
+    IF check_configuration IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    raise_error( p_sub_obj_type = c_type_include
+                 p_level        = statement_for_message-level
+                 p_position     = index
+                 p_from         = statement_for_message-from
+                 p_kind         = check_configuration-prio
+                 p_test         = me->myname
+                 p_code         = get_code( check_configuration-prio )
+                 p_suppress     = settings-pseudo_comment
+                 p_param_1      = |{ keyword }| ).
   ENDMETHOD.
 ENDCLASS.
