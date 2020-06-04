@@ -23,7 +23,7 @@ z: true - unchanged
 ```
 
 ## How to solve the issue?
-Use xsdbool( condition ) to allocate a Boolean into a variable.
+Use xsdbool( condition ) to allocate the result of a condition into a variable.
 
 ### Example
 ```abap
