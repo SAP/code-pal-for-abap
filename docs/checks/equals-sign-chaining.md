@@ -2,10 +2,11 @@
 
 # Equals Sign Chaining
 ## What is the Intent of the Check?
-The Equals Sign Chaining Check searches for multiple declarations to a variable.
+The Equals Sign Chaining Check searches for multiple declarations (chained) to a variable.
 
 ## How does the check work?
 The check highlights when someone confuses the declaration of a variable with a condition.
+Moreover, when the sequence of the attribution remains unclear.
 ### Example
 ```abap
 DATA x TYPE bool.
@@ -23,7 +24,7 @@ z: true - unchanged
 ```
 
 ## How to solve the issue?
-Use xsdbool( condition ) to allocate the result of a condition into a variable.
+Use xsdbool( condition ) to allocate the result of a condition (or multiple conditions) into a variable.
 
 ### Example
 ```abap
