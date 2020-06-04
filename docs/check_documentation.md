@@ -9,6 +9,7 @@
 - [Deprecated Key Word](checks/deprecated-key-word.md)
 - [Empty IF Branches](checks/empty-if-branches.md)
 - [Empty Procedure](checks/empty-procedure.md)
+- [Equal Sign Chaining](checks/equals-sign-chaining.md)
 - [FORM Routine](checks/form-routine.md)
 - [FUNCTION Routine](checks/function-routine.md)
 - [Interface in Class](checks/interface-in-class.md)
