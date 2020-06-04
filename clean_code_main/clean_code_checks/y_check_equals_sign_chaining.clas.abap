@@ -11,7 +11,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_equals_sign_chaining IMPLEMENTATION.
+CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -20,8 +20,9 @@ CLASS y_check_equals_sign_chaining IMPLEMENTATION.
     category    = 'Y_CHECK_CATEGORY'.
     version     = '0000'.
     position    = '320'.
-    has_documentation = abap_false.
+    has_documentation = abap_true.
 
+    settings-documentation = |{ c_docs_path-checks }equals-sign-chaining.md|.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
 
