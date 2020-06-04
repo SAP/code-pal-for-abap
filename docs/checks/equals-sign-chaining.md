@@ -11,7 +11,15 @@ The check highlights when someone confuses the declaration of a variable with a 
 DATA x TYPE bool.
 DATA y TYPE bool.
 DATA z TYPE bool.
+x = abap_false.
+y = abap_false.
+z = abap_true.
 x = y = z.
+
+Output:
+x: true - changed
+y: true - changed
+z: true - unchanged
 ```
 
 ## How to solve the issue?
@@ -22,8 +30,16 @@ Use xsdbool( condition ) to allocate a Boolean into a variable.
 DATA x TYPE bool.
 DATA y TYPE bool.
 DATA z TYPE bool.
-x = xsdbool( y = abap_true AND
-             z = abap_false ).
+x = abap_false.
+y = abap_false.
+z = abap_true.
+x = xsdbool( y = abap_false AND
+             z = abap_true ).
+
+Output:
+x: true  - changed because of xsdbool()
+y: false - unchanged
+z: true  - unchanged
 ```
 
 ## Can the check be surpressed?
