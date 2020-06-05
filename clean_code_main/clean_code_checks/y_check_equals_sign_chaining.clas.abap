@@ -22,6 +22,7 @@ CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
     position    = '320'.
     has_documentation = abap_true.
 
+    settings-pseudo_comment = '"#EC EQUALS_CHAINING'.
     settings-documentation = |{ c_docs_path-checks }equals-sign-chaining.md|.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
