@@ -26,7 +26,7 @@ ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_GENERAL IMPLEMENTATION.
+CLASS y_exemption_general IMPLEMENTATION.
 
 
   METHOD is_object_exempted.
@@ -46,13 +46,15 @@ CLASS Y_EXEMPTION_GENERAL IMPLEMENTATION.
 
     CALL FUNCTION 'TR_CHECK_EXIST'
       EXPORTING
-        iv_pgmid    = 'R3TR'
-        iv_object   = l_object_type
-        iv_obj_name = l_object_name
+        iv_pgmid             = 'R3TR'
+        iv_object            = l_object_type
+        iv_obj_name          = l_object_name
       IMPORTING
-        e_exist     = existence_flag.
+        e_exist              = existence_flag
+      EXCEPTIONS
+        tr_no_check_function = 1.
 
-    IF existence_flag <> object_exists.
+    IF sy-subrc = 0 AND existence_flag <> object_exists.
       result = abap_true.
     ENDIF.
   ENDMETHOD.
