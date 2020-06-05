@@ -20,7 +20,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_NUMBER_EVENTS IMPLEMENTATION.
+CLASS y_check_number_events IMPLEMENTATION.
 
 
   METHOD checkif_error.
@@ -54,6 +54,7 @@ CLASS Y_CHECK_NUMBER_EVENTS IMPLEMENTATION.
     has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC NUMBER_EVENTS' ##NO_TEXT.
+    settings-documentation = |{ c_docs_path-checks }number-events.md|.
 
     y_message_registration=>add_message(
       EXPORTING

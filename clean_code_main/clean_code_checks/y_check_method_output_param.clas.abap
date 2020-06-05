@@ -26,7 +26,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
+CLASS y_check_method_output_param IMPLEMENTATION.
 
 
   METHOD calculate_param_combination.
@@ -66,6 +66,7 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
     settings-pseudo_comment = '"#EC PARAMETER_OUT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
+    settings-documentation = |{ c_docs_path-checks }method-output-parameter.md|.
 
     y_message_registration=>add_message(
       EXPORTING

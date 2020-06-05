@@ -19,7 +19,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_FORM IMPLEMENTATION.
+CLASS y_check_form IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -34,6 +34,7 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
     settings-pseudo_comment = '"#EC CI_FORM' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }form-routine.md|.
 
     y_message_registration=>add_message(
       EXPORTING

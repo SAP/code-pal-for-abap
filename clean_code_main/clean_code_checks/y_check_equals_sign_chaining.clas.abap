@@ -11,7 +11,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
+CLASS y_check_equals_sign_chaining IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -20,7 +20,7 @@ CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
     category    = 'Y_CHECK_CATEGORY'.
     version     = '0000'.
     position    = '320'.
-    has_documentation = abap_true.
+    has_documentation = abap_false.
 
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.

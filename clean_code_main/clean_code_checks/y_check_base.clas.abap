@@ -10,7 +10,12 @@ CLASS y_check_base DEFINITION ABSTRACT
         error        TYPE sci_errc VALUE '100',
         warning      TYPE sci_errc VALUE '101',
         notification TYPE sci_errc VALUE '102',
-      END OF c_code .
+      END OF c_code,
+      BEGIN OF c_docs_path,
+        main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
+        checks TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/checks/' ##NO_TEXT,
+      END OF c_docs_path.
+
     DATA:
       BEGIN OF settings READ-ONLY,
         pseudo_comment                TYPE sci_pcom,
@@ -68,7 +73,7 @@ CLASS y_check_base DEFINITION ABSTRACT
       RETURNING
         VALUE(result) TYPE sci_errc .
     METHODS inspect_tokens
-      ABSTRACT
+          ABSTRACT
       IMPORTING
         !structure TYPE sstruc OPTIONAL
         !index     TYPE i OPTIONAL
@@ -122,7 +127,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_BASE IMPLEMENTATION.
+CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -144,7 +149,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
     settings-apply_on_test_code = abap_true.
-    settings-documentation = 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/check_documentation.md' ##NO_TEXT.
+    settings-documentation = |{ c_docs_path-main }check_documentation.md|.
 
     has_attributes = do_attributes_exist( ).
 

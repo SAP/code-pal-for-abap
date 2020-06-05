@@ -19,7 +19,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
+CLASS y_check_constants_interface IMPLEMENTATION.
 
 
   METHOD checkif_error.
@@ -53,6 +53,7 @@ CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
     settings-pseudo_comment = '"#EC CONS_INTF' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }constants-interface.md|.
 
     y_message_registration=>add_message(
       EXPORTING

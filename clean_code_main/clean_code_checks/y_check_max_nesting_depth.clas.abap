@@ -30,7 +30,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
+CLASS y_check_max_nesting_depth IMPLEMENTATION.
 
 
   METHOD compute_nesting_level.
@@ -60,6 +60,7 @@ CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
     has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC CI_NESTING' ##NO_TEXT.
+    settings-documentation = |{ c_docs_path-checks }maximum-nesting-depth.md|.
 
     y_message_registration=>add_message(
       EXPORTING
