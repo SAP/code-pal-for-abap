@@ -38,7 +38,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_empty_if_branches IMPLEMENTATION.
+CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
 
 
   METHOD begin_of_statement.
@@ -78,8 +78,7 @@ CLASS y_check_empty_if_branches IMPLEMENTATION.
                      p_from         = statement_wa-from
                      p_kind         = check_configuration-prio
                      p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_suppress     = settings-pseudo_comment ).
+                     p_code         = get_code( check_configuration-prio ) ).
     ENDCASE.
   ENDMETHOD.
 

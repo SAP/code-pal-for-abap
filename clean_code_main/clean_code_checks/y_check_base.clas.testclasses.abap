@@ -220,6 +220,7 @@ CLASS ltc_base IMPLEMENTATION.
     cut->scimessages = VALUE #( ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 100 kind = 'E' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| )
                                 ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 101 kind = 'W' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| )
                                 ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 102 kind = 'N' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| ) ).
+    cut->settings-pseudo_comment = '#EC CI_CYCLO'.
     cut->raise_error(
       EXPORTING
         p_sub_obj_type    = ''
@@ -228,7 +229,6 @@ CLASS ltc_base IMPLEMENTATION.
         p_position        = 11
         p_test            = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY'
         p_code            = '100'
-        p_suppress        = '#EC CI_CYCLO'
         p_kind            = 'E' ).
 
     assert_errors( 1 ).
@@ -243,6 +243,7 @@ CLASS ltc_base IMPLEMENTATION.
     cut->scimessages = VALUE #( ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 100 kind = 'E' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| )
                                 ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 101 kind = 'W' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| )
                                 ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 102 kind = 'N' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| ) ).
+    cut->settings-pseudo_comment = '#EC CI_CYCLO'.
     cut->raise_error(
       EXPORTING
         p_sub_obj_type    = ''
@@ -251,7 +252,6 @@ CLASS ltc_base IMPLEMENTATION.
         p_position        = 11
         p_test            = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY'
         p_code            = '101'
-        p_suppress        = '#EC CI_CYCLO'
         p_kind            = 'W' ).
 
     assert_errors( 0 ).

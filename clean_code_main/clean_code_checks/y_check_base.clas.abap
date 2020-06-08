@@ -73,7 +73,7 @@ CLASS y_check_base DEFINITION ABSTRACT
       RETURNING
         VALUE(result) TYPE sci_errc .
     METHODS inspect_tokens
-          ABSTRACT
+      ABSTRACT
       IMPORTING
         !structure TYPE sstruc OPTIONAL
         !index     TYPE i OPTIONAL
@@ -88,7 +88,6 @@ CLASS y_check_base DEFINITION ABSTRACT
         VALUE(p_kind)   TYPE sychar01
         !p_test         TYPE sci_chk
         !p_code         TYPE sci_errc
-        !p_suppress     TYPE sci_pcom OPTIONAL
         !p_param_1      TYPE csequence OPTIONAL
         !p_param_2      TYPE csequence OPTIONAL
         !p_param_3      TYPE csequence OPTIONAL
@@ -127,7 +126,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_base IMPLEMENTATION.
+CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -627,7 +626,7 @@ CLASS y_check_base IMPLEMENTATION.
                                                                                                                  scimessages      = scimessages
                                                                                                                  test             = p_test
                                                                                                                  code             = p_code
-                                                                                                                 suppress         = p_suppress
+                                                                                                                 suppress         = settings-pseudo_comment
                                                                                                                  position         = p_position ) ).
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'LCL_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = p_sub_obj_type
@@ -639,7 +638,7 @@ CLASS y_check_base IMPLEMENTATION.
               p_kind = p_kind
               p_test = p_test
               p_code = p_code
-              p_suppress = p_suppress
+              p_suppress = settings-pseudo_comment
               p_param_1 = p_param_1
               p_param_2 = p_param_2
               p_param_3 = p_param_3

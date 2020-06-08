@@ -31,7 +31,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_number_attributes IMPLEMENTATION.
+CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
 
 
   METHOD checkif_attribute_found.
@@ -68,7 +68,6 @@ CLASS y_check_number_attributes IMPLEMENTATION.
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )
-                   p_suppress     = settings-pseudo_comment
                    p_param_1      = |{ attribute_counter }|
                    p_param_2      = |{ check_configuration-threshold }| ).
     ENDIF.

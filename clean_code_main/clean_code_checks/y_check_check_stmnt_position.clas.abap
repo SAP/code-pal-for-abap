@@ -25,7 +25,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_check_stmnt_position IMPLEMENTATION.
+CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -116,7 +116,6 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )
-                   p_suppress     = settings-pseudo_comment
                    p_inclspec     = ' ' ).
     ENDIF.
   ENDMETHOD.

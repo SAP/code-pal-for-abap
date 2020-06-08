@@ -58,13 +58,14 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( stmnt = 1 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
+    levels = VALUE #( ( stmnt = 1 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '3' type = 'K' )
                           ( level = 1 from = '4' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '9' type = 'K' ) ).
+                          ( level = 1 from = '7' to = '9' type = 'K' )
+                          ( level = 1 from = '10' to = '13' type = 'K' ) ).
 
     tokens = VALUE #( ( str = 'METHODS'      type = 'I' row = 1 )
                       ( str = 'METHOD_NAME1' type = 'I' row = 1 )
@@ -74,7 +75,11 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'CHANGING'     type = 'I' row = 2 )
                       ( str = 'METHODS'      type = 'I' row = 3 )
                       ( str = 'METHOD_NAME3' type = 'I' row = 3 )
-                      ( str = 'RETURNING'    type = 'I' row = 3 ) ).
+                      ( str = 'RETURNING'    type = 'I' row = 3 )
+                      ( str = 'METHODS'      type = 'I' row = 4 )
+                      ( str = 'METHOD_NAME4' type = 'I' row = 4 )
+                      ( str = 'IMPORTING'    type = 'I' row = 4 )
+                      ( str = 'RETURNING'    type = 'I' row = 4 ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
