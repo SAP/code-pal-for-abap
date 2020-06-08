@@ -28,7 +28,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_db_access_in_ut IMPLEMENTATION.
+CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -160,7 +160,6 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
                  p_code         = get_code( check_configuration-prio )
-                 p_suppress     = settings-pseudo_comment
                  p_param_1      = |{ key_word }| ).
 
   ENDMETHOD.

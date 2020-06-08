@@ -40,7 +40,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_num_exec_statements IMPLEMENTATION.
+CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -116,7 +116,6 @@ CLASS y_check_num_exec_statements IMPLEMENTATION.
                      p_kind         = check_configuration-prio
                      p_test         = me->myname
                      p_code         = get_code( check_configuration-prio )
-                     p_suppress     = settings-pseudo_comment
                      p_param_1      = |{ no_exec_statements }|
                      p_param_2      = |{ check_configuration-threshold }| ).
       ENDIF.

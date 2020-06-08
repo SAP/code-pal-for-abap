@@ -37,7 +37,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_num_public_attributes IMPLEMENTATION.
+CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
 
 
   METHOD checkif_attribute_in_structure.
@@ -64,7 +64,6 @@ CLASS y_check_num_public_attributes IMPLEMENTATION.
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )
-                   p_suppress     = settings-pseudo_comment
                    p_param_1      = |{ public_attribute_counter }|
                    p_param_2      = |{ check_configuration-threshold }| ).
     ENDIF.

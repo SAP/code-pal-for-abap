@@ -21,7 +21,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_function IMPLEMENTATION.
+CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -85,8 +85,7 @@ CLASS y_check_function IMPLEMENTATION.
                      p_from         = statement_for_message-from
                      p_kind         = check_configuration-prio
                      p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_suppress     = settings-pseudo_comment ).
+                     p_code         = get_code( check_configuration-prio ) ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.

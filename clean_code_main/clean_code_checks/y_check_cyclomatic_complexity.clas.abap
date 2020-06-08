@@ -31,7 +31,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_cyclomatic_complexity IMPLEMENTATION.
+CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
 
 
   METHOD compute_cyclomatic_complexity.
@@ -111,7 +111,6 @@ CLASS y_check_cyclomatic_complexity IMPLEMENTATION.
                      p_kind         = check_configuration-prio
                      p_test         = me->myname
                      p_code         = get_code( check_configuration-prio )
-                     p_suppress     = settings-pseudo_comment
                      p_param_1      = |{ cyclo_comp }|
                      p_param_2      = |{ check_configuration-threshold }| ).
       ENDIF.
