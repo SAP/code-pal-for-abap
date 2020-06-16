@@ -664,45 +664,27 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
           p_kind            = ''
           p_test            = me->myname
           p_code            = '106' ).
+      FREE ref_scan_manager.
       RETURN.
     ENDIF.
 
     TRY.
         check_start_conditions( ).
-      CATCH ycx_object_not_processed.
-        RETURN.
-
-      CATCH ycx_object_is_exempted.
-*        raise_error(
-*          EXPORTING
-*              p_sub_obj_type    = c_type_include
-*              p_level           = 1
-*              p_position        = 1
-*              p_from            = 1
-*              p_kind            = ''
-*              p_test            = me->myname
-*              p_code            = '105' ).
-        RETURN.
-    ENDTRY.
-
-    TRY.
         DATA(profile_configurations) = clean_code_manager->read_check_customizing( username    = sy-uname
                                                                                    checkid     = myname
                                                                                    object_name = object_name
                                                                                    object_type = object_type ).
       CATCH ycx_no_check_customizing.
         IF lines( check_configurations ) = 0.
-*          raise_error(
-*            EXPORTING
-*              p_sub_obj_type    = c_type_include
-*              p_level           = 1
-*              p_position        = 1
-*              p_from            = 1
-*              p_kind            = ''
-*              p_test            = me->myname
-*              p_code            = '104' ).
+          FREE ref_scan_manager.
           RETURN.
         ENDIF.
+
+      CATCH ycx_object_not_processed
+            ycx_object_is_exempted.
+        FREE ref_scan_manager.
+        RETURN.
+
     ENDTRY.
 
     IF lines( check_configurations ) > 0.
