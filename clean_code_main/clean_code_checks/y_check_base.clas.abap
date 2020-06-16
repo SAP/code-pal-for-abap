@@ -670,16 +670,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     TRY.
         check_start_conditions( ).
-      CATCH ycx_object_not_processed.
-        FREE ref_scan_manager.
-        RETURN.
-
-      CATCH ycx_object_is_exempted.
-        FREE ref_scan_manager.
-        RETURN.
-    ENDTRY.
-
-    TRY.
         DATA(profile_configurations) = clean_code_manager->read_check_customizing( username    = sy-uname
                                                                                    checkid     = myname
                                                                                    object_name = object_name
@@ -689,6 +679,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
           FREE ref_scan_manager.
           RETURN.
         ENDIF.
+
+      CATCH ycx_object_not_processed
+            ycx_object_is_exempted.
+        FREE ref_scan_manager.
+        RETURN.
+
     ENDTRY.
 
     IF lines( check_configurations ) > 0.
