@@ -142,6 +142,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
+    me->remote_enabled = abap_true.
+    me->remote_rfc_enabled = abap_true.
 
     settings-object_created_on = '20160101'.
     settings-prio = 'E'.
