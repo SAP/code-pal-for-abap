@@ -12,9 +12,8 @@ CLASS ltd_clean_code_manager_error IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 ) ).
-    result = VALUE #( BASE result
-                    ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 1 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 1 ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -41,9 +40,8 @@ CLASS ltd_clean_code_manager_warning IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_false prio = 'E' threshold = 5 ) ).
-    result = VALUE #( BASE result
-                    ( apply_on_testcode = abap_false prio = 'W' threshold = 1 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_false prio = 'E' threshold = 5 )
+                      ( apply_on_testcode = abap_false prio = 'W' threshold = 1 ) ).
   ENDMETHOD.
 ENDCLASS.
 

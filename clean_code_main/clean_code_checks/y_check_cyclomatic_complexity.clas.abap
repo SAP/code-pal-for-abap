@@ -5,7 +5,7 @@ CLASS y_check_cyclomatic_complexity DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE seoclsname VALUE 'Y_CHECK_CYCLOMATIC_COMPLEXITY'.
+    CONSTANTS c_myname TYPE seoclsname VALUE 'Y_CHECK_CYCLOMATIC_COMPLEXITY' ##no_text .
     CONSTANTS second_token TYPE i VALUE 2.
     CONSTANTS third_token TYPE i VALUE 3.
 
