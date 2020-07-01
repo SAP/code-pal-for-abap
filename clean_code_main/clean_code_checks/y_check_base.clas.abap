@@ -97,6 +97,9 @@ CLASS y_check_base DEFINITION ABSTRACT
         !p_checksum_1   TYPE int4 OPTIONAL
         !p_comments     TYPE t_comments OPTIONAL .
 
+    METHODS get_standard_configurations
+      RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configurations.
+
     METHODS get_column_abs
         REDEFINITION .
     METHODS get_column_rel
@@ -126,7 +129,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_BASE IMPLEMENTATION.
+CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -655,6 +658,15 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+  METHOD get_standard_configurations.
+    APPEND VALUE y_if_clean_code_manager=>check_configuration( apply_on_productive_code = settings-apply_on_productive_code
+                                                               apply_on_testcode = settings-apply_on_test_code
+                                                               object_creation_date = settings-object_created_on
+                                                               prio = settings-prio
+                                                               threshold = settings-threshold )
+                                                               TO result.
+  ENDMETHOD.
+
 
   METHOD run.
     instantiate_objects( ).
@@ -673,18 +685,21 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
+
     TRY.
         check_start_conditions( ).
-        DATA(profile_configurations) = clean_code_manager->read_check_customizing( username    = sy-uname
-                                                                                   checkid     = myname
-                                                                                   object_name = object_name
-                                                                                   object_type = object_type ).
+        profile_configurations = clean_code_manager->read_check_customizing( username    = sy-uname
+                                                                             checkid     = myname
+                                                                             object_name = object_name
+                                                                             object_type = object_type ).
       CATCH ycx_no_check_customizing.
-        IF lines( check_configurations ) = 0.
+        IF lines( check_configurations ) = 0 AND attributes_ok = abap_false.
           FREE ref_scan_manager.
           RETURN.
+        ELSEIF attributes_ok = abap_true.
+          profile_configurations = get_standard_configurations( ).
         ENDIF.
-
       CATCH ycx_object_not_processed
             ycx_object_is_exempted.
         FREE ref_scan_manager.
