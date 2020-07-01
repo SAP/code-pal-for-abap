@@ -142,8 +142,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
+    me->remote_enabled = abap_true.
+    me->remote_rfc_enabled = abap_true.
 
-    settings-object_created_on = '20160101'.
+    settings-object_created_on = '20190101'.
     settings-prio = 'E'.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
@@ -208,6 +210,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     FIELD-SYMBOLS <profiles> TYPE ANY TABLE.
 
     TRY.
+        attributes_ok = abap_false.
         CREATE DATA profiles_ref TYPE STANDARD TABLE OF (`YTAB_PROFILES`) WITH DEFAULT KEY.
         ASSIGN profiles_ref->* TO <profiles>.
 
@@ -230,12 +233,14 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         IF lines( <profiles> ) > 0.
           result = abap_false.
         ELSE.
+          attributes_ok = abap_true.
           result = abap_true.
         ENDIF.
 
       CATCH cx_sy_create_data_error
             cx_sy_create_object_error
             ycx_entry_not_found.
+        attributes_ok = abap_true.
         result = abap_true.
     ENDTRY.
   ENDMETHOD.
