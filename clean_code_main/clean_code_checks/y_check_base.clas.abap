@@ -53,7 +53,6 @@ CLASS y_check_base DEFINITION ABSTRACT
     DATA statement_for_message TYPE sstmnt .
     DATA statistics TYPE REF TO y_if_scan_statistics .
     DATA test_code_detector TYPE REF TO y_if_testcode_detector .
-    DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
     DATA attributes_maintained TYPE abap_bool .
 
     METHODS check_start_conditions
@@ -129,7 +128,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_base IMPLEMENTATION.
+CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -487,8 +486,7 @@ CLASS y_check_base IMPLEMENTATION.
     DATA message(72) TYPE c.
 
     READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
-
-    IF use_default_attributes EQ abap_true.
+    IF sy-subrc <> 0.
       check_configuration-object_creation_date = settings-object_created_on.
       check_configuration-prio = settings-prio.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
@@ -561,7 +559,6 @@ CLASS y_check_base IMPLEMENTATION.
 
     CLEAR check_configurations.
     APPEND check_configuration TO check_configurations.
-    use_default_attributes = abap_false.
   ENDMETHOD.
 
 
@@ -657,6 +654,7 @@ CLASS y_check_base IMPLEMENTATION.
               p_comments = p_comments ).
     ENDIF.
   ENDMETHOD.
+
 
   METHOD get_standard_configurations.
     APPEND VALUE y_if_clean_code_manager=>check_configuration( apply_on_productive_code = settings-apply_on_productive_code
