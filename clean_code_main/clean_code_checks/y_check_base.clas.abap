@@ -53,6 +53,7 @@ CLASS y_check_base DEFINITION ABSTRACT
     DATA statement_for_message TYPE sstmnt .
     DATA statistics TYPE REF TO y_if_scan_statistics .
     DATA test_code_detector TYPE REF TO y_if_testcode_detector .
+    DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
     DATA attributes_maintained TYPE abap_bool .
 
     METHODS check_start_conditions
@@ -95,9 +96,6 @@ CLASS y_check_base DEFINITION ABSTRACT
         !p_detail       TYPE xstring OPTIONAL
         !p_checksum_1   TYPE int4 OPTIONAL
         !p_comments     TYPE t_comments OPTIONAL .
-
-    METHODS get_standard_configurations
-      RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configurations.
 
     METHODS get_column_abs
         REDEFINITION .
@@ -282,6 +280,14 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD get_attributes.
     READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
+    IF sy-subrc <> 0.
+      APPEND VALUE y_if_clean_code_manager=>check_configuration( apply_on_productive_code = settings-apply_on_productive_code
+                                                                 apply_on_testcode = settings-apply_on_test_code
+                                                                 object_creation_date = settings-object_created_on
+                                                                 prio = settings-prio
+                                                                 threshold = settings-threshold
+                                                                ) TO check_configurations.
+    ENDIF.
     EXPORT
       object_creation_date = check_configuration-object_creation_date
       message_severity = check_configuration-prio
@@ -486,7 +492,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     DATA message(72) TYPE c.
 
     READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
-    IF sy-subrc <> 0.
+    IF sy-subrc <> 0 AND use_default_attributes = abap_true.
       check_configuration-object_creation_date = settings-object_created_on.
       check_configuration-prio = settings-prio.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
@@ -559,6 +565,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     CLEAR check_configurations.
     APPEND check_configuration TO check_configurations.
+    use_default_attributes = abap_false.
   ENDMETHOD.
 
 
@@ -656,16 +663,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_standard_configurations.
-    APPEND VALUE y_if_clean_code_manager=>check_configuration( apply_on_productive_code = settings-apply_on_productive_code
-                                                               apply_on_testcode = settings-apply_on_test_code
-                                                               object_creation_date = settings-object_created_on
-                                                               prio = settings-prio
-                                                               threshold = settings-threshold )
-                                                               TO result.
-  ENDMETHOD.
-
-
   METHOD run.
     instantiate_objects( ).
 
@@ -692,11 +689,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
                                                                              object_name = object_name
                                                                              object_type = object_type ).
       CATCH ycx_no_check_customizing.
-        IF lines( check_configurations ) = 0 AND attributes_ok = abap_false.
+        IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
           FREE ref_scan_manager.
           RETURN.
         ELSEIF attributes_ok = abap_true.
-          profile_configurations = get_standard_configurations( ).
+          profile_configurations = check_configurations.
         ENDIF.
       CATCH ycx_object_not_processed
             ycx_object_is_exempted.
