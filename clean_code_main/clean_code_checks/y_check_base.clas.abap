@@ -122,6 +122,8 @@ CLASS y_check_base DEFINITION ABSTRACT
       RETURNING
         VALUE(result) TYPE abap_bool .
     METHODS instantiate_objects .
+
+    METHODS enable_rfc.
 ENDCLASS.
 
 
@@ -142,8 +144,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
-    me->remote_enabled = abap_true.
-    me->remote_rfc_enabled = abap_true.
+    enable_rfc( ).
 
     settings-object_created_on = '20190101'.
     settings-prio = 'E'.
@@ -279,14 +280,16 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_attributes.
-    READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
+    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+    READ TABLE check_configurations INTO check_configuration INDEX 1.
     IF sy-subrc <> 0.
-      APPEND VALUE y_if_clean_code_manager=>check_configuration( apply_on_productive_code = settings-apply_on_productive_code
-                                                                 apply_on_testcode = settings-apply_on_test_code
-                                                                 object_creation_date = settings-object_created_on
-                                                                 prio = settings-prio
-                                                                 threshold = settings-threshold
-                                                                ) TO check_configurations.
+      check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
+      check_configuration-apply_on_testcode = settings-apply_on_test_code.
+      check_configuration-object_creation_date = settings-object_created_on.
+      check_configuration-prio = settings-prio.
+      check_configuration-threshold = settings-threshold.
+
+      APPEND check_configuration TO check_configurations.
     ENDIF.
     EXPORT
       object_creation_date = check_configuration-object_creation_date
@@ -714,5 +717,18 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     execute_check( ).
 
     FREE ref_scan_manager.
+  ENDMETHOD.
+
+
+  METHOD enable_rfc.
+    ASSIGN me->('remote_rfc_enabled') TO FIELD-SYMBOL(<remote_rfc_enabled>).
+    IF sy-subrc = 0.
+      <remote_rfc_enabled> = abap_true.
+    ENDIF.
+    ASSIGN me->('remote_enabled') TO FIELD-SYMBOL(<remote_enabled>).
+    IF sy-subrc = 0.
+      <remote_enabled> = abap_true.
+    ENDIF.
+    UNASSIGN: <remote_rfc_enabled>, <remote_enabled>.
   ENDMETHOD.
 ENDCLASS.
