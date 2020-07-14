@@ -5,7 +5,9 @@
 `FUNCTION` Modules are sub-programs in procedural programming. With the release of Object Oriented ABAP this syntax became obsolete.
 
 ## How does the check work?
-This check searches for Function Modules, that are not RFC enabled.
+This check searches for Function Modules within a function group. However, since Remote Function Calls (RFC) can only be executed via FUNCTION MODULES, these ones (Function Modules with RFC enablement) will not be caught by this check.
+
+Note: This check does not search for the `CALL FUNCTION` statement within your source code (e.g. in a method or program).
 
 ## Which attributes can be maintained?
 ![Attributes](./img/function_module_usage.png)
