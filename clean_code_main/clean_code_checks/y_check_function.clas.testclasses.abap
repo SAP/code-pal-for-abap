@@ -66,7 +66,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
     tokens = VALUE #( ( str = 'FUNCTION'    type = 'I' row = 1 )
                       ( str = 'F1'          type = 'I' row = 1 )
-                      ( str = 'ENDFUNCTION' type = 'I' row = 1 ) ).
+                      ( str = 'ENDFUNCTION' type = 'I' row = 2 ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
@@ -85,23 +85,22 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'ENDFUNCTION'    type = 'I' row = 2 )
                       ( str = 'FUNCTION'       type = 'I' row = 3 )
                       ( str = 'F2'             type = 'I' row = 3 )
-                      ( str = 'ENDFUNCTION'    type = 'I' row = 3 ) ).
+                      ( str = 'ENDFUNCTION'    type = 'I' row = 4 ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
     levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 stmnt_type = scan_struc_stmnt_type-function )
-                          ( stmnt_from = 3 stmnt_to = 3 stmnt_type = scan_struc_stmnt_type-sequence ) ).
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 stmnt_type = scan_struc_stmnt_type-function ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' ) ).
+                          ( level = 1 from = '3' to = '3' type = 'P' )
+                          ( level = 1 from = '4' to = '4' type = 'K' ) ).
 
     tokens = VALUE #( ( str = 'FUNCTION'         type = 'I' row = 1 )
                       ( str = 'F1'               type = 'I' row = 1 )
-                      ( str = 'ENDFUNCTION'      type = 'I' row = 2 )
-                      ( str = '"#EC CI_FUNCTION' type = 'C' row = 2 ) ).
+                      ( str = '"#EC CI_FUNCTION' type = 'C' row = 1 )
+                      ( str = 'ENDFUNCTION'      type = 'I' row = 2 ) ).
   ENDMETHOD.
 ENDCLASS.
 
