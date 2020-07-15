@@ -40,7 +40,7 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
     y_message_registration=>add_message(
       EXPORTING
         check_name     = me->myname
-        text           = '[Clean Code]: Function-Module should not be used!'(102)
+        text           = '[Clean Code]: Function-Module should not be created!'(102)
         pseudo_comment = settings-pseudo_comment
       CHANGING
         messages       = me->scimessages ).

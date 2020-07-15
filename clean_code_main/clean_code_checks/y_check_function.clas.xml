@@ -22,7 +22,7 @@
     <item>
      <ID>I</ID>
      <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Function-Module should not be used!</ENTRY>
+     <ENTRY>[Clean Code]: Function-Module should not be created!</ENTRY>
      <LENGTH>98</LENGTH>
     </item>
    </TPOOL>
