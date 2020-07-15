@@ -64,7 +64,7 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
 
       raise_error( p_sub_obj_type = c_type_include
                    p_level        = statement_for_message-level
-                   p_position     = statement_for_message-from
+                   p_position     = structure-stmnt_from
                    p_from         = statement_for_message-from
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
