@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_EMPTY_CATCHES</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Empty Procedure</DESCRIPT>
+    <DESCRIPT>Clean Code Check - Empty Catch</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
@@ -22,7 +22,7 @@
     <item>
      <ID>I</ID>
      <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Empty Catches should be removed!</ENTRY>
+     <ENTRY>[Clean Code]: Empty Catch should be removed!</ENTRY>
      <LENGTH>96</LENGTH>
     </item>
    </TPOOL>

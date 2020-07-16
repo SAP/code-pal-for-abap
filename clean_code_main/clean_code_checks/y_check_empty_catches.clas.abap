@@ -1,13 +1,13 @@
-CLASS y_check_empty_catches DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
+class Y_CHECK_EMPTY_CATCHES definition
+  public
+  inheriting from Y_CHECK_BASE
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_EMPTY_CATCHES' ##NO_TEXT.
+  constants C_MYNAME type SCI_CHK value 'Y_CHECK_EMPTY_CATCHES' ##NO_TEXT.
 
-    METHODS constructor .
+  methods CONSTRUCTOR .
   PROTECTED SECTION.
 
     METHODS inspect_tokens REDEFINITION .
@@ -32,7 +32,7 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Empty Catches'(001).
+    description = 'Empty CATCH'(001).
     category    = 'Y_CHECK_CATEGORY'.
     version     = '0000'.
     position    = '300'.
@@ -42,12 +42,12 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-prio = 'W'.
-    settings-documentation = |{ c_docs_path-checks }empty-catches.md|.
+    settings-documentation = |{ c_docs_path-checks }empty-catch.md|.
 
     y_message_registration=>add_message(
       EXPORTING
         check_name     = me->myname
-        text           = '[Clean Code]: Empty catches should be removed!'(102)
+        text           = '[Clean Code]: Empty catch should be removed!'(102)
         pseudo_comment = settings-pseudo_comment
       CHANGING
         messages       = me->scimessages ).
