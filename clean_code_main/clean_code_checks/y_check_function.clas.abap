@@ -6,7 +6,6 @@ CLASS y_check_function DEFINITION
   PUBLIC SECTION.
 
     CONSTANTS c_myname TYPE seoclsname VALUE 'Y_CHECK_FUNCTION' ##NO_TEXT.
-    CONSTANTS second_token TYPE i VALUE 2 ##NO_TEXT.
 
     METHODS constructor .
   PROTECTED SECTION.
@@ -41,7 +40,7 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
     y_message_registration=>add_message(
       EXPORTING
         check_name     = me->myname
-        text           = '[Clean Code]: Function-Module should not be used!'(102)
+        text           = '[Clean Code]: Function-Module should not be created!'(102)
         pseudo_comment = settings-pseudo_comment
       CHANGING
         messages       = me->scimessages ).
@@ -49,7 +48,28 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    RETURN.
+    CHECK get_token_abs( statement-from ) EQ 'FUNCTION'.
+
+    statement_for_message = statement.
+
+    DATA fm_name TYPE c LENGTH 30.
+    fm_name = get_token_abs( statement-from + 1 ).
+
+    IF db_reader->is_fm_rfc_enabled( fm_name ) EQ abap_false.
+      DATA(check_configuration) = detect_check_configuration( threshold = 0
+                                                              include = get_include( p_level = statement_for_message-level ) ).
+      IF check_configuration IS INITIAL.
+        RETURN.
+      ENDIF.
+
+      raise_error( p_sub_obj_type = c_type_include
+                   p_level        = statement_for_message-level
+                   p_position     = structure-stmnt_from
+                   p_from         = statement_for_message-from
+                   p_kind         = check_configuration-prio
+                   p_test         = me->myname
+                   p_code         = get_code( check_configuration-prio ) ).
+    ENDIF.
   ENDMETHOD.
 
 
@@ -70,23 +90,13 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
           ENDIF.
       ENDTRY.
 
-      READ TABLE ref_scan_manager->get_statements( ) INDEX <structure>-stmnt_to INTO statement_for_message.
+      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+        FROM <structure>-stmnt_from TO <structure>-stmnt_to WHERE type NE scan_stmnt_type-comment AND
+                                                                  type NE scan_stmnt_type-comment_in_stmnt AND
+                                                                  type NE scan_stmnt_type-pragma.
+        inspect_tokens( structure = <structure> statement = <statement> ).
+      ENDLOOP.
 
-      IF NOT db_reader->is_fm_rfc_enabled( get_token_rel( second_token ) ).
-        DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                                include = get_include( p_level = statement_for_message-level ) ).
-        IF check_configuration IS INITIAL.
-          CONTINUE.
-        ENDIF.
-
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_for_message-level
-                     p_position     = <structure>-stmnt_to
-                     p_from         = statement_for_message-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio ) ).
-      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
