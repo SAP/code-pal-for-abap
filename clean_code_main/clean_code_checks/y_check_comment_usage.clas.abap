@@ -144,7 +144,8 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
          ( <token>-str+0(2) EQ |*"| OR
            <token>-str+0(2) EQ |"!| OR
            <token>-str+0(2) EQ |##| OR
-         ( strlen( <token>-str ) GE 3 AND <token>-str+0(3) EQ |"#E| ) OR
+           <token>-str+0(2) EQ |*?| OR
+           ( strlen( <token>-str ) GE 3 AND <token>-str+0(3) EQ |"#E| ) OR
            <token>-str CP '"' && object_name && '*.' ).
         comment_number = comment_number + 1.
       ENDIF.
