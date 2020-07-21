@@ -32,7 +32,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_comment_usage IMPLEMENTATION.
+CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
 
 
   METHOD calc_percentage_of_comments.
@@ -143,12 +143,13 @@ CLASS y_check_comment_usage IMPLEMENTATION.
       IF strlen( <token>-str ) GE 2 AND NOT
          ( <token>-str+0(2) EQ |*"| OR
            <token>-str+0(2) EQ |"!| OR
-           <token>-str+0(3) EQ |"#E| OR
            <token>-str+0(2) EQ |##| OR
+         ( strlen( <token>-str ) GE 3 AND <token>-str+0(3) EQ |"#E| ) OR
            <token>-str CP '"' && object_name && '*.' ).
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
+    UNASSIGN <token>.
   ENDMETHOD.
 
 

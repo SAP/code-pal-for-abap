@@ -118,7 +118,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'SOME_CODE'  type = 'I' row = 7 )
                       ( str = '"COMMENT'   type = 'C' row = 8 )
                       ( str = '"COMMENT'   type = 'C' row = 9 )
-                      ( str = '"COMMENT'   type = 'C' row = 10 ) ).
+                      ( str = '""'         type = 'C' row = 10 ) ).
   ENDMETHOD.
 ENDCLASS.
 
