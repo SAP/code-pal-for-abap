@@ -13,10 +13,11 @@ CLASS y_check_method_output_param DEFINITION
     METHODS execute_check REDEFINITION.
 
   PRIVATE SECTION.
-    DATA has_exporting_parameter TYPE abap_bool VALUE abap_false.
-    DATA has_changing_parameter TYPE abap_bool VALUE abap_false.
-    DATA has_returning_parameter TYPE abap_bool VALUE abap_false.
-    DATA has_pseudo_comment TYPE abap_bool VALUE abap_false.
+    DATA has_found_methods TYPE abap_bool.
+    DATA has_exporting_parameter TYPE abap_bool.
+    DATA has_changing_parameter TYPE abap_bool.
+    DATA has_returning_parameter TYPE abap_bool.
+    DATA has_pseudo_comment TYPE abap_bool.
 
     METHODS check_token_content
       IMPORTING token TYPE stokesx.
@@ -26,7 +27,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_method_output_param IMPLEMENTATION.
+CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
 
 
   METHOD calculate_param_combination.
@@ -147,8 +148,7 @@ CLASS y_check_method_output_param IMPLEMENTATION.
                      p_from         = statement_for_message-from
                      p_kind         = check_configuration-prio
                      p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_suppress     = settings-pseudo_comment ).
+                     p_code         = get_code( check_configuration-prio ) ).
       ENDIF.
 
       method_index = method_index + 1.

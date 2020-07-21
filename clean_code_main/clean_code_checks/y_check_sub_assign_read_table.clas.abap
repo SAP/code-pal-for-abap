@@ -18,7 +18,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_sub_assign_read_table IMPLEMENTATION.
+CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -75,8 +75,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
                      p_from         = statement_for_message-from
                      p_kind         = check_configuration-prio
                      p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_suppress     = settings-pseudo_comment ).
+                     p_code         = get_code( check_configuration-prio ) ).
       ENDIF.
 
       token_index = token_index + 1.

@@ -5,9 +5,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 0 ) ).
-    result = VALUE #( BASE result
-                    ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 1 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 0 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 1 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.
@@ -67,7 +66,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
     tokens = VALUE #( ( str = 'FUNCTION'    type = 'I' row = 1 )
                       ( str = 'F1'          type = 'I' row = 1 )
-                      ( str = 'ENDFUNCTION' type = 'I' row = 1 ) ).
+                      ( str = 'ENDFUNCTION' type = 'I' row = 2 ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
@@ -86,23 +85,23 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'ENDFUNCTION'    type = 'I' row = 2 )
                       ( str = 'FUNCTION'       type = 'I' row = 3 )
                       ( str = 'F2'             type = 'I' row = 3 )
-                      ( str = 'ENDFUNCTION'    type = 'I' row = 3 ) ).
+                      ( str = 'ENDFUNCTION'    type = 'I' row = 4 ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
     levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 stmnt_type = scan_struc_stmnt_type-function )
-                          ( stmnt_from = 3 stmnt_to = 3 stmnt_type = scan_struc_stmnt_type-sequence ) ).
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 stmnt_type = scan_struc_stmnt_type-function ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' ) ).
+                          ( level = 1 from = '3' to = '4' type = 'P' )
+                          ( level = 1 from = '5' to = '5' type = 'K' ) ).
 
     tokens = VALUE #( ( str = 'FUNCTION'         type = 'I' row = 1 )
                       ( str = 'F1'               type = 'I' row = 1 )
-                      ( str = 'ENDFUNCTION'      type = 'I' row = 2 )
-                      ( str = '"#EC CI_FUNCTION' type = 'C' row = 2 ) ).
+                      ( str = '"#EC CI_FUNCTION' type = 'C' row = 1 )
+                      ( str = '*SOME COMMENT'    type = 'C' row = 2 )
+                      ( str = 'ENDFUNCTION'      type = 'I' row = 3 ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -142,7 +141,7 @@ CLASS ltd_no_rfc_function IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltc_function DEFINITION FOR TESTING
+CLASS local_test_class DEFINITION FOR TESTING
   RISK LEVEL HARMLESS
   DURATION SHORT.
 
@@ -160,9 +159,9 @@ CLASS ltc_function DEFINITION FOR TESTING
       pseudo_comment_ok FOR TESTING.
 ENDCLASS.
 
-CLASS y_check_function DEFINITION LOCAL FRIENDS ltc_function.
+CLASS y_check_function DEFINITION LOCAL FRIENDS local_test_class.
 
-CLASS ltc_function IMPLEMENTATION.
+CLASS local_test_class IMPLEMENTATION.
   METHOD setup.
     cut = NEW y_check_function( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).

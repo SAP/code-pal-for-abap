@@ -28,7 +28,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_method_return_bool IMPLEMENTATION.
+CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -54,19 +54,19 @@ CLASS y_check_method_return_bool IMPLEMENTATION.
       CHANGING
         messages       = me->scimessages ).
 
-    APPEND 'IS_' TO good_method_names_beginning.
-    APPEND 'HAS_' TO good_method_names_beginning.
-    APPEND 'ARE_' TO good_method_names_beginning.
-    APPEND 'TRY_' TO good_method_names_beginning.
-    APPEND 'CAN_' TO good_method_names_beginning.
-    APPEND 'HAVE_' TO good_method_names_beginning.
-    APPEND 'MUST_' TO good_method_names_beginning.
+    APPEND 'IS_'     TO good_method_names_beginning.
+    APPEND 'HAS_'    TO good_method_names_beginning.
+    APPEND 'ARE_'    TO good_method_names_beginning.
+    APPEND 'TRY_'    TO good_method_names_beginning.
+    APPEND 'CAN_'    TO good_method_names_beginning.
+    APPEND 'HAVE_'   TO good_method_names_beginning.
+    APPEND 'MUST_'   TO good_method_names_beginning.
     APPEND 'STARTS_' TO good_method_names_beginning.
-    APPEND 'ENDS_' TO good_method_names_beginning.
+    APPEND 'ENDS_'   TO good_method_names_beginning.
     APPEND 'SHOULD_' TO good_method_names_beginning.
 
-    APPEND 'EXIST' TO good_method_names_containing.
-    APPEND 'EQUAL' TO good_method_names_containing.
+    APPEND 'EXIST'   TO good_method_names_containing.
+    APPEND 'EQUAL'   TO good_method_names_containing.
     APPEND 'CONTAIN' TO good_method_names_containing.
   ENDMETHOD.
 
@@ -149,7 +149,6 @@ CLASS y_check_method_return_bool IMPLEMENTATION.
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )
-                   p_suppress     = settings-pseudo_comment
                    p_param_1      = |{ method_name }| ).
     ENDIF.
   ENDMETHOD.

@@ -1,6 +1,6 @@
 # Code Pal for ABAP
 
-***Note: Netweaver release 7.40 or higher is required.***
+***Note: Netweaver release 7.40 SP8 or higher is required.***
 
 Code pal is a tool which supports you in writing clean ABAP code. Clean Code allows you to read your code like well-written prose, it is easily understandable, maintainable and extensible. In addition, you can write high quality and reliable Unit Tests without hurdles and hereby reduce the total cost of ownership of the software.
 

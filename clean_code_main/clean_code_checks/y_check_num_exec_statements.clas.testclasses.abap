@@ -1,6 +1,3 @@
-CLASS ltc_no_exec_statements DEFINITION DEFERRED.
-CLASS y_check_num_exec_statements DEFINITION LOCAL FRIENDS ltc_no_exec_statements.
-
 CLASS ltd_clean_code_manager DEFINITION FOR TESTING.
   PUBLIC SECTION.
     INTERFACES: y_if_clean_code_manager.
@@ -8,9 +5,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 ) ).
-    result = VALUE #( BASE result
-                    ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 1 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 1 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.
@@ -117,10 +113,10 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   METHOD set_pseudo_comment_ok.
     set_data_for_error( ).
 
-    statements = VALUE #( BASE statements
-                        ( level = 1 from = '15' to = '15' type = 'P' ) ).
-    tokens = VALUE #( BASE tokens
-                    ( str = '"#EC CI_NOES' type = 'C' row = 6 ) ).
+    APPEND VALUE sstmnt( level = 1 from = '15' to = '15' type = 'P' )
+           TO statements.
+    APPEND VALUE stokesx( str = '"#EC CI_NOES' type = 'C' row = 6 )
+           TO tokens.
   ENDMETHOD.
 ENDCLASS.
 
@@ -137,7 +133,7 @@ CLASS ltd_clean_code_exemption_no IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltc_no_exec_statements DEFINITION FOR TESTING
+CLASS local_test_class DEFINITION FOR TESTING
   RISK LEVEL HARMLESS
   DURATION SHORT.
 
@@ -155,7 +151,9 @@ CLASS ltc_no_exec_statements DEFINITION FOR TESTING
       pseudo_comment_ok FOR TESTING.
 ENDCLASS.
 
-CLASS ltc_no_exec_statements IMPLEMENTATION.
+CLASS y_check_num_exec_statements DEFINITION LOCAL FRIENDS local_test_class.
+
+CLASS local_test_class IMPLEMENTATION.
   METHOD setup.
     cut = NEW y_check_num_exec_statements( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).
@@ -206,9 +204,6 @@ CLASS ltc_no_exec_statements IMPLEMENTATION.
         exp = pc_cnt ).
   ENDMETHOD.
 ENDCLASS.
-
-CLASS ltc_no_exec_statements_event DEFINITION DEFERRED.
-CLASS y_check_num_exec_statements DEFINITION LOCAL FRIENDS ltc_no_exec_statements_event.
 
 CLASS ltd_ref_scan_manager_event DEFINITION FOR TESTING.
   PUBLIC SECTION.
@@ -303,14 +298,14 @@ CLASS ltd_ref_scan_manager_event IMPLEMENTATION.
 
     structures = VALUE #( ( type = scan_struc_type-event stmnt_from = 1 stmnt_to = 6 stmnt_type = scan_struc_stmnt_type-start_of_selection ) ).
 
-    statements = VALUE #( BASE statements
-                        ( level = 1 from = '13' to = '13' type = 'P' ) ).
-    tokens = VALUE #( BASE tokens
-                    ( str = '"#EC CI_NOES' type = 'C' row = 6 ) ).
+    APPEND VALUE sstmnt( level = 1 from = '13' to = '13' type = 'P' )
+           TO statements.
+    APPEND VALUE stokesx( str = '"#EC CI_NOES' type = 'C' row = 6 )
+           TO tokens.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltc_no_exec_statements_event DEFINITION FOR TESTING
+CLASS local_test_class2 DEFINITION FOR TESTING
   RISK LEVEL HARMLESS
   DURATION SHORT.
 
@@ -328,7 +323,9 @@ CLASS ltc_no_exec_statements_event DEFINITION FOR TESTING
       pseudo_comment_ok FOR TESTING.
 ENDCLASS.
 
-CLASS ltc_no_exec_statements_event IMPLEMENTATION.
+CLASS y_check_num_exec_statements DEFINITION LOCAL FRIENDS local_test_class2.
+
+CLASS local_test_class2 IMPLEMENTATION.
   METHOD setup.
     cut = NEW y_check_num_exec_statements( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager_event( ).

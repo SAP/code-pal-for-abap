@@ -24,9 +24,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true prio = 'N' threshold = 0 ) ).
-    result = VALUE #( BASE result
-                    ( apply_on_testcode = abap_true prio = 'E' threshold = 0 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true prio = 'N' threshold = 0 )
+                      ( apply_on_testcode = abap_true prio = 'E' threshold = 0 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.
@@ -204,9 +203,7 @@ CLASS local_test_class DEFINITION FOR TESTING
       is_bound FOR TESTING,
       check_ok FOR TESTING,
       check_error FOR TESTING,
-      check_pseudo_comment_ok FOR TESTING,
-      db_access_in_ut FOR TESTING,
-      db_access_in_ut_pseudo FOR TESTING.
+      check_pseudo_comment_ok FOR TESTING.
 ENDCLASS.
 
 CLASS y_check_db_access_in_ut DEFINITION LOCAL FRIENDS local_test_class.
@@ -261,18 +258,5 @@ CLASS local_test_class IMPLEMENTATION.
       EXPORTING
         act = cut->statistics->get_number_pseudo_comments( )
         exp = pc_cnt ).
-  ENDMETHOD.
-  METHOD db_access_in_ut.
-    SELECT * FROM tadir INTO TABLE @DATA(tadir)
-      WHERE pgmid    EQ 'ZZZZ'
-        AND object   EQ 'ZZZZ'
-        AND obj_name EQ 'ZDM%'.
-  ENDMETHOD.
-
-  METHOD db_access_in_ut_pseudo.
-    SELECT * FROM tadir INTO TABLE @DATA(tadir)
-      WHERE pgmid    EQ 'ZZZZ'
-        AND object   EQ 'ZZZZ'
-        AND obj_name EQ 'ZDM%'.                       "#EC DB_ACCESS_UT
   ENDMETHOD.
 ENDCLASS.

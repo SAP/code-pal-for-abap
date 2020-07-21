@@ -16,7 +16,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_test_seam_usage IMPLEMENTATION.
+CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -60,7 +60,6 @@ CLASS y_check_test_seam_usage IMPLEMENTATION.
                  p_from         = statement_for_message-from
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
-                 p_code         = get_code( check_configuration-prio )
-                 p_suppress     = settings-pseudo_comment ).
+                 p_code         = get_code( check_configuration-prio ) ).
   ENDMETHOD.
 ENDCLASS.

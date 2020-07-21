@@ -16,7 +16,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_receiving_usage IMPLEMENTATION.
+CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -63,8 +63,7 @@ CLASS y_check_receiving_usage IMPLEMENTATION.
                    p_from         = statement_for_message-from
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
-                   p_code         = get_code( check_configuration-prio )
-                   p_suppress     = settings-pseudo_comment ).
+                   p_code         = get_code( check_configuration-prio ) ).
 
     ENDLOOP.
   ENDMETHOD.

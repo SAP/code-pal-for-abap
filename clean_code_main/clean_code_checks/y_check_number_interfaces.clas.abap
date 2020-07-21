@@ -21,7 +21,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_number_interfaces IMPLEMENTATION.
+CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
 
 
   METHOD checkif_error.
@@ -39,7 +39,6 @@ CLASS y_check_number_interfaces IMPLEMENTATION.
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )
-                   p_suppress     = settings-pseudo_comment
                    p_param_1      = |{ interface_counter }|
                    p_param_2      = |{ check_configuration-threshold }| ).
     ENDIF.

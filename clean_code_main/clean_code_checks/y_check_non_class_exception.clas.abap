@@ -17,7 +17,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_non_class_exception IMPLEMENTATION.
+CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
 
 
   METHOD checkif_error.
@@ -33,8 +33,7 @@ CLASS y_check_non_class_exception IMPLEMENTATION.
                  p_from         = statement_for_message-from
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
-                 p_code         = get_code( check_configuration-prio )
-                 p_suppress     = settings-pseudo_comment ).
+                 p_code         = get_code( check_configuration-prio ) ).
 
   ENDMETHOD.
 

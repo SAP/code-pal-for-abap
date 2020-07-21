@@ -30,7 +30,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_max_nesting_depth IMPLEMENTATION.
+CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
 
 
   METHOD compute_nesting_level.
@@ -107,7 +107,6 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
                        p_kind         = check_configuration-prio
                        p_test         = me->myname
                        p_code         = get_code( check_configuration-prio )
-                       p_suppress     = settings-pseudo_comment
                        p_param_1      = |{ max_nesting }|
                        p_param_2      = |{ check_configuration-threshold }| ).
         ENDIF.

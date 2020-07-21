@@ -18,7 +18,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_deprecated_key_words IMPLEMENTATION.
+CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -70,7 +70,6 @@ CLASS y_check_deprecated_key_words IMPLEMENTATION.
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
                  p_code         = get_code( check_configuration-prio )
-                 p_suppress     = settings-pseudo_comment
                  p_param_1      = |{ keyword }| ).
   ENDMETHOD.
 ENDCLASS.

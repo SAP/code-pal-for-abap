@@ -18,7 +18,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_is_interface_in_class IMPLEMENTATION.
+CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -33,6 +33,7 @@ CLASS y_check_is_interface_in_class IMPLEMENTATION.
     settings-pseudo_comment = '"#EC INTF_IN_CLASS' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-prio = 'W'.
     settings-documentation = |{ c_docs_path-checks }interface-in-class.md|.
 
     y_message_registration=>add_message(
@@ -88,7 +89,6 @@ CLASS y_check_is_interface_in_class IMPLEMENTATION.
                      p_kind         = check_configuration-prio
                      p_test         = me->myname
                      p_code         = get_code( check_configuration-prio )
-                     p_suppress     = settings-pseudo_comment
                      p_param_1      = |{ public_method_counter }| ).
       ENDIF.
     ENDLOOP.

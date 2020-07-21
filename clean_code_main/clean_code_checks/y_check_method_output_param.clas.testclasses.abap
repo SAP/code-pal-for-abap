@@ -5,9 +5,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 1 ) ).
-    result = VALUE #( BASE result
-                    ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 2 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 1 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 2 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.
@@ -58,13 +57,14 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( stmnt = 1 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
+    levels = VALUE #( ( stmnt = 1 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '3' type = 'K' )
                           ( level = 1 from = '4' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '9' type = 'K' ) ).
+                          ( level = 1 from = '7' to = '9' type = 'K' )
+                          ( level = 1 from = '10' to = '13' type = 'K' ) ).
 
     tokens = VALUE #( ( str = 'METHODS'      type = 'I' row = 1 )
                       ( str = 'METHOD_NAME1' type = 'I' row = 1 )
@@ -74,7 +74,11 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'CHANGING'     type = 'I' row = 2 )
                       ( str = 'METHODS'      type = 'I' row = 3 )
                       ( str = 'METHOD_NAME3' type = 'I' row = 3 )
-                      ( str = 'RETURNING'    type = 'I' row = 3 ) ).
+                      ( str = 'RETURNING'    type = 'I' row = 3 )
+                      ( str = 'METHODS'      type = 'I' row = 4 )
+                      ( str = 'METHOD_NAME4' type = 'I' row = 4 )
+                      ( str = 'IMPORTING'    type = 'I' row = 4 )
+                      ( str = 'RETURNING'    type = 'I' row = 4 ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
@@ -119,7 +123,7 @@ CLASS ltd_clean_code_exemption_no IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltc_method_output_param DEFINITION FOR TESTING
+CLASS local_test_class DEFINITION FOR TESTING
   RISK LEVEL HARMLESS
   DURATION SHORT.
 
@@ -137,9 +141,9 @@ CLASS ltc_method_output_param DEFINITION FOR TESTING
       pseudo_comment_ok FOR TESTING.
 ENDCLASS.
 
-CLASS y_check_method_output_param DEFINITION LOCAL FRIENDS ltc_method_output_param.
+CLASS y_check_method_output_param DEFINITION LOCAL FRIENDS local_test_class.
 
-CLASS ltc_method_output_param IMPLEMENTATION.
+CLASS local_test_class IMPLEMENTATION.
   METHOD setup.
     cut = NEW y_check_method_output_param( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).

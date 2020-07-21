@@ -5,9 +5,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 2 ) ).
-    result = VALUE #( BASE result
-                    ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 2 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.
@@ -126,7 +125,7 @@ CLASS ltd_clean_code_exemption_no IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltc_number_methods DEFINITION FOR TESTING
+CLASS local_test_class DEFINITION FOR TESTING
   RISK LEVEL HARMLESS
   DURATION SHORT.
 
@@ -144,9 +143,9 @@ CLASS ltc_number_methods DEFINITION FOR TESTING
       pseudo_comment_ok FOR TESTING.
 ENDCLASS.
 
-CLASS y_check_number_methods DEFINITION LOCAL FRIENDS ltc_number_methods.
+CLASS y_check_number_methods DEFINITION LOCAL FRIENDS local_test_class.
 
-CLASS ltc_number_methods IMPLEMENTATION.
+CLASS local_test_class IMPLEMENTATION.
   METHOD setup.
     cut = NEW y_check_number_methods( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).

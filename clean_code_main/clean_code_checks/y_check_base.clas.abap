@@ -73,7 +73,7 @@ CLASS y_check_base DEFINITION ABSTRACT
       RETURNING
         VALUE(result) TYPE sci_errc .
     METHODS inspect_tokens
-          ABSTRACT
+      ABSTRACT
       IMPORTING
         !structure TYPE sstruc OPTIONAL
         !index     TYPE i OPTIONAL
@@ -88,7 +88,6 @@ CLASS y_check_base DEFINITION ABSTRACT
         VALUE(p_kind)   TYPE sychar01
         !p_test         TYPE sci_chk
         !p_code         TYPE sci_errc
-        !p_suppress     TYPE sci_pcom OPTIONAL
         !p_param_1      TYPE csequence OPTIONAL
         !p_param_2      TYPE csequence OPTIONAL
         !p_param_3      TYPE csequence OPTIONAL
@@ -123,11 +122,13 @@ CLASS y_check_base DEFINITION ABSTRACT
       RETURNING
         VALUE(result) TYPE abap_bool .
     METHODS instantiate_objects .
+
+    METHODS enable_rfc.
 ENDCLASS.
 
 
 
-CLASS y_check_base IMPLEMENTATION.
+CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -143,8 +144,9 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
+    enable_rfc( ).
 
-    settings-object_created_on = '20160101'.
+    settings-object_created_on = '20190101'.
     settings-prio = 'E'.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
@@ -209,6 +211,7 @@ CLASS y_check_base IMPLEMENTATION.
     FIELD-SYMBOLS <profiles> TYPE ANY TABLE.
 
     TRY.
+        attributes_ok = abap_false.
         CREATE DATA profiles_ref TYPE STANDARD TABLE OF (`YTAB_PROFILES`) WITH DEFAULT KEY.
         ASSIGN profiles_ref->* TO <profiles>.
 
@@ -231,12 +234,14 @@ CLASS y_check_base IMPLEMENTATION.
         IF lines( <profiles> ) > 0.
           result = abap_false.
         ELSE.
+          attributes_ok = abap_true.
           result = abap_true.
         ENDIF.
 
       CATCH cx_sy_create_data_error
             cx_sy_create_object_error
             ycx_entry_not_found.
+        attributes_ok = abap_true.
         result = abap_true.
     ENDTRY.
   ENDMETHOD.
@@ -275,7 +280,17 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_attributes.
-    READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
+    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+    READ TABLE check_configurations INTO check_configuration INDEX 1.
+    IF sy-subrc <> 0.
+      check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
+      check_configuration-apply_on_testcode = settings-apply_on_test_code.
+      check_configuration-object_creation_date = settings-object_created_on.
+      check_configuration-prio = settings-prio.
+      check_configuration-threshold = settings-threshold.
+
+      APPEND check_configuration TO check_configurations.
+    ENDIF.
     EXPORT
       object_creation_date = check_configuration-object_creation_date
       message_severity = check_configuration-prio
@@ -480,8 +495,7 @@ CLASS y_check_base IMPLEMENTATION.
     DATA message(72) TYPE c.
 
     READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
-
-    IF use_default_attributes EQ abap_true.
+    IF sy-subrc <> 0 AND use_default_attributes = abap_true.
       check_configuration-object_creation_date = settings-object_created_on.
       check_configuration-prio = settings-prio.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
@@ -627,7 +641,7 @@ CLASS y_check_base IMPLEMENTATION.
                                                                                                                  scimessages      = scimessages
                                                                                                                  test             = p_test
                                                                                                                  code             = p_code
-                                                                                                                 suppress         = p_suppress
+                                                                                                                 suppress         = settings-pseudo_comment
                                                                                                                  position         = p_position ) ).
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'LCL_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = p_sub_obj_type
@@ -639,7 +653,7 @@ CLASS y_check_base IMPLEMENTATION.
               p_kind = p_kind
               p_test = p_test
               p_code = p_code
-              p_suppress = p_suppress
+              p_suppress = settings-pseudo_comment
               p_param_1 = p_param_1
               p_param_2 = p_param_2
               p_param_3 = p_param_3
@@ -665,45 +679,30 @@ CLASS y_check_base IMPLEMENTATION.
           p_kind            = ''
           p_test            = me->myname
           p_code            = '106' ).
+      FREE ref_scan_manager.
       RETURN.
     ENDIF.
 
+    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
+
     TRY.
         check_start_conditions( ).
-      CATCH ycx_object_not_processed.
-        RETURN.
-
-      CATCH ycx_object_is_exempted.
-*        raise_error(
-*          EXPORTING
-*              p_sub_obj_type    = c_type_include
-*              p_level           = 1
-*              p_position        = 1
-*              p_from            = 1
-*              p_kind            = ''
-*              p_test            = me->myname
-*              p_code            = '105' ).
-        RETURN.
-    ENDTRY.
-
-    TRY.
-        DATA(profile_configurations) = clean_code_manager->read_check_customizing( username    = sy-uname
-                                                                                   checkid     = myname
-                                                                                   object_name = object_name
-                                                                                   object_type = object_type ).
+        profile_configurations = clean_code_manager->read_check_customizing( username    = sy-uname
+                                                                             checkid     = myname
+                                                                             object_name = object_name
+                                                                             object_type = object_type ).
       CATCH ycx_no_check_customizing.
-        IF lines( check_configurations ) = 0.
-*          raise_error(
-*            EXPORTING
-*              p_sub_obj_type    = c_type_include
-*              p_level           = 1
-*              p_position        = 1
-*              p_from            = 1
-*              p_kind            = ''
-*              p_test            = me->myname
-*              p_code            = '104' ).
+        IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
+          FREE ref_scan_manager.
           RETURN.
+        ELSEIF attributes_ok = abap_true.
+          profile_configurations = check_configurations.
         ENDIF.
+      CATCH ycx_object_not_processed
+            ycx_object_is_exempted.
+        FREE ref_scan_manager.
+        RETURN.
+
     ENDTRY.
 
     IF lines( check_configurations ) > 0.
@@ -718,5 +717,18 @@ CLASS y_check_base IMPLEMENTATION.
     execute_check( ).
 
     FREE ref_scan_manager.
+  ENDMETHOD.
+
+
+  METHOD enable_rfc.
+    ASSIGN me->('remote_rfc_enabled') TO FIELD-SYMBOL(<remote_rfc_enabled>).
+    IF sy-subrc = 0.
+      <remote_rfc_enabled> = abap_true.
+    ENDIF.
+    ASSIGN me->('remote_enabled') TO FIELD-SYMBOL(<remote_enabled>).
+    IF sy-subrc = 0.
+      <remote_enabled> = abap_true.
+    ENDIF.
+    UNASSIGN: <remote_rfc_enabled>, <remote_enabled>.
   ENDMETHOD.
 ENDCLASS.

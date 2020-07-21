@@ -23,7 +23,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_declaration_in_if IMPLEMENTATION.
+CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -119,7 +119,6 @@ CLASS y_check_declaration_in_if IMPLEMENTATION.
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )
-                   p_suppress     = settings-pseudo_comment
                    p_param_1      = |{ keyword }| ).
     ENDIF.
   ENDMETHOD.
