@@ -85,7 +85,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'SOME_CODE'   type = 'I' row = 8 )
                       ( str = 'SOME_CODE'   type = 'I' row = 9 )
                       ( str = 'SOME_CODE'   type = 'I' row = 9 )
-                      ( str = '"COMMENT'    type = 'C' row = 10 )
+                      ( str = '"?<html>'    type = 'C' row = 10 )
                       ( str = '*"*COMMENT'  type = 'C' row = 11 )
                       ( str = '*"'          type = 'C' row = 12 )
                       ( str = '"! docu'     type = 'C' row = 13 )
@@ -117,7 +117,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'SOME_CODE'  type = 'I' row = 6 )
                       ( str = 'SOME_CODE'  type = 'I' row = 7 )
                       ( str = '"COMMENT'   type = 'C' row = 8 )
-                      ( str = '"COMMENT'   type = 'C' row = 9 )
+                      ( str = '*COMMENT'   type = 'C' row = 9 )
                       ( str = '""'         type = 'C' row = 10 ) ).
   ENDMETHOD.
 ENDCLASS.
