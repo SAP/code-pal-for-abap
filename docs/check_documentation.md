@@ -7,6 +7,7 @@
 - [DB Access in Unit Tests](checks/db-access-in-ut.md)
 - [Declaration in IF](checks/declaration-in-if.md)
 - [Deprecated Key Word](checks/deprecated-key-word.md)
+- [Empty Catch](checks/empty_catch.md)
 - [Empty IF Branches](checks/empty-if-branches.md)
 - [Empty Procedure](checks/empty-procedure.md)
 - [Equals Sign Chaining](checks/equals-sign-chaining.md)
