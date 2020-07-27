@@ -78,7 +78,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
     structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 stmnt_type = scan_struc_stmnt_type-method )
                           ( stmnt_from = 3 stmnt_to = 4 stmnt_type = scan_struc_stmnt_type-form )
-                          ( stmnt_from = 5 stmnt_to = 7 stmnt_type = scan_struc_stmnt_type-function ) ).
+                          ( stmnt_from = 5 stmnt_to = 7 stmnt_type = scan_struc_stmnt_type-module ) ).
 
     statements = VALUE #( ( level = 1 from = '1' to = '2'   type = 'K' )
                           ( level = 1 from = '3' to = '3'   type = 'K' )
@@ -94,10 +94,10 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'FORM'        type = 'I' row = 3 )
                       ( str = 'CALC'        type = 'I' row = 3 )
                       ( str = 'ENDFORM'     type = 'I' row = 4 )
-                      ( str = 'FUNCTION'    type = 'I' row = 5 )
+                      ( str = 'MODULE'      type = 'I' row = 5 )
                       ( str = 'CALC'        type = 'I' row = 5 )
                       ( str = '"COMMENT'    type = 'C' row = 6 )
-                      ( str = 'ENDFUNCTION' type = 'I' row = 7 ) ).
+                      ( str = 'ENDMODULE'   type = 'I' row = 7 ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
@@ -105,7 +105,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
     structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 stmnt_type = scan_struc_stmnt_type-method )
                           ( stmnt_from = 4 stmnt_to = 5 stmnt_type = scan_struc_stmnt_type-form )
-                          ( stmnt_from = 7 stmnt_to = 8 stmnt_type = scan_struc_stmnt_type-function ) ).
+                          ( stmnt_from = 7 stmnt_to = 8 stmnt_type = scan_struc_stmnt_type-module ) ).
 
     statements = VALUE #( ( level = 1 from = '1'  to = '2'  type = 'K' )
                           ( level = 1 from = '3'  to = '3'  type = 'K' )
@@ -125,9 +125,9 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
                       ( str = 'CALC'                 type = 'I' row = 3 )
                       ( str = 'ENDFORM'              type = 'I' row = 4 )
                       ( str = '"#EC EMPTY_PROCEDURE' type = 'C' row = 4 )
-                      ( str = 'FUNCTION'             type = 'I' row = 5 )
+                      ( str = 'MODULE'               type = 'I' row = 5 )
                       ( str = 'CALC'                 type = 'I' row = 5 )
-                      ( str = 'ENDFUNCTION'          type = 'I' row = 6 )
+                      ( str = 'ENDMODULE'            type = 'I' row = 6 )
                       ( str = '"#EC EMPTY_PROCEDURE' type = 'C' row = 6 ) ).
   ENDMETHOD.
 ENDCLASS.

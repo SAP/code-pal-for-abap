@@ -2,7 +2,7 @@
 
 # Empty Procedure Check
 ## What is the Intent of the Check?
-The Empty Procedures check searches for empty methods, functions, forms and modules.
+The Empty Procedures check searches for empty methods, forms and modules.
 
 ## How does the check work?
 The check highlights all empty code statements. Comments and Pragmas are also classified as "empty".
