@@ -12,11 +12,6 @@ CLASS y_check_empty_procedures DEFINITION
 
     METHODS inspect_tokens REDEFINITION .
   PRIVATE SECTION.
-    DATA is_empty TYPE abap_bool VALUE abap_false.
-
-    METHODS is_statement_type_excluded
-      IMPORTING statement     TYPE sstmnt
-      RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS get_next_token_from_index
       IMPORTING index         TYPE i
@@ -75,62 +70,44 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
   METHOD has_found_start_procedure.
     result = abap_false.
     CASE get_next_token_from_index( statement-from )-str.
-      WHEN  if_kaizen_keywords_c=>gc_form OR
-            if_kaizen_keywords_c=>gc_method OR
-            if_kaizen_keywords_c=>gc_function OR
-            if_kaizen_keywords_c=>gc_module.
+      WHEN 'FORM' OR
+           'METHOD' OR
+           'MODULE'.
         result = abap_true.
     ENDCASE.
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    CHECK is_statement_type_excluded( statement ) = abap_false.
+    CHECK has_found_start_procedure( statement ) = abap_true AND
+          is_next_statement_end_proc( statement ) = abap_true.
 
-    IF is_empty = abap_true AND structure-stmnt_to EQ index.
-      statement_for_message = statement.
+    statement_for_message = statement.
 
-      DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                              include = get_include( p_level = statement_for_message-level ) ).
+    DATA(check_configuration) = detect_check_configuration( threshold = 0
+                                                            include = get_include( p_level = statement_for_message-level ) ).
 
-      IF check_configuration IS INITIAL.
-        RETURN.
-      ENDIF.
-
-      raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement_for_message-level
-                   p_position     = index
-                   p_from         = statement_for_message-from
-                   p_kind         = check_configuration-prio
-                   p_test         = me->myname
-                   p_code         = get_code( check_configuration-prio ) ).
-
-      is_empty = abap_false.
+    IF check_configuration IS INITIAL.
+      RETURN.
     ENDIF.
 
-    IF has_found_start_procedure( statement ) = abap_true AND
-       is_next_statement_end_proc( statement ) = abap_true.
-      is_empty = abap_true.
-    ENDIF.
+    raise_error( p_sub_obj_type = c_type_include
+                 p_level        = statement_for_message-level
+                 p_position     = index + 1
+                 p_from         = statement_for_message-to
+                 p_kind         = check_configuration-prio
+                 p_test         = me->myname
+                 p_code         = get_code( check_configuration-prio ) ).
   ENDMETHOD.
 
 
   METHOD is_next_statement_end_proc.
     result = abap_false.
     CASE get_next_token_from_index( statement-to + 1 )-str.
-      WHEN  if_kaizen_keywords_c=>gc_endform OR
-            if_kaizen_keywords_c=>gc_endmethod OR
-            if_kaizen_keywords_c=>gc_endfunction OR
-            if_kaizen_keywords_c=>gc_endmodule.
+      WHEN 'ENDFORM' OR
+           'ENDMETHOD' OR
+           'ENDMODULE'.
         result = abap_true.
     ENDCASE.
-  ENDMETHOD.
-
-
-  METHOD is_statement_type_excluded.
-    result = xsdbool( statement-type EQ scan_stmnt_type-empty OR
-                      statement-type EQ scan_stmnt_type-comment OR
-                      statement-type EQ scan_stmnt_type-comment_in_stmnt OR
-                      statement-type EQ scan_stmnt_type-pragma ).
   ENDMETHOD.
 ENDCLASS.

@@ -1,22 +1,18 @@
-class Y_CHECK_EMPTY_CATCHES definition
-  public
-  inheriting from Y_CHECK_BASE
-  create public .
+CLASS y_check_empty_catches DEFINITION
+  PUBLIC
+  INHERITING FROM y_check_base
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  constants C_MYNAME type SCI_CHK value 'Y_CHECK_EMPTY_CATCHES' ##NO_TEXT.
+    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_EMPTY_CATCHES' ##NO_TEXT.
 
-  methods CONSTRUCTOR .
+    METHODS constructor .
   PROTECTED SECTION.
 
     METHODS inspect_tokens REDEFINITION .
   PRIVATE SECTION.
     DATA is_empty TYPE abap_bool VALUE abap_false.
-
-    METHODS is_statement_type_excluded
-      IMPORTING statement     TYPE sstmnt
-      RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS get_next_token_from_index
       IMPORTING index         TYPE i
@@ -66,8 +62,7 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK is_statement_type_excluded( statement ) = abap_false AND
-          get_next_token_from_index( statement-from )-str EQ 'CATCH' AND
+    CHECK get_next_token_from_index( statement-from )-str EQ 'CATCH' AND
         ( get_next_token_from_index( statement-to + 1 )-str EQ 'ENDTRY' OR
           get_next_token_from_index( statement-to + 1 )-str EQ 'ENDCATCH' ).
 
@@ -87,13 +82,5 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
                  p_code         = get_code( check_configuration-prio ) ).
-  ENDMETHOD.
-
-
-  METHOD is_statement_type_excluded.
-    result = xsdbool( statement-type EQ scan_stmnt_type-empty OR
-                      statement-type EQ scan_stmnt_type-comment OR
-                      statement-type EQ scan_stmnt_type-comment_in_stmnt OR
-                      statement-type EQ scan_stmnt_type-pragma ).
   ENDMETHOD.
 ENDCLASS.
