@@ -24,8 +24,11 @@ CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
       set_pseudo_comment_ok.
 
   PRIVATE SECTION.
+    DATA str TYPE c LENGTH 255.
+    DATA str_tab LIKE STANDARD TABLE OF str.
+
     METHODS:
-      convert_code IMPORTING source TYPE string255_tab.
+      convert_code IMPORTING source LIKE str_tab.
 
     DATA:
       levels     TYPE slevel_tab,
@@ -61,31 +64,29 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
   METHOD set_data_for_ok.
 
-    DATA(source) = VALUE string255_tab(
-      ( ' CLASS z_check_num_output_parameter DEFINITION PUBLIC FINAL CREATE PUBLIC. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS: ' )
-      ( '       clean_method RETURNING VALUE(ro_excel) TYPE REF TO cl_abap_xsd ' )
-      ( '                    RAISING cx_dynamic_check, ' )
-      ( '       exporting_example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                         RAISING   cx_dynamic_check, ' )
-      ( '       changing_example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                        RAISING  cx_dynamic_check, ' )
-      ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. ' )
-      ( '   PRIVATE SECTION. ' )
-      ( '     CLASS-METHODS static_example IMPORTING import_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd. ' )
-      ( ' ENDCLASS. ' )
-    ).
-
-    convert_code( source ).
+    convert_code( VALUE #(
+       ( ' CLASS z_check_num_output_parameter DEFINITION PUBLIC FINAL CREATE PUBLIC. ' )
+       ( '   PUBLIC SECTION. ' )
+       ( '   PROTECTED SECTION. ' )
+       ( '     METHODS: ' )
+       ( '       clean_method RETURNING VALUE(ro_excel) TYPE REF TO cl_abap_xsd ' )
+       ( '                    RAISING cx_dynamic_check, ' )
+       ( '       exporting_example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+       ( '                         RAISING   cx_dynamic_check, ' )
+       ( '       changing_example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
+       ( '                        RAISING  cx_dynamic_check, ' )
+       ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. ' )
+       ( '   PRIVATE SECTION. ' )
+       ( '     CLASS-METHODS static_example IMPORTING import_01 TYPE REF TO cl_abap_xsd ' )
+       ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd. ' )
+       ( ' ENDCLASS. ' )
+     ) ).
 
   ENDMETHOD.
 
   METHOD set_data_for_error.
 
-    DATA(source) = VALUE string255_tab(
+    convert_code( VALUE #(
       ( ' CLASS z_check_num_output_parameter DEFINITION PUBLIC FINAL CREATE PUBLIC. ' )
       ( '   PUBLIC SECTION. ' )
       ( '   PROTECTED SECTION. ' )
@@ -107,39 +108,35 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
       ( '                                            exporting_02 TYPE REF TO cl_abap_xsd. ' )
       ( ' ENDCLASS. ' )
-    ).
-
-    convert_code( source ).
+    ) ).
 
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
 
-    DATA(source) = VALUE string255_tab(
-      ( ' CLASS z_check_num_output_parameter DEFINITION PUBLIC FINAL CREATE PUBLIC. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS: ' )
-      ( '       clean_method RETURNING VALUE(ro_excel) TYPE REF TO cl_abap_xsd ' )
-      ( '                    RAISING cx_dynamic_check, ' )
-      ( '       exporting_example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                                   exporting_02 TYPE REF TO cl_abap_xsd ' )
-      ( '                                   exporting_03 TYPE REF TO cl_abap_xsd ' )
-      ( '                                   exporting_04 TYPE REF TO cl_abap_xsd ' )
-      ( '                         RAISING   cx_dynamic_check, "#EC NUM_OUTPUT_PARA ' )
-      ( '       changing_example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                                 changing_02 TYPE REF TO cl_abap_xsd ' )
-      ( '                                 changing_03 TYPE REF TO cl_abap_xsd ' )
-      ( '                        RAISING  cx_dynamic_check, "#EC NUM_OUTPUT_PARA ' )
-      ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd inline_02 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. "#EC NUM_OUTPUT_PARA ' )
-      ( '   PRIVATE SECTION. ' )
-      ( '     CLASS-METHODS static_example IMPORTING import_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                                            exporting_02 TYPE REF TO cl_abap_xsd. "#EC NUM_OUTPUT_PARA ' )
-      ( ' ENDCLASS. ' )
-    ).
-
-    convert_code( source ).
+    convert_code( VALUE #(
+       ( ' CLASS z_check_num_output_parameter DEFINITION PUBLIC FINAL CREATE PUBLIC. ' )
+       ( '   PUBLIC SECTION. ' )
+       ( '   PROTECTED SECTION. ' )
+       ( '     METHODS: ' )
+       ( '       clean_method RETURNING VALUE(ro_excel) TYPE REF TO cl_abap_xsd ' )
+       ( '                    RAISING cx_dynamic_check, ' )
+       ( '       exporting_example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+       ( '                                   exporting_02 TYPE REF TO cl_abap_xsd ' )
+       ( '                                   exporting_03 TYPE REF TO cl_abap_xsd ' )
+       ( '                                   exporting_04 TYPE REF TO cl_abap_xsd ' )
+       ( '                         RAISING   cx_dynamic_check, "#EC NUM_OUTPUT_PARA ' )
+       ( '       changing_example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
+       ( '                                 changing_02 TYPE REF TO cl_abap_xsd ' )
+       ( '                                 changing_03 TYPE REF TO cl_abap_xsd ' )
+       ( '                        RAISING  cx_dynamic_check, "#EC NUM_OUTPUT_PARA ' )
+       ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd inline_02 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. "#EC NUM_OUTPUT_PARA ' )
+       ( '   PRIVATE SECTION. ' )
+       ( '     CLASS-METHODS static_example IMPORTING import_01 TYPE REF TO cl_abap_xsd ' )
+       ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+       ( '                                            exporting_02 TYPE REF TO cl_abap_xsd. "#EC NUM_OUTPUT_PARA ' )
+       ( ' ENDCLASS. ' )
+     ) ).
 
   ENDMETHOD.
 
