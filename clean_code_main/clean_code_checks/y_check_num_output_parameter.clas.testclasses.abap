@@ -24,6 +24,9 @@ CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
       set_pseudo_comment_ok.
 
   PRIVATE SECTION.
+    METHODS:
+      convert_code IMPORTING source TYPE string255_tab.
+
     DATA:
       levels     TYPE slevel_tab,
       structures TYPE sstruc_tab,
@@ -57,55 +60,99 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( stmnt = 1 from = 1 to = 1 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 1 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    DATA(source) = VALUE string255_tab(
+      ( ' CLASS z_check_num_output_parameter DEFINITION PUBLIC FINAL CREATE PUBLIC. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     METHODS: ' )
+      ( '       clean_method RETURNING VALUE(ro_excel) TYPE REF TO cl_abap_xsd ' )
+      ( '                    RAISING cx_dynamic_check, ' )
+      ( '       exporting_example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                         RAISING   cx_dynamic_check, ' )
+      ( '       changing_example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                        RAISING  cx_dynamic_check, ' )
+      ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     CLASS-METHODS static_example IMPORTING import_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd. ' )
+      ( ' ENDCLASS. ' )
+    ).
 
-    statements = VALUE #( ( level = 1 from = '1' to = '6' type = 'K' ) ).
+    convert_code( source ).
 
-    tokens = VALUE #( ( str = 'METHODS'      type = 'I' row = 1 )
-                      ( str = 'METHOD_NAME1' type = 'I' row = 1 )
-                      ( str = 'EXPORTING'    type = 'I' row = 1 )
-                      ( str = 'LIKE'         type = 'I' row = 1 )
-                      ( str = 'CHANGING'     type = 'I' row = 1 )
-                      ( str = 'TYPE'         type = 'I' row = 1 )
-                      ( str = 'RETURNING'    type = 'I' row = 1 )
-                      ( str = 'TYPE'         type = 'I' row = 1 ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( stmnt = 0 from = 1 to = 1 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 1 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    DATA(source) = VALUE string255_tab(
+      ( ' CLASS z_check_num_output_parameter DEFINITION PUBLIC FINAL CREATE PUBLIC. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     METHODS: ' )
+      ( '       clean_method RETURNING VALUE(ro_excel) TYPE REF TO cl_abap_xsd ' )
+      ( '                    RAISING cx_dynamic_check, ' )
+      ( '       exporting_example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                   exporting_02 TYPE REF TO cl_abap_xsd ' )
+      ( '                                   exporting_03 TYPE REF TO cl_abap_xsd ' )
+      ( '                                   exporting_04 TYPE REF TO cl_abap_xsd ' )
+      ( '                         RAISING   cx_dynamic_check,' )
+      ( '       changing_example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                 changing_02 TYPE REF TO cl_abap_xsd ' )
+      ( '                                 changing_03 TYPE REF TO cl_abap_xsd ' )
+      ( '                        RAISING  cx_dynamic_check, ' )
+      ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd inline_02 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     CLASS-METHODS static_example IMPORTING import_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                            exporting_02 TYPE REF TO cl_abap_xsd. ' )
+      ( ' ENDCLASS. ' )
+    ).
 
-    statements = VALUE #( ( level = 1 from = '1' to = '7' type = 'K' ) ).
+    convert_code( source ).
 
-    tokens = VALUE #( ( str = 'METHODS'      type = 'I' row = 1 )
-                      ( str = 'METHOD_NAME1' type = 'I' row = 1 )
-                      ( str = 'EXPORTING'    type = 'I' row = 1 )
-                      ( str = 'LIKE'         type = 'I' row = 1 )
-                      ( str = 'TYPE'         type = 'I' row = 1 )
-                      ( str = 'RETURNING'    type = 'I' row = 1 )
-                      ( str = 'TYPE'         type = 'I' row = 1 ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    levels = VALUE #( ( stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    DATA(source) = VALUE string255_tab(
+      ( ' CLASS z_check_num_output_parameter DEFINITION PUBLIC FINAL CREATE PUBLIC. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     METHODS: ' )
+      ( '       clean_method RETURNING VALUE(ro_excel) TYPE REF TO cl_abap_xsd ' )
+      ( '                    RAISING cx_dynamic_check, ' )
+      ( '       exporting_example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                   exporting_02 TYPE REF TO cl_abap_xsd ' )
+      ( '                                   exporting_03 TYPE REF TO cl_abap_xsd ' )
+      ( '                                   exporting_04 TYPE REF TO cl_abap_xsd ' )
+      ( '                         RAISING   cx_dynamic_check, "#EC NUM_OUTPUT_PARA ' )
+      ( '       changing_example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                 changing_02 TYPE REF TO cl_abap_xsd ' )
+      ( '                                 changing_03 TYPE REF TO cl_abap_xsd ' )
+      ( '                        RAISING  cx_dynamic_check, "#EC NUM_OUTPUT_PARA ' )
+      ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd inline_02 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. "#EC NUM_OUTPUT_PARA ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     CLASS-METHODS static_example IMPORTING import_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+      ( '                                            exporting_02 TYPE REF TO cl_abap_xsd. "#EC NUM_OUTPUT_PARA ' )
+      ( ' ENDCLASS. ' )
+    ).
 
-    statements = VALUE #( ( level = 1 from = '1' to = '7' type = 'K' )
-                          ( level = 1 from = '8' to = '8' type = 'P' ) ).
+    convert_code( source ).
 
-    tokens = VALUE #( ( str = 'METHODS'              type = 'I' row = 1 )
-                      ( str = 'METHOD_NAME1'         type = 'I' row = 1 )
-                      ( str = 'EXPORTING'            type = 'I' row = 1 )
-                      ( str = 'LIKE'                 type = 'I' row = 1 )
-                      ( str = 'TYPE'                 type = 'I' row = 1 )
-                      ( str = 'RETURNING'            type = 'I' row = 1 )
-                      ( str = 'TYPE'                 type = 'I' row = 1 )
-                      ( str = '"#EC NUM_OUTPUT_PARA' type = 'C' row = 1 ) ).
   ENDMETHOD.
+
+
+  METHOD convert_code.
+    SCAN ABAP-SOURCE source
+    LEVELS INTO levels
+    STRUCTURES INTO structures
+    STATEMENTS INTO statements
+    TOKENS INTO tokens
+    WITH COMMENTS.
+  ENDMETHOD.
+
 ENDCLASS.
 
 CLASS ltd_clean_code_exemption_no DEFINITION FOR TESTING
@@ -124,19 +171,19 @@ ENDCLASS.
 CLASS local_test_class DEFINITION FOR TESTING
   RISK LEVEL HARMLESS
   DURATION SHORT.
-
-  PRIVATE SECTION.
-    DATA: cut                     TYPE REF TO y_check_num_output_parameter,
-          ref_scan_manager_double TYPE REF TO ltd_ref_scan_manager.
-
+  PROTECTED SECTION.
     METHODS:
-      setup,
-      assert_errors IMPORTING err_cnt TYPE i,
-      assert_pseudo_comments IMPORTING pc_cnt TYPE i,
       is_bound FOR TESTING,
       cut_error FOR TESTING,
       cut_ok FOR TESTING,
       pseudo_comment_ok FOR TESTING.
+  PRIVATE SECTION.
+    DATA: cut                     TYPE REF TO y_check_num_output_parameter,
+          ref_scan_manager_double TYPE REF TO ltd_ref_scan_manager.
+    METHODS:
+      setup,
+      assert_errors IMPORTING err_cnt TYPE i,
+      assert_pseudo_comments IMPORTING pc_cnt TYPE i.
 ENDCLASS.
 
 CLASS y_check_num_output_parameter DEFINITION LOCAL FRIENDS local_test_class.
@@ -152,9 +199,7 @@ CLASS local_test_class IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound(
-      EXPORTING
-        act = cut ).
+    cl_abap_unit_assert=>assert_bound( act = cut ).
   ENDMETHOD.
 
   METHOD cut_ok.
@@ -167,7 +212,7 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD cut_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 1 ).
+    assert_errors( 4 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -175,7 +220,7 @@ CLASS local_test_class IMPLEMENTATION.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_pseudo_comments( 1 ).
+    assert_pseudo_comments( 4 ).
   ENDMETHOD.
 
   METHOD assert_errors.
