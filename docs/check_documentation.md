@@ -1,5 +1,6 @@
 # Check Documentation
 - [CALL Method Usage](checks/call-method-usage.md)
+- [Chain Declaration Usage](checks/chain-declaration-usage.md)
 - [CHECK Statement Position](checks/check-statement-position.md)
 - [Comment Usage](checks/comment-usage.md)
 - [Constants Interface](checks/constants-interface.md)
