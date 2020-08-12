@@ -1,23 +1,8 @@
-interface Y_IF_SCAN_MANAGER
-  public .
-
-
-  methods GET_LEVELS
-    returning
-      value(RESULT) type SLEVEL_TAB .
-  methods GET_STATEMENTS
-    returning
-      value(RESULT) type SSTMNT_TAB .
-  methods GET_STRUCTURES
-    returning
-      value(RESULT) type SSTRUC_TAB .
-  methods GET_TOKENS
-    returning
-      value(RESULT) type STOKESX_TAB .
-  methods IS_SCAN_OK
-    returning
-      value(RESULT) type ABAP_BOOL .
-  methods SET_REF_SCAN
-    importing
-      !IO_REF_SCAN type ref to CL_CI_SCAN .
-endinterface.
+INTERFACE y_if_scan_manager PUBLIC .
+  METHODS get_levels RETURNING VALUE(result) TYPE slevel_tab .
+  METHODS get_statements RETURNING VALUE(result) TYPE sstmnt_tab .
+  METHODS get_structures RETURNING VALUE(result) TYPE sstruc_tab .
+  METHODS get_tokens RETURNING VALUE(result) TYPE stokesx_tab .
+  METHODS is_scan_ok RETURNING VALUE(result) TYPE abap_bool .
+  METHODS set_ref_scan IMPORTING !io_ref_scan TYPE REF TO cl_ci_scan .
+ENDINTERFACE.
