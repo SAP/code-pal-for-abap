@@ -33,144 +33,90 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_check_pseudo_comment_ok.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
-
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS lcl_classname DEFINITION FOR TESTING.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS methodname.' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1'  to = '4'  type = 'K' )
-                          ( level = 1 from = '5'  to = '8'  type = 'K' )
-                          ( level = 1 from = '9'  to = '11' type = 'K' )
-                          ( level = 1 from = '12' to = '14' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'INSERT' type = 'I' row = 1 )
-                      ( str = 'itab'   type = 'I' row = 1 )
-                      ( str = 'INTO'   type = 'I' row = 1 )
-                      ( str = 'TABLE'  type = 'I' row = 1 )
-                      ( str = 'MODIFY' type = 'I' row = 2 )
-                      ( str = 'TABLE'  type = 'I' row = 2 )
-                      ( str = 'itab'   type = 'I' row = 2 )
-                      ( str = 'FROM'   type = 'I' row = 2 )
-                      ( str = 'DELETE' type = 'I' row = 3 )
-                      ( str = 'itab'   type = 'I' row = 3 )
-                      ( str = 'WHERE'  type = 'I' row = 3 )
-                      ( str = 'DELETE' type = 'I' row = 4 )
-                      ( str = 'itab'   type = 'I' row = 4 )
-                      ( str = 'FROM'   type = 'I' row = 4 ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION.' )
+    ( ' METHOD methodname.' )
+    ( '  DATA itab TYPE STANDARD TABLE OF c.' )
+    ( |  INSERT 'a' INTO TABLE itab.| )
+    ( |  MODIFY TABLE itab FROM 'a'.| )
+    ( |  DELETE itab INDEX 1.| )
+    ( |  DELETE itab FROM 'a'.| )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 11 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 11 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS lcl_classname DEFINITION FOR TESTING.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS methodname.' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1'  to = '1'  type = 'K' )
-                          ( level = 1 from = '2'  to = '2'  type = 'K' )
-                          ( level = 1 from = '3'  to = '3'  type = 'K' )
-                          ( level = 1 from = '4'  to = '4'  type = 'K' )
-                          ( level = 1 from = '5'  to = '5'  type = 'K' )
-                          ( level = 1 from = '6'  to = '8'  type = 'K' )
-                          ( level = 1 from = '9'  to = '11' type = 'K' )
-                          ( level = 1 from = '12' to = '14' type = 'K' )
-                          ( level = 1 from = '15' to = '17' type = 'K' )
-                          ( level = 1 from = '18' to = '20' type = 'K' )
-                          ( level = 1 from = '21' to = '23' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'COMMIT'   type = 'I' row = 1 )
-                      ( str = 'ROLLBACK' type = 'I' row = 2 )
-                      ( str = 'SELECT'   type = 'I' row = 3 )
-                      ( str = 'EXEC'     type = 'I' row = 4 )
-                      ( str = 'ALTER'    type = 'I' row = 5 )
-                      ( str = 'INSERT'   type = 'I' row = 6 )
-                      ( str = 'INTO'     type = 'I' row = 6 )
-                      ( str = 'tadir'    type = 'I' row = 6 )
-                      ( str = 'DELETE'   type = 'I' row = 7 )
-                      ( str = 'FROM'     type = 'I' row = 7 )
-                      ( str = 'tadir'    type = 'I' row = 7 )
-                      ( str = 'INSERT'   type = 'I' row = 8 )
-                      ( str = 'tadir'    type = 'I' row = 8 )
-                      ( str = 'FROM'     type = 'I' row = 8 )
-                      ( str = 'UPDATE'   type = 'I' row = 9 )
-                      ( str = 'tadir'    type = 'I' row = 9 )
-                      ( str = 'FROM'     type = 'I' row = 9 )
-                      ( str = 'MODIFY'   type = 'I' row = 10 )
-                      ( str = 'tadir'    type = 'I' row = 10 )
-                      ( str = 'FROM'     type = 'I' row = 10 )
-                      ( str = 'DELETE'   type = 'I' row = 11 )
-                      ( str = 'tadir'    type = 'I' row = 11 )
-                      ( str = 'FROM'     type = 'I' row = 11 ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION.' )
+    ( ' METHOD methodname.' )
+    ( '  DATA line TYPE tadir.' )
+    ( '  DATA table TYPE STANDARD TABLE OF line.' )
+    ( '  COMMIT WORK.' )
+    ( '  ROLLBACK WORK.' )
+    ( '  SELECT * FROM tadir INTO TABLE table.' )
+    ( '  INSERT INTO tadir VALUES line.' )
+    ( '  INSERT tadir FROM line.' )
+    ( '  UPDATE tadir FROM line.' )
+    ( '  MODIFY tadir FROM line.' )
+    ( '  DELETE FROM tadir.' )
+    ( '  DELETE tadir FROM line.' )
+    ( '  EXEC SQL.' )
+    ( '  ENDEXEC.' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_check_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 11 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 11 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS lcl_classname DEFINITION FOR TESTING.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS methodname.' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1'  to = '1'  type = 'K' )
-                          ( level = 1 from = '2'  to = '2'  type = 'P' )
-                          ( level = 1 from = '3'  to = '5'  type = 'K' )
-                          ( level = 1 from = '6'  to = '6'  type = 'P' )
-                          ( level = 1 from = '7'  to = '9'  type = 'K' )
-                          ( level = 1 from = '10' to = '10' type = 'P' )
-                          ( level = 1 from = '11' to = '13' type = 'K' )
-                          ( level = 1 from = '14' to = '14' type = 'P' ) ).
-
-    tokens = VALUE #( ( str = 'COMMIT'   type = 'I' row = 1 )
-                      ( str = '"#EC DB_ACCESS_UT'   type = 'C' row = 1 )
-                      ( str = 'DELETE'   type = 'I' row = 2 )
-                      ( str = 'FROM'     type = 'I' row = 2 )
-                      ( str = 'tadir'    type = 'I' row = 2 )
-                      ( str = '"#EC DB_ACCESS_UT'   type = 'C' row = 2 )
-                      ( str = 'INSERT'   type = 'I' row = 3 )
-                      ( str = 'tadir'    type = 'I' row = 3 )
-                      ( str = 'FROM'     type = 'I' row = 3 )
-                      ( str = '"#EC DB_ACCESS_UT'   type = 'C' row = 3 )
-                      ( str = 'DELETE'   type = 'I' row = 4 )
-                      ( str = 'tadir'    type = 'I' row = 4 )
-                      ( str = 'FROM'     type = 'I' row = 4 )
-                      ( str = '"#EC DB_ACCESS_UT'   type = 'C' row = 4 ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION.' )
+    ( ' METHOD methodname.' )
+    ( '  DATA line TYPE tadir.' )
+    ( '  DATA table TYPE STANDARD TABLE OF line.' )
+    ( '  COMMIT WORK. "#EC DB_ACCESS_UT' )
+    ( '  ROLLBACK WORK. "#EC DB_ACCESS_UT' )
+    ( '  SELECT * FROM tadir INTO TABLE table. "#EC DB_ACCESS_UT' )
+    ( '  INSERT INTO tadir VALUES line. "#EC DB_ACCESS_UT' )
+    ( '  INSERT tadir FROM line. "#EC DB_ACCESS_UT' )
+    ( '  UPDATE tadir FROM line. "#EC DB_ACCESS_UT' )
+    ( '  MODIFY tadir FROM line. "#EC DB_ACCESS_UT' )
+    ( '  DELETE FROM tadir. "#EC DB_ACCESS_UT' )
+    ( '  DELETE tadir FROM line. "#EC DB_ACCESS_UT' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
 ENDCLASS.
@@ -235,7 +181,7 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD check_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 11 ).
+    assert_errors( 10 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -243,7 +189,7 @@ CLASS local_test_class IMPLEMENTATION.
     ref_scan_manager_double->set_check_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_pseudo_comments( 4 ).
+    assert_pseudo_comments( 9 ).
   ENDMETHOD.
 
   METHOD assert_errors.

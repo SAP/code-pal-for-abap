@@ -48,122 +48,94 @@ CLASS ltd_clean_code_manager_no_cust IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_pseudo_comment_ok.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
-
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 5 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+     ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 5 stmnt_type = scan_struc_stmnt_type-method ) ).
+     ( 'CLASS y_check_base DEFINITION. ' )
+     ( '  PUBLIC SECTION. ' )
+     ( '  PROTECTED SECTION. ' )
+     ( '  PRIVATE SECTION. ' )
+     ( '    METHODS name. ' )
+     ( 'ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2'   type = 'K' )
-                          ( level = 1 from = '3' to = '7'   type = 'K' )
-                          ( level = 1 from = '8' to = '10'  type = 'K' )
-                          ( level = 1 from = '11' to = '11' type = 'K' )
-                          ( level = 1 from = '12' to = '12' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHOD'    type = 'I' row = 1 )
-                      ( str = 'CALC'      type = 'I' row = 1 )
-                      ( str = 'IF'        type = 'I' row = 2 )
-                      ( str = 'VALUE_A' type = 'I' row = 2 )
-                      ( str = '='         type = 'I' row = 2 )
-                      ( str = '1'         type = 'I' row = 2 )
-                      ( str = 'VALUE_B' type = 'I' row = 3 )
-                      ( str = '='         type = 'I' row = 3 )
-                      ( str = '2'         type = 'I' row = 3 )
-                      ( str = 'ENDIF'     type = 'I' row = 4 )
-                      ( str = 'ENDMETHOD' type = 'I' row = 5 ) ).
+     ( 'CLASS y_check_base IMPLEMENTATION. ' )
+     ( '  METHOD name. ' )
+     ( '    DATA(value_a) = 1. ' )
+     ( '    DATA(value_b) = 2. ' )
+     ( '    IF value_a = 1. ' )
+     ( '      value_b = 2. ' )
+     ( '    ENDIF. ' )
+     ( '  ENDMETHOD. ' )
+     ( 'ENDCLASS.' )
+      ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 11 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 11 stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS y_check_base DEFINITION. ' )
+    ( '  PUBLIC SECTION. ' )
+    ( '  PROTECTED SECTION. ' )
+    ( '  PRIVATE SECTION. ' )
+    ( '    METHODS name. ' )
+    ( 'ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2'   type = 'K' )
-                          ( level = 1 from = '3' to = '6'   type = 'K' )
-                          ( level = 1 from = '7' to = '9'   type = 'K' )
-                          ( level = 1 from = '10' to = '12' type = 'K' )
-                          ( level = 1 from = '13' to = '17' type = 'K' )
-                          ( level = 1 from = '18' to = '19' type = 'K' )
-                          ( level = 1 from = '20' to = '21' type = 'K' )
-                          ( level = 1 from = '22' to = '22' type = 'K' )
-                          ( level = 1 from = '23' to = '23' type = 'K' )
-                          ( level = 1 from = '24' to = '24' type = 'K' )
-                          ( level = 1 from = '25' to = '25' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHOD'    type = 'I' row = 1 )
-                      ( str = 'CALC'      type = 'I' row = 1 )
-                      ( str = 'IF'        type = 'I' row = 2 )
-                      ( str = 'VALUE_A'   type = 'I' row = 2 )
-                      ( str = '='         type = 'I' row = 2 )
-                      ( str = '1'         type = 'I' row = 2 )
-                      ( str = 'VALUE_B'   type = 'I' row = 3 )
-                      ( str = '='         type = 'I' row = 3 )
-                      ( str = '2'         type = 'I' row = 3 )
-                      ( str = 'DO'        type = 'I' row = 6 )
-                      ( str = 'COUNTER'   type = 'I' row = 6 )
-                      ( str = 'TIMES'     type = 'I' row = 6 )
-                      ( str = 'VALUE_C'   type = 'I' row = 7 )
-                      ( str = '='         type = 'I' row = 7 )
-                      ( str = 'VALUE_C'   type = 'I' row = 7 )
-                      ( str = '+'         type = 'I' row = 7 )
-                      ( str = '1'         type = 'I' row = 7 )
-                      ( str = 'CASE'      type = 'I' row = 8 )
-                      ( str = 'VALUE_D'   type = 'I' row = 8 )
-                      ( str = 'WHEN'      type = 'I' row = 9 )
-                      ( str = 'ACTIVE'    type = 'I' row = 9 )
-                      ( str = 'ENDCASE'   type = 'I' row = 10 )
-                      ( str = 'ENDDO'     type = 'I' row = 11 )
-                      ( str = 'ENDIF'     type = 'I' row = 12 )
-                      ( str = 'ENDMETHOD' type = 'I' row = 13 ) ).
+    ( 'CLASS y_check_base IMPLEMENTATION. ' )
+    ( '  METHOD name. ' )
+    ( '    DATA(value_a) = 1. ' )
+    ( '    DATA(value_b) = 2. ' )
+    ( '    IF value_a = 1. ' )
+    ( '      value_b = 2. ' )
+    ( '      DO value_b TIMES. ' )
+    ( '        DATA(value_c) = 3. ' )
+    ( '        CASE value_c. ' )
+    ( '          WHEN 3. ' )
+    ( '        ENDCASE. ' )
+    ( '      ENDDO. ' )
+    ( '    ENDIF. ' )
+    ( '  ENDMETHOD. ' )
+    ( 'ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    set_data_for_error( ).
-    statements = VALUE #( BASE statements
-                        ( level = 1 from = '26' to = '26' type = 'P' ) ).
-    tokens = VALUE #( BASE tokens
-                    ( str = '"#EC CI_CYCLO' type = 'C' row = 14 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT y_example. ' )
+
+    ( 'CLASS y_check_base DEFINITION. ' )
+    ( '  PUBLIC SECTION. ' )
+    ( '  PROTECTED SECTION. ' )
+    ( '  PRIVATE SECTION. ' )
+    ( '    METHODS name. ' )
+    ( 'ENDCLASS. ' )
+
+    ( 'CLASS y_check_base IMPLEMENTATION. ' )
+    ( '  METHOD name. ' )
+    ( '    DATA(value_a) = 1. ' )
+    ( '    DATA(value_b) = 2. ' )
+    ( '    IF value_a = 1. ' )
+    ( '      value_b = 2. ' )
+    ( '      DO value_b TIMES. ' )
+    ( '        DATA(value_c) = 3. ' )
+    ( '        CASE value_c. ' )
+    ( '          WHEN 3. ' )
+    ( '        ENDCASE. ' )
+    ( '      ENDDO. ' )
+    ( '    ENDIF. ' )
+    ( '  ENDMETHOD. "#EC CI_CYCLO ' )
+    ( 'ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 

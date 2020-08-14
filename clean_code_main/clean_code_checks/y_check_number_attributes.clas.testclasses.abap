@@ -15,119 +15,123 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
-    METHODS:
-      set_data_for_ok,
-      set_data_for_error,
-      set_pseudo_comment_ok.
-
+    METHODS set_data_for_ok.
+    METHODS set_data_for_error.
+    METHODS set_pseudo_comment_ok.
   PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 5 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_one DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     DATA one TYPE i VALUE 1. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     CLASS-DATA two TYPE i VALUE 2. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 5 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+      ( ' CLASS y_example_one IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1'  to = '3'  type = 'K' )
-                          ( level = 1 from = '4'  to = '7'  type = 'K' )
-                          ( level = 1 from = '8'  to = '11' type = 'K' )
-                          ( level = 1 from = '12' to = '15' type = 'K' )
-                          ( level = 1 from = '16' to = '19' type = 'K' ) ).
+      ( ' CLASS y_example_two DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     DATA: BEGIN OF one, ' )
+      ( '             index  TYPE i, ' )
+      ( '             spfli_wa TYPE spfli, ' )
+      ( '           END OF one. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     CLASS-DATA two TYPE i VALUE 2. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'DATA'    type = 'I' row = 1 )
-                      ( str = 'A1'      type = 'I' row = 1 )
-                      ( str = 'TYPE'    type = 'I' row = 1 )
-                      ( str = 'TYPE'    type = 'I' row = 2 )
-                      ( str = 'BEGIN'   type = 'I' row = 2 )
-                      ( str = 'OF'      type = 'I' row = 2 )
-                      ( str = 'struct1' type = 'I' row = 2 )
-                      ( str = 'DATA'    type = 'I' row = 3 )
-                      ( str = 'dta1'    type = 'I' row = 3 )
-                      ( str = 'TYPE'    type = 'I' row = 3 )
-                      ( str = 'c'       type = 'I' row = 3 )
-                      ( str = 'DATA'    type = 'I' row = 4 )
-                      ( str = 'dta1'    type = 'I' row = 4 )
-                      ( str = 'TYPE'    type = 'I' row = 4 )
-                      ( str = 'c'       type = 'I' row = 4 )
-                      ( str = 'TYPE'    type = 'I' row = 5 )
-                      ( str = 'END'     type = 'I' row = 5 )
-                      ( str = 'OF'      type = 'I' row = 5 )
-                      ( str = 'struct1' type = 'I' row = 5 ) ).
+      ( ' CLASS y_example_two IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+      ( ' CLASS y_example_one DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     DATA one TYPE i VALUE 1. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     DATA two TYPE i VALUE 2. ' )
+      ( '     DATA three TYPE i VALUE 3. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_one IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '6' type = 'K' ) ).
+      ( ' CLASS y_example_two DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     DATA one TYPE i VALUE 1. ' )
+      ( '     CLASS-DATA two TYPE i VALUE 2. ' )
+      ( '     CLASS-DATA three TYPE i VALUE 3. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_two IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'DATA'       type = 'I' row = 1 )
-                      ( str = 'A1'         type = 'I' row = 1 )
-                      ( str = 'CLASS-DATA' type = 'I' row = 2 )
-                      ( str = 'A2'         type = 'I' row = 2 )
-                      ( str = 'CLASS-DATA' type = 'I' row = 3 )
-                      ( str = 'A3'         type = 'I' row = 3 ) ).
+      ( ' CLASS y_example_three DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     DATA one TYPE i VALUE 1. ' )
+      ( '     CLASS-DATA two TYPE i VALUE 2. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     DATA four TYPE i VALUE 4. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_three IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 6 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 6 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+      ( ' CLASS y_example_one DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     DATA one TYPE i VALUE 1. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     DATA two TYPE i VALUE 2. ' )
+      ( '     DATA three TYPE i VALUE 3. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_one IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'P' )
-                          ( level = 1 from = '4' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '7' type = 'K' )
-                          ( level = 1 from = '8' to = '9' type = 'K' )
-                          ( level = 1 from = '10' to = '10' type = 'K' ) ).
+      ( ' CLASS y_example_two DEFINITION. "#EC NUMBER_ATTR ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     DATA one TYPE i VALUE 1. ' )
+      ( '     CLASS-DATA two TYPE i VALUE 2. ' )
+      ( '     CLASS-DATA three TYPE i VALUE 3. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_two IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'CLASS'            type = 'I' row = 1 )
-                      ( str = 'LTC_TEST_TEST'    type = 'I' row = 1 )
-                      ( str = '"#EC NUMBER_ATTR' type = 'C' row = 1 )
-                      ( str = 'DATA'             type = 'I' row = 2 )
-                      ( str = 'A1'               type = 'I' row = 2 )
-                      ( str = 'CLASS-DATA'       type = 'I' row = 3 )
-                      ( str = 'A2'               type = 'I' row = 3 )
-                      ( str = 'CLASS-DATA'       type = 'I' row = 4 )
-                      ( str = 'A3'               type = 'I' row = 4 )
-                      ( str = 'ENDCLASS'         type = 'I' row = 5 ) ).
+      ( ' CLASS y_example_three DEFINITION. "#EC NUMBER_ATTR ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     DATA one TYPE i VALUE 1. ' )
+      ( '     CLASS-DATA two TYPE i VALUE 2. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     DATA four TYPE i VALUE 4. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     DATA five TYPE i VALUE 5. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_three IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -190,15 +194,15 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD cut_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 1 ).
+    assert_errors( 3 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
   METHOD pseudo_comment_ok.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
-    assert_errors( 0 ).
-    assert_pseudo_comments( 1 ).
+    assert_errors( 1 ).
+    assert_pseudo_comments( 2 ).
   ENDMETHOD.
 
   METHOD assert_errors.

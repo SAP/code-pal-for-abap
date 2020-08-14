@@ -14,86 +14,41 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_check_pseudo_comment_ok.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
-
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 1 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 1 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'READ'    type = 'I' row = 1 )
-                      ( str = 'DATASET' type = 'I' row = 1 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'START-OF-SELECTION.' )
+    ( 'DATA dta TYPE c.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '2' type = 'K' )  ).
-
-    tokens = VALUE #( ( str = 'MOVE'        type = 'I' row = 1 )
-                      ( str = 'TRANSLATE'   type = 'I' row = 2 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'START-OF-SELECTION.' )
+    ( 'DATA text TYPE c LENGTH 20.' )
+    ( |MOVE '' TO text.| )
+    ( |TRANSLATE text TO UPPER CASE.| )
+    ) ).
   ENDMETHOD.
 
   METHOD set_check_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '2' type = 'P' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' ) ).
-
-    tokens = VALUE #( ( str = 'MOVE'                type = 'I' row = 1 )
-                      ( str = '"#EC DEPRECATED_KEY' type = 'C' row = 1 )
-                      ( str = 'TRANSLATE'           type = 'I' row = 2 )
-                      ( str = '"#EC DEPRECATED_KEY' type = 'C' row = 2 ) ).
-
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'START-OF-SELECTION.' )
+    ( 'DATA text TYPE c LENGTH 20.' )
+    ( |MOVE '' TO text. "#EC DEPRECATED_KEY| )
+    ( |TRANSLATE text TO UPPER CASE. "#EC DEPRECATED_KEY| )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 

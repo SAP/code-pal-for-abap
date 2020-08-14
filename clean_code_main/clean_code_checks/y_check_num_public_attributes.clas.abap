@@ -72,8 +72,8 @@ CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
 
   METHOD checkif_public_attribute_found.
     IF ( first_token = 'DATA' OR first_token = 'CLASS-DATA' )
-                              AND structure_depth <= structure_depth_threshold
-                              AND NOT last_token = 'READ-ONLY'.
+       AND structure_depth <= structure_depth_threshold
+       AND NOT last_token = 'READ-ONLY'.
       ADD 1 TO public_attribute_counter.
     ENDIF.
   ENDMETHOD.

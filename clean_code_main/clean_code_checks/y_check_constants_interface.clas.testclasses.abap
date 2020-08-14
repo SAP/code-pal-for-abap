@@ -14,101 +14,49 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_pseudo_comment_ok.
 
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 stmnt_type = scan_struc_stmnt_type-interface ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '5' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'INTERFACE'      type = 'I' row = 1 )
-                      ( str = 'intf_name'      type = 'I' row = 1 )
-                      ( str = 'METHODS'        type = 'I' row = 2 )
-                      ( str = 'CONSTANTS'      type = 'I' row = 3 )
-                      ( str = 'ENDINTERFACE'   type = 'I' row = 4 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT r_name.' )
+    ( 'INTERFACE lcl_interface. ' )
+    ( ' METHODS method_name. ' )
+    ( ' CONSTANTS const_name TYPE abap_bool VALUE abap_false. ' )
+    ( 'ENDINTERFACE.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 7 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 7 stmnt_type = scan_struc_stmnt_type-interface ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '7' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'INTERFACE'      type = 'I' row = 1 )
-                      ( str = 'intf_name'      type = 'I' row = 1 )
-                      ( str = 'CONSTANTS'      type = 'I' row = 2 )
-                      ( str = 'BEGIN'          type = 'I' row = 3 )
-                      ( str = 'END'            type = 'I' row = 4 )
-                      ( str = 'OF'             type = 'I' row = 5 )
-                      ( str = 'ENDINTERFACE'   type = 'I' row = 6 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT r_name.' )
+    ( 'INTERFACE lcl_interface.' )
+    ( ' CONSTANTS: BEGIN OF struct, ' )
+    ( '             int TYPE i VALUE 1,' )
+    ( '            END OF struct.' )
+    ( ' CONSTANTS const_name TYPE abap_bool VALUE abap_false. ' )
+    ( 'ENDINTERFACE.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 stmnt_type = scan_struc_stmnt_type-interface ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'P' )
-                          ( level = 1 from = '4' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '5' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'INTERFACE'      type = 'I' row = 1 )
-                      ( str = 'intf_name'      type = 'I' row = 1 )
-                      ( str = '"#EC CONS_INTF' type = 'C' row = 1 )
-                      ( str = 'CONSTANTS'      type = 'I' row = 2 )
-                      ( str = 'ENDINTERFACE'   type = 'I' row = 3 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT r_name.' )
+    ( 'INTERFACE lcl_interface. "#EC CONS_INTF' )
+    ( ' CONSTANTS: BEGIN OF struct, ' )
+    ( '             int TYPE i VALUE 1,' )
+    ( '            END OF struct.' )
+    ( ' CONSTANTS const_name TYPE abap_bool VALUE abap_false. ' )
+    ( 'ENDINTERFACE.' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 

@@ -107,52 +107,42 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA(method_index) = statement-from.
+    CHECK get_token_abs( statement-from ) = 'METHODS' OR
+          get_token_abs( statement-from ) = 'CLASS-METHODS'.
+
+    has_exporting_parameter = abap_false.
+    has_changing_parameter = abap_false.
+    has_returning_parameter = abap_false.
+    statement_for_message = statement.
 
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
-      IF <token>-str NE 'METHODS' AND <token>-str NE 'CLASS-METHODS'.
-        method_index = method_index + 1.
-        CONTINUE.
-      ENDIF.
-
-      has_exporting_parameter = abap_false.
-      has_changing_parameter = abap_false.
-      has_returning_parameter = abap_false.
-
-      statement_for_message = statement.
-
-      DATA(check_configuration) = detect_check_configuration( threshold = 1
-                                                              include = get_include( p_level = statement_for_message-level ) ).
-      IF check_configuration IS INITIAL.
-        CONTINUE.
-      ENDIF.
-
-      LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<method_token>)
-        FROM method_index + 1 TO statement-to.
-
-        CASE <method_token>-str.
-          WHEN 'METHODS' OR 'CLASS-METHODS'.
-            EXIT.
-        ENDCASE.
-
-        check_token_content( <method_token> ).
-
-      ENDLOOP.
-
-      IF calculate_param_combination( ) > check_configuration-threshold.
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_for_message-level
-                     p_position     = method_index
-                     p_from         = statement_for_message-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio ) ).
-      ENDIF.
-
-      method_index = method_index + 1.
+      CASE <token>-str.
+        WHEN 'EXPORTING'.
+          has_exporting_parameter = abap_true.
+        WHEN 'RETURNING'.
+          has_returning_parameter = abap_true.
+        WHEN 'CHANGING'.
+          has_changing_parameter = abap_true.
+      ENDCASE.
 
     ENDLOOP.
+
+    DATA(check_configuration) = detect_check_configuration( threshold = 1
+                                                            include = get_include( p_level = statement_for_message-level ) ).
+    IF check_configuration IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    IF calculate_param_combination( ) > check_configuration-threshold.
+      raise_error( p_sub_obj_type = c_type_include
+                   p_level        = statement_for_message-level
+                   p_position     = index
+                   p_from         = statement_for_message-from
+                   p_kind         = check_configuration-prio
+                   p_test         = me->myname
+                   p_code         = get_code( check_configuration-prio ) ).
+    ENDIF.
   ENDMETHOD.
 ENDCLASS.

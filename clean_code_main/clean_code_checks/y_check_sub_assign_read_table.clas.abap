@@ -10,10 +10,7 @@ CLASS y_check_sub_assign_read_table DEFINITION
     METHODS constructor .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-
   PRIVATE SECTION.
-    DATA token_index TYPE i VALUE 0.
-    DATA into_index TYPE i VALUE 0.
 ENDCLASS.
 
 
@@ -46,43 +43,67 @@ CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) EQ 'READ' AND
-          get_token_abs( statement-from + 1 ) EQ 'TABLE'.
 
-    token_index = statement-from.
+    DATA fieldname TYPE string VALUE IS INITIAL.
 
+    CHECK get_token_abs( statement-from ) = 'READ' AND
+          get_token_abs( statement-from + 1 ) = 'TABLE'.
+
+    " First Read Table
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
-       FROM statement-from TO statement-to.
+    FROM statement-from TO statement-to.
+      IF <token>-str CP 'FIELD-SYMBOL(<*>)'.
+        fieldname = <token>-str.
+        REPLACE 'FIELD-SYMBOL(' IN fieldname WITH ''.
+        REPLACE ')' IN fieldname WITH ''.
+      ENDIF.
+    ENDLOOP.
 
-      IF <token>-str EQ 'INTO'.
-        into_index = token_index + 1.
+    IF fieldname IS INITIAL.
+      RETURN.
+    ENDIF.
 
-      ELSEIF into_index EQ token_index AND
-             <token>-str CS '<' AND
-             <token>-str CS '>'.
+    " Second Read Table
+    DATA(position) = index + 1.
 
-        statement_for_message = statement.
+    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    FROM structure-stmnt_from TO structure-stmnt_to.
+
+      IF statement-to > <statement>-to.
+        CONTINUE.
+      ENDIF.
+
+      IF get_token_abs( <statement>-from ) <> 'READ'
+      AND get_token_abs( <statement>-from + 1 ) <> 'TABLE'.
+
+        position = position + 1.
+        CONTINUE.
+      ENDIF.
+
+      LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING <token>
+      FROM <statement>-from TO <statement>-to.
+
+        IF <token>-str <> fieldname.
+          CONTINUE.
+        ENDIF.
 
         DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                                include = get_include( p_level = statement_for_message-level ) ).
+                                                                include = get_include( p_level = <statement>-level ) ).
         IF check_configuration IS INITIAL.
           CONTINUE.
         ENDIF.
 
         raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_for_message-level
-                     p_position     = index
-                     p_from         = statement_for_message-from
+                     p_level        = <statement>-level
+                     p_position     = position
+                     p_from         = <statement>-from
                      p_kind         = check_configuration-prio
                      p_test         = me->myname
                      p_code         = get_code( check_configuration-prio ) ).
-      ENDIF.
 
-      token_index = token_index + 1.
+
+      ENDLOOP.
 
     ENDLOOP.
-
-    into_index = 0.
-    token_index = 0.
   ENDMETHOD.
 ENDCLASS.

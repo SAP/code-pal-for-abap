@@ -14,122 +14,91 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_pseudo_comment_ok.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
-
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 10 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_repo.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 10 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    ( 'CLASS lcl_abstr DEFINITION ABSTRACT.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS abstr_method ABSTRACT.' )
+    ( '  METHODS constructor.' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1'  to = '3'  type = 'K' )
-                          ( level = 1 from = '4'  to = '5'  type = 'K' )
-                          ( level = 1 from = '6'  to = '8'  type = 'K' )
-                          ( level = 1 from = '9'  to = '10' type = 'K' )
-                          ( level = 1 from = '11' to = '12' type = 'K' )
-                          ( level = 1 from = '13' to = '14' type = 'K' )
-                          ( level = 1 from = '15' to = '16' type = 'K' )
-                          ( level = 1 from = '17' to = '18' type = 'K' )
-                          ( level = 1 from = '19' to = '20' type = 'K' )
-                          ( level = 1 from = '21' to = '23' type = 'K' ) ).
+    ( 'CLASS lcl_abstr IMPLEMENTATION.' )
+    ( ' METHOD constructor.' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
 
-    tokens = VALUE #( ( str = 'CLASS'         type = 'I' row = 1 )
-                      ( str = 'CLASS_NAME'    type = 'I' row = 1 )
-                      ( str = 'DEFINITION'    type = 'I' row = 1 )
-                      ( str = 'PUBLIC'        type = 'I' row = 2 )
-                      ( str = 'SECTION'       type = 'I' row = 2 )
-                      ( str = 'METHODS'       type = 'I' row = 3 )
-                      ( str = 'METHOD_NAME_1' type = 'I' row = 3 )
-                      ( str = 'REDEFINITION'  type = 'I' row = 3 )
-                      ( str = 'METHODS'       type = 'I' row = 4 )
-                      ( str = 'CONSTRUCTOR'   type = 'I' row = 4 )
-                      ( str = 'CLASS-METHODS' type = 'I' row = 5 )
-                      ( str = 'METHOD_NAME_3' type = 'I' row = 5 )
-                      ( str = 'PROTECTED'     type = 'I' row = 6 )
-                      ( str = 'SECTION'       type = 'I' row = 6 )
-                      ( str = 'METHODS'       type = 'I' row = 7 )
-                      ( str = 'METHOD_NAME_4' type = 'I' row = 7 )
-                      ( str = 'PRIVATE'       type = 'I' row = 8 )
-                      ( str = 'SECTION'       type = 'I' row = 8 )
-                      ( str = 'METHODS'       type = 'I' row = 9 )
-                      ( str = 'METHOD_NAME_5' type = 'I' row = 9 )
-                      ( str = 'ABSTRACT'      type = 'I' row = 10 )
-                      ( str = 'METHODS'       type = 'I' row = 10 )
-                      ( str = 'METHOD_NAME_6' type = 'I' row = 10 ) ).
+    ( 'CLASS lcl_inh_abstr DEFINITION INHERITING FROM lcl_abstr.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS abstr_method REDEFINITION.' )
+    ( '  METHODS constructor.' )
+    ( ' PROTECTED SECTION.' )
+    ( '  METHODS prot_method.' )
+    ( ' PRIVATE SECTION.' )
+    ( '  METHODS priv_method.' )
+    ( 'ENDCLASS.' )
+
+    ( 'CLASS lcl_inh_abstr IMPLEMENTATION.' )
+    ( ' METHOD constructor.' )
+    ( '  super->constructor( ).' )
+    ( ' ENDMETHOD.' )
+
+    ( ' METHOD abstr_method.' )
+    ( ' ENDMETHOD.' )
+
+    ( ' METHOD prot_method.' )
+    ( ' ENDMETHOD.' )
+
+    ( ' METHOD priv_method.' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_repo.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    ( 'CLASS lcl_classname DEFINITION.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS publ_method.' )
+    ( ' PROTECTED SECTION.' )
+    ( ' PRIVATE SECTION.' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '7' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'CLASS'         type = 'I' row = 1 )
-                      ( str = 'CLASS_NAME'    type = 'I' row = 1 )
-                      ( str = 'DEFINITION'    type = 'I' row = 1 )
-                      ( str = 'PUBLIC'        type = 'I' row = 2 )
-                      ( str = 'SECTION'       type = 'I' row = 2 )
-                      ( str = 'METHODS'       type = 'I' row = 3 )
-                      ( str = 'METHOD_NAME_1' type = 'I' row = 3 ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION.' )
+    ( ' METHOD publ_method.' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_repo.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    ( 'CLASS lcl_classname DEFINITION. "#EC INTF_IN_CLASS' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS publ_method.'  )
+    ( ' PROTECTED SECTION.' )
+    ( ' PRIVATE SECTION.' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' )
-                          ( level = 1 from = '5' to = '6' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'CLASS'              type = 'I' row = 1 )
-                      ( str = 'CLASS_NAME'         type = 'I' row = 1 )
-                      ( str = 'DEFINITION'         type = 'I' row = 1 )
-                      ( str = '"#EC INTF_IN_CLASS' type = 'C' row = 1 )
-                      ( str = 'METHODS'            type = 'I' row = 3 )
-                      ( str = 'METHOD_NAME_1'      type = 'I' row = 3 ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION.' )
+    ( ' METHOD publ_method.' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 

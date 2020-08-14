@@ -14,118 +14,89 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_pseudo_comment_ok.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
-
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 8 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'CLASS classname DEFINITION.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS class_based.' )
+    ( '  METHODS system_based.' )
+    ( 'ENDCLASS.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 8 stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS classname IMPLEMENTATION.' )
+    ( ' METHOD class_based.' )
+    ( '  TRY.' )
+    ( '   CATCH cx_sy_no_reference.' )
+    ( '    DATA cx TYPE c.' )
+    ( '  ENDTRY.' )
+    ( ' ENDMETHOD.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '5' type = 'P' )
-                          ( level = 1 from = '6' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '8' type = 'K' )
-                          ( level = 1 from = '9' to = '9' type = 'K' )
-                          ( level = 1 from = '10' to = '10' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'TRY'      type = 'I' row = 1 )
-                      ( str = 'CATCH'    type = 'I' row = 2 )
-                      ( str = 'CX_ERROR' type = 'I' row = 2 )
-                      ( str = 'CODE'     type = 'I' row = 3 )
-                      ( str = '*COMMENT' type = 'C' row = 4 )
-                      ( str = 'ENDTRY'   type = 'I' row = 5 )
-                      ( str = 'CATCH'    type = 'I' row = 6 )
-                      ( str = 'SYSTEM'   type = 'I' row = 6 )
-                      ( str = 'CODE'     type = 'I' row = 7 )
-                      ( str = 'ENDCATCH' type = 'I' row = 8 ) ).
+    ( ' METHOD system_based.' )
+    ( '  CATCH SYSTEM-EXCEPTIONS OTHERS = 1.' )
+    ( '   DATA cy TYPE c.' )
+    ( '  ENDCATCH.' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 6 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'CLASS classname DEFINITION.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS class_based.' )
+    ( '  METHODS system_based.' )
+    ( 'ENDCLASS.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 6 stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS classname IMPLEMENTATION.' )
+    ( ' METHOD class_based.' )
+    ( '  TRY.' )
+    ( '   CATCH cx_sy_no_reference.' )
+    ( '* comment' )
+    ( '  ENDTRY.' )
+    ( ' ENDMETHOD.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' )
-                          ( level = 1 from = '5' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '7' type = 'K' )
-                          ( level = 1 from = '9' to = '9' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'TRY'      type = 'I' row = 1 )
-                      ( str = 'CATCH'    type = 'I' row = 2 )
-                      ( str = 'CX_ERROR' type = 'I' row = 2 )
-                      ( str = '*COMMENT' type = 'C' row = 3 )
-                      ( str = 'ENDTRY'   type = 'I' row = 4 )
-                      ( str = 'CATCH'    type = 'I' row = 5 )
-                      ( str = 'SYSTEM'   type = 'I' row = 5 )
-                      ( str = 'ENDCATCH' type = 'I' row = 6 ) ).
+    ( ' METHOD system_based.' )
+    ( '  CATCH SYSTEM-EXCEPTIONS OTHERS = 1.' )
+    ( '  ENDCATCH.' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 7 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'CLASS classname DEFINITION.' )
+    ( ' PUBLIC SECTION.' )
+    ( '  METHODS class_based.' )
+    ( '  METHODS system_based.' )
+    ( 'ENDCLASS.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 7 stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS classname IMPLEMENTATION.' )
+    ( ' METHOD class_based.' )
+    ( '  TRY.' )
+    ( '   CATCH cx_sy_no_reference. "#EC EMPTY_CATCH' )
+    ( '* comment' )
+    ( '  ENDTRY.' )
+    ( ' ENDMETHOD.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' )
-                          ( level = 1 from = '5' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '7' type = 'K' )
-                          ( level = 1 from = '8' to = '8' type = 'P' )
-                          ( level = 1 from = '9' to = '9' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'TRY'              type = 'I' row = 1 )
-                      ( str = 'CATCH'            type = 'I' row = 2 )
-                      ( str = 'CX_ERROR'         type = 'I' row = 2 )
-                      ( str = '"#EC EMPTY_CATCH' type = 'C' row = 2 )
-                      ( str = 'ENDTRY'           type = 'I' row = 3 )
-                      ( str = 'CATCH'            type = 'I' row = 4 )
-                      ( str = 'SYSTEM'           type = 'I' row = 4 )
-                      ( str = '"#EC EMPTY_CATCH' type = 'C' row = 4 )
-                      ( str = 'ENDCATCH'         type = 'I' row = 5 ) ).
+    ( ' METHOD system_based.' )
+    ( '  CATCH SYSTEM-EXCEPTIONS OTHERS = 1. "#EC EMPTY_CATCH' )
+    ( '  ENDCATCH.' )
+    ( ' ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 

@@ -14,99 +14,96 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_pseudo_comment_ok.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
-
   METHOD set_data_for_ok.
-    levels = VALUE #( ( stmnt = 1 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    ( 'CLASS lcl_classname DEFINITION.' )
+    ( '  PUBLIC SECTION.' )
+    ( '    METHODS: exporting_method' )
+    ( '      EXPORTING char TYPE abap_bool' )
+    ( '      RAISING   cx_sy_no_reference,' )
+    ( '      changing_method' )
+    ( '        CHANGING char TYPE abap_bool' )
+    ( '        RAISING  cx_sy_no_reference.' )
+    ( '    METHODS returning_method' )
+    ( '      RETURNING VALUE(result) TYPE abap_bool' )
+    ( '      RAISING   cx_sy_no_reference.' )
+    ( '    METHODS importing_method' )
+    ( '      IMPORTING char TYPE abap_bool' )
+    ( '      RAISING   cx_sy_no_reference.' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '9' type = 'K' )
-                          ( level = 1 from = '10' to = '13' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHODS'      type = 'I' row = 1 )
-                      ( str = 'METHOD_NAME1' type = 'I' row = 1 )
-                      ( str = 'EXPORTING'    type = 'I' row = 1 )
-                      ( str = 'METHODS'      type = 'I' row = 2 )
-                      ( str = 'METHOD_NAME2' type = 'I' row = 2 )
-                      ( str = 'CHANGING'     type = 'I' row = 2 )
-                      ( str = 'METHODS'      type = 'I' row = 3 )
-                      ( str = 'METHOD_NAME3' type = 'I' row = 3 )
-                      ( str = 'RETURNING'    type = 'I' row = 3 )
-                      ( str = 'METHODS'      type = 'I' row = 4 )
-                      ( str = 'METHOD_NAME4' type = 'I' row = 4 )
-                      ( str = 'IMPORTING'    type = 'I' row = 4 )
-                      ( str = 'RETURNING'    type = 'I' row = 4 ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION.' )
+    ( '  METHOD changing_method.' )
+    ( '  ENDMETHOD.' )
+    ( '  METHOD exporting_method.' )
+    ( '  ENDMETHOD.' )
+    ( '  METHOD returning_method.' )
+    ( '  ENDMETHOD.' )
+    ( '  METHOD importing_method.' )
+    ( '  ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( stmnt = 0 from = 1 to = 1 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 1 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    ( 'CLASS lcl_classname DEFINITION.' )
+    ( '  PUBLIC SECTION.' )
+    ( '    METHODS: exporting_method' )
+    ( '      EXPORTING char TYPE abap_bool' )
+    ( '      CHANGING  cha TYPE abap_bool' )
+    ( '      RAISING   cx_sy_no_reference.' )
+    ( '    METHODS returning_method' )
+    ( '      CHANGING  char TYPE abap_bool' )
+    ( '      RETURNING VALUE(result) TYPE abap_bool' )
+    ( '      RAISING   cx_sy_no_reference.' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '4' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHODS'      type = 'I' row = 1 )
-                      ( str = 'METHOD_NAME1' type = 'I' row = 1 )
-                      ( str = 'EXPORTING'    type = 'I' row = 1 )
-                      ( str = 'CHANGING'     type = 'I' row = 1 ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION.' )
+    ( '  METHOD exporting_method.' )
+    ( '  ENDMETHOD.' )
+    ( '  METHOD returning_method.' )
+    ( '  ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    levels = VALUE #( ( stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
+    ( 'CLASS lcl_classname DEFINITION.' )
+    ( '  PUBLIC SECTION. ' )
+    ( '    METHODS exporting_method ' )
+    ( '      EXPORTING char TYPE abap_bool ' )
+    ( '      CHANGING  cha TYPE abap_bool ' )
+    ( '      RAISING   cx_sy_no_reference. "#EC PARAMETER_OUT' )
+    ( '    METHODS returning_method' )
+    ( '      CHANGING  char TYPE abap_bool' )
+    ( '      RETURNING VALUE(result) TYPE abap_bool' )
+    ( '      RAISING   cx_sy_no_reference. "#EC PARAMETER_OUT' )
+    ( 'ENDCLASS.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '5' type = 'P' ) ).
-
-    tokens = VALUE #( ( str = 'METHODS'            type = 'I' row = 1 )
-                      ( str = 'METHOD_NAME1'       type = 'I' row = 1 )
-                      ( str = 'EXPORTING'          type = 'I' row = 1 )
-                      ( str = 'CHANGING'           type = 'I' row = 1 )
-                      ( str = '"#EC PARAMETER_OUT' type = 'C' row = 1 ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION.' )
+    ( '  METHOD exporting_method.' )
+    ( '  ENDMETHOD.' )
+    ( '  METHOD returning_method.' )
+    ( '  ENDMETHOD.' )
+    ( 'ENDCLASS.' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -169,7 +166,7 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD cut_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 1 ).
+    assert_errors( 2 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -177,7 +174,7 @@ CLASS local_test_class IMPLEMENTATION.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_pseudo_comments( 1 ).
+    assert_pseudo_comments( 2 ).
   ENDMETHOD.
 
   METHOD assert_errors.
