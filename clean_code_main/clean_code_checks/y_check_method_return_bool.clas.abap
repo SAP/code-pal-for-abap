@@ -134,18 +134,17 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     ENDLOOP.
 
     IF has_found_bool = abap_true AND NOT contains_name_condition( statement-from ).
-      statement_for_message = statement.
 
       DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                              include = get_include( p_level = statement_for_message-level ) ).
+                                                              include = get_include( p_level = statement-level ) ).
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.
 
       raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement_for_message-level
+                   p_level        = statement-level
                    p_position     = index
-                   p_from         = statement_for_message-from
+                   p_from         = statement-from
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )

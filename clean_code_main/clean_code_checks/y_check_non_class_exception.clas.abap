@@ -12,7 +12,8 @@ CLASS y_check_non_class_exception DEFINITION
 
   PRIVATE SECTION.
     METHODS checkif_error
-      IMPORTING index TYPE i.
+      IMPORTING index TYPE i
+                statement TYPE sstmnt.
 ENDCLASS.
 
 
@@ -22,15 +23,15 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
 
   METHOD checkif_error.
     DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                            include = get_include( p_level = statement_for_message-level ) ).
+                                                            include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
     raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement_for_message-level
+                 p_level        = statement-level
                  p_position     = index
-                 p_from         = statement_for_message-from
+                 p_from         = statement-from
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
                  p_code         = get_code( check_configuration-prio ) ).
@@ -63,18 +64,18 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    statement_for_message = statement.
-
     CASE get_token_abs( statement-from ).
       WHEN 'RAISE'.
         IF 'RESUMABLE SHORTDUMP EVENT' NS get_token_abs( statement-from + 1 ) AND NOT
           ( get_token_abs( statement-from + 1 ) EQ 'EXCEPTION' AND get_token_abs( statement-from + 2 ) EQ 'TYPE' ).
-          checkif_error( index ).
+          checkif_error( index = index
+                         statement = statement ).
         ENDIF.
       WHEN 'MESSAGE'.
         LOOP AT ref_scan_manager->get_tokens( ) TRANSPORTING NO FIELDS
           FROM statement-from TO statement-to WHERE str = 'RAISING' AND type EQ 'I'.
-          checkif_error( index ).
+          checkif_error( index = index
+                         statement = statement ).
         ENDLOOP.
     ENDCASE.
   ENDMETHOD.

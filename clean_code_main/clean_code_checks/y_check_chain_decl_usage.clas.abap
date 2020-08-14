@@ -62,6 +62,7 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
                  p_test         = me->myname
                  p_code         = get_code( configuration-prio ) ).
 
+
   ENDMETHOD.
 
 

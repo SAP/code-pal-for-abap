@@ -50,7 +50,6 @@ CLASS y_check_base DEFINITION ABSTRACT
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager .
     DATA is_testcode TYPE abap_bool .
     DATA ref_scan_manager TYPE REF TO y_if_scan_manager .
-    DATA statement_for_message TYPE sstmnt .
     DATA statistics TYPE REF TO y_if_scan_statistics .
     DATA test_code_detector TYPE REF TO y_if_testcode_detector .
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.

@@ -15,6 +15,7 @@ CLASS y_check_num_exec_statements DEFINITION
   PRIVATE SECTION.
 
     DATA no_exec_statements TYPE i .
+    DATA statement_for_message TYPE sstmnt.
 
     METHODS count_statements
       CHANGING

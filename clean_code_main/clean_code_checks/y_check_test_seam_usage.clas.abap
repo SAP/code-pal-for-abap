@@ -46,18 +46,16 @@ CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
   METHOD inspect_tokens.
     CHECK get_token_abs( statement-from ) EQ 'TEST-SEAM'.
 
-    statement_for_message = statement.
-
     DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                            include = get_include( p_level = statement_for_message-level ) ).
+                                                            include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
     raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement_for_message-level
+                 p_level        = statement-level
                  p_position     = index
-                 p_from         = statement_for_message-from
+                 p_from         = statement-from
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
                  p_code         = get_code( check_configuration-prio ) ).

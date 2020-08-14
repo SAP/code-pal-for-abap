@@ -18,6 +18,7 @@ CLASS y_check_comment_usage DEFINITION
     DATA comment_number TYPE i VALUE 0.
     DATA percentage_of_comments TYPE decfloat16 VALUE 0.
     DATA is_function_module TYPE abap_bool.
+    DATA statement_for_message TYPE sstmnt.
 
     METHODS calc_percentage_of_comments .
     METHODS checkif_error
