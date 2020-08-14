@@ -14,199 +14,176 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
-    METHODS:
-      set_data_for_ok,
-      set_data_for_error,
-      set_check_pseudo_comment_ok.
-
+    METHODS set_data_for_ok.
+    METHODS set_data_for_error.
+    METHODS set_pseudo_comment_ok.
   PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 11 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS has_entry RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS are_oficial RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS try_read RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     METHODS can_select RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS have_file RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS must_validate RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS starts_vowel RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     METHODS ends_dot RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS should_concatenate RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS exist_entry RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS contain_value RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS sum IMPORTING a TYPE i b TYPE i RETURNING VALUE(result) TYPE i. ' )
+      ( '     METHODS increment_one CHANGING integer TYPE i. ' )
+      ( ' ENDCLASS. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 11 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition )
-                          ( stmnt_from = 1 stmnt_to = 11 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-interface ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '12' type = 'K' )
-                          ( level = 1 from = '13' to = '18' type = 'K' )
-                          ( level = 1 from = '19' to = '24' type = 'K' )
-                          ( level = 1 from = '25' to = '30' type = 'K' )
-                          ( level = 1 from = '31' to = '36' type = 'K' )
-                          ( level = 1 from = '37' to = '42' type = 'K' )
-                          ( level = 1 from = '43' to = '48' type = 'K' )
-                          ( level = 1 from = '49' to = '54' type = 'K' )
-                          ( level = 1 from = '55' to = '60' type = 'K' )
-                          ( level = 1 from = '61' to = '66' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHODS'       type = 'I' row = 1 )
-                      ( str = 'IS_NAME'       type = 'I' row = 1 )
-                      ( str = 'RETURNING'     type = 'I' row = 1 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 1 )
-                      ( str = 'TYPE'          type = 'I' row = 1 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 1 )
-
-                      ( str = 'METHODS'       type = 'I' row = 2 )
-                      ( str = 'HAS_NAME'      type = 'I' row = 2 )
-                      ( str = 'RETURNING'     type = 'I' row = 2 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 2 )
-                      ( str = 'TYPE'          type = 'I' row = 2 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 2 )
-
-                      ( str = 'METHODS'       type = 'I' row = 3 )
-                      ( str = 'NAME'          type = 'I' row = 3 )
-                      ( str = 'RETURNING'     type = 'I' row = 3 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 3 )
-                      ( str = 'TYPE'          type = 'I' row = 3 )
-                      ( str = 'STRING'        type = 'I' row = 3 )
-
-                      ( str = 'METHODS'       type = 'I' row = 4 )
-                      ( str = 'ARE_NAME'      type = 'I' row = 4 )
-                      ( str = 'RETURNING'     type = 'I' row = 4 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 4 )
-                      ( str = 'TYPE'          type = 'I' row = 4 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 4 )
-
-                      ( str = 'METHODS'       type = 'I' row = 5 )
-                      ( str = 'HAVE_NAME'     type = 'I' row = 5 )
-                      ( str = 'RETURNING'     type = 'I' row = 5 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 5 )
-                      ( str = 'TYPE'          type = 'I' row = 5 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 5 )
-
-                      ( str = 'METHODS'       type = 'I' row = 6 )
-                      ( str = 'CONTAINS_NAME' type = 'I' row = 6 )
-                      ( str = 'RETURNING'     type = 'I' row = 6 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 6 )
-                      ( str = 'TYPE'          type = 'I' row = 6 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 6 )
-
-                      ( str = 'METHODS'       type = 'I' row = 7 )
-                      ( str = 'VALUE_EXISTS'  type = 'I' row = 7 )
-                      ( str = 'RETURNING'     type = 'I' row = 7 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 7 )
-                      ( str = 'TYPE'          type = 'I' row = 7 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 7 )
-
-                      ( str = 'METHODS'       type = 'I' row = 8 )
-                      ( str = 'CAN_NAME'      type = 'I' row = 8 )
-                      ( str = 'RETURNING'     type = 'I' row = 8 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 8 )
-                      ( str = 'TYPE'          type = 'I' row = 8 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 8 )
-
-                      ( str = 'METHODS'       type = 'I' row = 9 )
-                      ( str = 'MUST_NAME'     type = 'I' row = 9 )
-                      ( str = 'RETURNING'     type = 'I' row = 9 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 9 )
-                      ( str = 'TYPE'          type = 'I' row = 9 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 9 )
-
-                      ( str = 'METHODS'       type = 'I' row = 10 )
-                      ( str = 'SHOULD_NAME'   type = 'I' row = 10 )
-                      ( str = 'RETURNING'     type = 'I' row = 10 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 10 )
-                      ( str = 'TYPE'          type = 'I' row = 10 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 10 )
-
-                      ( str = 'METHODS'       type = 'I' row = 11 )
-                      ( str = 'TRY_THIS'      type = 'I' row = 11 )
-                      ( str = 'RETURNING'     type = 'I' row = 11 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 11 )
-                      ( str = 'TYPE'          type = 'I' row = 11 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 11 )
-                      ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD has_entry. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD are_oficial. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD try_read. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD can_select. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD have_file. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD must_validate. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD starts_vowel. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD ends_dot. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD should_concatenate. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD exist_entry. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD contain_value. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD sum. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD increment_one. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
+     convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS active RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS entry RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS oficial RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS read RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     METHODS select RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS file RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS validate RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS vowel RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     METHODS dot RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS concatenate RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS value RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS sum IMPORTING a TYPE i b TYPE i RETURNING VALUE(result) TYPE i. ' )
+      ( '     METHODS increment_one CHANGING integer TYPE i. ' )
+      ( ' ENDCLASS. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition )
-                          ( stmnt_from = 1 stmnt_to = 4 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-interface ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '12' type = 'K' )
-                          ( level = 1 from = '13' to = '18' type = 'K' )
-                          ( level = 1 from = '19' to = '24' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHODS'       type = 'I' row = 1 )
-                      ( str = 'I_NAME'        type = 'I' row = 1 )
-                      ( str = 'RETURNING'     type = 'I' row = 1 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 1 )
-                      ( str = 'TYPE'          type = 'I' row = 1 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 1 )
-                      ( str = 'METHODS'       type = 'I' row = 2 )
-                      ( str = 'HA_NAME'       type = 'I' row = 2 )
-                      ( str = 'RETURNING'     type = 'I' row = 2 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 2 )
-                      ( str = 'TYPE'          type = 'I' row = 2 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 2 )
-                      ( str = 'METHODS'       type = 'I' row = 3 )
-                      ( str = 'AR_NAME'       type = 'I' row = 3 )
-                      ( str = 'RETURNING'     type = 'I' row = 3 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 3 )
-                      ( str = 'TYPE'          type = 'I' row = 3 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 3 )
-                      ( str = 'METHODS'       type = 'I' row = 4 )
-                      ( str = 'HAV_NAME'      type = 'I' row = 4 )
-                      ( str = 'RETURNING'     type = 'I' row = 4 )
-                      ( str = 'VALUE(RESULT)' type = 'I' row = 4 )
-                      ( str = 'TYPE'          type = 'I' row = 4 )
-                      ( str = 'ABAP_BOOL'     type = 'I' row = 4 )
-                      ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD active. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD entry. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD oficial. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD read. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD select. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD file. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD validate. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD vowel. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD dot. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD concatenate. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD value. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD sum. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD increment_one. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
-  METHOD set_check_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
+  METHOD set_pseudo_comment_ok.
+     convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS active RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
+      ( '     METHODS entry RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS oficial RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS read RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     METHODS select RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS file RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
+      ( '     METHODS validate RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS vowel RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     METHODS dot RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS concatenate RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
+      ( '     METHODS value RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS sum IMPORTING a TYPE i b TYPE i RETURNING VALUE(result) TYPE i. ' )
+      ( '     METHODS increment_one CHANGING integer TYPE i. ' )
+      ( ' ENDCLASS. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition )
-                          ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-interface ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '7' type = 'P' ) ).
-
-    tokens = VALUE #( ( str = 'METHODS'            type = 'I' row = 1 )
-                      ( str = 'NAME'               type = 'I' row = 1 )
-                      ( str = 'RETURNING'          type = 'I' row = 1 )
-                      ( str = 'VALUE(RESULT)'      type = 'I' row = 1 )
-                      ( str = 'TYPE'               type = 'I' row = 1 )
-                      ( str = 'ABAP_BOOL'          type = 'I' row = 1 )
-                      ( str = '"#EC METH_RET_BOOL' type = 'C' row = 1 ) ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD active. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD entry. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD oficial. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD read. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD select. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD file. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD validate. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD vowel. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD dot. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD concatenate. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD value. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD sum. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD increment_one. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -269,15 +246,15 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD check_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 8 ).
+    assert_errors( 11 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
   METHOD check_pseudo_comment_ok.
-    ref_scan_manager_double->set_check_pseudo_comment_ok( ).
+    ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
-    assert_errors( 0 ).
-    assert_pseudo_comments( 2 ).
+    assert_errors( 7 ).
+    assert_pseudo_comments( 4 ).
   ENDMETHOD.
 
   METHOD assert_errors.

@@ -14,120 +14,71 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_pseudo_comment_ok.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 5 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'START-OF-SELECTION.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 5 stmnt_type = scan_struc_stmnt_type-method ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '2'   type = 'K' )
-                          ( level = 1 from = '3' to = '7'   type = 'K' )
-                          ( level = 1 from = '8' to = '10'  type = 'K' )
-                          ( level = 1 from = '11' to = '11' type = 'K' )
-                          ( level = 1 from = '12' to = '12' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHOD'    type = 'I' row = 1 )
-                      ( str = 'CALC'      type = 'I' row = 1 )
-                      ( str = 'IF'        type = 'I' row = 2 )
-                      ( str = 'VALUE_A'   type = 'I' row = 2 )
-                      ( str = '='         type = 'I' row = 2 )
-                      ( str = '1'         type = 'I' row = 2 )
-                      ( str = 'VALUE_B'   type = 'I' row = 3 )
-                      ( str = '='         type = 'I' row = 3 )
-                      ( str = '2'         type = 'I' row = 3 )
-                      ( str = 'ENDIF'     type = 'I' row = 4 )
-                      ( str = 'ENDMETHOD' type = 'I' row = 5 ) ).
+    ( 'DATA val_a TYPE i VALUE 1.' )
+    ( 'DATA val_b TYPE i VALUE 2.' )
+    ( 'IF val_a = 1.' )
+    ( ' val_b = 2.' )
+    ( 'ENDIF.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 12 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'START-OF-SELECTION.' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 12 stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'DATA val_a TYPE i VALUE 1.' )
+    ( 'DATA val_b TYPE i VALUE 2.' )
+    ( 'DATA itab TYPE STANDARD TABLE OF i.' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2'   type = 'K' )
-                          ( level = 1 from = '3' to = '6'   type = 'K' )
-                          ( level = 1 from = '7' to = '9'   type = 'K' )
-                          ( level = 1 from = '10' to = '12' type = 'K' )
-                          ( level = 1 from = '13' to = '13' type = 'K' )
-                          ( level = 1 from = '14' to = '14' type = 'K' )
-                          ( level = 1 from = '15' to = '16' type = 'K' )
-                          ( level = 1 from = '17' to = '18' type = 'K' )
-                          ( level = 1 from = '19' to = '19' type = 'K' )
-                          ( level = 1 from = '20' to = '20' type = 'K' )
-                          ( level = 1 from = '21' to = '21' type = 'K' )
-                          ( level = 1 from = '22' to = '22' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'METHOD'    type = 'I' row = 1 )
-                      ( str = 'CALC'      type = 'I' row = 1 )
-                      ( str = 'IF'        type = 'I' row = 2 )
-                      ( str = 'VALUE_A'   type = 'I' row = 2 )
-                      ( str = '='         type = 'I' row = 2 )
-                      ( str = '1'         type = 'I' row = 2 )
-                      ( str = 'VALUE_B'   type = 'I' row = 3 )
-                      ( str = '='         type = 'I' row = 3 )
-                      ( str = '2'         type = 'I' row = 3 )
-                      ( str = 'LOOP'      type = 'I' row = 4 )
-                      ( str = 'AT'        type = 'I' row = 4 )
-                      ( str = 'ITAB'      type = 'I' row = 4 )
-                      ( str = 'AT FIRST'  type = 'I' row = 5 )
-                      ( str = 'ENDAT'     type = 'I' row = 6 )
-                      ( str = 'CASE'      type = 'I' row = 7 )
-                      ( str = 'VALUE_D'   type = 'I' row = 7 )
-                      ( str = 'WHEN'      type = 'I' row = 8 )
-                      ( str = 'ACTIVE'    type = 'I' row = 8 )
-                      ( str = 'ENDCASE'   type = 'I' row = 9 )
-                      ( str = 'ENDLOOP'   type = 'I' row = 10 )
-                      ( str = 'ENDIF'     type = 'I' row = 11 )
-                      ( str = 'ENDMETHOD' type = 'I' row = 12 ) ).
+    ( 'IF val_a = 1.' )
+    ( ' val_b = 2.' )
+    ( ' LOOP AT itab INTO DATA(line).' )
+    ( '  AT FIRST.' )
+    ( '  ENDAT.' )
+    ( '  CASE line.' )
+    ( '   WHEN 0.' )
+    ( '  ENDCASE.' )
+    ( ' ENDLOOP.' )
+    ( 'ENDIF.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    set_data_for_error( ).
-    statements = VALUE #( BASE statements
-                        ( level = 1 from = '23' to = '23' type = 'P' ) ).
-    tokens = VALUE #( BASE tokens
-                    ( str = '"#EC CI_NESTING' type = 'C' row = 13 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'START-OF-SELECTION. "#EC CI_NESTING' )
+
+    ( 'DATA val_a TYPE i VALUE 1.' )
+    ( 'DATA val_b TYPE i VALUE 2.' )
+    ( 'DATA itab TYPE STANDARD TABLE OF i.' )
+
+    ( 'IF val_a = 1.' )
+    ( ' val_b = 2.' )
+    ( ' LOOP AT itab INTO DATA(line).' )
+    ( '  AT FIRST.' )
+    ( '  ENDAT.' )
+    ( '  CASE line.' )
+    ( '   WHEN 0.' )
+    ( '  ENDCASE.' )
+    ( ' ENDLOOP.' )
+    ( 'ENDIF. "#EC CI_NESTING' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 

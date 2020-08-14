@@ -14,111 +14,38 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 15 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 15 stmnt_type = scan_struc_stmnt_type-function ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'P' )
-                          ( level = 1 from = '2' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '7' type = 'K' )
-                          ( level = 1 from = '8' to = '8' type = 'K' )
-                          ( level = 1 from = '9' to = '10' type = 'K' )
-                          ( level = 1 from = '11' to = '11' type = 'P' )
-                          ( level = 1 from = '12' to = '12' type = 'P' )
-                          ( level = 1 from = '13' to = '13' type = 'P' )
-                          ( level = 1 from = '14' to = '14' type = 'K' )
-                          ( level = 1 from = '15' to = '15' type = 'P' ) ).
-
-    tokens = VALUE #( ( str = '"COMMENT'    type = 'C' row = 1 )
-                      ( str = 'FUNCTION'    type = 'I' row = 2 )
-                      ( str = 'SOME_CODE'   type = 'I' row = 3 )
-                      ( str = 'SOME_CODE'   type = 'I' row = 4 )
-                      ( str = 'SOME_CODE'   type = 'I' row = 5 )
-                      ( str = 'SOME_CODE'   type = 'I' row = 6 )
-                      ( str = 'SOME_CODE'   type = 'I' row = 7 )
-                      ( str = 'SOME_CODE'   type = 'I' row = 8 )
-                      ( str = 'SOME_CODE'   type = 'I' row = 9 )
-                      ( str = 'SOME_CODE'   type = 'I' row = 9 )
-                      ( str = '"?<html>'    type = 'C' row = 10 )
-                      ( str = '*"*COMMENT'  type = 'C' row = 11 )
-                      ( str = '*"'          type = 'C' row = 12 )
-                      ( str = '"! docu'     type = 'C' row = 13 )
-                      ( str = 'ENDFUNCTION' type = 'I' row = 14 )
-                      ( str = '"COMMENT'    type = 'C' row = 15 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT name1. ' )
+    ( 'AT SELECTION-SCREEN.' )
+    ( '  DATA name3 TYPE string. ' )
+    ( '  "?<html> ' )
+    ( '*"*COMMENT ' )
+    ( '*" ' )
+    ( '  "! docu ' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 11 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 11 stmnt_type = scan_struc_stmnt_type-class_implementation ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '7' type = 'K' )
-                          ( level = 1 from = '8' to = '8' type = 'P' )
-                          ( level = 1 from = '9' to = '9' type = 'P' )
-                          ( level = 1 from = '10' to = '10' type = 'P' ) ).
-
-    tokens = VALUE #( ( str = 'SOME_CODE'  type = 'I' row = 1 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 2 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 3 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 4 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 5 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 6 )
-                      ( str = 'SOME_CODE'  type = 'I' row = 7 )
-                      ( str = '"COMMENT'   type = 'C' row = 8 )
-                      ( str = '*COMMENT'   type = 'C' row = 9 )
-                      ( str = '""'         type = 'C' row = 10 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT name1. ' )
+    ( 'AT SELECTION-SCREEN.' )
+    ( '  DATA name3 TYPE string. ' )
+    ( '*COMMENT ' )
+    ( '  "do something ' )
+    ( '  "do more ' )
+    ( '  "do much more ' )
+    ( '  "but not any time soon ' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 

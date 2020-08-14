@@ -14,94 +14,66 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
-    METHODS:
-      set_data_for_ok,
-      set_data_for_error,
-      set_pseudo_comment_ok.
-
+    METHODS set_data_for_ok.
+    METHODS set_data_for_error.
+    METHODS set_pseudo_comment_ok.
   PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 stmnt_type = scan_struc_stmnt_type-method ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     METHODS test. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' ) ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '     DATA file TYPE REF TO cl_abap_json.' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
 
-    tokens = VALUE #( ( str = 'METHOD'    type = 'I' row = 1 )
-                      ( str = 'M1'        type = 'I' row = 1 )
-                      ( str = 'ENDMETHOD' type = 'I' row = 1 ) ).
   ENDMETHOD.
 
+
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 4 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 stmnt_type = scan_struc_stmnt_type-form )
-                          ( stmnt_from = 3 stmnt_to = 4 stmnt_type = scan_struc_stmnt_type-form ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' PERFORM first_example. ' )
+      ( ' PERFORM second_example. ' )
+      ( ' FORM first_example. ' )
+      ( '   DATA file TYPE REF TO cl_abap_json.' )
+      ( ' ENDFORM.' )
+      ( ' FORM second_example. ' )
+      ( '   DATA file TYPE REF TO cl_abap_json.' )
+      ( ' ENDFORM.' )
+    ) ).
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '6' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'FORM'       type = 'I' row = 1 )
-                      ( str = 'F1'         type = 'I' row = 1 )
-                      ( str = 'ENDFORM'    type = 'I' row = 2 )
-                      ( str = 'FORM'       type = 'I' row = 3 )
-                      ( str = 'F2'         type = 'I' row = 3 )
-                      ( str = 'ENDFORM'    type = 'I' row = 4 ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 stmnt_type = scan_struc_stmnt_type-form )
-                          ( stmnt_from = 3 stmnt_to = 3 stmnt_type = scan_struc_stmnt_type-sequence ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' PERFORM first_example. ' )
+      ( ' PERFORM second_example. ' )
+      ( ' FORM first_example. ' )
+      ( '   DATA file TYPE REF TO cl_abap_json.' )
+      ( ' ENDFORM. "#EC CI_FORM' )
+      ( ' FORM second_example. ' )
+      ( '   DATA file TYPE REF TO cl_abap_json.' )
+      ( ' ENDFORM. ' )
+    ) ).
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' ) ).
-
-    tokens = VALUE #( ( str = 'FORM'         type = 'I' row = 1 )
-                      ( str = 'F1'           type = 'I' row = 1 )
-                      ( str = 'ENDFORM'      type = 'I' row = 2 )
-                      ( str = '"#EC CI_FORM' type = 'C' row = 2 ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -171,7 +143,7 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD pseudo_comment_ok.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
-    assert_errors( 0 ).
+    assert_errors( 1 ).
     assert_pseudo_comments( 1 ).
   ENDMETHOD.
 

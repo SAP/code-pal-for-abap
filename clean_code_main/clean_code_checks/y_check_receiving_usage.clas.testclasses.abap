@@ -14,78 +14,75 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
-    METHODS:
-      set_data_for_ok,
-      set_data_for_error,
-      set_check_pseudo_comment_ok.
-
+    METHODS set_data_for_ok.
+    METHODS set_data_for_error.
+    METHODS set_pseudo_comment_ok.
   PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
+
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 1 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 1 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test RETURNING VALUE(name) TYPE string. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' ) ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'SOMETHING' type = 'I' row = 1 ) ).
+      ( ' START-OF-SELECTION. ' )
+      ( '   DATA(example) = NEW y_example_class( ). ' )
+      ( |   DATA(name) = example->test( ). | )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 1 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 1 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test RETURNING VALUE(name) TYPE string. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' ) ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'RECEIVING'   type = 'I' row = 1 ) ).
+      ( ' START-OF-SELECTION. ' )
+      ( '   DATA(example) = NEW y_example_class( ). ' )
+      ( |   example->test( RECEIVING name = DATA(name) ). | )
+    ) ).
   ENDMETHOD.
 
-  METHOD set_check_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
+  METHOD set_pseudo_comment_ok.
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test RETURNING VALUE(name) TYPE string. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '2' type = 'P' ) ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'RECEIVING'              type = 'I' row = 1 )
-                      ( str = '"#EC RECEIVING_USAGE' type = 'C' row = 1 ) ).
+      ( ' START-OF-SELECTION. ' )
+      ( '   DATA(example) = NEW y_example_class( ). ' )
+      ( |   example->test( RECEIVING name = DATA(name) ). "#EC RECEIVING_USAGE | )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -153,7 +150,7 @@ CLASS local_test_class IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD check_pseudo_comment_ok.
-    ref_scan_manager_double->set_check_pseudo_comment_ok( ).
+    ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
     assert_pseudo_comments( 1 ).

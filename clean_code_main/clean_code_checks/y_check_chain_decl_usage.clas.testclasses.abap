@@ -5,8 +5,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 2 )
-                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 1 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 1 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.
@@ -27,15 +27,20 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   METHOD set_data_for_ok.
     convert_code( VALUE #(
       ( 'REPORT y_example. ' )
-      ( ' CLASS y_example_class DEFINITION. "#EC NUMBER_METHODS ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
-      ( '     METHODS one. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '   PRIVATE SECTION. ' )
+      ( '     METHODS test. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD one. ' )
+      ( '   METHOD test. ' )
+      ( '     DATA file TYPE REF TO cl_abap_json.' )
+      ( '     DATA: payload TYPE REF TO cl_abap_json.' )
+      ( '     DATA data TYPE REF TO data.' )
+      ( |     DATA(string) = 'value'. | )
+      ( '     DATA(json) = NEW cl_abap_json( ). ' )
+      ( '     DATA(mandt) = sy-mandt. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ) ).
@@ -46,27 +51,37 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
-      ( '     METHODS one. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     CLASS-METHODS two. ' )
-      ( '     METHODS: ' )
-      ( '       three, ' )
-      ( '       four. ' )
-      ( '   PRIVATE SECTION. ' )
-      ( '     METHODS: five. ' )
+      ( '     METHODS a. ' )
+      ( '     METHODS b. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD one. ' )
+
+      ( '   METHOD a. ' )
+      ( '     DATA: ' )
+      ( '       string TYPE string, ' )
+      ( '       json TYPE REF TO cl_abap_json, ' )
+      ( '       mandt LIKE sy-mandt. ' )
+      ( '     DATA: ' )
+      ( '       integer TYPE i, ' )
+      ( '       data TYPE REF TO cl_abap_json, ' )
+      ( '       datetime LIKE sy-datum. ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD two. ' )
+
+      ( '   METHOD b. ' )
+      ( '     DATA file TYPE REF TO cl_abap_json.' )
+      ( '     DATA data TYPE REF TO data.' )
+      ( '     DATA: ' )
+      ( '       string TYPE string, ' )
+      ( '       json TYPE REF TO cl_abap_json, ' )
+      ( '       mandt LIKE sy-mandt. ' )
+
+      ( |     string = 'value'. | )
+      ( '     json = NEW cl_abap_json( ). ' )
+      ( '     mandt = sy-mandt. ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD three. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD four. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD five. ' )
-      ( '   ENDMETHOD. ' )
+
       ( ' ENDCLASS. ' )
     ) ).
   ENDMETHOD.
@@ -74,32 +89,44 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   METHOD set_pseudo_comment_ok.
     convert_code( VALUE #(
       ( 'REPORT y_example. ' )
-      ( ' CLASS y_example_class DEFINITION. "#EC NUMBER_METHODS ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
-      ( '     METHODS one. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     CLASS-METHODS two. ' )
-      ( '     METHODS: ' )
-      ( '       three, ' )
-      ( '       four. ' )
-      ( '   PRIVATE SECTION. ' )
-      ( '     METHODS: five. ' )
+      ( '     METHODS a. ' )
+      ( '     METHODS b. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD one. ' )
+
+      ( '   METHOD a. ' )
+      ( '     DATA: "#EC CHAIN_DECL_USAG ' )
+      ( '       string TYPE string, ' )
+      ( '       json TYPE REF TO cl_abap_json, ' )
+      ( '       mandt LIKE sy-mandt. ' )
+      ( '     DATA: "#EC CHAIN_DECL_USAG ' )
+      ( '       integer TYPE i, ' )
+      ( '       data TYPE REF TO cl_abap_json, ' )
+      ( '       datetime LIKE sy-datum. ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD two. ' )
+
+      ( '   METHOD b. ' )
+      ( '     DATA file TYPE REF TO cl_abap_json.' )
+      ( '     DATA data TYPE REF TO data.' )
+      ( '     DATA: "#EC CHAIN_DECL_USAG ' )
+      ( '       string TYPE string, ' )
+      ( '       json TYPE REF TO cl_abap_json, ' )
+      ( '       mandt LIKE sy-mandt. ' )
+
+      ( |     string = 'value'. | )
+      ( '     json = NEW cl_abap_json( ). ' )
+      ( '     mandt = sy-mandt. ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD three. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD four. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD five. ' )
-      ( '   ENDMETHOD. ' )
+
       ( ' ENDCLASS. ' )
     ) ).
   ENDMETHOD.
+
+
 ENDCLASS.
 
 CLASS ltd_clean_code_exemption_no DEFINITION FOR TESTING
@@ -118,26 +145,24 @@ ENDCLASS.
 CLASS local_test_class DEFINITION FOR TESTING
   RISK LEVEL HARMLESS
   DURATION SHORT.
-
+  PROTECTED SECTION.
+    METHODS is_bound FOR TESTING.
+    METHODS cut_error FOR TESTING.
+    METHODS cut_ok FOR TESTING.
+    METHODS pseudo_comment_ok FOR TESTING.
   PRIVATE SECTION.
-    DATA: cut                     TYPE REF TO y_check_number_methods,
-          ref_scan_manager_double TYPE REF TO ltd_ref_scan_manager.
-
-    METHODS:
-      setup,
-      assert_errors IMPORTING err_cnt TYPE i,
-      assert_pseudo_comments IMPORTING pc_cnt TYPE i,
-      is_bound FOR TESTING,
-      number_methods_ok FOR TESTING,
-      number_methods_error FOR TESTING,
-      pseudo_comment_ok FOR TESTING.
+    DATA cut TYPE REF TO y_check_chain_decl_usage.
+    DATA ref_scan_manager_double TYPE REF TO ltd_ref_scan_manager.
+    METHODS setup.
+    METHODS assert_errors IMPORTING err_cnt TYPE i.
+    METHODS assert_pseudo_comments IMPORTING pc_cnt TYPE i.
 ENDCLASS.
 
-CLASS y_check_number_methods DEFINITION LOCAL FRIENDS local_test_class.
+CLASS y_check_chain_decl_usage DEFINITION LOCAL FRIENDS local_test_class.
 
 CLASS local_test_class IMPLEMENTATION.
   METHOD setup.
-    cut = NEW y_check_number_methods( ).
+    cut = NEW y_check_chain_decl_usage( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).
     cut->ref_scan_manager ?= ref_scan_manager_double.
     cut->clean_code_manager = NEW ltd_clean_code_manager( ).
@@ -146,22 +171,20 @@ CLASS local_test_class IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound(
-      EXPORTING
-        act = cut ).
+    cl_abap_unit_assert=>assert_bound( act = cut ).
   ENDMETHOD.
 
-  METHOD number_methods_ok.
+  METHOD cut_ok.
     ref_scan_manager_double->set_data_for_ok( ).
     cut->run( ).
     assert_errors( 0 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
-  METHOD number_methods_error.
+  METHOD cut_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 1 ).
+    assert_errors( 3 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -169,7 +192,7 @@ CLASS local_test_class IMPLEMENTATION.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_pseudo_comments( 1 ).
+    assert_pseudo_comments( 3 ).
   ENDMETHOD.
 
   METHOD assert_errors.

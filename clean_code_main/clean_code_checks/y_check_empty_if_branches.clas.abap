@@ -43,14 +43,13 @@ CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
 
   METHOD begin_of_statement.
     CASE get_first_token_from_index( statement-from )-str.
-      WHEN  if_kaizen_keywords_c=>gc_if.
+      WHEN 'IF'.
         branch_counter = branch_counter + 1.
 
-      WHEN if_kaizen_keywords_c=>gc_endif.
+      WHEN 'ENDIF'.
         branch_counter = branch_counter - 1.
 
-      WHEN if_kaizen_keywords_c=>gc_elseif
-        OR if_kaizen_keywords_c=>gc_else.
+      WHEN 'ELSEIF' OR 'ELSE'.
         found_statement = abap_false.
 
       WHEN OTHERS.
@@ -62,9 +61,9 @@ CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
   METHOD branch_search_in_next_stmnt.
     CHECK branch_counter = first_if AND found_statement = abap_false.
     CASE get_first_token_from_index( statement-to + 1 )-str.
-      WHEN if_kaizen_keywords_c=>gc_elseif
-        OR if_kaizen_keywords_c=>gc_else
-        OR if_kaizen_keywords_c=>gc_endif.
+      WHEN 'ELSEIF'
+        OR 'ELSE'
+        OR 'ENDIF'.
 
         DATA(check_configuration) = detect_check_configuration( threshold = 0
                                                                 include = get_include( p_level = statement_wa-level ) ).

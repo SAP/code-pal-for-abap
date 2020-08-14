@@ -14,82 +14,33 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
     METHODS:
       set_data_for_ok,
       set_data_for_error.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
-
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 1 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 1 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '3'  type = 'K' )
-                          ( level = 1 from = '4' to = '11' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'VAR ' type = 'I' row = 1 )
-                      ( str = '='    type = 'I' row = 1 )
-                      ( str = 'VAR2' type = 'I' row = 1 )
-                      ( str = 'IF'   type = 'I' row = 2 )
-                      ( str = 'VAR1' type = 'I' row = 2 )
-                      ( str = '='    type = 'I' row = 2 )
-                      ( str = 'VAR2' type = 'I' row = 2 )
-                      ( str = 'AND'  type = 'I' row = 2 )
-                      ( str = 'VAR1' type = 'I' row = 2 )
-                      ( str = '='    type = 'I' row = 2 )
-                      ( str = 'VAR3' type = 'I' row = 2 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'START-OF-SELECTION.' )
+    ( ' DATA val1 TYPE c.' )
+    ( ' DATA val2 TYPE c.' )
+    ( ' val1 = val2.' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 1 name = 'ZTEST' type = 'P' ) ).
-
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 1 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '7' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'VAR1' type = 'I' row = 1 )
-                      ( str = '='    type = 'I' row = 1 )
-                      ( str = 'VAR2' type = 'I' row = 1 )
-                      ( str = '='    type = 'I' row = 1 )
-                      ( str = 'VAR3' type = 'I' row = 1 )
-                      ( str = '='    type = 'I' row = 1 )
-                      ( str = 'VAR4' type = 'I' row = 1 ) ).
+    convert_code( VALUE #(
+    ( 'REPORT ut_test.' )
+    ( 'START-OF-SELECTION.' )
+    ( ' DATA val1 TYPE c.' )
+    ( ' DATA val2 TYPE c.' )
+    ( ' DATA val3 TYPE c.' )
+    ( ' val1 = val2 = val3.' )
+    ) ).
   ENDMETHOD.
 
 ENDCLASS.

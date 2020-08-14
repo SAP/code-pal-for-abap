@@ -14,103 +14,94 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
+    CLASS-METHODS net.
     METHODS:
       set_data_for_ok,
       set_data_for_error,
       set_check_pseudo_comment_ok.
-
-  PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
+  METHOD net.
   ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 5 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 5 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS lcl_classname DEFINITION. ' )
+    ( ' PUBLIC SECTION. ' )
+    ( '  METHODS methodname. ' )
+    ( '  CLASS-METHODS class_method. ' )
+    ( 'ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '8' type = 'K' )
-                          ( level = 1 from = '9' to = '11' type = 'K' )
-                          ( level = 1 from = '12' to = '14' type = 'K' ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION. ' )
+    ( ' METHOD methodname. ' )
+    ( ' ENDMETHOD. ' )
+    ( ' METHOD class_method. ' )
+    ( ' ENDMETHOD. ' )
+    ( 'ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'CALL'      type = 'I' row = 1 )
-                      ( str = 'SOMETHING' type = 'I' row = 1 )
-                      ( str = 'CALL'      type = 'I' row = 2 )
-                      ( str = 'METHODS'   type = 'I' row = 2 )
-                      ( str = 'class->(methodname)' type = 'I' row = 2 )
-                      ( str = 'CALL'      type = 'I' row = 3 )
-                      ( str = 'METHODS'   type = 'I' row = 3 )
-                      ( str = 'class=>(methodname)' type = 'I' row = 3 )
-                      ( str = 'CALL'      type = 'I' row = 4 )
-                      ( str = 'METHODS'   type = 'I' row = 4 )
-                      ( str = '(classname)=>(methodname)' type = 'I' row = 4 )
-                      ( str = 'CALL'      type = 'I' row = 5 )
-                      ( str = 'METHODS'   type = 'I' row = 5 )
-                      ( str = '(classname)=>method' type = 'I' row = 5 ) ).
+    ( 'START-OF-SELECTION. ' )
+    ( 'DATA cn TYPE REF TO lcl_classname. ' )
+    ( 'cn = NEW lcl_classname( ). ' )
+    ( | CALL METHOD cn->('methodname'). | )
+    ( | CALL METHOD lcl_classname=>('class_method'). | )
+    ( | CALL METHOD ('lcl_classname')=>('class_method'). | )
+    ( | CALL METHOD ('lcl_classname')=>class_method. | )
+     ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS lcl_classname DEFINITION. ' )
+    ( ' PUBLIC SECTION. ' )
+    ( '  METHODS methodname. ' )
+    ( '  CLASS-METHODS class_method. ' )
+    ( 'ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '6' type = 'K' ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION. ' )
+    ( ' METHOD methodname.' )
+    ( ' ENDMETHOD. ' )
+    ( ' METHOD class_method. ' )
+    ( ' ENDMETHOD. ' )
+    ( 'ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'CALL'   type = 'I' row = 1 )
-                      ( str = 'METHOD' type = 'I' row = 1 )
-                      ( str = 'class->method' type = 'I' row = 1 )
-                      ( str = 'CALL'   type = 'I' row = 2 )
-                      ( str = 'METHOD' type = 'I' row = 2 )
-                      ( str = 'class=>method' type = 'I' row = 2 ) ).
+    ( 'START-OF-SELECTION. ' )
+    ( 'DATA cn TYPE REF TO lcl_classname. ' )
+    ( 'cn = NEW lcl_classname( ). ' )
+    ( ' CALL METHOD cn->methodname. ' )
+    ( ' CALL METHOD lcl_classname=>class_method. ' )
+     ) ).
   ENDMETHOD.
 
   METHOD set_check_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+    ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+    ( 'CLASS lcl_classname DEFINITION. ' )
+    ( ' PUBLIC SECTION. ' )
+    ( '  METHODS methodname. ' )
+    ( '  CLASS-METHODS class_method. ' )
+    ( 'ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '4' type = 'P' ) ).
+    ( 'CLASS lcl_classname IMPLEMENTATION. ' )
+    ( ' METHOD methodname. ' )
+    ( ' ENDMETHOD. ' )
+    ( ' METHOD class_method. ' )
+    ( ' ENDMETHOD. ' )
+    ( 'ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'CALL'                 type = 'I' row = 1 )
-                      ( str = 'METHOD'               type = 'I' row = 1 )
-                      ( str = 'class->method'        type = 'I' row = 1 )
-                      ( str = '"#EC CALL_METH_USAGE' type = 'C' row = 1 ) ).
+    ( 'START-OF-SELECTION. ' )
+    ( 'DATA cn TYPE REF TO lcl_classname. ' )
+    ( 'cn = NEW lcl_classname( ). ' )
+    ( ' CALL METHOD cn->methodname. "#EC CALL_METH_USAGE ' )
+    ( ' CALL METHOD lcl_classname=>class_method. "#EC CALL_METH_USAGE ' )
+     ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -181,7 +172,7 @@ CLASS local_test_class IMPLEMENTATION.
     ref_scan_manager_double->set_check_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_pseudo_comments( 1 ).
+    assert_pseudo_comments( 2 ).
   ENDMETHOD.
 
   METHOD assert_errors.

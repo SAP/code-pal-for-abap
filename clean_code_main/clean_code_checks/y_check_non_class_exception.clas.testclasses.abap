@@ -14,112 +14,93 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
-    METHODS:
-      set_data_for_ok,
-      set_data_for_error,
-      set_check_pseudo_comment_ok.
-
+    METHODS set_data_for_ok.
+    METHODS set_data_for_error.
+    METHODS set_pseudo_comment_ok.
   PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 5 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 5 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+      ( ' CLASS cx_demo DEFINITION INHERITING FROM cx_static_check. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '1' type = 'K' )
-                          ( level = 1 from = '2' to = '3' type = 'K' )
-                          ( level = 1 from = '4' to = '6' type = 'K' )
-                          ( level = 1 from = '7' to = '8' type = 'K' )
-                          ( level = 1 from = '9' to = '10' type = 'K' )
-                          ( level = 1 from = '11' to = '12' type = 'K' ) ).
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     EVENTS event. ' )
+      ( '     METHODS one RAISING cx_demo. ' )
+      ( '     METHODS two RAISING cx_demo. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
 
-    tokens = VALUE #( ( str = 'THROW'     type = 'I' row = 1 )
-                      ( str = 'RAISE'     type = 'I' row = 2 )
-                      ( str = 'EXCEPTION' type = 'I' row = 2 )
-                      ( str = 'RAISE'     type = 'I' row = 3 )
-                      ( str = 'RESUMABLE' type = 'I' row = 3 )
-                      ( str = 'EXCEPTION' type = 'I' row = 3 )
-                      ( str = 'RAISE'     type = 'I' row = 4 )
-                      ( str = 'SHORTDUMP' type = 'I' row = 4 )
-                      ( str = 'RAISE'     type = 'I' row = 5 )
-                      ( str = 'EVENT'     type = 'I' row = 5 )
-                      ( str = 'MESSAGE'   type = 'I' row = 6 )
-                      ( str = 'MSG_NAME'  type = 'I' row = 6 ) ).
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD one. ' )
+      ( '     RAISE EXCEPTION TYPE cx_demo. ' )
+      ( '     RAISE RESUMABLE EXCEPTION TYPE cx_demo. ' )
+      ( '     RAISE SHORTDUMP TYPE cx_demo. ' )
+      ( '     RAISE EVENT event. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD two. ' )
+      ( '     DATA cflag TYPE abap_bool. ' )
+      ( '     DATA(iflag) = COND i( WHEN cflag = abap_true  THEN 1 ' )
+      ( '                           WHEN cflag = abap_false THEN 0 ' )
+      ( |                           ELSE THROW cx_demo_dyn_t100( MESSAGE e888(sabapdemos) WITH 'Illegal value!' ) ). | )
+      ( '   ENDMETHOD.')
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     CLASS-METHODS one EXCEPTIONS exception. ' )
+      ( '     METHODS two EXCEPTIONS exception. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '6' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'RAISE'             type = 'I' row = 1 )
-                      ( str = 'SYSTEM-EXCEPTIONS' type = 'I' row = 1 )
-                      ( str = 'RAISE'             type = 'I' row = 2 )
-                      ( str = 'EX_NAME'           type = 'I' row = 2 )
-                      ( str = 'MESSAGE'           type = 'I' row = 3 )
-                      ( str = 'RAISING'           type = 'I' row = 3 ) ).
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD one. ' )
+      ( '     RAISE exception. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD two. ' )
+      ( |     MESSAGE 'test' TYPE 'I' RAISING exception.| )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
-  METHOD set_check_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 6 name = 'ZTEST' type = 'P' ) ).
+  METHOD set_pseudo_comment_ok.
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 6 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-method ) ).
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     CLASS-METHODS one EXCEPTIONS exception. ' )
+      ( '     METHODS two EXCEPTIONS exception. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
 
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'P' )
-                          ( level = 1 from = '4' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '6' type = 'P' )
-                          ( level = 1 from = '7' to = '8' type = 'K' )
-                          ( level = 1 from = '9' to = '9' type = 'P' ) ).
-
-    tokens = VALUE #( ( str = 'RAISE'              type = 'I' row = 1 )
-                      ( str = 'SYSTEM-EXCEPTIONS'  type = 'I' row = 1 )
-                      ( str = '"#EC NON_CL_EXCEPT' type = 'C' row = 1 )
-                      ( str = 'RAISE'              type = 'I' row = 2 )
-                      ( str = 'EX_NAME'            type = 'I' row = 2 )
-                      ( str = '"#EC NON_CL_EXCEPT' type = 'C' row = 2 )
-                      ( str = 'MESSAGE'            type = 'I' row = 3 )
-                      ( str = 'RAISING'            type = 'I' row = 3 )
-                      ( str = '"#EC NON_CL_EXCEPT' type = 'C' row = 3 ) ).
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD one. ' )
+      ( '     RAISE exception. "#EC NON_CL_EXCEPT' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD two. ' )
+      ( |     MESSAGE 'test' TYPE 'I' RAISING exception. "#EC NON_CL_EXCEPT| )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 
@@ -182,15 +163,15 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD check_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 3 ).
+    assert_errors( 2 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
   METHOD check_pseudo_comment_ok.
-    ref_scan_manager_double->set_check_pseudo_comment_ok( ).
+    ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_pseudo_comments( 3 ).
+    assert_pseudo_comments( 2 ).
   ENDMETHOD.
 
   METHOD assert_errors.

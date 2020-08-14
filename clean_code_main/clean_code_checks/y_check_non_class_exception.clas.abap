@@ -64,19 +64,18 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
 
   METHOD inspect_tokens.
     statement_for_message = statement.
+
     CASE get_token_abs( statement-from ).
       WHEN 'RAISE'.
-        IF 'EXCEPTION RESUMABLE SHORTDUMP EVENT' NS get_token_abs( statement-from + 1 ).
+        IF 'RESUMABLE SHORTDUMP EVENT' NS get_token_abs( statement-from + 1 ) AND NOT
+          ( get_token_abs( statement-from + 1 ) EQ 'EXCEPTION' AND get_token_abs( statement-from + 2 ) EQ 'TYPE' ).
           checkif_error( index ).
         ENDIF.
-
       WHEN 'MESSAGE'.
         LOOP AT ref_scan_manager->get_tokens( ) TRANSPORTING NO FIELDS
           FROM statement-from TO statement-to WHERE str = 'RAISING' AND type EQ 'I'.
-
           checkif_error( index ).
         ENDLOOP.
-
     ENDCASE.
   ENDMETHOD.
 ENDCLASS.

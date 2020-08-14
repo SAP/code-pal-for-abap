@@ -14,101 +14,67 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
-
-    METHODS:
-      set_data_for_ok,
-      set_data_for_error,
-      set_pseudo_comment_ok.
-
+    METHODS set_data_for_ok.
+    METHODS set_data_for_error.
+    METHODS set_pseudo_comment_ok.
   PRIVATE SECTION.
-    DATA:
-      levels     TYPE slevel_tab,
-      structures TYPE sstruc_tab,
-      statements TYPE sstmnt_tab,
-      tokens     TYPE stokesx_tab.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD y_if_scan_manager~get_structures.
-    result = structures.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_statements.
-    result = statements.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_tokens.
-    result = tokens.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~get_levels.
-    result = levels.
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
-  ENDMETHOD.
-
-  METHOD y_if_scan_manager~is_scan_ok.
-    result = abap_true.
-  ENDMETHOD.
 
   METHOD set_data_for_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 2 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     INTERFACES if_abap_c_reader. ' )
+      ( '     INTERFACES: ' )
+      ( '       if_abap_c_writer. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 2 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '4' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'INTERFACES' type = 'I' row = 1 )
-                      ( str = 'INTERFACES' type = 'I' row = 1 )     "(interface name) check should differ between name and keyword
-                      ( str = 'INTERFACES' type = 'I' row = 2 )
-                      ( str = 'I2'         type = 'I' row = 2 ) ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 3 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     INTERFACES if_abap_c_reader. ' )
+      ( '     INTERFACES: ' )
+      ( '       if_abap_c_writer, ' )
+      ( '       if_abap_cc_properties. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 3 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '4' type = 'K' )
-                          ( level = 1 from = '5' to = '6' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'INTERFACES' type = 'I' row = 1 )
-                      ( str = 'I1'         type = 'I' row = 1 )
-                      ( str = 'INTERFACES' type = 'I' row = 2 )
-                      ( str = 'I2'         type = 'I' row = 2 )
-                      ( str = 'INTERFACES' type = 'I' row = 3 )
-                      ( str = 'I3'         type = 'I' row = 3 ) ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    levels = VALUE #( ( depth = 1 level = 0 stmnt = 0 from = 1 to = 6 name = 'ZTEST' type = 'P' ) ).
+    convert_code( VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. "#EC NMBR_INTERFACES ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     INTERFACES if_abap_c_reader. ' )
+      ( '     INTERFACES: ' )
+      ( '       if_abap_c_writer, ' )
+      ( '       if_abap_cc_properties. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( ' ENDCLASS. ' )
 
-    structures = VALUE #( ( stmnt_from = 1 stmnt_to = 6 type = scan_struc_type-class stmnt_type = scan_struc_stmnt_type-class_definition ) ).
-
-    statements = VALUE #( ( level = 1 from = '1' to = '2' type = 'K' )
-                          ( level = 1 from = '3' to = '3' type = 'P' )
-                          ( level = 1 from = '4' to = '5' type = 'K' )
-                          ( level = 1 from = '6' to = '7' type = 'K' )
-                          ( level = 1 from = '8' to = '9' type = 'K' )
-                          ( level = 1 from = '10' to = '10' type = 'K' ) ).
-
-    tokens = VALUE #( ( str = 'CLASS'                type = 'I' row = 1 )
-                      ( str = 'LTC_TEST_TEST'        type = 'I' row = 1 )
-                      ( str = '"#EC NMBR_INTERFACES' type = 'C' row = 1 )
-                      ( str = 'INTERFACES'           type = 'I' row = 2 )
-                      ( str = 'I1'                   type = 'I' row = 2 )
-                      ( str = 'INTERFACES'           type = 'I' row = 3 )
-                      ( str = 'I2'                   type = 'I' row = 3 )
-                      ( str = 'INTERFACES'           type = 'I' row = 4 )
-                      ( str = 'I3'                   type = 'I' row = 4 )
-                      ( str = 'ENDCLASS'             type = 'I' row = 5 ) ).
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( ' ENDCLASS. ' )
+    ) ).
   ENDMETHOD.
 ENDCLASS.
 
