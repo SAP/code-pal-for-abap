@@ -670,13 +670,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     instantiate_objects( ).
 
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
-      raise_error(
-        EXPORTING
-          object_type     = c_type_include
-          statement_level = 1
-          statement_index = 1
-          statement_from  = 1
-          error_priority  = '' ).
+      raise_error( statement_level = 1
+                   statement_index = 1
+                   statement_from  = 1
+                   error_priority  = '' ).
       FREE ref_scan_manager.
       RETURN.
     ENDIF.
