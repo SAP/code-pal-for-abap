@@ -11,6 +11,7 @@ CLASS y_check_base DEFINITION ABSTRACT
         warning      TYPE sci_errc VALUE '101',
         notification TYPE sci_errc VALUE '102',
       END OF c_code,
+      c_code_not_maintained TYPE sci_errc VALUE '106',
       BEGIN OF c_docs_path,
         main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
         checks TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/checks/' ##NO_TEXT,
@@ -153,17 +154,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     has_attributes = do_attributes_exist( ).
 
     INSERT VALUE #( test = me->myname
-                    code = '104'
-                    kind = cl_ci_test_root=>c_note
-                    text = 'Check not customized!'(104) ) INTO TABLE me->scimessages[].
-
-    INSERT VALUE #( test = me->myname
-                    code = '105'
-                    kind = cl_ci_test_root=>c_note
-                    text = 'Object exempted - E.g. Object is generated'(105) ) INTO TABLE me->scimessages[].
-
-    INSERT VALUE #( test = me->myname
-                    code = '106'
+                    code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
                     text = 'Maintain Attributes for the Code Inspector Check!'(106) ) INTO TABLE me->scimessages[].
   ENDMETHOD.
@@ -307,7 +298,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       WHEN c_note.
         result = c_code-notification.
       WHEN OTHERS.
-        result = '106'.
+        result = c_code_not_maintained.
     ENDCASE.
   ENDMETHOD.
 

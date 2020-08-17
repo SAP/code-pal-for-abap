@@ -15,18 +15,6 @@
    <TPOOL>
     <item>
      <ID>I</ID>
-     <KEY>104</KEY>
-     <ENTRY>Check not customized!</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>105</KEY>
-     <ENTRY>Object exempted - E.g. Object is generated</ENTRY>
-     <LENGTH>118</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
      <KEY>106</KEY>
      <ENTRY>Maintain Attributes for the Code Inspector Check!</ENTRY>
      <LENGTH>132</LENGTH>
