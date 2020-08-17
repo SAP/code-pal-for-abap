@@ -5,8 +5,6 @@ CLASS y_check_max_nesting_depth DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE seoclsname VALUE 'Y_CHECK_MAX_NESTING_DEPTH' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
 
@@ -100,15 +98,12 @@ CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
         ENDIF.
 
         IF max_nesting > check_configuration-threshold.
-          raise_error( p_sub_obj_type = c_type_include
-                       p_level        = statement_for_message-level
-                       p_position     = determine_position( type = structure-type index = index )
-                       p_from         = statement_for_message-from
-                       p_kind         = check_configuration-prio
-                       p_test         = me->myname
-                       p_code         = get_code( check_configuration-prio )
-                       p_param_1      = |{ max_nesting }|
-                       p_param_2      = |{ check_configuration-threshold }| ).
+          raise_error( statement_level     = statement_for_message-level
+                       statement_index     = determine_position( type = structure-type index = index )
+                       statement_from      = statement_for_message-from
+                       error_priority      = check_configuration-prio
+                       parameter_01        = |{ max_nesting }|
+                       parameter_02        = |{ check_configuration-threshold }| ).
         ENDIF.
       ENDIF.
     ENDLOOP.

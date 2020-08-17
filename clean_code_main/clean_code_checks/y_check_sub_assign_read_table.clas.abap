@@ -5,8 +5,6 @@ CLASS y_check_sub_assign_read_table DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_SUB_ASSIGN_READ_TABLE' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
@@ -93,13 +91,10 @@ CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
           CONTINUE.
         ENDIF.
 
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = <statement>-level
-                     p_position     = position
-                     p_from         = <statement>-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio ) ).
+        raise_error( statement_level     = <statement>-level
+                     statement_index     = position
+                     statement_from      = <statement>-from
+                     error_priority      = check_configuration-prio ).
 
 
       ENDLOOP.

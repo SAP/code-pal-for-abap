@@ -5,8 +5,6 @@ CLASS y_check_function DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE seoclsname VALUE 'Y_CHECK_FUNCTION' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
 
@@ -60,13 +58,10 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
         RETURN.
       ENDIF.
 
-      raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement-level
-                   p_position     = structure-stmnt_from
-                   p_from         = statement-from
-                   p_kind         = check_configuration-prio
-                   p_test         = me->myname
-                   p_code         = get_code( check_configuration-prio ) ).
+      raise_error( statement_level     = statement-level
+                   statement_index     = structure-stmnt_from
+                   statement_from      = statement-from
+                   error_priority      = check_configuration-prio ).
     ENDIF.
   ENDMETHOD.
 

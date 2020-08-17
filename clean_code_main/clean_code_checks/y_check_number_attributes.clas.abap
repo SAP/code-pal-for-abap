@@ -4,7 +4,6 @@ CLASS y_check_number_attributes DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_NUMBER_ATTRIBUTES' ##NO_TEXT.
 
     METHODS constructor.
 
@@ -62,21 +61,19 @@ CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
     ENDIF.
 
     IF attribute_counter > check_configuration-threshold.
-      raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement-level
-                   p_position     = index
-                   p_from         = statement-from
-                   p_kind         = check_configuration-prio
-                   p_test         = me->myname
-                   p_code         = get_code( check_configuration-prio )
-                   p_param_1      = |{ attribute_counter }|
-                   p_param_2      = |{ check_configuration-threshold }| ).
+      raise_error( statement_level     = statement-level
+                   statement_index     = index
+                   statement_from      = statement-from
+                   error_priority      = check_configuration-prio
+                   parameter_01        = |{ attribute_counter }|
+                   parameter_02        = |{ check_configuration-threshold }| ).
     ENDIF.
   ENDMETHOD.
 
 
   METHOD constructor.
     super->constructor( ).
+
     description = 'Number of Attributes'(001).
     category    = 'Y_CHECK_CATEGORY'.
     version     = '0000'.

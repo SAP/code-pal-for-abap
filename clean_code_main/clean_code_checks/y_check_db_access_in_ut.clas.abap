@@ -4,9 +4,6 @@ CLASS y_check_db_access_in_ut DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_DB_ACCESS_IN_UT' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
@@ -153,14 +150,11 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement-level
-                 p_position     = index
-                 p_from         = statement-from
-                 p_kind         = check_configuration-prio
-                 p_test         = me->myname
-                 p_code         = get_code( check_configuration-prio )
-                 p_param_1      = |{ key_word }| ).
+    raise_error( statement_level     = statement-level
+                 statement_index     = index
+                 statement_from      = statement-from
+                 error_priority      = check_configuration-prio
+                 parameter_01        = |{ key_word }| ).
 
   ENDMETHOD.
 ENDCLASS.

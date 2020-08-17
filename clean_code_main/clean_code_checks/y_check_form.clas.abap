@@ -5,8 +5,6 @@ CLASS y_check_form DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_my_name TYPE seoclsname VALUE 'Y_CHECK_FORM' ##NO_TEXT.
-
     METHODS constructor .
 
   PROTECTED SECTION.
@@ -73,13 +71,10 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement_for_message-level
-                   p_position     = <structure>-stmnt_to
-                   p_from         = statement_for_message-from
-                   p_kind         = check_configuration-prio
-                   p_test         = me->myname
-                   p_code         = get_code( check_configuration-prio ) ).
+      raise_error( statement_level     = statement_for_message-level
+                   statement_index     = <structure>-stmnt_to
+                   statement_from      = statement_for_message-from
+                   error_priority      = check_configuration-prio ).
     ENDLOOP.
   ENDMETHOD.
 ENDCLASS.

@@ -5,8 +5,6 @@ CLASS y_check_comment_usage DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_COMMENT_USAGE' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
@@ -52,16 +50,13 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
     ENDIF.
 
     IF percentage_of_comments GT check_configuration-threshold.
-      raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement_for_message-level
-                   p_position     = index
-                   p_from         = statement_for_message-from
-                   p_kind         = check_configuration-prio
-                   p_test         = me->myname
-                   p_code         = get_code( check_configuration-prio )
-                   p_param_1      = |{ comment_number }|
-                   p_param_2      = |{ percentage_of_comments }|
-                   p_param_3      = |{ check_configuration-threshold }| ).
+      raise_error( statement_level     = statement_for_message-level
+                   statement_index     = index
+                   statement_from      = statement_for_message-from
+                   error_priority      = check_configuration-prio
+                   parameter_01        = |{ comment_number }|
+                   parameter_02        = |{ percentage_of_comments }|
+                   parameter_03        = |{ check_configuration-threshold }| ).
     ENDIF.
   ENDMETHOD.
 

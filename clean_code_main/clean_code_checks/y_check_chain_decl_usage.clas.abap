@@ -1,6 +1,5 @@
 CLASS y_check_chain_decl_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_CHAIN_DECL_USAGE' ##NO_TEXT.
     CONSTANTS threshold TYPE i VALUE 1.
     METHODS constructor.
   PROTECTED SECTION.
@@ -20,7 +19,7 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
 
     description = 'Chain Declarations Usage'(001).
     category    = 'Y_CHECK_CATEGORY'.
-    position    = '850'.
+    position    = '050'.
     version     = '0000'.
     has_documentation = abap_true.
 
@@ -54,14 +53,10 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement-level
-                 p_position     = index
-                 p_from         = statement-from
-                 p_kind         = configuration-prio
-                 p_test         = me->myname
-                 p_code         = get_code( configuration-prio ) ).
-
+    raise_error( statement_level     = statement-level
+                 statement_index     = index
+                 statement_from      = statement-from
+                 error_priority      = configuration-prio ).
 
   ENDMETHOD.
 
@@ -71,6 +66,4 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
       result = abap_true.
     ENDIF.
   ENDMETHOD.
-
-
 ENDCLASS.
