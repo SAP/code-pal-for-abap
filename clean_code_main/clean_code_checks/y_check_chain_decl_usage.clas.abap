@@ -24,7 +24,7 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
     has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC CHAIN_DECL_USAG' ##NO_TEXT.
-    settings-disable_threshold_selection = abap_false.
+    settings-disable_threshold_selection = abap_true.
     settings-threshold = threshold.
     settings-documentation = |{ c_docs_path-checks }chain-declaration-usage.md|.
 
@@ -57,6 +57,7 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
                  statement_index     = index
                  statement_from      = statement-from
                  error_priority      = configuration-prio ).
+
   ENDMETHOD.
 
 
