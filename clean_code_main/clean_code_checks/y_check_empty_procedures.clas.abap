@@ -82,19 +82,17 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
     CHECK has_found_start_procedure( statement ) = abap_true AND
           is_next_statement_end_proc( statement ) = abap_true.
 
-    statement_for_message = statement.
-
     DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                            include = get_include( p_level = statement_for_message-level ) ).
+                                                            include = get_include( p_level = statement-level ) ).
 
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
     raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement_for_message-level
+                 p_level        = statement-level
                  p_position     = index + 1
-                 p_from         = statement_for_message-to
+                 p_from         = statement-to
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
                  p_code         = get_code( check_configuration-prio ) ).

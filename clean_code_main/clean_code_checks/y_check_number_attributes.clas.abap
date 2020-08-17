@@ -26,7 +26,8 @@ CLASS y_check_number_attributes DEFINITION
       IMPORTING first_token TYPE string.
 
     METHODS checkif_error
-      IMPORTING index TYPE i.
+      IMPORTING index TYPE i
+                statement TYPE sstmnt.
 ENDCLASS.
 
 
@@ -55,16 +56,16 @@ CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
 
   METHOD checkif_error.
     DATA(check_configuration) = detect_check_configuration( threshold = attribute_counter
-                                                            include = get_include( p_level = statement_for_message-level ) ).
+                                                            include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
     IF attribute_counter > check_configuration-threshold.
       raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement_for_message-level
+                   p_level        = statement-level
                    p_position     = index
-                   p_from         = statement_for_message-from
+                   p_from         = statement-from
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )
@@ -111,7 +112,7 @@ CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
           ENDIF.
       ENDTRY.
 
-      READ TABLE ref_scan_manager->get_statements( ) INTO statement_for_message
+      READ TABLE ref_scan_manager->get_statements( ) INTO DATA(statement_for_message)
         INDEX <structure>-stmnt_from.
       attribute_counter = 0.
 
@@ -121,7 +122,8 @@ CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
         inspect_tokens( statement = <statement> ).
       ENDLOOP.
 
-      checkif_error( <structure>-stmnt_from ).
+      checkif_error( index = <structure>-stmnt_from
+                     statement = statement_for_message ).
     ENDLOOP.
   ENDMETHOD.
 

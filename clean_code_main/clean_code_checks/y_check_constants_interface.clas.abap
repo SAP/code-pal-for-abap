@@ -13,6 +13,7 @@ CLASS y_check_constants_interface DEFINITION
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
     DATA has_something_else TYPE abap_bool VALUE abap_false.
+    DATA statement_for_message TYPE sstmnt.
     METHODS checkif_error
       IMPORTING index TYPE i.
 ENDCLASS.

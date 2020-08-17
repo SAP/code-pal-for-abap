@@ -17,6 +17,7 @@ CLASS y_check_cyclomatic_complexity DEFINITION
   PRIVATE SECTION.
 
     DATA cyclo_comp TYPE i .
+    DATA statement_for_message TYPE sstmnt.
 
     METHODS compute_cyclomatic_complexity
       CHANGING

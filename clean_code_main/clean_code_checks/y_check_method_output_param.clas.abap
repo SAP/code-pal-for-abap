@@ -113,7 +113,6 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
     has_exporting_parameter = abap_false.
     has_changing_parameter = abap_false.
     has_returning_parameter = abap_false.
-    statement_for_message = statement.
 
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
@@ -130,16 +129,16 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
     ENDLOOP.
 
     DATA(check_configuration) = detect_check_configuration( threshold = 1
-                                                            include = get_include( p_level = statement_for_message-level ) ).
+                                                            include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
     IF calculate_param_combination( ) > check_configuration-threshold.
       raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement_for_message-level
+                   p_level        = statement-level
                    p_position     = index
-                   p_from         = statement_for_message-from
+                   p_from         = statement-from
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio ) ).

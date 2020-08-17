@@ -13,7 +13,8 @@ CLASS y_check_deprecated_key_words DEFINITION
   PRIVATE SECTION.
     METHODS check_if_error
       IMPORTING index   TYPE i
-                keyword TYPE string.
+                keyword TYPE string
+                statement TYPE sstmnt.
 ENDCLASS.
 
 
@@ -49,24 +50,24 @@ CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
     DATA(keyword) = get_token_abs( statement-from ).
     CASE keyword.
       WHEN 'MOVE' OR 'TRANSLATE'.
-        statement_for_message = statement.
         check_if_error( index   = index
-                        keyword = keyword ).
+                        keyword = keyword
+                        statement = statement ).
     ENDCASE.
   ENDMETHOD.
 
 
   METHOD check_if_error.
     DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                                include = get_include( p_level = statement_for_message-level ) ).
+                                                                include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
     raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement_for_message-level
+                 p_level        = statement-level
                  p_position     = index
-                 p_from         = statement_for_message-from
+                 p_from         = statement-from
                  p_kind         = check_configuration-prio
                  p_test         = me->myname
                  p_code         = get_code( check_configuration-prio )

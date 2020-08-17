@@ -13,7 +13,7 @@ CLASS y_check_max_nesting_depth DEFINITION
     METHODS inspect_tokens
         REDEFINITION .
   PRIVATE SECTION.
-
+    DATA statement_for_message TYPE sstmnt.
     DATA curr_nesting TYPE i .
     DATA max_nesting TYPE i .
 

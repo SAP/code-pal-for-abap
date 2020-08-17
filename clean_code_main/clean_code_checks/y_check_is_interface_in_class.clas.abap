@@ -60,7 +60,7 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
           ENDIF.
       ENDTRY.
 
-      READ TABLE ref_scan_manager->get_statements( ) INTO statement_for_message
+      READ TABLE ref_scan_manager->get_statements( ) INTO DATA(statement_for_message)
               INDEX <structure>-stmnt_from.
       public_method_counter = 0.
 

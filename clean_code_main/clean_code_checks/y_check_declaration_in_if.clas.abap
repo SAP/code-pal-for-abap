@@ -18,7 +18,8 @@ CLASS y_check_declaration_in_if DEFINITION
 
     METHODS check_if_error
       IMPORTING index   TYPE i
-                keyword TYPE string.
+                keyword TYPE string
+                statement TYPE sstmnt.
 ENDCLASS.
 
 
@@ -90,15 +91,15 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
         branch_counter = branch_counter - 1.
 
       WHEN 'DATA' OR 'FIELD-SYMBOLS' OR 'TYPES'.
-        statement_for_message = statement.
         check_if_error( index = index
-                        keyword = keyword ).
+                        keyword = keyword
+                        statement = statement ).
     ENDCASE.
 
     IF keyword CP 'DATA(*)'.
-      statement_for_message = statement.
       check_if_error( index = index
-                      keyword = keyword ).
+                      keyword = keyword
+                      statement = statement ).
     ENDIF.
   ENDMETHOD.
 
@@ -107,15 +108,15 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
     IF branch_counter = first_if.
 
       DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                              include = get_include( p_level = statement_for_message-level ) ).
+                                                              include = get_include( p_level = statement-level ) ).
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.
 
       raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement_for_message-level
+                   p_level        = statement-level
                    p_position     = index
-                   p_from         = statement_for_message-from
+                   p_from         = statement-from
                    p_kind         = check_configuration-prio
                    p_test         = me->myname
                    p_code         = get_code( check_configuration-prio )
