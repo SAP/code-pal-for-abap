@@ -219,15 +219,14 @@ CLASS ltc_base IMPLEMENTATION.
                                 ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 101 kind = 'W' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| )
                                 ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 102 kind = 'N' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| ) ).
     cut->settings-pseudo_comment = '#EC CI_CYCLO'.
+    cut->myname = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY'.
     cut->raise_error(
       EXPORTING
-        p_sub_obj_type    = ''
-        p_level           = 0
-        p_from            = 0
-        p_position        = 11
-        p_test            = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY'
-        p_code            = '100'
-        p_kind            = 'E' ).
+        object_type     = ''
+        statement_level = 0
+        statement_from  = 0
+        statement_index = 11
+        error_priority  = 'E' ).
 
     assert_errors( 1 ).
     assert_warnings( 0 ).
@@ -242,15 +241,14 @@ CLASS ltc_base IMPLEMENTATION.
                                 ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 101 kind = 'W' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| )
                                 ( test = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY' code = 102 kind = 'N' text = |Cyclotomic complexity is &1, exceeding threshold of &2| pcom = |CI_CYCLO| ) ).
     cut->settings-pseudo_comment = '#EC CI_CYCLO'.
+    cut->myname = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY'.
     cut->raise_error(
       EXPORTING
-        p_sub_obj_type    = ''
-        p_level           = 0
-        p_from            = 0
-        p_position        = 11
-        p_test            = 'CL_CI_CC_CYCLOMATIC_COMPLEXITY'
-        p_code            = '101'
-        p_kind            = 'W' ).
+        object_type     = ''
+        statement_level = 0
+        statement_from  = 0
+        statement_index = 11
+        error_priority  = 'W' ).
 
     assert_errors( 0 ).
     assert_warnings( 0 ).

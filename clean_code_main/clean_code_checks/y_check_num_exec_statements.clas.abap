@@ -4,7 +4,6 @@ CLASS y_check_num_exec_statements DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_NUM_EXEC_STATEMENTS' ##NO_TEXT.
 
     METHODS constructor .
   PROTECTED SECTION.
@@ -110,15 +109,12 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
       ENDIF.
 
       IF no_exec_statements > check_configuration-threshold.
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_for_message-level
-                     p_position     = determine_position( type = structure-type index = index )
-                     p_from         = statement_for_message-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_param_1      = |{ no_exec_statements }|
-                     p_param_2      = |{ check_configuration-threshold }| ).
+        raise_error( statement_level     = statement_for_message-level
+                     statement_index     = determine_position( type = structure-type index = index )
+                     statement_from      = statement_for_message-from
+                     error_priority      = check_configuration-prio
+                     parameter_01        = |{ no_exec_statements }|
+                     parameter_02        = |{ check_configuration-threshold }| ).
       ENDIF.
     ENDIF.
   ENDMETHOD.

@@ -1,6 +1,5 @@
 CLASS y_check_num_output_parameter DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_NUM_OUTPUT_PARAMETER' ##NO_TEXT.
     CONSTANTS threshold TYPE i VALUE 1.
     METHODS constructor .
   PROTECTED SECTION.
@@ -11,11 +10,13 @@ CLASS y_check_num_output_parameter DEFINITION PUBLIC INHERITING FROM y_check_bas
 ENDCLASS.
 
 
-CLASS y_check_num_output_parameter IMPLEMENTATION.
+
+CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
 
 
   METHOD constructor.
     super->constructor( ).
+
     description = 'Number of Output Parameters'(001).
     category    = 'Y_CHECK_CATEGORY'.
     version     = '0000'.
@@ -79,13 +80,10 @@ CLASS y_check_num_output_parameter IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement-level
-                 p_position     = index
-                 p_from         = statement-from + 1
-                 p_kind         = configuration-prio
-                 p_test         = me->myname
-                 p_code         = get_code( configuration-prio ) ).
+    raise_error( statement_level     = statement-level
+                 statement_index     = index
+                 statement_from      = statement-from + 1
+                 error_priority      = configuration-prio ).
 
   ENDMETHOD.
 
@@ -116,5 +114,4 @@ CLASS y_check_num_output_parameter IMPLEMENTATION.
 
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.

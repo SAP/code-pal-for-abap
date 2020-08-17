@@ -5,8 +5,6 @@ CLASS y_check_empty_catches DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_EMPTY_CATCHES' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
 
@@ -73,12 +71,9 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement-level
-                 p_position     = index
-                 p_from         = statement-from
-                 p_kind         = check_configuration-prio
-                 p_test         = me->myname
-                 p_code         = get_code( check_configuration-prio ) ).
+    raise_error( statement_level      = statement-level
+                 statement_index      = index
+                 statement_from       = statement-from
+                 error_priority       = check_configuration-prio ).
   ENDMETHOD.
 ENDCLASS.

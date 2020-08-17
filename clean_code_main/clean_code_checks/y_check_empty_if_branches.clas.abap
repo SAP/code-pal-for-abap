@@ -5,8 +5,6 @@ CLASS y_check_empty_if_branches DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_EMPTY_IF_BRANCHES' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
@@ -71,13 +69,10 @@ CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
           RETURN.
         ENDIF.
 
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_wa-level
-                     p_position     = index
-                     p_from         = statement_wa-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio ) ).
+        raise_error( statement_level     = statement_wa-level
+                     statement_index     = index
+                     statement_from      = statement_wa-from
+                     error_priority      = check_configuration-prio ).
     ENDCASE.
   ENDMETHOD.
 

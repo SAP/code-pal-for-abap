@@ -4,9 +4,6 @@ CLASS y_check_call_method_usage DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_CALL_METHOD_USAGE' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
@@ -23,7 +20,7 @@ CLASS Y_CHECK_CALL_METHOD_USAGE IMPLEMENTATION.
 
     description = 'CALL METHOD Usage'(001).
     category    = 'Y_CHECK_CATEGORY'.
-    position = '010'.
+    position = '030'.
     version = '0000'.
     has_documentation = abap_true.
 
@@ -58,14 +55,10 @@ CLASS Y_CHECK_CALL_METHOD_USAGE IMPLEMENTATION.
       AND has_keyword = abap_true
       AND is_dynamic = abap_false.
 
-      raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement-level
-                   p_position     = index
-                   p_from         = statement-from
-                   p_kind         = check_configuration-prio
-                   p_test         = me->myname
-                   p_code         = get_code( check_configuration-prio ) ).
-
+      raise_error( statement_level     = statement-level
+                   statement_index     = index
+                   statement_from      = statement-from
+                   error_priority      = check_configuration-prio ).
     ENDIF.
   ENDMETHOD.
 ENDCLASS.

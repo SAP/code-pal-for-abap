@@ -79,22 +79,20 @@ CLASS y_check_base DEFINITION ABSTRACT
         !statement TYPE sstmnt OPTIONAL .
     METHODS raise_error
       IMPORTING
-        !p_sub_obj_type TYPE trobjtype
-        !p_level        TYPE stmnt_levl
-        !p_position     TYPE int4
-        !p_from         TYPE int4
-        !p_errcnt       TYPE sci_errcnt OPTIONAL
-        VALUE(p_kind)   TYPE sychar01
-        !p_test         TYPE sci_chk
-        !p_code         TYPE sci_errc
-        !p_param_1      TYPE csequence OPTIONAL
-        !p_param_2      TYPE csequence OPTIONAL
-        !p_param_3      TYPE csequence OPTIONAL
-        !p_param_4      TYPE csequence OPTIONAL
-        !p_inclspec     TYPE sci_inclspec DEFAULT ' '
-        !p_detail       TYPE xstring OPTIONAL
-        !p_checksum_1   TYPE int4 OPTIONAL
-        !p_comments     TYPE t_comments OPTIONAL .
+        object_type            TYPE trobjtype DEFAULT c_type_include
+        statement_level        TYPE stmnt_levl
+        statement_index        TYPE int4
+        statement_from         TYPE int4
+        error_counter          TYPE sci_errcnt OPTIONAL
+        error_priority         TYPE sychar01
+        parameter_01           TYPE csequence OPTIONAL
+        parameter_02           TYPE csequence OPTIONAL
+        parameter_03           TYPE csequence OPTIONAL
+        parameter_04           TYPE csequence OPTIONAL
+        is_include_specific    TYPE sci_inclspec DEFAULT ' '
+        additional_information TYPE xstring OPTIONAL
+        checksum               TYPE int4 OPTIONAL
+        pseudo_comments        TYPE t_comments OPTIONAL .
 
     METHODS get_column_abs
         REDEFINITION .
@@ -308,6 +306,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         result = c_code-warning.
       WHEN c_note.
         result = c_code-notification.
+      WHEN OTHERS.
+        result = '106'.
     ENDCASE.
   ENDMETHOD.
 
@@ -635,32 +635,33 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD raise_error.
-    statistics->collect( kind = p_kind
+    statistics->collect( kind = error_priority
                          pc = NEW lcl_pseudo_comment_detector( )->lif_pseudo_comment_detector~is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                                                  scimessages      = scimessages
-                                                                                                                 test             = p_test
-                                                                                                                 code             = p_code
+                                                                                                                 test             = me->myname
+                                                                                                                 code             = get_code( error_priority )
                                                                                                                  suppress         = settings-pseudo_comment
-                                                                                                                 position         = p_position ) ).
+                                                                                                                 position         = statement_index ) ).
+
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'LCL_REF_SCAN_MANAGER'.
-      inform( p_sub_obj_type = p_sub_obj_type
-              p_sub_obj_name = get_include( p_level = p_level )
-              p_position = p_position
-              p_line = get_line_abs( p_from )
-              p_column = get_column_abs( p_from )
-              p_errcnt = p_errcnt
-              p_kind = p_kind
-              p_test = p_test
-              p_code = p_code
+      inform( p_sub_obj_type = object_type
+              p_sub_obj_name = get_include( p_level = statement_level )
+              p_position = statement_index
+              p_line = get_line_abs( statement_from )
+              p_column = get_column_abs( statement_from )
+              p_errcnt = error_counter
+              p_kind = error_priority
+              p_test = me->myname
+              p_code = get_code( error_priority )
               p_suppress = settings-pseudo_comment
-              p_param_1 = p_param_1
-              p_param_2 = p_param_2
-              p_param_3 = p_param_3
-              p_param_4 = p_param_4
-              p_inclspec = p_inclspec
-              p_detail = p_detail
-              p_checksum_1 = p_checksum_1
-              p_comments = p_comments ).
+              p_param_1 = parameter_01
+              p_param_2 = parameter_02
+              p_param_3 = parameter_03
+              p_param_4 = parameter_04
+              p_inclspec = is_include_specific
+              p_detail = additional_information
+              p_checksum_1 = checksum
+              p_comments = pseudo_comments ).
     ENDIF.
   ENDMETHOD.
 
@@ -671,13 +672,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
       raise_error(
         EXPORTING
-          p_sub_obj_type    = c_type_include
-          p_level           = 1
-          p_position        = 1
-          p_from            = 1
-          p_kind            = ''
-          p_test            = me->myname
-          p_code            = '106' ).
+          object_type     = c_type_include
+          statement_level = 1
+          statement_index = 1
+          statement_from  = 1
+          error_priority  = '' ).
       FREE ref_scan_manager.
       RETURN.
     ENDIF.

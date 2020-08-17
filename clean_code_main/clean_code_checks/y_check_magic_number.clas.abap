@@ -4,8 +4,6 @@ CLASS y_check_magic_number DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-
-    CONSTANTS c_myname TYPE seoclsname VALUE 'Y_CHECK_MAGIC_NUMBER' ##NO_TEXT.
     CONSTANTS second_token TYPE i VALUE 2 ##NO_TEXT.
 
     METHODS constructor .
@@ -93,14 +91,11 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
           CONTINUE.
         ENDIF.
 
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_wa-level
-                     p_position     = index
-                     p_from         = statement_wa-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_param_1      = |{ magic_number }| ).
+        raise_error( statement_level     = statement_wa-level
+                     statement_index     = index
+                     statement_from      = statement_wa-from
+                     error_priority      = check_configuration-prio
+                     parameter_01        = |{ magic_number }| ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.

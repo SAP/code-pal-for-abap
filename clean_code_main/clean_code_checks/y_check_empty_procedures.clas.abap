@@ -5,8 +5,6 @@ CLASS y_check_empty_procedures DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_EMPTY_PROCEDURES' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
 
@@ -89,13 +87,10 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( p_sub_obj_type = c_type_include
-                 p_level        = statement-level
-                 p_position     = index + 1
-                 p_from         = statement-to
-                 p_kind         = check_configuration-prio
-                 p_test         = me->myname
-                 p_code         = get_code( check_configuration-prio ) ).
+    raise_error( statement_level     = statement-level
+                 statement_index     = index + 1
+                 statement_from      = statement-to
+                 error_priority      = check_configuration-prio ).
   ENDMETHOD.
 
 

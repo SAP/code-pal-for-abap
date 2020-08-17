@@ -5,7 +5,6 @@ CLASS y_check_cyclomatic_complexity DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE seoclsname VALUE 'Y_CHECK_CYCLOMATIC_COMPLEXITY' ##no_text .
     CONSTANTS second_token TYPE i VALUE 2.
     CONSTANTS third_token TYPE i VALUE 3.
 
@@ -105,15 +104,12 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
       ENDIF.
 
       IF cyclo_comp > check_configuration-threshold.
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_for_message-level
-                     p_position     = determine_position( type = structure-type index = index )
-                     p_from         = statement_for_message-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_param_1      = |{ cyclo_comp }|
-                     p_param_2      = |{ check_configuration-threshold }| ).
+        raise_error( statement_level     = statement_for_message-level
+                     statement_index     = determine_position( type = structure-type index = index )
+                     statement_from      = statement_for_message-from
+                     error_priority      = check_configuration-prio
+                     parameter_01        = |{ cyclo_comp }|
+                     parameter_02        = |{ check_configuration-threshold }| ).
       ENDIF.
     ENDIF.
   ENDMETHOD.

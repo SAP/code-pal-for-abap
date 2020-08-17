@@ -5,8 +5,6 @@ CLASS y_check_is_interface_in_class DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_CHECK_IS_INTERFACE_IN_CLASS' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
@@ -82,14 +80,11 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
       ENDIF.
 
       IF public_method_counter > check_configuration-threshold.
-        raise_error( p_sub_obj_type = c_type_include
-                     p_level        = statement_for_message-level
-                     p_position     = <structure>-stmnt_from
-                     p_from         = statement_for_message-from
-                     p_kind         = check_configuration-prio
-                     p_test         = me->myname
-                     p_code         = get_code( check_configuration-prio )
-                     p_param_1      = |{ public_method_counter }| ).
+        raise_error( statement_level     = statement_for_message-level
+                     statement_index     = <structure>-stmnt_from
+                     statement_from      = statement_for_message-from
+                     error_priority      = check_configuration-prio
+                     parameter_01        = |{ public_method_counter }| ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.

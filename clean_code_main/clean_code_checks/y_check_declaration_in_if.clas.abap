@@ -5,8 +5,6 @@ CLASS y_check_declaration_in_if DEFINITION
 
   PUBLIC SECTION.
 
-    CONSTANTS c_myname TYPE sci_chk VALUE 'Y_DECLARATION_IN_IF' ##NO_TEXT.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
@@ -17,8 +15,8 @@ CLASS y_check_declaration_in_if DEFINITION
     CONSTANTS first_if TYPE i VALUE 1 ##NO_TEXT.
 
     METHODS check_if_error
-      IMPORTING index   TYPE i
-                keyword TYPE string
+      IMPORTING index     TYPE i
+                keyword   TYPE string
                 statement TYPE sstmnt.
 ENDCLASS.
 
@@ -113,14 +111,11 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
         RETURN.
       ENDIF.
 
-      raise_error( p_sub_obj_type = c_type_include
-                   p_level        = statement-level
-                   p_position     = index
-                   p_from         = statement-from
-                   p_kind         = check_configuration-prio
-                   p_test         = me->myname
-                   p_code         = get_code( check_configuration-prio )
-                   p_param_1      = |{ keyword }| ).
+      raise_error( statement_level     = statement-level
+                   statement_index     = index
+                   statement_from      = statement-from
+                   error_priority      = check_configuration-prio
+                   parameter_01        = |{ keyword }| ).
     ENDIF.
   ENDMETHOD.
 ENDCLASS.
