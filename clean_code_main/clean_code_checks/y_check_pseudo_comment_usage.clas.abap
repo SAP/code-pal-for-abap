@@ -129,16 +129,19 @@ CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
 
 
   METHOD select_object_list.
-    SELECT SINGLE devclass FROM tadir WHERE obj_name EQ @myname INTO @DATA(packagename).
+    SELECT SINGLE devclass FROM tadir
+      WHERE obj_name EQ @myname
+      INTO @DATA(packagename).
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
 
-    SELECT obj_name FROM tadir WHERE devclass EQ @packagename INTO TABLE @result.
+    SELECT obj_name FROM tadir
+      WHERE devclass EQ @packagename AND
+            obj_name NE @check_base_name
+      INTO TABLE @result.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
-
-    DELETE TABLE result FROM check_base_name.
   ENDMETHOD.
 ENDCLASS.
