@@ -4,7 +4,7 @@
 
 Code pal is a tool which supports you in writing clean ABAP code. Clean Code allows you to read your code like well-written prose, it is easily understandable, maintainable and extensible. In addition, you can write high quality and reliable Unit Tests without hurdles and hereby reduce the total cost of ownership of the software.
 
-Furthermore... It's free and open source: code pal is licensed under the Apache License, Version 2.0 - see [license.txt](license.txt)
+Furthermore... It's free and open source: code pal is licensed under the Apache License, Version 2.0 - see [LICENSE]
 
 * [Features](#features)
 * [How to bring Code Pal into your system?](#how-to-bring-code-pal-into-your-system)
