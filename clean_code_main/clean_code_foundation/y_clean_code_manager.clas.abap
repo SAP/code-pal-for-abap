@@ -210,11 +210,6 @@ CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
       ENDTRY.
       APPEND LINES OF check_configurations TO result.
     ENDLOOP.
-
-*   Same check set in different profiles
-    SORT result.
-    DELETE ADJACENT DUPLICATES FROM result.
-
     IF lines( result ) = 0.
       RAISE EXCEPTION TYPE ycx_no_check_customizing.
     ENDIF.
