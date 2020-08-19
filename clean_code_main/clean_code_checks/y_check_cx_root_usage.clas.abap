@@ -47,7 +47,7 @@ CLASS Y_CHECK_CX_ROOT_USAGE IMPLEMENTATION.
     CHECK get_token_abs( statement-from ) EQ 'CATCH'
       AND has_cx_root( statement ) EQ abap_true.
 
-    DATA(check_configuration) = detect_check_configuration( threshold = 0
+    DATA(check_configuration) = detect_check_configuration( error_count = 0
                                                             include = get_include( p_level = statement-level ) ).
 
     IF check_configuration IS INITIAL.

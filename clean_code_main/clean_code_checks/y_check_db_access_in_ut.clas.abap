@@ -143,7 +143,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
     DATA(key_word) = get_token_abs( statement-from ).
 
-    check_configuration = detect_check_configuration( threshold = 0
+    check_configuration = detect_check_configuration( error_count = 0
                                                       include = get_include( p_level = statement-level ) ).
 
     IF check_configuration IS INITIAL.

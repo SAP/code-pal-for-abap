@@ -26,7 +26,7 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( threshold = method_counter
+    DATA(check_configuration) = detect_check_configuration( error_count = method_counter
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

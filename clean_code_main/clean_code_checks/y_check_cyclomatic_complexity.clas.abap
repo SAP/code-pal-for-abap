@@ -97,7 +97,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
         c_cyclo_comp = cyclo_comp ).
 
     IF index = structure-stmnt_to.
-      DATA(check_configuration) = detect_check_configuration( threshold = cyclo_comp
+      DATA(check_configuration) = detect_check_configuration( error_count = cyclo_comp
                                                               include = get_include( p_level = statement_for_message-level ) ).
       IF check_configuration IS INITIAL.
         RETURN.

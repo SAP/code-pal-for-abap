@@ -113,7 +113,7 @@ CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
 
   METHOD raise_error_wrapper.
     IF pseudo_comment_counter GT 0.
-      DATA(check_configuration) = detect_check_configuration( threshold = 0
+      DATA(check_configuration) = detect_check_configuration( error_count = 0
                                                               include = get_include( p_level = 1 ) ).
       IF check_configuration IS INITIAL.
         RETURN.

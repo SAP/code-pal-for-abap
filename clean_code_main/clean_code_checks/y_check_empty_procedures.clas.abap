@@ -80,7 +80,7 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
     CHECK has_found_start_procedure( statement ) = abap_true AND
           is_next_statement_end_proc( statement ) = abap_true.
 
-    DATA(check_configuration) = detect_check_configuration( threshold = 0
+    DATA(check_configuration) = detect_check_configuration( error_count = 0
                                                             include = get_include( p_level = statement-level ) ).
 
     IF check_configuration IS INITIAL.

@@ -22,7 +22,7 @@ CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( threshold = 0
+    DATA(check_configuration) = detect_check_configuration( error_count = 0
                                                             include = get_include( p_level = statement_for_message-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

@@ -85,7 +85,7 @@ CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
           CONTINUE.
         ENDIF.
 
-        DATA(check_configuration) = detect_check_configuration( threshold = 0
+        DATA(check_configuration) = detect_check_configuration( error_count = 0
                                                                 include = get_include( p_level = <statement>-level ) ).
         IF check_configuration IS INITIAL.
           CONTINUE.
