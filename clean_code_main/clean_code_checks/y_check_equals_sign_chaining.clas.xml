@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_EQUALS_SIGN_CHAINING</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Check for equals sign chaining</DESCRIPT>
+    <DESCRIPT>Clean Code Check - Equals Sign Chaining</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
