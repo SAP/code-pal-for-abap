@@ -50,7 +50,7 @@ CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( error_count = public_attribute_counter
+    DATA(check_configuration) = detect_check_configuration( threshold = public_attribute_counter
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

@@ -44,7 +44,7 @@ CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
   METHOD inspect_tokens.
     CHECK get_token_abs( statement-from ) EQ 'TEST-SEAM'.
 
-    DATA(check_configuration) = detect_check_configuration( error_count = 0
+    DATA(check_configuration) = detect_check_configuration( threshold = 0
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

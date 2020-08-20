@@ -47,7 +47,7 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
 
     APPEND statement-colonrow TO rows_with_colon.
 
-    DATA(configuration) = detect_check_configuration( error_count = threshold
+    DATA(configuration) = detect_check_configuration( threshold = threshold
                                                       include = get_include( p_level = statement-level ) ).
     IF configuration IS INITIAL.
       RETURN.

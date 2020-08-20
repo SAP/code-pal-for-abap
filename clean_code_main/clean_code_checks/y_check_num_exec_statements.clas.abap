@@ -102,7 +102,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
         no_exec_statements = no_exec_statements ).
 
     IF index = structure-stmnt_to.
-      DATA(check_configuration) = detect_check_configuration( error_count = no_exec_statements
+      DATA(check_configuration) = detect_check_configuration( threshold = no_exec_statements
                                                               include = get_include( p_level = statement_for_message-level ) ).
       IF check_configuration IS INITIAL.
         RETURN.

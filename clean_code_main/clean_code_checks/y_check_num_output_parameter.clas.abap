@@ -68,7 +68,7 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
     CHECK get_token_abs( statement-from ) = 'METHODS'
     OR get_token_abs( statement-from ) = 'CLASS-METHODS'.
 
-    DATA(configuration) = detect_check_configuration( error_count = threshold
+    DATA(configuration) = detect_check_configuration( threshold = threshold
                                                       include = get_include( p_level = statement-level ) ).
     IF configuration IS INITIAL.
       RETURN.

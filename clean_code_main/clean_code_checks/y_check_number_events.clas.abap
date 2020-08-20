@@ -24,7 +24,7 @@ CLASS Y_CHECK_NUMBER_EVENTS IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( error_count = event_counter
+    DATA(check_configuration) = detect_check_configuration( threshold = event_counter
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

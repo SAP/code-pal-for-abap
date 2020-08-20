@@ -21,7 +21,7 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( error_count = 0
+    DATA(check_configuration) = detect_check_configuration( threshold = 0
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

@@ -99,7 +99,7 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
 
     IF statement_index GT 1 AND get_token_abs( statement-from ) EQ 'CHECK'.
 
-      DATA(check_configuration) = detect_check_configuration( error_count = 0
+      DATA(check_configuration) = detect_check_configuration( threshold = 0
                                                               include = get_include( p_level = statement-level ) ).
       IF check_configuration IS INITIAL.
         RETURN.
