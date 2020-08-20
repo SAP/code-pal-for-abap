@@ -54,7 +54,7 @@ CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( threshold = attribute_counter
+    DATA(check_configuration) = detect_check_configuration( error_count = attribute_counter
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

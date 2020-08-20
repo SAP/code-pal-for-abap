@@ -73,7 +73,7 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
         inspect_tokens( statement = <statement> ).
       ENDLOOP.
 
-      DATA(check_configuration) = detect_check_configuration( threshold = public_method_counter
+      DATA(check_configuration) = detect_check_configuration( error_count = public_method_counter
                                                               include = get_include( p_level = statement_for_message-level ) ).
       IF check_configuration IS INITIAL.
         CONTINUE.

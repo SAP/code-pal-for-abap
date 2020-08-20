@@ -127,7 +127,7 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
 
     ENDLOOP.
 
-    DATA(check_configuration) = detect_check_configuration( threshold = 1
+    DATA(check_configuration) = detect_check_configuration( error_count = 1
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

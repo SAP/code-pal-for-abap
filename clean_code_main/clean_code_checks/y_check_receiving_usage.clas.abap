@@ -47,7 +47,7 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to WHERE str EQ 'RECEIVING'.
 
-      DATA(check_configuration) = detect_check_configuration( threshold = 0
+      DATA(check_configuration) = detect_check_configuration( error_count = 0
                                                               include = get_include( p_level = statement-level ) ).
       IF check_configuration IS INITIAL.
         CONTINUE.

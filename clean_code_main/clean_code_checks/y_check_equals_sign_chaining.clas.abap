@@ -1,7 +1,11 @@
-CLASS y_check_equals_sign_chaining DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
-  PUBLIC SECTION.
+class Y_CHECK_EQUALS_SIGN_CHAINING definition
+  public
+  inheriting from Y_CHECK_BASE
+  create public .
 
-    METHODS constructor.
+public section.
+
+  methods CONSTRUCTOR .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
@@ -37,7 +41,7 @@ CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA(check_configuration) = detect_check_configuration( threshold = 1
+    DATA(check_configuration) = detect_check_configuration( error_count = 1
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.
