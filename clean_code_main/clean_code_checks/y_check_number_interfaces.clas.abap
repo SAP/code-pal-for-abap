@@ -25,7 +25,7 @@ CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( error_count = interface_counter
+    DATA(check_configuration) = detect_check_configuration( threshold = interface_counter
                                                             include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

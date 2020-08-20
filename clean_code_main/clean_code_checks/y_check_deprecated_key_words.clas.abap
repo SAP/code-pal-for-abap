@@ -56,7 +56,7 @@ CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
 
 
   METHOD check_if_error.
-    DATA(check_configuration) = detect_check_configuration( error_count = 0
+    DATA(check_configuration) = detect_check_configuration( threshold = 0
                                                                 include = get_include( p_level = statement-level ) ).
     IF check_configuration IS INITIAL.
       RETURN.

@@ -62,8 +62,8 @@ CLASS y_check_base DEFINITION ABSTRACT
         ycx_object_is_exempted .
     METHODS detect_check_configuration
       IMPORTING
-        error_count  TYPE int4
-        include      TYPE sobj_name
+        !threshold    TYPE int4
+        !include      TYPE sobj_name
       RETURNING
         VALUE(result) TYPE y_if_clean_code_manager=>check_configuration .
     METHODS execute_check .
@@ -161,41 +161,34 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
-    DATA(creation_date) = NEW y_object_creation_date( )->y_if_object_creation_date~get_program_create_date( include ).
+    DATA config TYPE y_if_clean_code_manager=>check_configuration.
 
-    LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
-    WHERE object_creation_date LE creation_date
-    AND threshold <= error_count.
+    DATA(object_creation_date) = NEW y_object_creation_date( ).
+    DATA(crt_date) = object_creation_date->y_if_object_creation_date~get_program_create_date( include ).
 
-      IF <configuration>-apply_on_testcode = abap_false
-      AND is_testcode = abap_true.
+    LOOP AT check_configurations INTO config
+      WHERE object_creation_date LE crt_date AND
+            threshold LE threshold.
+
+      IF is_testcode = abap_true AND config-apply_on_testcode = abap_false.
         CONTINUE.
-      ENDIF.
-
-      IF <configuration>-apply_on_productive_code = abap_false
-      AND is_testcode = abap_false.
+      ELSEIF is_testcode = abap_false AND config-apply_on_productive_code = abap_false.
         CONTINUE.
       ENDIF.
 
       IF result IS INITIAL.
-        result = <configuration>.
-        CONTINUE.
-      ENDIF.
+        result = config.
 
-      IF <configuration>-threshold > result-threshold.
-        CONTINUE.
-      ENDIF.
+      ELSEIF result-prio = config-prio AND
+           result-threshold GE config-threshold.
+        result = config.
 
-      IF <configuration>-threshold < result-threshold.
-        result = <configuration>.
-        CONTINUE.
+      ELSEIF result-threshold LE config-threshold AND
+             ( ( result-prio = 'W' AND config-prio = 'E' ) OR
+               ( result-prio = 'N' AND config-prio = 'E' ) OR
+               ( result-prio = 'N' AND config-prio = 'W' ) ).
+        result = config.
       ENDIF.
-
-      IF ( <configuration>-prio = 'E' AND result-prio <> 'E' )
-      OR ( <configuration>-prio = 'W' AND result-prio = 'N' ).
-        result = <configuration>.
-      ENDIF.
-
     ENDLOOP.
   ENDMETHOD.
 
