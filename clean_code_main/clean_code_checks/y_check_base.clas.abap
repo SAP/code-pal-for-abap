@@ -1,4 +1,9 @@
-CLASS y_check_base DEFINITION ABSTRACT PUBLIC INHERITING FROM cl_ci_test_scan CREATE PUBLIC.
+CLASS y_check_base DEFINITION
+  PUBLIC
+  INHERITING FROM cl_ci_test_scan
+  ABSTRACT
+  CREATE PUBLIC .
+
   PUBLIC SECTION.
 
     CONSTANTS:
@@ -6,13 +11,13 @@ CLASS y_check_base DEFINITION ABSTRACT PUBLIC INHERITING FROM cl_ci_test_scan CR
         error        TYPE sci_errc VALUE '100',
         warning      TYPE sci_errc VALUE '101',
         notification TYPE sci_errc VALUE '102',
-      END OF c_code,
-      c_code_not_maintained TYPE sci_errc VALUE '106',
+      END OF c_code .
+    CONSTANTS c_code_not_maintained TYPE sci_errc VALUE '106' ##NO_TEXT.
+    CONSTANTS:
       BEGIN OF c_docs_path,
         main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
         checks TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/checks/' ##NO_TEXT,
-      END OF c_docs_path.
-
+      END OF c_docs_path .
     DATA:
       BEGIN OF settings READ-ONLY,
         pseudo_comment                TYPE sci_pcom,
@@ -76,20 +81,20 @@ CLASS y_check_base DEFINITION ABSTRACT PUBLIC INHERITING FROM cl_ci_test_scan CR
         !statement TYPE sstmnt OPTIONAL .
     METHODS raise_error
       IMPORTING
-        object_type            TYPE trobjtype DEFAULT c_type_include
-        statement_level        TYPE stmnt_levl
-        statement_index        TYPE int4
-        statement_from         TYPE int4
-        error_counter          TYPE sci_errcnt OPTIONAL
-        error_priority         TYPE sychar01
-        parameter_01           TYPE csequence OPTIONAL
-        parameter_02           TYPE csequence OPTIONAL
-        parameter_03           TYPE csequence OPTIONAL
-        parameter_04           TYPE csequence OPTIONAL
-        is_include_specific    TYPE sci_inclspec DEFAULT ' '
-        additional_information TYPE xstring OPTIONAL
-        checksum               TYPE int4 OPTIONAL
-        pseudo_comments        TYPE t_comments OPTIONAL .
+        !object_type            TYPE trobjtype DEFAULT c_type_include
+        !statement_level        TYPE stmnt_levl
+        !statement_index        TYPE int4
+        !statement_from         TYPE int4
+        !error_counter          TYPE sci_errcnt OPTIONAL
+        !error_priority         TYPE sychar01
+        !parameter_01           TYPE csequence OPTIONAL
+        !parameter_02           TYPE csequence OPTIONAL
+        !parameter_03           TYPE csequence OPTIONAL
+        !parameter_04           TYPE csequence OPTIONAL
+        !is_include_specific    TYPE sci_inclspec DEFAULT ' '
+        !additional_information TYPE xstring OPTIONAL
+        !checksum               TYPE int4 OPTIONAL
+        !pseudo_comments        TYPE t_comments OPTIONAL .
 
     METHODS get_column_abs
         REDEFINITION .
