@@ -53,33 +53,33 @@ CLASS ltc_check_configuration IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD given_error_threshold_one.
-    APPEND VALUE #( prio = 'E' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true )
-    TO cut->check_configurations.
+    cut->check_configurations = VALUE #( BASE cut->check_configurations
+                                       ( prio = 'E' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_error_threshold_five.
-    APPEND VALUE #( prio = 'E' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true )
-    TO cut->check_configurations.
+    cut->check_configurations = VALUE #( BASE cut->check_configurations
+                                       ( prio = 'E' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_note_threshold_one.
-    APPEND VALUE #( prio = 'N' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true )
-    TO cut->check_configurations.
+    cut->check_configurations = VALUE #( BASE cut->check_configurations
+                                       ( prio = 'N' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_note_threshold_five.
-    APPEND VALUE #( prio = 'N' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true )
-    TO cut->check_configurations.
+    cut->check_configurations = VALUE #( BASE cut->check_configurations
+                                       ( prio = 'N' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_warning_threshold_five.
-    APPEND VALUE #( prio = 'W' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true )
-    TO cut->check_configurations.
+    cut->check_configurations = VALUE #( BASE cut->check_configurations
+                                       ( prio = 'W' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_warning_threshold_one.
-    APPEND VALUE #( prio = 'W' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true )
-    TO cut->check_configurations.
+    cut->check_configurations = VALUE #( BASE cut->check_configurations
+                                       ( prio = 'W' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD when_eight_errors.

@@ -180,14 +180,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       IF result IS INITIAL.
         result = <configuration>.
 
-      ELSEIF result-prio = <configuration>-prio AND
-           result-threshold GE <configuration>-threshold.
+      ELSEIF result-prio = <configuration>-prio
+      AND result-threshold >= <configuration>-threshold.
         result = <configuration>.
 
-      ELSEIF result-threshold LE <configuration>-threshold AND
-             ( ( result-prio = 'W' AND <configuration>-prio = 'E' ) OR
-               ( result-prio = 'N' AND <configuration>-prio = 'E' ) OR
-               ( result-prio = 'N' AND <configuration>-prio = 'W' ) ).
+      ELSEIF ( result-prio <> 'E' AND <configuration>-prio = 'E' )
+      OR     ( result-prio = 'N' AND <configuration>-prio = 'W' ).
         result = <configuration>.
       ENDIF.
     ENDLOOP.
