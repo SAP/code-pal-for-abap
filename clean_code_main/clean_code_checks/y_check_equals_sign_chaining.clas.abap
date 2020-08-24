@@ -1,7 +1,11 @@
-CLASS y_check_equals_sign_chaining DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
-  PUBLIC SECTION.
+class Y_CHECK_EQUALS_SIGN_CHAINING definition
+  public
+  inheriting from Y_CHECK_BASE
+  create public .
 
-    METHODS constructor.
+public section.
+
+  methods CONSTRUCTOR .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
