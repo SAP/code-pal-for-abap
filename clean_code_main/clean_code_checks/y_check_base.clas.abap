@@ -1,8 +1,4 @@
-CLASS y_check_base DEFINITION ABSTRACT
-  PUBLIC
-  INHERITING FROM cl_ci_test_scan
-  CREATE PUBLIC .
-
+CLASS y_check_base DEFINITION ABSTRACT PUBLIC INHERITING FROM cl_ci_test_scan CREATE PUBLIC.
   PUBLIC SECTION.
 
     CONSTANTS:
@@ -142,6 +138,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
+    instantiate_objects( ).
     enable_rfc( ).
 
     settings-object_created_on = '20190101'.
@@ -563,31 +560,21 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD instantiate_objects.
-    IF ref_scan_manager IS NOT BOUND.
-      ref_scan_manager = NEW lcl_ref_scan_manager( ).
-      IF ref_scan IS INITIAL.
-        get( ).
-      ENDIF.
+    ref_scan_manager = NEW y_ref_scan_manager( ).
+    IF ref_scan IS INITIAL.
+      get( ).
     ENDIF.
     ref_scan_manager->set_ref_scan( ref_scan ).
 
-    IF clean_code_manager IS NOT BOUND.
-      clean_code_manager = NEW y_clean_code_manager( ).
-    ENDIF.
+    clean_code_manager = NEW y_clean_code_manager( ).
 
-    IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = NEW y_exemption_handler( ).
-    ENDIF.
+    clean_code_exemption_handler = NEW y_exemption_handler( ).
 
-    IF test_code_detector IS NOT BOUND.
-      test_code_detector = NEW lcl_test_code_detector( ).
-    ENDIF.
+    test_code_detector = NEW y_test_code_detector( ).
     test_code_detector->clear( ).
     test_code_detector->set_ref_scan_manager( ref_scan_manager ).
 
-    IF statistics IS NOT BOUND.
-      statistics = NEW lcl_statistics( ).
-    ENDIF.
+    statistics = NEW y_scan_statistics( ).
 
     IF lines( check_configurations ) = 1 AND
        check_configurations[ 1 ]-object_creation_date = '00000000'.
@@ -627,12 +614,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD raise_error.
     statistics->collect( kind = error_priority
-                         pc = NEW lcl_pseudo_comment_detector( )->lif_pseudo_comment_detector~is_pseudo_comment( ref_scan_manager = ref_scan_manager
-                                                                                                                 scimessages      = scimessages
-                                                                                                                 test             = me->myname
-                                                                                                                 code             = get_code( error_priority )
-                                                                                                                 suppress         = settings-pseudo_comment
-                                                                                                                 position         = statement_index ) ).
+                         pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
+                                                                                   scimessages      = scimessages
+                                                                                   test             = me->myname
+                                                                                   code             = get_code( error_priority )
+                                                                                   suppress         = settings-pseudo_comment
+                                                                                   position         = statement_index ) ).
 
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'LCL_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
@@ -658,8 +645,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD run.
-    instantiate_objects( ).
-
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
       raise_error( statement_level = 1
                    statement_index = 1
