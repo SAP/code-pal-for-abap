@@ -1,6 +1,3 @@
-CLASS ltc_cyclo_complexity DEFINITION DEFERRED.
-CLASS y_check_cyclomatic_complexity DEFINITION LOCAL FRIENDS ltc_cyclo_complexity.
-
 CLASS ltd_clean_code_manager_error DEFINITION FOR TESTING.
   PUBLIC SECTION.
     INTERFACES: y_if_clean_code_manager.
@@ -171,6 +168,8 @@ CLASS ltc_cyclo_complexity DEFINITION FOR TESTING
       max_nesting_depth_warning FOR TESTING,
       pseudo_comment_ok FOR TESTING.
 ENDCLASS.
+
+CLASS y_check_cyclomatic_complexity DEFINITION LOCAL FRIENDS ltc_cyclo_complexity.
 
 CLASS ltc_cyclo_complexity IMPLEMENTATION.
   METHOD setup.
