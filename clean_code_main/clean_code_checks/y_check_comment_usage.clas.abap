@@ -41,10 +41,12 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( threshold = round( val =  percentage_of_comments
-                                                                               dec = 0
-                                                                               mode = cl_abap_math=>round_down )
-                                                            include = get_include( p_level = statement_for_message-level ) ).
+
+    DATA(check_configuration) = detect_check_configuration( error_count = round( val =  percentage_of_comments
+                                                                                 dec = 0
+                                                                                 mode = cl_abap_math=>round_down )
+                                                            statement = statement_for_message ).
+
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.

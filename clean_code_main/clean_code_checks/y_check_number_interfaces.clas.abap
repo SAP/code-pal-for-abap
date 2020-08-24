@@ -25,20 +25,18 @@ CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( threshold = interface_counter
-                                                            include = get_include( p_level = statement-level ) ).
+    DATA(check_configuration) = detect_check_configuration( error_count = interface_counter
+                                                            statement = statement ).
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
-    IF interface_counter > check_configuration-threshold.
-      raise_error( statement_level      = statement-level
-                   statement_index      = index
-                   statement_from       = statement-from
-                   error_priority       = check_configuration-prio
-                   parameter_01         = |{ interface_counter }|
-                   parameter_02         = |{ check_configuration-threshold }| ).
-    ENDIF.
+    raise_error( statement_level      = statement-level
+                 statement_index      = index
+                 statement_from       = statement-from
+                 error_priority       = check_configuration-prio
+                 parameter_01         = |{ interface_counter }|
+                 parameter_02         = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 

@@ -91,20 +91,18 @@ CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
       compute_nesting_level( <token>-str ).
 
       IF index = structure-stmnt_to.
-        DATA(check_configuration) = detect_check_configuration( threshold = max_nesting
-                                                                include = get_include( p_level = statement_for_message-level ) ).
+        DATA(check_configuration) = detect_check_configuration( error_count = max_nesting
+                                                                statement = statement_for_message ).
         IF check_configuration IS INITIAL.
           CONTINUE.
         ENDIF.
 
-        IF max_nesting > check_configuration-threshold.
-          raise_error( statement_level     = statement_for_message-level
-                       statement_index     = determine_position( type = structure-type index = index )
-                       statement_from      = statement_for_message-from
-                       error_priority      = check_configuration-prio
-                       parameter_01        = |{ max_nesting }|
-                       parameter_02        = |{ check_configuration-threshold }| ).
-        ENDIF.
+        raise_error( statement_level     = statement_for_message-level
+                     statement_index     = determine_position( type = structure-type index = index )
+                     statement_from      = statement_for_message-from
+                     error_priority      = check_configuration-prio
+                     parameter_01        = |{ max_nesting }|
+                     parameter_02        = |{ check_configuration-threshold }| ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.

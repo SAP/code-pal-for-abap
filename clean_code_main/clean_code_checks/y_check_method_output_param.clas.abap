@@ -20,7 +20,7 @@ CLASS y_check_method_output_param DEFINITION
     METHODS check_token_content
       IMPORTING token TYPE stokesx.
 
-    METHODS calculate_param_combination RETURNING VALUE(result) TYPE i.
+    METHODS has_error RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -28,15 +28,19 @@ ENDCLASS.
 CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
 
 
-  METHOD calculate_param_combination.
+  METHOD has_error.
+    DATA(sum) = 0.
     IF has_exporting_parameter = abap_true.
-      ADD 1 TO result.
+      ADD 1 TO sum.
     ENDIF.
     IF has_changing_parameter = abap_true.
-      ADD 1 TO result.
+      ADD 1 TO sum.
     ENDIF.
     IF has_returning_parameter = abap_true.
-      ADD 1 TO result.
+      ADD 1 TO sum.
+    ENDIF.
+    IF sum > 1.
+      result = abap_true.
     ENDIF.
   ENDMETHOD.
 
@@ -127,17 +131,20 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
 
     ENDLOOP.
 
-    DATA(check_configuration) = detect_check_configuration( threshold = 1
-                                                            include = get_include( p_level = statement-level ) ).
+    IF has_error( ) = abap_false.
+      RETURN.
+    ENDIF.
+
+    DATA(check_configuration) = detect_check_configuration( statement ).
+
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
-    IF calculate_param_combination( ) > check_configuration-threshold.
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio ).
-    ENDIF.
+    raise_error( statement_level     = statement-level
+                 statement_index     = index
+                 statement_from      = statement-from
+                 error_priority      = check_configuration-prio ).
+
   ENDMETHOD.
 ENDCLASS.

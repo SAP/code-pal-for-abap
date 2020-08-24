@@ -243,25 +243,21 @@ CLASS ltc_base IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltc_check_configuration DEFINITION FOR TESTING
-  RISK LEVEL HARMLESS
-  DURATION SHORT.
-
+CLASS ltc_check_configuration DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PUBLIC SECTION.
+    METHODS given_error_threshold_one.
+    METHODS given_error_threshold_five.
+    METHODS given_warning_threshold_one.
+    METHODS given_warning_threshold_five.
+    METHODS given_note_threshold_one.
+    METHODS given_note_threshold_five.
+    METHODS when_four_errors.
+    METHODS when_eight_error.
+  PROTECTED SECTION.
+    DATA cut TYPE REF TO y_check_base.
   PRIVATE SECTION.
-    DATA: cut TYPE REF TO y_check_base,
-          exp TYPE y_if_clean_code_manager=>check_configuration.
-
-    METHODS:
-      setup,
-      is_bound FOR TESTING,
-      no_config_ok FOR TESTING,
-      one_config_ok FOR TESTING,
-      one_config_error FOR TESTING,
-      two_configs_same_prio_err FOR TESTING,
-      two_configs_diff_prio_warn FOR TESTING,
-      two_configs_diff_prio_err FOR TESTING,
-      two_configs_same_limit_err FOR TESTING,
-      two_configs_diff_test_note FOR TESTING.
+    METHODS setup.
+    METHODS is_bound FOR TESTING.
 ENDCLASS.
 
 CLASS y_check_base DEFINITION LOCAL FRIENDS ltc_check_configuration.
@@ -275,71 +271,39 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     cl_abap_unit_assert=>assert_bound( act = cut ).
   ENDMETHOD.
 
-  METHOD no_config_ok.
-    exp = VALUE #( apply_on_testcode = abap_false prio = '' threshold = 0 ).
-    cl_abap_unit_assert=>assert_equals(
-      act = cut->detect_check_configuration( threshold = 3 include = 'Y____TEST' )
-      exp = exp ).
+  METHOD given_error_threshold_one.
+    APPEND VALUE #( prio = 'E' threshold = 1 ) TO cut->check_configurations.
   ENDMETHOD.
 
-  METHOD one_config_ok.
-    exp = VALUE #( apply_on_testcode = abap_false prio = '' threshold = 0 ).
-    cut->check_configurations = VALUE #( ( apply_on_testcode = abap_false prio = 'E' threshold = 5 ) ).
-    cl_abap_unit_assert=>assert_equals(
-      act = cut->detect_check_configuration( threshold = 3 include = 'Y____TEST' )
-      exp = exp ).
+  METHOD given_error_threshold_five.
+    APPEND VALUE #( prio = 'E' threshold = 5 ) TO cut->check_configurations.
   ENDMETHOD.
 
-  METHOD one_config_error.
-    exp = VALUE #( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'E' threshold = 5 ).
-    cut->check_configurations = VALUE #( ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'E' threshold = 5 ) ).
-    cl_abap_unit_assert=>assert_equals(
-      act = cut->detect_check_configuration( threshold = 15 include = 'Y____TEST' )
-      exp = exp ).
+  METHOD given_note_threshold_one.
+    APPEND VALUE #( prio = 'N' threshold = 1 ) TO cut->check_configurations.
   ENDMETHOD.
 
-  METHOD two_configs_same_prio_err.
-    exp = VALUE #( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'E' threshold = 5 ).
-    cut->check_configurations = VALUE #( ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'E' threshold = 10 )
-                                         ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'E' threshold = 5 ) ).
-    cl_abap_unit_assert=>assert_equals(
-      act = cut->detect_check_configuration( threshold = 15 include = 'Y____TEST' )
-      exp = exp ).
+  METHOD given_note_threshold_five.
+    APPEND VALUE #( prio = 'N' threshold = 5 ) TO cut->check_configurations.
   ENDMETHOD.
 
-  METHOD two_configs_diff_prio_warn.
-    exp = VALUE #( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'W' threshold = 5 ).
-    cut->check_configurations = VALUE #( ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'E' threshold = 10 )
-                                         ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'W' threshold = 5 ) ).
-    cl_abap_unit_assert=>assert_equals(
-      act = cut->detect_check_configuration( threshold = 8 include = 'Y____TEST' )
-      exp = exp ).
+  METHOD given_warning_threshold_five.
+    APPEND VALUE #( prio = 'W' threshold = 1 ) TO cut->check_configurations.
   ENDMETHOD.
 
-  METHOD two_configs_diff_prio_err.
-    exp = VALUE #( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'E' threshold = 5 ).
-    cut->check_configurations = VALUE #( ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'W' threshold = 10 )
-                                         ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'E' threshold = 5 ) ).
-    cl_abap_unit_assert=>assert_equals(
-      act = cut->detect_check_configuration( threshold = 8 include = 'Y____TEST' )
-      exp = exp ).
+  METHOD given_warning_threshold_one.
+    APPEND VALUE #( prio = 'W' threshold = 5 ) TO cut->check_configurations.
   ENDMETHOD.
 
-  METHOD two_configs_same_limit_err.
-    exp = VALUE #( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'W' threshold = 10 ).
-    cut->check_configurations = VALUE #( ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'N' threshold = 10 )
-                                         ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'W' threshold = 10 ) ).
-    cl_abap_unit_assert=>assert_equals(
-      act = cut->detect_check_configuration( threshold = 12 include = 'Y____TEST' )
-      exp = exp ).
+  METHOD when_eight_error.
+*    cut->detect_check_configuration(
+*        threshold =
+*        include   =
+*    ).
   ENDMETHOD.
 
-  METHOD two_configs_diff_test_note.
-    exp = VALUE #( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 10 ).
-    cut->check_configurations = VALUE #( ( apply_on_testcode = abap_false apply_on_productive_code = abap_true prio = 'N' threshold = 10 )
-                                         ( apply_on_testcode = abap_true  apply_on_productive_code = abap_true prio = 'N' threshold = 10 ) ).
-    cl_abap_unit_assert=>assert_equals(
-      act = cut->detect_check_configuration( threshold = 12 include = 'Y____TEST' )
-      exp = exp ).
+  METHOD when_four_errors.
+
   ENDMETHOD.
+
 ENDCLASS.
