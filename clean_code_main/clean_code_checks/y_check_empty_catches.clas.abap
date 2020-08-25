@@ -64,8 +64,7 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
         ( get_next_token_from_index( statement-to + 1 )-str EQ 'ENDTRY' OR
           get_next_token_from_index( statement-to + 1 )-str EQ 'ENDCATCH' ).
 
-    DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                            include = get_include( p_level = statement-level ) ).
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     IF check_configuration IS INITIAL.
       RETURN.

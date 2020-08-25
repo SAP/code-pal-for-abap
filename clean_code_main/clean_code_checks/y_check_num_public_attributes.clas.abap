@@ -50,20 +50,19 @@ CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( threshold = public_attribute_counter
-                                                            include = get_include( p_level = statement-level ) ).
+
+    DATA(check_configuration) = detect_check_configuration( statement = statement
+                                                            error_count = public_attribute_counter ).
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
-    IF public_attribute_counter > check_configuration-threshold.
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio
-                   parameter_01        = |{ public_attribute_counter }|
-                   parameter_02        = |{ check_configuration-threshold }| ).
-    ENDIF.
+    raise_error( statement_level     = statement-level
+                 statement_index     = index
+                 statement_from      = statement-from
+                 error_priority      = check_configuration-prio
+                 parameter_01        = |{ public_attribute_counter }|
+                 parameter_02        = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 
@@ -87,7 +86,7 @@ CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC NUM_PUBLIC_ATTR' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
-    settings-threshold = 0.
+    settings-threshold = 1.
     settings-documentation = |{ c_docs_path-checks }number-public-attributes.md|.
 
     y_message_registration=>add_message(

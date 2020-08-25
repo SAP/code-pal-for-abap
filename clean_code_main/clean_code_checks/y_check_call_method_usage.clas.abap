@@ -49,8 +49,8 @@ CLASS Y_CHECK_CALL_METHOD_USAGE IMPLEMENTATION.
                              OR token CP '*)=>(*)*'
                              OR token CP '*)=>*' ).
 
-    DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                            include = get_include( p_level = statement-level ) ).
+    DATA(check_configuration) = detect_check_configuration( statement ).
+
     IF check_configuration IS NOT INITIAL
       AND has_keyword = abap_true
       AND is_dynamic = abap_false.

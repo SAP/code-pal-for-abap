@@ -97,20 +97,19 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
         c_cyclo_comp = cyclo_comp ).
 
     IF index = structure-stmnt_to.
-      DATA(check_configuration) = detect_check_configuration( threshold = cyclo_comp
-                                                              include = get_include( p_level = statement_for_message-level ) ).
+      DATA(check_configuration) = detect_check_configuration( error_count = cyclo_comp
+                                                              statement = statement_for_message ).
+
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.
 
-      IF cyclo_comp > check_configuration-threshold.
-        raise_error( statement_level     = statement_for_message-level
-                     statement_index     = determine_position( type = structure-type index = index )
-                     statement_from      = statement_for_message-from
-                     error_priority      = check_configuration-prio
-                     parameter_01        = |{ cyclo_comp }|
-                     parameter_02        = |{ check_configuration-threshold }| ).
-      ENDIF.
+      raise_error( statement_level     = statement_for_message-level
+                   statement_index     = determine_position( type = structure-type index = index )
+                   statement_from      = statement_for_message-from
+                   error_priority      = check_configuration-prio
+                   parameter_01        = |{ cyclo_comp }|
+                   parameter_02        = |{ check_configuration-threshold }| ).
     ENDIF.
   ENDMETHOD.
 ENDCLASS.

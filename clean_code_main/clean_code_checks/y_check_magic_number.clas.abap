@@ -85,8 +85,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
       ENDIF.
 
       IF is_magic_number( <token>-str ).
-        DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                                include = get_include( p_level = statement_wa-level ) ).
+        DATA(check_configuration) = detect_check_configuration( statement_wa ).
         IF check_configuration IS INITIAL.
           CONTINUE.
         ENDIF.

@@ -24,20 +24,18 @@ CLASS Y_CHECK_NUMBER_EVENTS IMPLEMENTATION.
 
 
   METHOD checkif_error.
-    DATA(check_configuration) = detect_check_configuration( threshold = event_counter
-                                                            include = get_include( p_level = statement-level ) ).
+    DATA(check_configuration) = detect_check_configuration( error_count = event_counter
+                                                            statement = statement ).
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
-    IF event_counter > check_configuration-threshold.
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio
-                   parameter_01        = |{ event_counter }|
-                   parameter_02        = |{ check_configuration-threshold }| ).
-    ENDIF.
+    raise_error( statement_level     = statement-level
+                 statement_index     = index
+                 statement_from      = statement-from
+                 error_priority      = check_configuration-prio
+                 parameter_01        = |{ event_counter }|
+                 parameter_02        = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 
