@@ -85,7 +85,8 @@ CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
           CONTINUE.
         ENDIF.
 
-        DATA(check_configuration) = detect_check_configuration( <statement> ).
+        DATA(check_configuration) = detect_check_configuration( threshold = 0
+                                                                include = get_include( p_level = <statement>-level ) ).
         IF check_configuration IS INITIAL.
           CONTINUE.
         ENDIF.
@@ -94,6 +95,7 @@ CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
                      statement_index     = position
                      statement_from      = <statement>-from
                      error_priority      = check_configuration-prio ).
+
 
       ENDLOOP.
 

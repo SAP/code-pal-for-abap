@@ -65,8 +65,8 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
 
       READ TABLE ref_scan_manager->get_statements( ) INDEX <structure>-stmnt_to INTO DATA(statement_for_message).
 
-      DATA(check_configuration) = detect_check_configuration( statement_for_message ).
-
+      DATA(check_configuration) = detect_check_configuration( threshold = 0
+                                                              include = get_include( p_level = statement_for_message-level ) ).
       IF check_configuration IS INITIAL.
         CONTINUE.
       ENDIF.
