@@ -5,8 +5,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 3 )
-                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 2 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 1 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 1 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.
@@ -124,7 +124,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( '                                 changing_02 TYPE REF TO cl_abap_xsd ' )
       ( '                                 changing_03 TYPE REF TO cl_abap_xsd ' )
       ( '                        RAISING  cx_dynamic_check, "#EC NUM_OUTPUT_PARA ' )
-      ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd inline_02 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. ' )
+      ( '       inline_example EXPORTING inline_01 TYPE REF TO cl_abap_xsd inline_02 TYPE REF TO cl_abap_xsd RAISING cx_dynamic_check. "#EC NUM_OUTPUT_PARA ' )
       ( '   PRIVATE SECTION. ' )
       ( '     CLASS-METHODS static_example IMPORTING import_01 TYPE REF TO cl_abap_xsd ' )
       ( '                                  EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
@@ -172,7 +172,6 @@ CLASS local_test_class DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT
     DATA ref_scan_manager_double TYPE REF TO ltd_ref_scan_manager.
     METHODS setup.
     METHODS assert_errors IMPORTING err_cnt TYPE i.
-    METHODS assert_warnings IMPORTING warn_cnt TYPE i.
     METHODS assert_pseudo_comments IMPORTING pc_cnt TYPE i.
 ENDCLASS.
 
@@ -196,15 +195,13 @@ CLASS local_test_class IMPLEMENTATION.
     ref_scan_manager_double->set_data_for_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_warnings( 0 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
   METHOD cut_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 2 ).
-    assert_warnings( 2 ).
+    assert_errors( 4 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -212,8 +209,7 @@ CLASS local_test_class IMPLEMENTATION.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_warnings( 1 ).
-    assert_pseudo_comments( 3 ).
+    assert_pseudo_comments( 4 ).
   ENDMETHOD.
 
   METHOD assert_errors.
@@ -221,13 +217,6 @@ CLASS local_test_class IMPLEMENTATION.
       EXPORTING
         act = cut->statistics->get_number_errors( )
         exp = err_cnt ).
-  ENDMETHOD.
-
-  METHOD assert_warnings.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_warnings( )
-        exp = warn_cnt ).
   ENDMETHOD.
 
   METHOD assert_pseudo_comments.

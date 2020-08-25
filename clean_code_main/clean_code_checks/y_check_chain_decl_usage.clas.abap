@@ -1,5 +1,6 @@
 CLASS y_check_chain_decl_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
+    CONSTANTS threshold TYPE i VALUE 1.
     METHODS constructor.
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
@@ -24,7 +25,7 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC CHAIN_DECL_USAG' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
-    settings-threshold = 0.
+    settings-threshold = threshold.
     settings-documentation = |{ c_docs_path-checks }chain-declaration-usage.md|.
 
     y_message_registration=>add_message(
@@ -46,8 +47,8 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
 
     APPEND statement-colonrow TO rows_with_colon.
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
+    DATA(configuration) = detect_check_configuration( threshold = threshold
+                                                      include = get_include( p_level = statement-level ) ).
     IF configuration IS INITIAL.
       RETURN.
     ENDIF.

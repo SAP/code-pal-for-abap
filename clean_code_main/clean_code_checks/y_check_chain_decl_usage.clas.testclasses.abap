@@ -5,8 +5,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 0 )
-                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 0 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 1 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 1 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.

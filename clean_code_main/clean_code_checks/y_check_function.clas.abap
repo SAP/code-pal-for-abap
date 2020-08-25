@@ -52,9 +52,8 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
     fm_name = get_token_abs( statement-from + 1 ).
 
     IF db_reader->is_fm_rfc_enabled( fm_name ) EQ abap_false.
-
-      DATA(check_configuration) = detect_check_configuration( statement ).
-
+      DATA(check_configuration) = detect_check_configuration( threshold = 0
+                                                              include = get_include( p_level = statement-level ) ).
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.
@@ -63,7 +62,6 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
                    statement_index     = structure-stmnt_from
                    statement_from      = statement-from
                    error_priority      = check_configuration-prio ).
-
     ENDIF.
   ENDMETHOD.
 

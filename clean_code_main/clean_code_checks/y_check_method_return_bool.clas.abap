@@ -133,7 +133,8 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
 
     IF has_found_bool = abap_true AND NOT contains_name_condition( statement-from ).
 
-      DATA(check_configuration) = detect_check_configuration( statement ).
+      DATA(check_configuration) = detect_check_configuration( threshold = 0
+                                                              include = get_include( p_level = statement-level ) ).
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.
