@@ -26,7 +26,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
   METHOD set_data_for_ok.
 
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
 
       ( ' CLASS y_example_class DEFINITION. ' )
@@ -63,7 +63,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
   METHOD set_data_for_error.
 
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
 
       ( ' CLASS y_example_class DEFINITION. ' )
@@ -106,7 +106,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
   METHOD set_pseudo_comment_ok.
 
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
 
       ( ' CLASS y_example_class DEFINITION. ' )

@@ -63,8 +63,8 @@ CLASS y_check_base DEFINITION
         ycx_object_is_exempted .
     METHODS detect_check_configuration
       IMPORTING
-        statement TYPE sstmnt
-        error_count TYPE int4 DEFAULT 1
+        statement     TYPE sstmnt
+        error_count   TYPE int4 DEFAULT 1
       RETURNING
         VALUE(result) TYPE y_if_clean_code_manager=>check_configuration.
     METHODS execute_check .
@@ -120,8 +120,7 @@ CLASS y_check_base DEFINITION
     METHODS do_attributes_exist
       RETURNING
         VALUE(result) TYPE abap_bool .
-    METHODS instantiate_objects .
-
+    METHODS instantiate_objects.
     METHODS enable_rfc.
 ENDCLASS.
 
@@ -143,7 +142,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
-    instantiate_objects( ).
     enable_rfc( ).
 
     settings-object_created_on = '20190101'.
@@ -562,21 +560,31 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD instantiate_objects.
-    ref_scan_manager = NEW y_ref_scan_manager( ).
-    IF ref_scan IS INITIAL.
-      get( ).
+    IF ref_scan_manager IS NOT BOUND.
+      ref_scan_manager = NEW y_ref_scan_manager( ).
+      IF ref_scan IS INITIAL.
+        get( ).
+      ENDIF.
     ENDIF.
     ref_scan_manager->set_ref_scan( ref_scan ).
 
-    clean_code_manager = NEW y_clean_code_manager( ).
+    IF clean_code_manager IS NOT BOUND.
+      clean_code_manager = NEW y_clean_code_manager( ).
+    ENDIF.
 
-    clean_code_exemption_handler = NEW y_exemption_handler( ).
+    IF clean_code_exemption_handler IS NOT BOUND.
+      clean_code_exemption_handler = NEW y_exemption_handler( ).
+    ENDIF.
 
-    test_code_detector = NEW y_test_code_detector( ).
+    IF test_code_detector IS NOT BOUND.
+      test_code_detector = NEW y_test_code_detector( ).
+    ENDIF.
     test_code_detector->clear( ).
     test_code_detector->set_ref_scan_manager( ref_scan_manager ).
 
-    statistics = NEW y_scan_statistics( ).
+    IF statistics IS NOT BOUND.
+      statistics = NEW y_scan_statistics( ).
+    ENDIF.
 
     IF lines( check_configurations ) = 1 AND
        check_configurations[ 1 ]-object_creation_date = '00000000'.
@@ -622,8 +630,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
                                                                                    code             = get_code( error_priority )
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
-
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'LCL_REF_SCAN_MANAGER'.
+    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
               p_position = statement_index
@@ -647,6 +654,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD run.
+    instantiate_objects( ).
+
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
       raise_error( statement_level = 1
                    statement_index = 1

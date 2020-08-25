@@ -7,7 +7,7 @@ ENDCLASS.
 
 CLASS ltd_ref_scan_manager_test IMPLEMENTATION.
   METHOD set_data_without_test.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT lcl_test.' )
 
     ( 'CLASS lcl_classname DEFINITION.' )
@@ -24,7 +24,7 @@ CLASS ltd_ref_scan_manager_test IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_with_test.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT lcl_test.' )
 
     ( 'CLASS lcl_classname DEFINITION FOR TESTING.' )
