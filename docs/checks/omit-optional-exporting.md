@@ -1,8 +1,9 @@
 [BACK](../check_documentation.md)
 
-# Optional EXPORTING Usage
+# Omit Optional EXPORTING
 ## What is the Intent of the Check?
-The “Optional EXPORTING Usage” check is part of the Clean Code Check Repository, and the optional parameters make the code needlessly longer.
+The “Omit Optional EXPORTING” check is part of the Clean Code Check Repository. 
+The optional EXPORTING parameter makes the class method call needlessly longer.
 
 ## How does the check work?
 This check searches for the usage of the optional keyword EXPORTING in the class method calls.
