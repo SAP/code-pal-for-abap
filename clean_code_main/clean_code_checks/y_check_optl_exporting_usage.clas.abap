@@ -14,9 +14,9 @@ CLASS Y_CHECK_OPTL_EXPORTING_USAGE IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Optional Keyword EXPORTING Usage'(001).
+    description = 'Optional EXPORTING Usage'(001).
     category    = 'Y_CHECK_CATEGORY'.
-    position    = '090'.
+    position    = '790'.
     version     = '0000'.
     has_documentation = abap_true.
 
