@@ -44,19 +44,19 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
 
-      ( |     me->meth1( param1 = 'example'   | )
-      ( |                param2 = 10 ).       | )
+      ( |     meth1( param1 = 'example'   | )
+      ( |            param2 = 10 ).       | )
 
-      ( |     me->meth2( EXPORTING                  | )
-      ( |                  param1 = 'example'       | )
-      ( |                IMPORTING                  | )
-      ( |                  param2 = DATA(param2)    | )
-      ( |                  param3 = DATA(param3) ). | )
+      ( |     meth2( EXPORTING                  | )
+      ( |              param1 = 'example'       | )
+      ( |            IMPORTING                  | )
+      ( |             param2 = DATA(param2)    | )
+      ( |              param3 = DATA(param3) ). | )
 
-      ( |     DATA(meth3) = me->meth3( param1 = 'example'   | )
-      ( |                              param2 = 10 ).       | )
+      ( |     DATA(meth3) = meth3( param1 = 'example'   | )
+      ( |                          param2 = 10 ).       | )
 
-      ( |     me->meth4( 'example' ). | )
+      ( |     meth4( 'example' ). | )
 
       ( '   ENDMETHOD. ' )
 
@@ -89,12 +89,12 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
 
-      ( |     me->meth1( EXPORTING param1 = 'example' ). | )
+      ( |     meth1( EXPORTING param1 = 'example' ). | )
 
-      ( |     DATA(meth2) = me->meth2( EXPORTING param1 = 'example' ). | )
+      ( |     DATA(meth2) = meth2( EXPORTING param1 = 'example' ). | )
 
-      ( |     me->meth3( EXPORTING param1 = 'example' | )
-      ( |                          param2 = 10 ). | )
+      ( |     meth3( EXPORTING param1 = 'example' | )
+      ( |                      param2 = 10 ). | )
 
       ( '   ENDMETHOD. ' )
 
@@ -125,12 +125,12 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
 
-      ( |     me->meth1( EXPORTING param1 = 'example' ). "#EC OPTL_EXP | )
+      ( |     meth1( EXPORTING param1 = 'example' ). "#EC OPTL_EXP | )
 
-      ( |     DATA(meth2) = me->meth2( EXPORTING param1 = 'example' ). "#EC OPTL_EXP | )
+      ( |     DATA(meth2) = meth2( EXPORTING param1 = 'example' ). "#EC OPTL_EXP | )
 
-      ( |     me->meth3( EXPORTING param1 = 'example' | )
-      ( |                          param2 = 10 ). "#EC OPTL_EXP | )
+      ( |     meth3( EXPORTING param1 = 'example' | )
+      ( |                      param2 = 10 ). "#EC OPTL_EXP | )
 
       ( '   ENDMETHOD. ' )
 
