@@ -28,7 +28,7 @@
 - [Number Output Parameter](checks/number-output-parameter.md)
 - [Number of Public Attributes](checks/number-public-attributes.md)
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
-- [Optional EXPORTING Usage](checks/optional-exporting-usage.md)
+- [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
 - [RECEIVING Usage](checks/receiving-usage.md)
 - [Subsequent Memory Assign Read Table](checks/sub-assign-read-table.md)
 - [Test Seam Usage](checks/test-seam-usage.md)
