@@ -1,4 +1,4 @@
-CLASS y_check_optl_exporting_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_omit_optional_exp DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
   PROTECTED SECTION.
@@ -8,13 +8,12 @@ CLASS y_check_optl_exporting_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
                                    RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
-
-CLASS Y_CHECK_OPTL_EXPORTING_USAGE IMPLEMENTATION.
+CLASS y_check_omit_optional_exp IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Optional EXPORTING Usage'(001).
+    description = 'Omit Optional EXPORTING'(001).
     category    = 'Y_CHECK_CATEGORY'.
     position    = '790'.
     version     = '0000'.
@@ -23,7 +22,7 @@ CLASS Y_CHECK_OPTL_EXPORTING_USAGE IMPLEMENTATION.
     settings-pseudo_comment = '"#EC OPTL_EXP' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }optional-exporting-usage.md|.
+    settings-documentation = |{ c_docs_path-checks }omit-optional-exporting.md|.
 
     y_message_registration=>add_message(
       EXPORTING
@@ -33,7 +32,6 @@ CLASS Y_CHECK_OPTL_EXPORTING_USAGE IMPLEMENTATION.
       CHANGING
         messages       = me->scimessages ).
   ENDMETHOD.
-
 
   METHOD inspect_tokens.
 

@@ -169,18 +169,18 @@ CLASS local_test_class DEFINITION FOR TESTING
     METHODS cut_ok FOR TESTING.
     METHODS pseudo_comment_ok FOR TESTING.
   PRIVATE SECTION.
-    DATA cut TYPE REF TO y_check_optl_exporting_usage.
+    DATA cut TYPE REF TO y_check_omit_optional_exp.
     DATA ref_scan_manager_double TYPE REF TO ltd_ref_scan_manager.
     METHODS setup.
     METHODS assert_errors IMPORTING err_cnt TYPE i.
     METHODS assert_pseudo_comments IMPORTING pc_cnt TYPE i.
 ENDCLASS.
 
-CLASS y_check_optl_exporting_usage DEFINITION LOCAL FRIENDS local_test_class.
+CLASS y_check_omit_optional_exp DEFINITION LOCAL FRIENDS local_test_class.
 
 CLASS local_test_class IMPLEMENTATION.
   METHOD setup.
-    cut = NEW y_check_optl_exporting_usage( ).
+    cut = NEW y_check_omit_optional_exp( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).
     cut->ref_scan_manager ?= ref_scan_manager_double.
     cut->clean_code_manager = NEW ltd_clean_code_manager( ).
