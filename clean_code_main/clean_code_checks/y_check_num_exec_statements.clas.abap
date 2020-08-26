@@ -102,20 +102,18 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
         no_exec_statements = no_exec_statements ).
 
     IF index = structure-stmnt_to.
-      DATA(check_configuration) = detect_check_configuration( threshold = no_exec_statements
-                                                              include = get_include( p_level = statement_for_message-level ) ).
+      DATA(check_configuration) = detect_check_configuration( error_count = no_exec_statements
+                                                              statement = statement_for_message ).
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.
 
-      IF no_exec_statements > check_configuration-threshold.
-        raise_error( statement_level     = statement_for_message-level
-                     statement_index     = determine_position( type = structure-type index = index )
-                     statement_from      = statement_for_message-from
-                     error_priority      = check_configuration-prio
-                     parameter_01        = |{ no_exec_statements }|
-                     parameter_02        = |{ check_configuration-threshold }| ).
-      ENDIF.
+      raise_error( statement_level     = statement_for_message-level
+                   statement_index     = determine_position( type = structure-type index = index )
+                   statement_from      = statement_for_message-from
+                   error_priority      = check_configuration-prio
+                   parameter_01        = |{ no_exec_statements }|
+                   parameter_02        = |{ check_configuration-threshold }| ).
     ENDIF.
   ENDMETHOD.
 

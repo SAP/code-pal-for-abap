@@ -30,7 +30,7 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC INTF_IN_CLASS' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
-    settings-threshold = 0.
+    settings-threshold = 1.
     settings-prio = 'W'.
     settings-documentation = |{ c_docs_path-checks }interface-in-class.md|.
 
@@ -73,19 +73,18 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
         inspect_tokens( statement = <statement> ).
       ENDLOOP.
 
-      DATA(check_configuration) = detect_check_configuration( threshold = public_method_counter
-                                                              include = get_include( p_level = statement_for_message-level ) ).
+      DATA(check_configuration) = detect_check_configuration( error_count = public_method_counter
+                                                              statement = statement_for_message ).
+
       IF check_configuration IS INITIAL.
         CONTINUE.
       ENDIF.
 
-      IF public_method_counter > check_configuration-threshold.
-        raise_error( statement_level     = statement_for_message-level
-                     statement_index     = <structure>-stmnt_from
-                     statement_from      = statement_for_message-from
-                     error_priority      = check_configuration-prio
-                     parameter_01        = |{ public_method_counter }| ).
-      ENDIF.
+      raise_error( statement_level     = statement_for_message-level
+                   statement_index     = <structure>-stmnt_from
+                   statement_from      = statement_for_message-from
+                   error_priority      = check_configuration-prio
+                   parameter_01        = |{ public_method_counter }| ).
     ENDLOOP.
   ENDMETHOD.
 

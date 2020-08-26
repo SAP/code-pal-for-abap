@@ -26,7 +26,7 @@ ENDCLASS.
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
   METHOD set_data_for_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT r_name.' )
     ( 'INTERFACE lcl_interface. ' )
     ( ' METHODS method_name. ' )
@@ -36,7 +36,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT r_name.' )
     ( 'INTERFACE lcl_interface.' )
     ( ' CONSTANTS: BEGIN OF struct, ' )
@@ -48,7 +48,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT r_name.' )
     ( 'INTERFACE lcl_interface. "#EC CONS_INTF' )
     ( ' CONSTANTS: BEGIN OF struct, ' )

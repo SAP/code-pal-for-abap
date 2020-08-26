@@ -63,8 +63,8 @@ CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
         OR 'ELSE'
         OR 'ENDIF'.
 
-        DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                                include = get_include( p_level = statement_wa-level ) ).
+        DATA(check_configuration) = detect_check_configuration( statement_wa ).
+
         IF check_configuration IS INITIAL.
           RETURN.
         ENDIF.

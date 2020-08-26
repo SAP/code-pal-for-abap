@@ -16,7 +16,6 @@ ENDCLASS.
 
 CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
   PUBLIC SECTION.
-    CLASS-METHODS net.
     METHODS:
       set_data_for_ok,
       set_data_for_error,
@@ -24,11 +23,8 @@ CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
-  METHOD net.
-  ENDMETHOD.
-
   METHOD set_data_for_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT y_example. ' )
 
     ( 'CLASS lcl_classname DEFINITION. ' )
@@ -55,7 +51,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT y_example. ' )
 
     ( 'CLASS lcl_classname DEFINITION. ' )
@@ -80,7 +76,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_check_pseudo_comment_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT y_example. ' )
 
     ( 'CLASS lcl_classname DEFINITION. ' )
