@@ -2,8 +2,8 @@
 
 # Boolean Input Parameter
 ## What is the Intent of the Check?
-Boolean input parameters are often an indicator that a method does two things instead of one.  
-Setter methods using boolean variables are okey.
+Usage of boolean input parameters because they are often an indicator that a method does two things instead of one.  
+Ps: Setter methods using boolean variables are okey.
 
 ## How to solve the issue?
 Splitting the method may simplify the methods' code and describe the different intentions better.
