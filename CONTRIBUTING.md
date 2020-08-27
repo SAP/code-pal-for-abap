@@ -1,6 +1,6 @@
 # Contributing
 
-We are a small team and this project is one of many projects. We would love to see, when you help us developing new checks. Here a small how-to.
+We are a team with limited capacity dedicated to several projects. Every single contribution is valid and more than welcome. Feel free to help us in developing new ABAP Checks and keeping this project up & running! Hereby a short how-to tutorial.
 
 ### How-to
 
