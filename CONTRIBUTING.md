@@ -14,7 +14,7 @@ When you are done. Please `stage` --> `commit` --> `push` the files to your fork
 
 Back to github.com you can create a pull request from your fork to our base repo.
 
-This is the point, where we'll look into your code and approve the merge. Please create the request to merge with our `dev` branch, because our work-flow is from `dev` to `test` to `master`.
+At this point of time, we will verify your code and authorize/approve the merge (if applicable). Please create the request to merge it with our `dev` branch (our release workflow starts from `dev`, then to `test` and finally it reaches the `master` branch.
 
 Thank you in advance for contributing and for sharing your ideas with the community!
 
