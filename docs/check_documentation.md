@@ -1,7 +1,10 @@
 # Check Documentation
+- [Boolean Input Parameter](checks/boolean-input-parameter.md)
 - [CALL Method Usage](checks/call-method-usage.md)
 - [Chain Declaration Usage](checks/chain-declaration-usage.md)
 - [CHECK Statement Position](checks/check-statement-position.md)
+- [Comment Position](checks/comment-position.md)
+- [Comment Type](checks/comment-type.md)
 - [Comment Usage](checks/comment-usage.md)
 - [Constants Interface](checks/constants-interface.md)
 - [Cyclomatic Complexity](checks/cyclomatic-complexity.md)
@@ -29,7 +32,10 @@
 - [Number of Public Attributes](checks/number-public-attributes.md)
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
 - [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
+- [Optional Parameters](checks/optional-parameters.md)
 - [RECEIVING Usage](checks/receiving-usage.md)
+- [Returning Name](checks/returning-name.md)
+- [Self-Reference](checks/self-reference.md)
 - [Subsequent Memory Assign Read Table](checks/sub-assign-read-table.md)
 - [Test Seam Usage](checks/test-seam-usage.md)
 
