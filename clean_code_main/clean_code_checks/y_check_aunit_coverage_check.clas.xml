@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Clean Code Check - ABAP Unit Coverage</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+    <RSTAT>K</RSTAT>
+    <MSG_ID>/BMW/CCP_CI_MESSAGES</MSG_ID>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>COMPLEXITY_CHECKER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Code Inspector: Test Based on SCAN</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>CONSTRUCTOR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Constructor</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>DISPLAY_POPUP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Display popup for user criteria</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>GET_CYCLOMATIC_COMPLEXITY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve cyclomatic complexity from SAP standard output</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>GET_UNIT_TEST_RESULT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve coverage measurement from unit test execution</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>PROCESS_UNIT_TEST_RESULT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Return result of the unit test to the SCI framework</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>THRESHOLD_FOR_COMPLEXITY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Only check objects with cycl. complexity above</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>THRESHOLD_FOR_RED_ALERT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Raise error if Unit test coverage below %</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_AUNIT_COVERAGE_CHECK</CLSNAME>
+     <CMPNAME>THRESHOLD_FOR_YELLOW_ALERT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Raise warning if Unit test coverage below %</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
