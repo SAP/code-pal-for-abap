@@ -31,17 +31,21 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
-      ( '     METHODS test RETURNING VALUE(name) TYPE string. ' )
+      ( '     METHODS test RETURNING VALUE(receiving) TYPE string ' )
+      ( '                  EXCEPTIONS exceptions.' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD test. ' )
+      ( '     RAISE exceptions.' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
 
       ( ' START-OF-SELECTION. ' )
       ( '   DATA(example) = NEW y_example_class( ). ' )
-      ( |   DATA(name) = example->test( ). | )
+      ( |   DATA(receiving) = example->test( ). | )
+      ( |   example->test( RECEIVING receiving = receiving | )
+      ( |                  EXCEPTIONS exceptions = 4 ). | )
     ) ).
   ENDMETHOD.
 
@@ -51,7 +55,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
-      ( '     METHODS test RETURNING VALUE(name) TYPE string. ' )
+      ( '     METHODS test RETURNING VALUE(receiving) TYPE string. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
@@ -61,7 +65,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
       ( ' START-OF-SELECTION. ' )
       ( '   DATA(example) = NEW y_example_class( ). ' )
-      ( |   example->test( RECEIVING name = DATA(name) ). | )
+      ( |   example->test( RECEIVING receiving = DATA(receiving) ). | )
     ) ).
   ENDMETHOD.
 
