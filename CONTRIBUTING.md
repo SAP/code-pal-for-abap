@@ -16,7 +16,7 @@ Back to github.com you can create a pull request from your fork to our base repo
 
 At this point of time, we will verify your code and authorize/approve the merge (if applicable). Please create the request to merge it with our `dev` branch (our release workflow starts from `dev`, then to `test` and finally it reaches the `master` branch.
 
-Thank you in advance for contributing and for sharing your ideas with the community!
+Thank you in advance for contributing and sharing your ideas within our community! We really appreciate this!
 
 ### Some usefull information
 
