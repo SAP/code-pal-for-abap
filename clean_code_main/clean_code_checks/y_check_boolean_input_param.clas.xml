@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>Y_CHECK_OMIT_OPTIONAL_EXP</CLSNAME>
+    <CLSNAME>Y_CHECK_BOOLEAN_INPUT_PARAM</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Omit Optional EXPORTING</DESCRIPT>
+    <DESCRIPT>Clean Code Check - Boolean Input Parameter</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
@@ -16,13 +16,13 @@
     <item>
      <ID>I</ID>
      <KEY>001</KEY>
-     <ENTRY>Omit Optional EXPORTING</ENTRY>
+     <ENTRY>Boolean Input Parameter</ENTRY>
      <LENGTH>54</LENGTH>
     </item>
     <item>
      <ID>I</ID>
      <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Omit the optional keyword EXPORTING!</ENTRY>
+     <ENTRY>[Clean Code]: Split method instead of Boolean input parameter!</ENTRY>
      <LENGTH>82</LENGTH>
     </item>
    </TPOOL>
