@@ -1,6 +1,7 @@
-CLASS y_check_base DEFINITION ABSTRACT
+CLASS y_check_base DEFINITION
   PUBLIC
   INHERITING FROM cl_ci_test_scan
+  ABSTRACT
   CREATE PUBLIC .
 
   PUBLIC SECTION.
@@ -10,13 +11,13 @@ CLASS y_check_base DEFINITION ABSTRACT
         error        TYPE sci_errc VALUE '100',
         warning      TYPE sci_errc VALUE '101',
         notification TYPE sci_errc VALUE '102',
-      END OF c_code,
-      c_code_not_maintained TYPE sci_errc VALUE '106',
+      END OF c_code .
+    CONSTANTS c_code_not_maintained TYPE sci_errc VALUE '106' ##NO_TEXT.
+    CONSTANTS:
       BEGIN OF c_docs_path,
         main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
         checks TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/checks/' ##NO_TEXT,
-      END OF c_docs_path.
-
+      END OF c_docs_path .
     DATA:
       BEGIN OF settings READ-ONLY,
         pseudo_comment                TYPE sci_pcom,
@@ -62,10 +63,10 @@ CLASS y_check_base DEFINITION ABSTRACT
         ycx_object_is_exempted .
     METHODS detect_check_configuration
       IMPORTING
-        !threshold    TYPE int4
-        !include      TYPE sobj_name
+        statement     TYPE sstmnt
+        error_count   TYPE int4 DEFAULT 1
       RETURNING
-        VALUE(result) TYPE y_if_clean_code_manager=>check_configuration .
+        VALUE(result) TYPE y_if_clean_code_manager=>check_configuration.
     METHODS execute_check .
     METHODS get_code
       IMPORTING
@@ -80,20 +81,20 @@ CLASS y_check_base DEFINITION ABSTRACT
         !statement TYPE sstmnt OPTIONAL .
     METHODS raise_error
       IMPORTING
-        object_type            TYPE trobjtype DEFAULT c_type_include
-        statement_level        TYPE stmnt_levl
-        statement_index        TYPE int4
-        statement_from         TYPE int4
-        error_counter          TYPE sci_errcnt OPTIONAL
-        error_priority         TYPE sychar01
-        parameter_01           TYPE csequence OPTIONAL
-        parameter_02           TYPE csequence OPTIONAL
-        parameter_03           TYPE csequence OPTIONAL
-        parameter_04           TYPE csequence OPTIONAL
-        is_include_specific    TYPE sci_inclspec DEFAULT ' '
-        additional_information TYPE xstring OPTIONAL
-        checksum               TYPE int4 OPTIONAL
-        pseudo_comments        TYPE t_comments OPTIONAL .
+        !object_type            TYPE trobjtype DEFAULT c_type_include
+        !statement_level        TYPE stmnt_levl
+        !statement_index        TYPE int4
+        !statement_from         TYPE int4
+        !error_counter          TYPE sci_errcnt OPTIONAL
+        !error_priority         TYPE sychar01
+        !parameter_01           TYPE csequence OPTIONAL
+        !parameter_02           TYPE csequence OPTIONAL
+        !parameter_03           TYPE csequence OPTIONAL
+        !parameter_04           TYPE csequence OPTIONAL
+        !is_include_specific    TYPE sci_inclspec DEFAULT ' '
+        !additional_information TYPE xstring OPTIONAL
+        !checksum               TYPE int4 OPTIONAL
+        !pseudo_comments        TYPE t_comments OPTIONAL .
 
     METHODS get_column_abs
         REDEFINITION .
@@ -119,8 +120,7 @@ CLASS y_check_base DEFINITION ABSTRACT
     METHODS do_attributes_exist
       RETURNING
         VALUE(result) TYPE abap_bool .
-    METHODS instantiate_objects .
-
+    METHODS instantiate_objects.
     METHODS enable_rfc.
 ENDCLASS.
 
@@ -161,33 +161,30 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
-    DATA config TYPE y_if_clean_code_manager=>check_configuration.
 
-    DATA(object_creation_date) = NEW y_object_creation_date( ).
-    DATA(crt_date) = object_creation_date->y_if_object_creation_date~get_program_create_date( include ).
+    DATA(include) = get_include( p_level = statement-level ).
+    DATA(creation_date) =  NEW y_object_creation_date( )->y_if_object_creation_date~get_program_create_date( include ).
 
-    LOOP AT check_configurations INTO config
-      WHERE object_creation_date LE crt_date AND
-            threshold LE threshold.
+    LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
+    WHERE object_creation_date <= creation_date
+    AND threshold <= error_count.
 
-      IF is_testcode = abap_true AND config-apply_on_testcode = abap_false.
+      IF is_testcode = abap_true AND <configuration>-apply_on_testcode = abap_false.
         CONTINUE.
-      ELSEIF is_testcode = abap_false AND config-apply_on_productive_code = abap_false.
+      ELSEIF is_testcode = abap_false AND <configuration>-apply_on_productive_code = abap_false.
         CONTINUE.
       ENDIF.
 
       IF result IS INITIAL.
-        result = config.
+        result = <configuration>.
 
-      ELSEIF result-prio = config-prio AND
-           result-threshold GE config-threshold.
-        result = config.
+      ELSEIF result-prio = <configuration>-prio
+      AND result-threshold >= <configuration>-threshold.
+        result = <configuration>.
 
-      ELSEIF result-threshold LE config-threshold AND
-             ( ( result-prio = 'W' AND config-prio = 'E' ) OR
-               ( result-prio = 'N' AND config-prio = 'E' ) OR
-               ( result-prio = 'N' AND config-prio = 'W' ) ).
-        result = config.
+      ELSEIF ( result-prio <> 'E' AND <configuration>-prio = 'E' )
+      OR     ( result-prio = 'N' AND <configuration>-prio = 'W' ).
+        result = <configuration>.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
@@ -564,7 +561,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD instantiate_objects.
     IF ref_scan_manager IS NOT BOUND.
-      ref_scan_manager = NEW lcl_ref_scan_manager( ).
+      ref_scan_manager = NEW y_ref_scan_manager( ).
       IF ref_scan IS INITIAL.
         get( ).
       ENDIF.
@@ -580,13 +577,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.
-      test_code_detector = NEW lcl_test_code_detector( ).
+      test_code_detector = NEW y_test_code_detector( ).
     ENDIF.
     test_code_detector->clear( ).
     test_code_detector->set_ref_scan_manager( ref_scan_manager ).
 
     IF statistics IS NOT BOUND.
-      statistics = NEW lcl_statistics( ).
+      statistics = NEW y_scan_statistics( ).
     ENDIF.
 
     IF lines( check_configurations ) = 1 AND
@@ -627,14 +624,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD raise_error.
     statistics->collect( kind = error_priority
-                         pc = NEW lcl_pseudo_comment_detector( )->lif_pseudo_comment_detector~is_pseudo_comment( ref_scan_manager = ref_scan_manager
-                                                                                                                 scimessages      = scimessages
-                                                                                                                 test             = me->myname
-                                                                                                                 code             = get_code( error_priority )
-                                                                                                                 suppress         = settings-pseudo_comment
-                                                                                                                 position         = statement_index ) ).
-
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'LCL_REF_SCAN_MANAGER'.
+                         pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
+                                                                                   scimessages      = scimessages
+                                                                                   test             = me->myname
+                                                                                   code             = get_code( error_priority )
+                                                                                   suppress         = settings-pseudo_comment
+                                                                                   position         = statement_index ) ).
+    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
               p_position = statement_index

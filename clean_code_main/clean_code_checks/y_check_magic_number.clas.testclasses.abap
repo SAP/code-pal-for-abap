@@ -29,7 +29,7 @@ ENDCLASS.
 CLASS ltd_test_data_ok_case IMPLEMENTATION.
 
   METHOD set_data_for_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -39,7 +39,7 @@ CLASS ltd_test_data_ok_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_if_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -49,7 +49,7 @@ CLASS ltd_test_data_ok_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_if_0_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -60,7 +60,7 @@ CLASS ltd_test_data_ok_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_do_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -71,7 +71,7 @@ CLASS ltd_test_data_ok_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_check_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -81,7 +81,7 @@ CLASS ltd_test_data_ok_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_case_subrc_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -93,7 +93,7 @@ CLASS ltd_test_data_ok_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_check_lines_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -115,7 +115,7 @@ ENDCLASS.
 CLASS ltd_test_data_error_case IMPLEMENTATION.
 
   METHOD set_data_for_if_error.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -126,7 +126,7 @@ CLASS ltd_test_data_error_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_do_error.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -136,7 +136,7 @@ CLASS ltd_test_data_error_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_check_error.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 
@@ -146,7 +146,7 @@ CLASS ltd_test_data_error_case IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
     ( 'REPORT ut_test.' )
     ( 'START-OF-SELECTION.' )
 

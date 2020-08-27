@@ -5,7 +5,7 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 2 )
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 2 )
                       ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 ) ).
   ENDMETHOD.
 
@@ -25,12 +25,11 @@ ENDCLASS.
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
   METHOD set_data_for_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     CLASS-EVENTS one. ' )
-      ( '     EVENTS two. ' )
       ( '   PROTECTED SECTION. ' )
       ( '   PRIVATE SECTION. ' )
       ( ' ENDCLASS. ' )
@@ -41,13 +40,11 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     CLASS-EVENTS one. ' )
-      ( '     CLASS-EVENTS two. ' )
-      ( '     EVENTS three. ' )
       ( '     EVENTS four. ' )
       ( '   PROTECTED SECTION. ' )
       ( '   PRIVATE SECTION. ' )
@@ -59,12 +56,10 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-      convert_code( VALUE #(
+      inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_class DEFINITION. "#EC NUMBER_EVENTS ' )
       ( '   PUBLIC SECTION. ' )
-      ( '     CLASS-EVENTS one. ' )
-      ( '     CLASS-EVENTS two. ' )
       ( '     EVENTS three. ' )
       ( '     EVENTS four. ' )
       ( '   PROTECTED SECTION. ' )

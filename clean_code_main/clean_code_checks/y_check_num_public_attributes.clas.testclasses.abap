@@ -5,8 +5,8 @@ ENDCLASS.
 
 CLASS ltd_clean_code_manager IMPLEMENTATION.
   METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 0 )
-                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 0 ) ).
+    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 1 )
+                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 1 ) ).
   ENDMETHOD.
 
   METHOD y_if_clean_code_manager~calculate_obj_creation_date.
@@ -27,7 +27,7 @@ ENDCLASS.
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
   METHOD set_data_for_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_one DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
@@ -70,7 +70,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_one DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
@@ -114,7 +114,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_one DEFINITION. "#EC NUM_PUBLIC_ATTR ' )
       ( '   PUBLIC SECTION. ' )

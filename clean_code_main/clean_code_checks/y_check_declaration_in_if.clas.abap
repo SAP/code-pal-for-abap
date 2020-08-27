@@ -105,8 +105,8 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
   METHOD check_if_error.
     IF branch_counter = first_if.
 
-      DATA(check_configuration) = detect_check_configuration( threshold = 0
-                                                              include = get_include( p_level = statement-level ) ).
+      DATA(check_configuration) = detect_check_configuration( statement ).
+
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.

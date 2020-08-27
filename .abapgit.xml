@@ -19,6 +19,7 @@
     <item>/*.jpeg</item>
     <item>/license.txt</item>
     <item>/notice.txt</item>
+    <item>/.gitattributes</item>
    </IGNORE>
   </DATA>
  </asx:values>

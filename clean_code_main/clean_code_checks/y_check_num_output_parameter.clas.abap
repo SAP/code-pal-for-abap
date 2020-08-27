@@ -1,6 +1,5 @@
 CLASS y_check_num_output_parameter DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-    CONSTANTS threshold TYPE i VALUE 1.
     METHODS constructor .
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
@@ -25,7 +24,7 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC NUM_OUTPUT_PARA' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
-    settings-threshold = threshold.
+    settings-threshold = 2.
     settings-documentation = |{ c_docs_path-checks }number-output-parameter.md|.
 
     y_message_registration=>add_message(
@@ -68,15 +67,12 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
     CHECK get_token_abs( statement-from ) = 'METHODS'
     OR get_token_abs( statement-from ) = 'CLASS-METHODS'.
 
-    DATA(configuration) = detect_check_configuration( threshold = threshold
-                                                      include = get_include( p_level = statement-level ) ).
+    DATA(outputs_of_statement) = count_outputs_of_statement( statement ).
+
+    DATA(configuration) = detect_check_configuration( error_count = outputs_of_statement
+                                                      statement = statement ).
+
     IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    DATA(count) = count_outputs_of_statement( statement ).
-
-    IF count <= configuration-threshold.
       RETURN.
     ENDIF.
 

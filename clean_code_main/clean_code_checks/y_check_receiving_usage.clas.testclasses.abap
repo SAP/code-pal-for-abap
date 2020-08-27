@@ -26,32 +26,36 @@ ENDCLASS.
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
   METHOD set_data_for_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
-      ( '     METHODS test RETURNING VALUE(name) TYPE string. ' )
+      ( '     METHODS test RETURNING VALUE(receiving) TYPE string ' )
+      ( '                  EXCEPTIONS exceptions.' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD test. ' )
+      ( '     RAISE exceptions.' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
 
       ( ' START-OF-SELECTION. ' )
       ( '   DATA(example) = NEW y_example_class( ). ' )
-      ( |   DATA(name) = example->test( ). | )
+      ( |   DATA(receiving) = example->test( ). | )
+      ( |   example->test( RECEIVING receiving = receiving | )
+      ( |                  EXCEPTIONS exceptions = 4 ). | )
     ) ).
   ENDMETHOD.
 
   METHOD set_data_for_error.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
-      ( '     METHODS test RETURNING VALUE(name) TYPE string. ' )
+      ( '     METHODS test RETURNING VALUE(receiving) TYPE string. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
@@ -61,12 +65,12 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
       ( ' START-OF-SELECTION. ' )
       ( '   DATA(example) = NEW y_example_class( ). ' )
-      ( |   example->test( RECEIVING name = DATA(name) ). | )
+      ( |   example->test( RECEIVING receiving = DATA(receiving) ). | )
     ) ).
   ENDMETHOD.
 
   METHOD set_pseudo_comment_ok.
-    convert_code( VALUE #(
+    inject_code( VALUE #(
       ( 'REPORT y_example. ' )
 
       ( ' CLASS y_example_class DEFINITION. ' )
