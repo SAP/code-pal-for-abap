@@ -1,19 +1,3 @@
-CLASS ltd_clean_code_manager DEFINITION FOR TESTING.
-  PUBLIC SECTION.
-    INTERFACES: y_if_clean_code_manager.
-ENDCLASS.
-
-CLASS ltd_clean_code_manager IMPLEMENTATION.
-  METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 2 )
-                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 2 ) ).
-  ENDMETHOD.
-
-  METHOD y_if_clean_code_manager~calculate_obj_creation_date.
-    result = '20190101'.
-  ENDMETHOD.
-ENDCLASS.
-
 CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
     METHODS set_data_for_ok.
@@ -47,26 +31,51 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS one. ' )
+      ( '     METHODS two. ' )
+      ( '     METHODS three. ' )
+      ( '     METHODS four. ' )
+      ( '     METHODS five. ' )
+      ( '     METHODS six. ' )
+      ( '     METHODS seven. ' )
+      ( '     METHODS eight. ' )
+      ( '     METHODS nine. ' )
+      ( '     METHODS ten. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     CLASS-METHODS two. ' )
-      ( '     METHODS: ' )
-      ( '       three, ' )
-      ( '       four. ' )
+      ( '     CLASS-METHODS eleven. ' )
+      ( '     CLASS-METHODS twelve. ' )
+      ( '     CLASS-METHODS thirteen. ' )
+      ( '     CLASS-METHODS fourteen. ' )
+      ( '     CLASS-METHODS fifteen. ' )
       ( '   PRIVATE SECTION. ' )
-      ( '     METHODS: five. ' )
+      ( '     METHODS: ' )
+      ( '       sixteen, ' )
+      ( '       seventeen, ' )
+      ( '       eighteen, ' )
+      ( '       nineteen, ' )
+      ( '       twenty. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD one. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD two. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD three. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD four. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD five. ' )
-      ( '   ENDMETHOD. ' )
+      ( '   METHOD one. ENDMETHOD. ' )
+      ( '   METHOD two. ENDMETHOD. ' )
+      ( '   METHOD three. ENDMETHOD. ' )
+      ( '   METHOD four. ENDMETHOD. ' )
+      ( '   METHOD five. ENDMETHOD. ' )
+      ( '   METHOD six. ENDMETHOD. ' )
+      ( '   METHOD seven. ENDMETHOD. ' )
+      ( '   METHOD eight. ENDMETHOD. ' )
+      ( '   METHOD nine. ENDMETHOD. ' )
+      ( '   METHOD ten. ENDMETHOD. ' )
+      ( '   METHOD eleven. ENDMETHOD. ' )
+      ( '   METHOD twelve. ENDMETHOD. ' )
+      ( '   METHOD thirteen. ENDMETHOD. ' )
+      ( '   METHOD fourteen. ENDMETHOD. ' )
+      ( '   METHOD fifteen. ENDMETHOD. ' )
+      ( '   METHOD sixteen. ENDMETHOD. ' )
+      ( '   METHOD seventeen. ENDMETHOD. ' )
+      ( '   METHOD eighteen. ENDMETHOD. ' )
+      ( '   METHOD nineteen. ENDMETHOD. ' )
+      ( '   METHOD twenty. ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ) ).
   ENDMETHOD.
@@ -77,26 +86,51 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( ' CLASS y_example_class DEFINITION. "#EC NUMBER_METHODS ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS one. ' )
+      ( '     METHODS two. ' )
+      ( '     METHODS three. ' )
+      ( '     METHODS four. ' )
+      ( '     METHODS five. ' )
+      ( '     METHODS six. ' )
+      ( '     METHODS seven. ' )
+      ( '     METHODS eight. ' )
+      ( '     METHODS nine. ' )
+      ( '     METHODS ten. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     CLASS-METHODS two. ' )
-      ( '     METHODS: ' )
-      ( '       three, ' )
-      ( '       four. ' )
+      ( '     CLASS-METHODS eleven. ' )
+      ( '     CLASS-METHODS twelve. ' )
+      ( '     CLASS-METHODS thirteen. ' )
+      ( '     CLASS-METHODS fourteen. ' )
+      ( '     CLASS-METHODS fifteen. ' )
       ( '   PRIVATE SECTION. ' )
-      ( '     METHODS: five. ' )
+      ( '     METHODS: ' )
+      ( '       sixteen, ' )
+      ( '       seventeen, ' )
+      ( '       eighteen, ' )
+      ( '       nineteen, ' )
+      ( '       twenty. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD one. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD two. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD three. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD four. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD five. ' )
-      ( '   ENDMETHOD. ' )
+      ( '   METHOD one. ENDMETHOD. ' )
+      ( '   METHOD two. ENDMETHOD. ' )
+      ( '   METHOD three. ENDMETHOD. ' )
+      ( '   METHOD four. ENDMETHOD. ' )
+      ( '   METHOD five. ENDMETHOD. ' )
+      ( '   METHOD six. ENDMETHOD. ' )
+      ( '   METHOD seven. ENDMETHOD. ' )
+      ( '   METHOD eight. ENDMETHOD. ' )
+      ( '   METHOD nine. ENDMETHOD. ' )
+      ( '   METHOD ten. ENDMETHOD. ' )
+      ( '   METHOD eleven. ENDMETHOD. ' )
+      ( '   METHOD twelve. ENDMETHOD. ' )
+      ( '   METHOD thirteen. ENDMETHOD. ' )
+      ( '   METHOD fourteen. ENDMETHOD. ' )
+      ( '   METHOD fifteen. ENDMETHOD. ' )
+      ( '   METHOD sixteen. ENDMETHOD. ' )
+      ( '   METHOD seventeen. ENDMETHOD. ' )
+      ( '   METHOD eighteen. ENDMETHOD. ' )
+      ( '   METHOD nineteen. ENDMETHOD. ' )
+      ( '   METHOD twenty. ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ) ).
   ENDMETHOD.
@@ -140,15 +174,13 @@ CLASS local_test_class IMPLEMENTATION.
     cut = NEW y_check_number_methods( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).
     cut->ref_scan_manager ?= ref_scan_manager_double.
-    cut->clean_code_manager = NEW ltd_clean_code_manager( ).
+    cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption_no( ).
     cut->attributes_maintained = abap_true.
   ENDMETHOD.
 
   METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound(
-      EXPORTING
-        act = cut ).
+    cl_abap_unit_assert=>assert_bound( cut ).
   ENDMETHOD.
 
   METHOD number_methods_ok.
@@ -173,16 +205,12 @@ CLASS local_test_class IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD assert_errors.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_errors( )
-        exp = err_cnt ).
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_errors( )
+                                        exp = err_cnt ).
   ENDMETHOD.
 
   METHOD assert_pseudo_comments.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_pseudo_comments( )
-        exp = pc_cnt ).
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_pseudo_comments( )
+                                        exp = pc_cnt ).
   ENDMETHOD.
 ENDCLASS.

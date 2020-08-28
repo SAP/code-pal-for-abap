@@ -1,23 +1,7 @@
-CLASS ltd_clean_code_manager DEFINITION FOR TESTING.
-  PUBLIC SECTION.
-    INTERFACES: y_if_clean_code_manager.
-ENDCLASS.
-
-CLASS ltd_clean_code_manager IMPLEMENTATION.
-  METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 0 )
-                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 0 ) ).
-  ENDMETHOD.
-
-  METHOD y_if_clean_code_manager~calculate_obj_creation_date.
-    result = '20190101'.
-  ENDMETHOD.
-ENDCLASS.
-
 CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
     METHODS set_data_for_ok.
-    METHODS set_data_for_error.
+    METHODS set_data_for_warning.
     METHODS set_pseudo_comment_ok.
   PRIVATE SECTION.
 ENDCLASS.
@@ -80,7 +64,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
     ) ).
   ENDMETHOD.
 
-  METHOD set_data_for_error.
+  METHOD set_data_for_warning.
      inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_class DEFINITION. ' )
@@ -210,11 +194,11 @@ CLASS local_test_class DEFINITION FOR TESTING
 
     METHODS:
       setup,
-      assert_errors IMPORTING err_cnt TYPE i,
+      assert_warnings IMPORTING err_cnt TYPE i,
       assert_pseudo_comments IMPORTING pc_cnt TYPE i,
       is_bound FOR TESTING,
       check_ok FOR TESTING,
-      check_error FOR TESTING,
+      check_warning FOR TESTING,
       check_pseudo_comment_ok FOR TESTING.
 ENDCLASS.
 
@@ -225,49 +209,43 @@ CLASS local_test_class IMPLEMENTATION.
     cut = NEW y_check_method_return_bool( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).
     cut->ref_scan_manager ?= ref_scan_manager_double.
-    cut->clean_code_manager = NEW ltd_clean_code_manager( ).
+    cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption_no( ).
     cut->attributes_maintained = abap_true.
   ENDMETHOD.
 
   METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound(
-      EXPORTING
-        act = cut ).
+    cl_abap_unit_assert=>assert_bound( cut ).
   ENDMETHOD.
 
   METHOD check_ok.
     ref_scan_manager_double->set_data_for_ok( ).
     cut->run( ).
-    assert_errors( 0 ).
+    assert_warnings( 0 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
-  METHOD check_error.
-    ref_scan_manager_double->set_data_for_error( ).
+  METHOD check_warning.
+    ref_scan_manager_double->set_data_for_warning( ).
     cut->run( ).
-    assert_errors( 11 ).
+    assert_warnings( 11 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
   METHOD check_pseudo_comment_ok.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
-    assert_errors( 7 ).
+    assert_warnings( 7 ).
     assert_pseudo_comments( 4 ).
   ENDMETHOD.
 
-  METHOD assert_errors.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_errors( )
-        exp = err_cnt ).
+  METHOD assert_warnings.
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_warnings( )
+                                        exp = err_cnt ).
   ENDMETHOD.
 
   METHOD assert_pseudo_comments.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_pseudo_comments( )
-        exp = pc_cnt ).
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_pseudo_comments( )
+                                        exp = pc_cnt ).
   ENDMETHOD.
 ENDCLASS.

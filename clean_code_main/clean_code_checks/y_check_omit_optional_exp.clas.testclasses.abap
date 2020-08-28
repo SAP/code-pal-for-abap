@@ -1,18 +1,3 @@
-CLASS ltd_clean_code_manager DEFINITION FOR TESTING.
-  PUBLIC SECTION.
-    INTERFACES: y_if_clean_code_manager.
-ENDCLASS.
-
-CLASS ltd_clean_code_manager IMPLEMENTATION.
-  METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 0 ) ).
-  ENDMETHOD.
-
-  METHOD y_if_clean_code_manager~calculate_obj_creation_date.
-    result = '20190101'.
-  ENDMETHOD.
-ENDCLASS.
-
 CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
     METHODS set_data_for_ok.
@@ -183,13 +168,13 @@ CLASS local_test_class IMPLEMENTATION.
     cut = NEW y_check_omit_optional_exp( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).
     cut->ref_scan_manager ?= ref_scan_manager_double.
-    cut->clean_code_manager = NEW ltd_clean_code_manager( ).
+    cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption_no( ).
     cut->attributes_maintained = abap_true.
   ENDMETHOD.
 
   METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound( act = cut ).
+    cl_abap_unit_assert=>assert_bound( cut ).
   ENDMETHOD.
 
   METHOD cut_ok.

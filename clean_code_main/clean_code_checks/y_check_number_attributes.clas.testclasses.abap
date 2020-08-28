@@ -1,20 +1,3 @@
-CLASS ltd_clean_code_manager DEFINITION FOR TESTING.
-  PUBLIC SECTION.
-    INTERFACES: y_if_clean_code_manager.
-ENDCLASS.
-
-CLASS ltd_clean_code_manager IMPLEMENTATION.
-
-  METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'N' threshold = 3 )
-                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 3 ) ).
-  ENDMETHOD.
-
-  METHOD y_if_clean_code_manager~calculate_obj_creation_date.
-    result = '20190101'.
-  ENDMETHOD.
-ENDCLASS.
-
 CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
     METHODS set_data_for_ok.
@@ -65,7 +48,16 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( '   PROTECTED SECTION. ' )
       ( '     DATA two TYPE i VALUE 2. ' )
       ( '     DATA three TYPE i VALUE 3. ' )
+      ( '     DATA four TYPE i VALUE 4. ' )
+      ( '     DATA five TYPE i VALUE 5. ' )
+      ( '     DATA six TYPE i VALUE 6. ' )
+      ( '     DATA seven TYPE i VALUE 7. ' )
+      ( '     DATA eight TYPE i VALUE 8. ' )
       ( '   PRIVATE SECTION. ' )
+      ( '     DATA nine TYPE i VALUE 9. ' )
+      ( '     DATA ten TYPE i VALUE 10. ' )
+      ( '     DATA eleven TYPE i VALUE 11. ' )
+      ( '     DATA twelve TYPE i VALUE 12. ' )
       ( ' ENDCLASS. ' )
       ( ' CLASS y_example_one IMPLEMENTATION. ' )
       ( ' ENDCLASS. ' )
@@ -76,7 +68,16 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( '     CLASS-DATA two TYPE i VALUE 2. ' )
       ( '     CLASS-DATA three TYPE i VALUE 3. ' )
       ( '   PROTECTED SECTION. ' )
+      ( '     DATA four TYPE i VALUE 4. ' )
+      ( '     DATA five TYPE i VALUE 5. ' )
+      ( '     DATA six TYPE i VALUE 6. ' )
+      ( '     DATA seven TYPE i VALUE 7. ' )
+      ( '     DATA eight TYPE i VALUE 8. ' )
       ( '   PRIVATE SECTION. ' )
+      ( '     DATA nine TYPE i VALUE 9. ' )
+      ( '     DATA ten TYPE i VALUE 10. ' )
+      ( '     DATA eleven TYPE i VALUE 11. ' )
+      ( '     DATA twelve TYPE i VALUE 12. ' )
       ( ' ENDCLASS. ' )
       ( ' CLASS y_example_two IMPLEMENTATION. ' )
       ( ' ENDCLASS. ' )
@@ -85,9 +86,17 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( '   PUBLIC SECTION. ' )
       ( '     DATA one TYPE i VALUE 1. ' )
       ( '     CLASS-DATA two TYPE i VALUE 2. ' )
+      ( '     CLASS-DATA three TYPE i VALUE 2. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     DATA four TYPE i VALUE 4. ' )
-      ( '   PRIVATE SECTION. ' )
+      ( '     CLASS-DATA four TYPE i VALUE 4. ' )
+      ( '     CLASS-DATA five TYPE i VALUE 5. ' )
+      ( '     CLASS-DATA six TYPE i VALUE 6. ' )
+      ( '     CLASS-DATA seven TYPE i VALUE 7. ' )
+      ( '     CLASS-DATA eight TYPE i VALUE 8. ' )
+      ( '     CLASS-DATA nine TYPE i VALUE 9. ' )
+      ( '     CLASS-DATA ten TYPE i VALUE 10. ' )
+      ( '     CLASS-DATA eleven TYPE i VALUE 11. ' )
+      ( '     CLASS-DATA twelve TYPE i VALUE 12. ' )
       ( ' ENDCLASS. ' )
       ( ' CLASS y_example_three IMPLEMENTATION. ' )
       ( ' ENDCLASS. ' )
@@ -97,14 +106,22 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   METHOD set_pseudo_comment_ok.
     inject_code( VALUE #(
       ( 'REPORT y_example. ' )
-
-      ( ' CLASS y_example_one DEFINITION. ' )
+      ( ' CLASS y_example_one DEFINITION. "#EC NUMBER_ATTR ' )
       ( '   PUBLIC SECTION. ' )
       ( '     DATA one TYPE i VALUE 1. ' )
       ( '   PROTECTED SECTION. ' )
       ( '     DATA two TYPE i VALUE 2. ' )
       ( '     DATA three TYPE i VALUE 3. ' )
+      ( '     DATA four TYPE i VALUE 4. ' )
+      ( '     DATA five TYPE i VALUE 5. ' )
+      ( '     DATA six TYPE i VALUE 6. ' )
+      ( '     DATA seven TYPE i VALUE 7. ' )
+      ( '     DATA eight TYPE i VALUE 8. ' )
       ( '   PRIVATE SECTION. ' )
+      ( '     DATA nine TYPE i VALUE 9. ' )
+      ( '     DATA ten TYPE i VALUE 10. ' )
+      ( '     DATA eleven TYPE i VALUE 11. ' )
+      ( '     DATA twelve TYPE i VALUE 12. ' )
       ( ' ENDCLASS. ' )
       ( ' CLASS y_example_one IMPLEMENTATION. ' )
       ( ' ENDCLASS. ' )
@@ -115,7 +132,16 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( '     CLASS-DATA two TYPE i VALUE 2. ' )
       ( '     CLASS-DATA three TYPE i VALUE 3. ' )
       ( '   PROTECTED SECTION. ' )
+      ( '     DATA four TYPE i VALUE 4. ' )
+      ( '     DATA five TYPE i VALUE 5. ' )
+      ( '     DATA six TYPE i VALUE 6. ' )
+      ( '     DATA seven TYPE i VALUE 7. ' )
+      ( '     DATA eight TYPE i VALUE 8. ' )
       ( '   PRIVATE SECTION. ' )
+      ( '     DATA nine TYPE i VALUE 9. ' )
+      ( '     DATA ten TYPE i VALUE 10. ' )
+      ( '     DATA eleven TYPE i VALUE 11. ' )
+      ( '     DATA twelve TYPE i VALUE 12. ' )
       ( ' ENDCLASS. ' )
       ( ' CLASS y_example_two IMPLEMENTATION. ' )
       ( ' ENDCLASS. ' )
@@ -124,10 +150,17 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( '   PUBLIC SECTION. ' )
       ( '     DATA one TYPE i VALUE 1. ' )
       ( '     CLASS-DATA two TYPE i VALUE 2. ' )
+      ( '     CLASS-DATA three TYPE i VALUE 2. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     DATA four TYPE i VALUE 4. ' )
-      ( '   PRIVATE SECTION. ' )
-      ( '     DATA five TYPE i VALUE 5. ' )
+      ( '     CLASS-DATA four TYPE i VALUE 4. ' )
+      ( '     CLASS-DATA five TYPE i VALUE 5. ' )
+      ( '     CLASS-DATA six TYPE i VALUE 6. ' )
+      ( '     CLASS-DATA seven TYPE i VALUE 7. ' )
+      ( '     CLASS-DATA eight TYPE i VALUE 8. ' )
+      ( '     CLASS-DATA nine TYPE i VALUE 9. ' )
+      ( '     CLASS-DATA ten TYPE i VALUE 10. ' )
+      ( '     CLASS-DATA eleven TYPE i VALUE 11. ' )
+      ( '     CLASS-DATA twelve TYPE i VALUE 12. ' )
       ( ' ENDCLASS. ' )
       ( ' CLASS y_example_three IMPLEMENTATION. ' )
       ( ' ENDCLASS. ' )
@@ -173,15 +206,13 @@ CLASS local_test_class IMPLEMENTATION.
     cut = NEW y_check_number_attributes( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).
     cut->ref_scan_manager ?= ref_scan_manager_double.
-    cut->clean_code_manager = NEW ltd_clean_code_manager( ).
+    cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption_no( ).
     cut->attributes_maintained = abap_true.
   ENDMETHOD.
 
   METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound(
-      EXPORTING
-        act = cut ).
+    cl_abap_unit_assert=>assert_bound( cut ).
   ENDMETHOD.
 
   METHOD cut_ok.
@@ -201,21 +232,17 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD pseudo_comment_ok.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
-    assert_errors( 1 ).
-    assert_pseudo_comments( 2 ).
+    assert_errors( 0 ).
+    assert_pseudo_comments( 3 ).
   ENDMETHOD.
 
   METHOD assert_errors.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_errors( )
-        exp = err_cnt ).
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_errors( )
+                                        exp = err_cnt ).
   ENDMETHOD.
 
   METHOD assert_pseudo_comments.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_pseudo_comments( )
-        exp = pc_cnt ).
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_pseudo_comments( )
+                                        exp = pc_cnt ).
   ENDMETHOD.
 ENDCLASS.

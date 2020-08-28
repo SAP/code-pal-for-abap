@@ -12,6 +12,9 @@ INTERFACE y_if_scan_statistics
   METHODS get_number_warnings
     RETURNING
       VALUE(result) TYPE i .
+  METHODS get_number_notes
+    RETURNING
+      VALUE(result) TYPE i .
   METHODS get_number_pseudo_comments
     RETURNING
       VALUE(result) TYPE i .

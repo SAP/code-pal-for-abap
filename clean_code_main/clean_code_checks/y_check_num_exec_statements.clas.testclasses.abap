@@ -1,20 +1,3 @@
-CLASS ltd_clean_code_manager DEFINITION FOR TESTING.
-  PUBLIC SECTION.
-    INTERFACES: y_if_clean_code_manager.
-ENDCLASS.
-
-CLASS ltd_clean_code_manager IMPLEMENTATION.
-  METHOD y_if_clean_code_manager~read_check_customizing.
-    result = VALUE #( ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'E' threshold = 3 )
-                      ( apply_on_testcode = abap_true apply_on_productive_code = abap_true prio = 'W' threshold = 2 ) ).
-  ENDMETHOD.
-
-  METHOD y_if_clean_code_manager~calculate_obj_creation_date.
-    result = '20190101'.
-  ENDMETHOD.
-ENDCLASS.
-
-
 CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
     METHODS set_data_for_ok.
@@ -56,33 +39,63 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
     inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_class DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
       ( '   PROTECTED SECTION. ' )
       ( '     METHODS test. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     DATA attribute_01 TYPE i. ' )
+      ( '     DATA attribute_02 TYPE i. ' )
+      ( '     DATA attribute_03 TYPE i. ' )
+      ( '     DATA attribute_04 TYPE i. ' )
+      ( '     DATA attribute_05 TYPE i. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD test. ' )
-      ( '     DATA(zero) = 0. ' )
-      ( '     DATA(one) = 1. ' )
-      ( '     DATA(two) = 2. ' )
-      ( '     IF zero = 0 ' )
-      ( '     AND one = 1 ' )
-      ( '     AND two = 2. ' )
-      ( '       "Do something... ' )
-      ( '     ENDIF. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-
-      ( ' START-OF-SELECTION. ' )
-      ( '   DATA(zero) = 0. ' )
-      ( '   DATA(one) = 1. ' )
-      ( '   DATA(two) = 2. ' )
-      ( '   IF zero = 0 ' )
-      ( '   AND one = 1 ' )
-      ( '   AND two = 2. ' )
-      ( '     "Do something... ' )
-      ( '   ENDIF. ' )
     ) ).
   ENDMETHOD.
 
@@ -90,33 +103,63 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
     inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' CLASS y_example_class DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
       ( '   PROTECTED SECTION. ' )
       ( '     METHODS test. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     DATA attribute_01 TYPE i. ' )
+      ( '     DATA attribute_02 TYPE i. ' )
+      ( '     DATA attribute_03 TYPE i. ' )
+      ( '     DATA attribute_04 TYPE i. ' )
+      ( '     DATA attribute_05 TYPE i. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD test. ' )
-      ( '     DATA(zero) = 0. ' )
-      ( '     DATA(one) = 1. ' )
-      ( '     DATA(two) = 2. ' )
-      ( '     IF zero = 0 ' )
-      ( '     AND one = 1 ' )
-      ( '     AND two = 2. ' )
-      ( '       "Do something... ' )
-      ( '     ENDIF. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
+      ( '    attribute_01 = attribute_02. ' )
+      ( '    attribute_02 = attribute_03. ' )
+      ( '    attribute_03 = attribute_04. ' )
+      ( '    attribute_04 = attribute_05. ' )
+      ( '    attribute_05 = attribute_01. ' )
       ( '   ENDMETHOD. "#EC CI_NOES ' )
       ( ' ENDCLASS. ' )
-
-      ( ' START-OF-SELECTION. ' )
-      ( '   DATA(zero) = 0. ' )
-      ( '   DATA(one) = 1. ' )
-      ( '   DATA(two) = 2. ' )
-      ( '   IF zero = 0 ' )
-      ( '   AND one = 1 ' )
-      ( '   AND two = 2. ' )
-      ( '     "Do something... ' )
-      ( '   ENDIF. "#EC CI_NOES ' )
     ) ).
   ENDMETHOD.
 ENDCLASS.
@@ -159,15 +202,13 @@ CLASS local_test_class IMPLEMENTATION.
     cut = NEW y_check_num_exec_statements( ).
     ref_scan_manager_double = NEW ltd_ref_scan_manager( ).
     cut->ref_scan_manager ?= ref_scan_manager_double.
-    cut->clean_code_manager = NEW ltd_clean_code_manager( ).
+    cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption_no( ).
     cut->attributes_maintained = abap_true.
   ENDMETHOD.
 
   METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound(
-      EXPORTING
-        act = cut ).
+    cl_abap_unit_assert=>assert_bound( cut ).
   ENDMETHOD.
 
   METHOD num_exec_statements_ok.
@@ -180,7 +221,7 @@ CLASS local_test_class IMPLEMENTATION.
   METHOD num_exec_statements_error.
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 2 ).
+    assert_errors( 1 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -188,20 +229,16 @@ CLASS local_test_class IMPLEMENTATION.
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
     assert_errors( 0 ).
-    assert_pseudo_comments( 2 ).
+    assert_pseudo_comments( 1 ).
   ENDMETHOD.
 
   METHOD assert_errors.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_errors( )
-        exp = err_cnt ).
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_errors( )
+                                        exp = err_cnt ).
   ENDMETHOD.
 
   METHOD assert_pseudo_comments.
-    cl_abap_unit_assert=>assert_equals(
-      EXPORTING
-        act = cut->statistics->get_number_pseudo_comments( )
-        exp = pc_cnt ).
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_pseudo_comments( )
+                                        exp = pc_cnt ).
   ENDMETHOD.
 ENDCLASS.
