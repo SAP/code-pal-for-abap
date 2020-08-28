@@ -6,6 +6,7 @@ Code pal is a tool which supports you in writing clean ABAP code. Clean Code all
 
 Furthermore... It's free and open source: code pal is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE)
 
+
 * [Features](#features)
 * [How to bring Code Pal into your system?](#how-to-bring-code-pal-into-your-system)
   * [1. Create a local package](#1-create-a-local-package)
