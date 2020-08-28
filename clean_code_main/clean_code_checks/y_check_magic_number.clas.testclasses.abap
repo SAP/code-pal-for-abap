@@ -14,7 +14,7 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_test_data_ok_case DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
+CLASS ltd_test_data_ok_case DEFINITION FOR TESTING INHERITING FROM y_ref_scan_manager_double.
   PUBLIC SECTION.
     METHODS:
       set_data_for_ok,
@@ -103,7 +103,7 @@ CLASS ltd_test_data_ok_case IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_test_data_error_case DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
+CLASS ltd_test_data_error_case DEFINITION FOR TESTING INHERITING FROM y_ref_scan_manager_double.
   PUBLIC SECTION.
     METHODS:
       set_data_for_if_error,

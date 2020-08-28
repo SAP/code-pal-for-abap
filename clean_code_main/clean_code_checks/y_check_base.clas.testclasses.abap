@@ -1,4 +1,4 @@
-CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_scan_manager_double FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
     METHODS get_report.
   PRIVATE SECTION.

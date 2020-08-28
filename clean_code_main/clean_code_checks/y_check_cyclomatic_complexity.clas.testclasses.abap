@@ -30,7 +30,7 @@ CLASS ltd_clean_code_manager_warning IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING INHERITING FROM y_ref_scan_manager_double.
   PUBLIC SECTION.
     METHODS set_data_for_ok.
     METHODS set_data_for_error.

@@ -14,7 +14,7 @@ CLASS ltd_clean_code_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_scan_manager_double FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING.
   PUBLIC SECTION.
     METHODS set_data_for_ok.
     METHODS set_data_for_error.
