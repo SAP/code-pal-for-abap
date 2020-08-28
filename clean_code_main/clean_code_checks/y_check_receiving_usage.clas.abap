@@ -42,7 +42,8 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) CP '*>*(*'.
+    CHECK get_token_abs( statement-from ) CP '*(*' AND
+          get_token_abs( statement-from ) NE 'BADI'.
 
     DATA(has_receiving) = abap_false.
     DATA(has_classic_exception) = abap_false.
