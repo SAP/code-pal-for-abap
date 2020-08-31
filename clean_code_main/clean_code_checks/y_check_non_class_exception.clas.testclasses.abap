@@ -52,7 +52,7 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
       ( '     DATA(iflag) = COND i( WHEN cflag = abap_true  THEN 1 ' )
       ( '                           WHEN cflag = abap_false THEN 0 ' )
       ( |                           ELSE THROW cx_demo_dyn_t100( MESSAGE e888(sabapdemos) WITH 'Illegal value!' ) ). | )
-      ( '   ENDMETHOD.')
+      ( '   ENDMETHOD.' )
       ( ' ENDCLASS. ' )
     ) ).
   ENDMETHOD.
