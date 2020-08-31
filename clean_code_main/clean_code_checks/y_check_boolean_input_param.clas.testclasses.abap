@@ -6,17 +6,32 @@ CLASS local_test_class DEFINITION INHERITING FROM y_unit_test_base FOR TESTING R
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS y_check_boolean_input_param DEFINITION LOCAL FRIENDS local_test_class.
-
 CLASS local_test_class IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_boolean_input_param( ).
   ENDMETHOD.
 
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS update IMPORTING do_commit TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD update. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
   METHOD get_code_without_issue.
     result = VALUE #(
-      ( 'REPORT y_example. ' )
+      ( ' REPORT y_example. ' )
+
       ( ' CLASS y_example DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS update_without_commit. ' )
@@ -34,25 +49,11 @@ CLASS local_test_class IMPLEMENTATION.
 
   METHOD get_code_with_exemption.
     result = VALUE #(
-      ( 'REPORT y_example. ' )
+      ( ' REPORT y_example. ' )
+
       ( ' CLASS y_example DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS update IMPORTING do_commit TYPE abap_bool.  "#EC BOOL_PARAM ' )
-      ( ' ENDCLASS. ' )
-
-      ( ' CLASS y_example IMPLEMENTATION. ' )
-      ( '   METHOD update. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( 'REPORT y_example. ' )
-      ( ' CLASS y_example DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS update IMPORTING do_commit TYPE abap_bool. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )

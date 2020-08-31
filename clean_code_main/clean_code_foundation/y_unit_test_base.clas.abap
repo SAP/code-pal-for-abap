@@ -1,14 +1,15 @@
 CLASS y_unit_test_base DEFINITION PUBLIC ABSTRACT FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PUBLIC SECTION.
     METHODS bound FOR TESTING.
-    METHODS issue FOR TESTING.
-    METHODS no_issue FOR TESTING.
-    METHODS exmeption FOR TESTING.
+    METHODS with_issue FOR TESTING.
+    METHODS without_issue FOR TESTING.
+    METHODS with_exmeption FOR TESTING.
   PROTECTED SECTION.
     METHODS get_cut ABSTRACT RETURNING VALUE(result) TYPE REF TO y_check_base.
     METHODS get_code_with_issue ABSTRACT RETURNING VALUE(result) TYPE char255_tab.
     METHODS get_code_without_issue ABSTRACT RETURNING VALUE(result) TYPE char255_tab.
     METHODS get_code_with_exemption ABSTRACT RETURNING VALUE(result) TYPE char255_tab.
+    METHODS get_expected_count RETURNING VALUE(result) TYPE i.
   PRIVATE SECTION.
     DATA cut TYPE REF TO y_check_base.
     METHODS setup.
@@ -21,6 +22,7 @@ CLASS y_unit_test_base DEFINITION PUBLIC ABSTRACT FOR TESTING RISK LEVEL HARMLES
     METHODS then_exemption.
     METHODS then_no_exemption.
     METHODS get_issue_count RETURNING VALUE(result) TYPE i.
+    METHODS has_pseudo_comment RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -30,25 +32,30 @@ CLASS y_unit_test_base IMPLEMENTATION.
     cl_abap_unit_assert=>assert_bound(  cut ).
   ENDMETHOD.
 
-  METHOD issue.
+  METHOD with_issue.
     given_code_with_issue( ).
     when_run( ).
     then_issue( ).
     then_no_exemption( ).
   ENDMETHOD.
 
-  METHOD no_issue.
+  METHOD without_issue.
     given_code_without_issue( ).
     when_run( ).
     then_no_issue( ).
     then_no_exemption( ).
   ENDMETHOD.
 
-  METHOD exmeption.
+  METHOD with_exmeption.
+    CHECK has_pseudo_comment( ).
     given_code_with_exemption( ).
     when_run( ).
     then_no_issue( ).
     then_exemption( ).
+  ENDMETHOD.
+
+  METHOD get_expected_count.
+    result = 1.
   ENDMETHOD.
 
   METHOD setup.
@@ -78,7 +85,7 @@ CLASS y_unit_test_base IMPLEMENTATION.
 
   METHOD then_issue.
     cl_abap_unit_assert=>assert_equals( act = get_issue_count( )
-                                        exp = 1 ).
+                                        exp = get_expected_count( ) ).
   ENDMETHOD.
 
   METHOD then_no_issue.
@@ -87,7 +94,7 @@ CLASS y_unit_test_base IMPLEMENTATION.
 
   METHOD then_exemption.
     cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_pseudo_comments( )
-                                        exp = 1 ).
+                                        exp = get_expected_count( ) ).
   ENDMETHOD.
 
   METHOD then_no_exemption.
@@ -98,6 +105,10 @@ CLASS y_unit_test_base IMPLEMENTATION.
     result = COND #( WHEN cut->settings-prio = y_check_base=>c_error THEN cut->statistics->get_number_errors( )
                      WHEN cut->settings-prio = y_check_base=>c_warning THEN cut->statistics->get_number_warnings( )
                      WHEN cut->settings-prio = y_check_base=>c_info THEN cut->statistics->get_number_notes( ) ).
+  ENDMETHOD.
+
+  METHOD has_pseudo_comment.
+    result = xsdbool( cut->settings-pseudo_comment IS NOT INITIAL ).
   ENDMETHOD.
 
 ENDCLASS.
