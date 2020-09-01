@@ -120,12 +120,12 @@ CLASS ltc_check_configuration IMPLEMENTATION.
   METHOD then_expect.
     cl_abap_unit_assert=>assert_equals( act = actual
                                         exp = expected
-                                        quit = if_abap_unit_constant=>quit-no ).
+                                        quit = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD then_expect_no_result.
     cl_abap_unit_assert=>assert_initial( act = actual
-                                         quit = if_abap_unit_constant=>quit-no ).
+                                         quit = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD cleanup.
