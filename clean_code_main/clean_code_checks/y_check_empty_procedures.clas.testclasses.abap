@@ -85,6 +85,7 @@ CLASS ltc_form IMPLEMENTATION.
       ( ' START-OF-SELECTION. ' )
       ( '   FORM example. ' )
       ( '     "comment' )
+      ( '     "comment' )
       ( '   ENDFORM. ' )
     ).
   ENDMETHOD.
@@ -104,6 +105,7 @@ CLASS ltc_form IMPLEMENTATION.
       ( ' REPORT ut_test. ' )
       ( ' START-OF-SELECTION. ' )
       ( '   FORM example. ' )
+      ( '     "comment' )
       ( '     "comment' )
       ( '   ENDFORM. "#EC EMPTY_PROCEDURE ' )
     ).
