@@ -18,6 +18,7 @@ CLASS ltc_if IMPLEMENTATION.
       ( ' START-OF-SELECTION.' )
       ( '   DATA val TYPE i VALUE 1.' )
       ( '   IF val EQ 8.' )
+      ( '     val = 2.' )
       ( '   ENDIF.' )
     ).
   ENDMETHOD.
@@ -114,8 +115,8 @@ CLASS ltc_check IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT ut_test.' )
       ( ' START-OF-SELECTION.' )
-      ( '   DATA(skip) = 0.' )
-      ( '   CHECK skip = 1. ' )
+      ( '   DATA(skip) = 1.' )
+      ( '   CHECK skip = 2. ' )
     ).
   ENDMETHOD.
 
@@ -132,8 +133,8 @@ CLASS ltc_check IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT ut_test.' )
       ( ' START-OF-SELECTION.' )
-      ( '   DATA(skip) = 0.' )
-      ( '   CHECK skip = 1. "#EC CI_MAGIC' )
+      ( '   DATA(skip) = 1.' )
+      ( '   CHECK skip = 2. "#EC CI_MAGIC' )
     ).
   ENDMETHOD.
 
