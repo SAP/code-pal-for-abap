@@ -56,6 +56,8 @@ To understand how the checks work, please refer to the [Check Documentation](/do
 
 Then simply execute the Checks.
 
+Note: You can simulate the checks using the `Y_DEMO_FAILURES` class. 
+
 ## Further Reading
 * [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md)
 
