@@ -87,7 +87,7 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
     ENDIF.
 
     raise_error( statement_level     = statement-level
-                 statement_index     = index + 1
+                 statement_index     = structure-stmnt_to
                  statement_from      = statement-to
                  error_priority      = check_configuration-prio ).
   ENDMETHOD.

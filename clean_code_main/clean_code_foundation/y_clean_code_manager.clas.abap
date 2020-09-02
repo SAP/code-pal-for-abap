@@ -1,37 +1,23 @@
-CLASS y_clean_code_manager DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
-
+CLASS y_clean_code_manager DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
-    INTERFACES y_if_clean_code_manager .
-
+    INTERFACES y_if_clean_code_manager.
+    ALIASES calculate_obj_creation_date FOR y_if_clean_code_manager~calculate_obj_creation_date.
+    ALIASES read_check_customizing FOR y_if_clean_code_manager~read_check_customizing..
   PROTECTED SECTION.
-private section.
-
-  data OBJECT_CREATION_DATE type ref to Y_IF_OBJECT_CREATION_DATE .
-
-  methods DETERMINE_PROFILES
-    importing
-      !USERNAME type XUBNAME
-    returning
-      value(RESULT) type STRING_TABLE
-    raising
-      YCX_NO_CHECK_CUSTOMIZING .
-  methods DETERMINE_CHECKS
-    importing
-      !PROFILE type STRING
-      !CHECKID type SEOCLSNAME
-      !OBJ_CREATION_DATE type DATUM
-    returning
-      value(RESULT) type Y_IF_CLEAN_CODE_MANAGER=>CHECK_CONFIGURATIONS
-    raising
-      YCX_NO_CHECK_CUSTOMIZING .
+  PRIVATE SECTION.
+    DATA object_creation_date TYPE REF TO y_if_object_creation_date.
+    METHODS determine_profiles IMPORTING username TYPE xubname
+                               RETURNING VALUE(result) TYPE string_table
+                               RAISING ycx_no_check_customizing.
+    METHODS determine_checks IMPORTING profile TYPE string
+                                       checkid TYPE seoclsname
+                                       obj_creation_date TYPE datum
+                             RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configurations
+                             RAISING ycx_no_check_customizing .
 ENDCLASS.
 
 
-
-CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
+CLASS y_clean_code_manager IMPLEMENTATION.
 
 
   METHOD determine_checks.
@@ -173,7 +159,7 @@ CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD y_if_clean_code_manager~calculate_obj_creation_date.
+  METHOD calculate_obj_creation_date.
     IF object_creation_date IS NOT BOUND.
       object_creation_date = NEW y_object_creation_date( ).
     ENDIF.
@@ -191,7 +177,7 @@ CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD y_if_clean_code_manager~read_check_customizing.
+  METHOD read_check_customizing.
     TRY.
         DATA(profiles) = determine_profiles( username ).
       CATCH ycx_no_check_customizing.

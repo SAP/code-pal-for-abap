@@ -1,20 +1,18 @@
-CLASS y_scan_manager_double DEFINITION PUBLIC INHERITING FROM y_ref_scan_manager.
+CLASS y_ref_scan_manager_double DEFINITION PUBLIC INHERITING FROM y_ref_scan_manager.
   PUBLIC SECTION.
-    TYPES str TYPE c LENGTH 255.
-    TYPES strtab TYPE STANDARD TABLE OF str.
     METHODS set_ref_scan REDEFINITION.
+    METHODS inject_code IMPORTING source TYPE char255_tab.
   PROTECTED SECTION.
-    METHODS inject_code IMPORTING source TYPE strtab.
   PRIVATE SECTION.
     DATA source_code TYPE sci_include.
-    METHODS syntax_check IMPORTING source TYPE strtab.
-    METHODS convert_code IMPORTING source TYPE strtab
+    METHODS syntax_check IMPORTING source TYPE char255_tab.
+    METHODS convert_code IMPORTING source TYPE char255_tab
                          RETURNING VALUE(result) TYPE sci_include.
 ENDCLASS.
 
 
 
-CLASS Y_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
+CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
 
   METHOD syntax_check.
     DATA program TYPE string.

@@ -1,4 +1,4 @@
-CLASS ltd_ref_scan_manager_test DEFINITION FOR TESTING INHERITING FROM y_scan_manager_double.
+CLASS ltd_ref_scan_manager_test DEFINITION FOR TESTING INHERITING FROM y_ref_scan_manager_double.
   PUBLIC SECTION.
     METHODS:
       set_data_without_test,

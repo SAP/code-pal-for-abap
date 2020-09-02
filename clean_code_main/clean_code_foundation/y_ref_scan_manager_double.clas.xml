@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>Y_SCAN_MANAGER_DOUBLE</CLSNAME>
+    <CLSNAME>Y_REF_SCAN_MANAGER_DOUBLE</CLSNAME>
     <LANGU>E</LANGU>
     <DESCRIPT>Scan Manager</DESCRIPT>
     <STATE>1</STATE>
