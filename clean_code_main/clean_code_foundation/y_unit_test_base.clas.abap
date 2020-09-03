@@ -6,9 +6,9 @@ CLASS y_unit_test_base DEFINITION PUBLIC ABSTRACT FOR TESTING RISK LEVEL HARMLES
     METHODS with_exmeption FOR TESTING.
   PROTECTED SECTION.
     METHODS get_cut ABSTRACT RETURNING VALUE(result) TYPE REF TO y_check_base.
-    METHODS get_code_with_issue ABSTRACT RETURNING VALUE(result) TYPE char255_tab.
-    METHODS get_code_without_issue ABSTRACT RETURNING VALUE(result) TYPE char255_tab.
-    METHODS get_code_with_exemption ABSTRACT RETURNING VALUE(result) TYPE char255_tab.
+    METHODS get_code_with_issue ABSTRACT RETURNING VALUE(result) TYPE y_char255_tab.
+    METHODS get_code_without_issue ABSTRACT RETURNING VALUE(result) TYPE y_char255_tab.
+    METHODS get_code_with_exemption ABSTRACT RETURNING VALUE(result) TYPE y_char255_tab.
     METHODS get_expected_count RETURNING VALUE(result) TYPE i.
   PRIVATE SECTION.
     DATA cut TYPE REF TO y_check_base.
@@ -102,9 +102,9 @@ CLASS y_unit_test_base IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_issue_count.
-    result = COND #( WHEN cut->settings-prio = y_check_base=>c_error THEN cut->statistics->get_number_errors( )
-                     WHEN cut->settings-prio = y_check_base=>c_warning THEN cut->statistics->get_number_warnings( )
-                     WHEN cut->settings-prio = y_check_base=>c_info THEN cut->statistics->get_number_notes( ) ).
+    result = COND #( WHEN cut->settings-prio = cl_ci_test_root=>c_error   THEN cut->statistics->get_number_errors( )
+                     WHEN cut->settings-prio = cl_ci_test_root=>c_warning THEN cut->statistics->get_number_warnings( )
+                     WHEN cut->settings-prio = cl_ci_test_root=>c_note    THEN cut->statistics->get_number_notes( ) ).
   ENDMETHOD.
 
   METHOD has_pseudo_comment.
