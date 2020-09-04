@@ -359,7 +359,7 @@ CLASS y_demo_failures IMPLEMENTATION.
 
 
   METHOD comment_position.
-    " Temporary code
+  " Temporary code
     DATA(active) = abap_true.
   ENDMETHOD.
 
