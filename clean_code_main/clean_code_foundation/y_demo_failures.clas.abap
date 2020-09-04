@@ -63,7 +63,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS function.
     METHODS comment_position.
     METHODS comment_type.
-    METHODS cx_root_usage RAISING cx_root.
+    METHODS cx_root_usage.
     METHODS cyclomatic_complexity.
     METHODS declaration_in_if.
     METHODS sub_assign_read_table.
@@ -90,9 +90,9 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS returning_name RETURNING VALUE(name) TYPE string. "#EC NUM_OUTPUT_PARA
     METHODS self_reference.
     METHODS test_seam_usage.
-    METHODS multiple_pseudo_comments IMPORTING name TYPE string
-                                               surname TYPE string OPTIONAL
-                                               active TYPE abap_bool OPTIONAL
+    METHODS multiple_pseudo_comments IMPORTING name       TYPE string
+                                               surname    TYPE string OPTIONAL
+                                               active     TYPE abap_bool OPTIONAL
                                      RETURNING VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
@@ -105,13 +105,14 @@ ENDCLASS.
 
 
 
-CLASS Y_DEMO_FAILURES IMPLEMENTATION.
+CLASS y_demo_failures IMPLEMENTATION.
 
 
   METHOD test_seam_usage.
-    TEST-SEAM read_report_name.
-      DATA(report_name) = sy-repid.
-    END-TEST-SEAM.
+    " SAP_BASIS >= 7.50
+    " TEST-SEAM read_report_name.
+    "   DATA(report_name) = sy-repid.
+    " END-TEST-SEAM.
   ENDMETHOD.
 
 
@@ -229,7 +230,7 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
   METHOD multiple_pseudo_comments.
-  ENDMETHOD.                                     "#EC EMPTY_PROCEDURE
+  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
 
 
   METHOD method_return_bool.
@@ -296,7 +297,7 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   METHOD empty_catches.
     TRY.
         DATA(string) = 1.
-      CATCH cx_sy_no_reference.
+      CATCH ycx_entry_not_found.
     ENDTRY.
   ENDMETHOD.
 
@@ -344,7 +345,11 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
   METHOD cx_root_usage.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+    TRY.
+        RAISE EXCEPTION TYPE ycx_entry_not_found.
+      CATCH cx_root.
+    ENDTRY.
+  ENDMETHOD.
 
 
   METHOD comment_type.
