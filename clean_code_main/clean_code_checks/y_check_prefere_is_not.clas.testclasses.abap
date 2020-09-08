@@ -42,7 +42,7 @@ CLASS local_test_class IMPLEMENTATION.
 
       ( ' START-OF-SELECTION.      ' )
       ( '   DATA(count) = 0. ' )
-      ( '   IF NOT count IS INITIAL. "#EC NOT_IS ' )
+      ( '   IF NOT count IS INITIAL. "#EC PREFERE_IS_NOT ' )
       ( '     count = 1. ' )
       ( '   ENDIF. ' )
     ).

@@ -20,7 +20,7 @@ CLASS y_check_prefere_is_not IMPLEMENTATION.
     version     = '0000'.
     has_documentation = abap_true.
 
-    settings-pseudo_comment = '"#EC NOT_IS' ##NO_TEXT.
+    settings-pseudo_comment = '"#EC PREFERE_IS_NOT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }prefere-is-not-to-not-is.md|.
