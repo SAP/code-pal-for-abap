@@ -74,32 +74,32 @@ CLASS ltc_check_configuration IMPLEMENTATION.
 
   METHOD given_error_threshold_one.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = 'E' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_error threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_error_threshold_five.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = 'E' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_error threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_note_threshold_one.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = 'N' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_note threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_note_threshold_five.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = 'N' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_note threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_warning_threshold_five.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = 'W' threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_warning threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD given_warning_threshold_one.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = 'W' threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_warning threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
   ENDMETHOD.
 
   METHOD when_eight_errors.
@@ -143,37 +143,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_error_threshold_one( ).
     given_error_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_error_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_five( ).
     given_error_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_error_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_error_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_five( ).
     given_error_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
   ENDMETHOD.
 
@@ -187,37 +187,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_error_threshold_one( ).
     given_note_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_note_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_five( ).
     given_note_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_note_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_note_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_five( ).
     given_note_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 5 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 5 ] ).
     cleanup( ).
   ENDMETHOD.
 
@@ -231,37 +231,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_error_threshold_one( ).
     given_warning_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_warning_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_five( ).
     given_warning_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_warning_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_one( ).
     given_warning_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_error_threshold_five( ).
     given_warning_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 5 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 5 ] ).
     cleanup( ).
   ENDMETHOD.
 
@@ -275,37 +275,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_note_threshold_one( ).
     given_error_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_error_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_five( ).
     given_error_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_error_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_error_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 5 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 5 ] ).
     cleanup( ).
 
     given_note_threshold_five( ).
     given_error_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
   ENDMETHOD.
 
@@ -319,37 +319,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_note_threshold_one( ).
     given_note_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_note_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_five( ).
     given_note_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_note_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_note_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_five( ).
     given_note_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
   ENDMETHOD.
 
@@ -363,37 +363,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_note_threshold_one( ).
     given_warning_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_warning_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_five( ).
     given_warning_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_warning_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_note_threshold_one( ).
     given_warning_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 5 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 5 ] ).
     cleanup( ).
 
     given_note_threshold_five( ).
     given_warning_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
   ENDMETHOD.
 
@@ -407,37 +407,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_warning_threshold_one( ).
     given_error_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_error_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_five( ).
     given_error_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_error_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_error_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 5 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 5 ] ).
     cleanup( ).
 
     given_warning_threshold_five( ).
     given_error_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'E' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
     cleanup( ).
   ENDMETHOD.
 
@@ -451,37 +451,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_warning_threshold_one( ).
     given_note_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_note_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_five( ).
     given_note_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'N' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_note_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_note_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_five( ).
     given_note_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 5 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 5 ] ).
     cleanup( ).
   ENDMETHOD.
 
@@ -495,37 +495,37 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     given_warning_threshold_one( ).
     given_warning_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_warning_threshold_five( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_five( ).
     given_warning_threshold_one( ).
     when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_warning_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_one( ).
     given_warning_threshold_five( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
 
     given_warning_threshold_five( ).
     given_warning_threshold_one( ).
     when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = 'W' threshold = 1 ] ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
   ENDMETHOD.
 

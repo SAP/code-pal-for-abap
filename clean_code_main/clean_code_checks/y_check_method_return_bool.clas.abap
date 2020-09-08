@@ -41,7 +41,7 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     settings-pseudo_comment = '"#EC METH_RET_BOOL' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-prio = 'W'.
+    settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }method-return-bool.md|.
 
     y_message_registration=>add_message(

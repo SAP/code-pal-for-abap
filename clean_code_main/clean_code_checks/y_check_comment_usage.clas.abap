@@ -71,7 +71,7 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
     version = '0000'.
     has_documentation = abap_true.
 
-    settings-prio = 'N'.
+    settings-prio = c_note.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
 

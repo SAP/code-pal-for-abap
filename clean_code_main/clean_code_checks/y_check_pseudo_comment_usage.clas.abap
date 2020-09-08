@@ -63,7 +63,7 @@ CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
-    settings-prio = 'N'.
+    settings-prio = c_note.
 
     y_message_registration=>add_message(
       EXPORTING
