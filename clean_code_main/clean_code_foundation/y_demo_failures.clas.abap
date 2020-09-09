@@ -95,7 +95,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
                                                active     TYPE abap_bool OPTIONAL
                                      RETURNING VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
     METHODS prefere_is_not_to_not_is.
-    METHODS prefere_case_to_elseif.
+    METHODS prefer_case_to_elseif.
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
     DATA attribute_8 TYPE string.
@@ -349,7 +349,7 @@ CLASS y_demo_failures IMPLEMENTATION.
   METHOD cx_root_usage.
     TRY.
         RAISE EXCEPTION TYPE ycx_entry_not_found.
-      CATCH cx_root.
+      CATCH cx_root. "#EC EMPTY_CATCH
     ENDTRY.
   ENDMETHOD.
 
@@ -401,7 +401,7 @@ CLASS y_demo_failures IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD prefere_case_to_elseif.
+  METHOD prefer_case_to_elseif.
     DATA(value) = 0.
 
     IF sy-mandt = 000. "#EC CI_MAGIC

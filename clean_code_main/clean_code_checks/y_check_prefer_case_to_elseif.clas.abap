@@ -1,4 +1,4 @@
-CLASS y_check_prefere_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
   PROTECTED SECTION.
@@ -19,7 +19,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_prefere_case_to_elseif IMPLEMENTATION.
+CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -31,9 +31,9 @@ CLASS y_check_prefere_case_to_elseif IMPLEMENTATION.
     version     = '0000'.
     has_documentation = abap_true.
 
-    settings-pseudo_comment = '"#EC PREFERE_CASE' ##NO_TEXT.
+    settings-pseudo_comment = '"#EC PREFER_CASE' ##NO_TEXT.
     settings-threshold = 5.
-    settings-documentation = |{ c_docs_path-checks }prefere-case-to-elseif.md|.
+    settings-documentation = |{ c_docs_path-checks }prefer-case-to-elseif.md|.
 
     y_message_registration=>add_message(
       EXPORTING

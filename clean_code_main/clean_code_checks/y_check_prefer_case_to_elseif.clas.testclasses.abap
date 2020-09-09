@@ -9,7 +9,7 @@ ENDCLASS.
 CLASS ltc_single_if IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefere_case_to_elseif( ).
+    result ?= NEW y_check_prefer_case_to_elseif( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -67,7 +67,7 @@ CLASS ltc_single_if IMPLEMENTATION.
       ( ' START-OF-SELECTION.                   ' )
       ( '  DATA(value) = 0.                     ' )
       ( '                                       ' )
-      ( '  IF sy-mandt = 000. "#EC PREFERE_CASE ' )
+      ( '  IF sy-mandt = 000. "#EC PREFER_CASE  ' )
       ( '    value = 0.                         ' )
       ( '  ELSEIF sy-mandt = 100.               ' )
       ( '    value = 1.                         ' )
@@ -96,7 +96,7 @@ ENDCLASS.
 CLASS ltc_multiples_if IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefere_case_to_elseif( ).
+    result ?= NEW y_check_prefer_case_to_elseif( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -180,7 +180,7 @@ CLASS ltc_multiples_if IMPLEMENTATION.
       ( '      value = 2.                         ' )
       ( '    ENDIF.                               ' )
       ( |  ELSEIF sy-langu = 'DE'.                | )
-      ( '    IF sy-mandt = 300. "#EC PREFERE_CASE ' )
+      ( '    IF sy-mandt = 300. "#EC PREFER_CASE  ' )
       ( '      value = 3.                         ' )
       ( '    ELSEIF sy-mandt = 400.               ' )
       ( '      value = 4.                         ' )
