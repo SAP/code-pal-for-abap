@@ -94,6 +94,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
                                                surname    TYPE string OPTIONAL
                                                active     TYPE abap_bool OPTIONAL
                                      RETURNING VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
+    METHODS prefere_is_not_to_not_is.
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
     DATA attribute_8 TYPE string.
@@ -390,4 +391,13 @@ CLASS y_demo_failures IMPLEMENTATION.
   METHOD ext_call_in_prod_code.
     SUBMIT demo_program_submit_rep AND RETURN.
   ENDMETHOD.
+
+
+  METHOD prefere_is_not_to_not_is.
+    IF NOT attribute_1 IS INITIAL.
+      attribute_1 = attribute_2.
+    ENDIF.
+  ENDMETHOD.
+
+
 ENDCLASS.
