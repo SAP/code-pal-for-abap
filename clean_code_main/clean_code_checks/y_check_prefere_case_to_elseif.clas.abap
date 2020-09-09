@@ -32,6 +32,7 @@ CLASS y_check_prefere_case_to_elseif IMPLEMENTATION.
     has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC PREFERE_CASE' ##NO_TEXT.
+    settings-threshold = 5.
     settings-documentation = |{ c_docs_path-checks }prefere-case-to-elseif.md|.
 
     y_message_registration=>add_message(
