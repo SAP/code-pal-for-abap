@@ -110,7 +110,7 @@ ENDCLASS.
 CLASS y_demo_failures IMPLEMENTATION.
 
 
-  METHOD test_seam_usage.
+  METHOD test_seam_usage. "#EC EMPTY_PROCEDURE
     " SAP_BASIS >= 7.50
     " TEST-SEAM read_report_name.
     "   DATA(report_name) = sy-repid.
@@ -404,17 +404,17 @@ CLASS y_demo_failures IMPLEMENTATION.
   METHOD prefere_case_to_elseif.
     DATA(value) = 0.
 
-    IF sy-mandt = 000.
+    IF sy-mandt = 000. "#EC CI_MAGIC
       value = 0.
-    ELSEIF sy-mandt = 100.
+    ELSEIF sy-mandt = 100. "#EC CI_MAGIC
       value = 1.
-    ELSEIF sy-mandt = 200.
+    ELSEIF sy-mandt = 200. "#EC CI_MAGIC
       value = 2.
-    ELSEIF sy-mandt = 300.
+    ELSEIF sy-mandt = 300. "#EC CI_MAGIC
       value = 3.
-    ELSEIF sy-mandt = 400.
+    ELSEIF sy-mandt = 400. "#EC CI_MAGIC
       value = 4.
-    ELSEIF sy-mandt = 500.
+    ELSEIF sy-mandt = 500. "#EC CI_MAGIC
       value = 5.
     ENDIF.
   ENDMETHOD.
