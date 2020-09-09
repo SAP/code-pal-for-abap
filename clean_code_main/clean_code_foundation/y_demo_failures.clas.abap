@@ -95,6 +95,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
                                                active     TYPE abap_bool OPTIONAL
                                      RETURNING VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
     METHODS prefere_is_not_to_not_is.
+    METHODS prefere_case_to_elseif.
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
     DATA attribute_8 TYPE string.
@@ -399,5 +400,23 @@ CLASS y_demo_failures IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
+  METHOD prefere_case_to_elseif.
+    DATA(value) = 0.
+
+    IF sy-mandt = 000.
+      value = 0.
+    ELSEIF sy-mandt = 100.
+      value = 1.
+    ELSEIF sy-mandt = 200.
+      value = 2.
+    ELSEIF sy-mandt = 300.
+      value = 3.
+    ELSEIF sy-mandt = 400.
+      value = 4.
+    ELSEIF sy-mandt = 500.
+      value = 5.
+    ENDIF.
+  ENDMETHOD.
 
 ENDCLASS.
