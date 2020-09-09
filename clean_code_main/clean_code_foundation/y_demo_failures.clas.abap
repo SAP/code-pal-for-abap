@@ -110,12 +110,12 @@ ENDCLASS.
 CLASS y_demo_failures IMPLEMENTATION.
 
 
-  METHOD test_seam_usage. "#EC EMPTY_PROCEDURE
+  METHOD test_seam_usage.
     " SAP_BASIS >= 7.50
     " TEST-SEAM read_report_name.
     "   DATA(report_name) = sy-repid.
     " END-TEST-SEAM.
-  ENDMETHOD.
+  ENDMETHOD. "#EC EMPTY_PROCEDURE
 
 
   METHOD sub_assign_read_table.
