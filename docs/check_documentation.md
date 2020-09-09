@@ -30,7 +30,7 @@
 - [Number Methods](checks/number-methods.md)
 - [Number Output Parameter](checks/number-output-parameter.md)
 - [Number of Public Attributes](checks/number-public-attributes.md)
-- [Prefer CASE to ELSEIF](checks/prefere-case-to-elseif.md)
+- [Prefer CASE to ELSEIF](checks/prefer-case-to-elseif.md)
 - [Prefer IS NOT to NOT IS](checks/prefere-is-not-to-not-is.md)
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
 - [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
