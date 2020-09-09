@@ -144,7 +144,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     enable_rfc( ).
 
     settings-object_created_on = '20190101'.
-    settings-prio = 'E'.
+    settings-prio = c_error.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
     settings-apply_on_test_code = abap_true.
@@ -181,8 +181,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       AND result-threshold >= <configuration>-threshold.
         result = <configuration>.
 
-      ELSEIF ( result-prio <> 'E' AND <configuration>-prio = 'E' )
-      OR     ( result-prio = 'N' AND <configuration>-prio = 'W' ).
+      ELSEIF ( result-prio <> c_error AND <configuration>-prio = c_error )
+      OR     ( result-prio = c_note AND <configuration>-prio = c_warning ).
         result = <configuration>.
       ENDIF.
     ENDLOOP.
