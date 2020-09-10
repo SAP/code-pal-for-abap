@@ -94,7 +94,8 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
                                                surname    TYPE string OPTIONAL
                                                active     TYPE abap_bool OPTIONAL
                                      RETURNING VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
-    METHODS prefere_is_not_to_not_is.
+    METHODS prefer_is_not_to_not_is.
+    METHODS prefer_case_to_elseif.
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
     DATA attribute_8 TYPE string.
@@ -114,7 +115,7 @@ CLASS y_demo_failures IMPLEMENTATION.
     " TEST-SEAM read_report_name.
     "   DATA(report_name) = sy-repid.
     " END-TEST-SEAM.
-  ENDMETHOD.
+  ENDMETHOD. "#EC EMPTY_PROCEDURE
 
 
   METHOD sub_assign_read_table.
@@ -348,7 +349,7 @@ CLASS y_demo_failures IMPLEMENTATION.
   METHOD cx_root_usage.
     TRY.
         RAISE EXCEPTION TYPE ycx_entry_not_found.
-      CATCH cx_root.
+      CATCH cx_root. "#EC EMPTY_CATCH
     ENDTRY.
   ENDMETHOD.
 
@@ -393,11 +394,29 @@ CLASS y_demo_failures IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD prefere_is_not_to_not_is.
+  METHOD prefer_is_not_to_not_is.
     IF NOT attribute_1 IS INITIAL.
       attribute_1 = attribute_2.
     ENDIF.
   ENDMETHOD.
 
+
+  METHOD prefer_case_to_elseif.
+    DATA(value) = 0.
+
+    IF sy-mandt = 000. "#EC CI_MAGIC
+      value = 0.
+    ELSEIF sy-mandt = 100. "#EC CI_MAGIC
+      value = 1.
+    ELSEIF sy-mandt = 200. "#EC CI_MAGIC
+      value = 2.
+    ELSEIF sy-mandt = 300. "#EC CI_MAGIC
+      value = 3.
+    ELSEIF sy-mandt = 400. "#EC CI_MAGIC
+      value = 4.
+    ELSEIF sy-mandt = 500. "#EC CI_MAGIC
+      value = 5.
+    ENDIF.
+  ENDMETHOD.
 
 ENDCLASS.

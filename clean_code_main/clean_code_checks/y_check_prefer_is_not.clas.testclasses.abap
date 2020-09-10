@@ -9,7 +9,7 @@ ENDCLASS.
 CLASS ltc_not_is_initial IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefere_is_not( ).
+    result ?= NEW y_check_prefer_is_not( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -42,7 +42,7 @@ CLASS ltc_not_is_initial IMPLEMENTATION.
 
       ( ' START-OF-SELECTION.      ' )
       ( '   DATA(count) = 0. ' )
-      ( '   IF NOT count IS INITIAL. "#EC PREFERE_IS_NOT ' )
+      ( '   IF NOT count IS INITIAL. "#EC PREFER_IS_NOT ' )
       ( '     count = 1. ' )
       ( '   ENDIF. ' )
     ).
@@ -61,7 +61,7 @@ ENDCLASS.
 CLASS ltc_not_contains_pattern IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefere_is_not( ).
+    result ?= NEW y_check_prefer_is_not( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -97,7 +97,7 @@ CLASS ltc_not_contains_pattern IMPLEMENTATION.
       ( ' START-OF-SELECTION.     ' )
       ( |   DATA(text) = 'text'. | )
       ( '   DATA(count) = 0. ' )
-      ( |   IF NOT text CP 't*'. "#EC PREFERE_IS_NOT | )
+      ( |   IF NOT text CP 't*'. "#EC PREFER_IS_NOT | )
       ( '     count = 1. ' )
       ( '   ENDIF. ' )
     ).
@@ -116,7 +116,7 @@ ENDCLASS.
 CLASS ltc_not_value IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefere_is_not( ).
+    result ?= NEW y_check_prefer_is_not( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -149,7 +149,7 @@ CLASS ltc_not_value IMPLEMENTATION.
 
       ( ' START-OF-SELECTION.      ' )
       ( '   DATA(count) = 0. ' )
-      ( |   IF NOT count = 0. "#EC PREFERE_IS_NOT | )
+      ( |   IF NOT count = 0. "#EC PREFER_IS_NOT | )
       ( '     count = 1. ' )
       ( '   ENDIF. ' )
     ).
@@ -168,7 +168,7 @@ ENDCLASS.
 CLASS ltc_and IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefere_is_not( ).
+    result ?= NEW y_check_prefer_is_not( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -204,7 +204,7 @@ CLASS ltc_and IMPLEMENTATION.
       ( ' START-OF-SELECTION.                      ' )
       ( '   DATA(count) = 0.                       ' )
       ( '   IF sy-subrc = 0                        ' )
-      ( '   AND NOT count = 1. "#EC PREFERE_IS_NOT ' )
+      ( '   AND NOT count = 1. "#EC PREFER_IS_NOT  ' )
       ( '     count = 1.                           ' )
       ( '   ENDIF.                                 ' )
     ).
@@ -224,7 +224,7 @@ ENDCLASS.
 CLASS ltc_or IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefere_is_not( ).
+    result ?= NEW y_check_prefer_is_not( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -260,7 +260,7 @@ CLASS ltc_or IMPLEMENTATION.
       ( ' START-OF-SELECTION.                     ' )
       ( '   DATA(count) = 0.                      ' )
       ( '   IF sy-subrc = 0                       ' )
-      ( '   OR NOT count = 1. "#EC PREFERE_IS_NOT ' )
+      ( '   OR NOT count = 1. "#EC PREFER_IS_NOT  ' )
       ( '     count = 1.                          ' )
       ( '   ENDIF.                                ' )
     ).
@@ -280,7 +280,7 @@ ENDCLASS.
 CLASS ltc_multiple_issues IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefere_is_not( ).
+    result ?= NEW y_check_prefer_is_not( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -319,7 +319,7 @@ CLASS ltc_multiple_issues IMPLEMENTATION.
       ( '   DATA(count) = 0.                      ' )
       ( '   IF sy-subrc = 0                       ' )
       ( '   OR NOT count = 1                      ' )
-      ( '   OR NOT count = 5. "#EC PREFERE_IS_NOT ' )
+      ( '   OR NOT count = 5. "#EC PREFER_IS_NOT  ' )
       ( '     count = 1.                          ' )
       ( '   ENDIF.                                ' )
     ).

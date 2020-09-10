@@ -1,4 +1,4 @@
-CLASS y_check_prefere_is_not DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_prefer_is_not DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
   PROTECTED SECTION.
@@ -8,7 +8,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_prefere_is_not IMPLEMENTATION.
+CLASS y_check_prefer_is_not IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -20,10 +20,10 @@ CLASS y_check_prefere_is_not IMPLEMENTATION.
     version     = '0000'.
     has_documentation = abap_true.
 
-    settings-pseudo_comment = '"#EC PREFERE_IS_NOT' ##NO_TEXT.
+    settings-pseudo_comment = '"#EC PREFER_IS_NOT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }prefere-is-not-to-not-is.md|.
+    settings-documentation = |{ c_docs_path-checks }prefer-is-not-to-not-is.md|.
 
     y_message_registration=>add_message(
       EXPORTING
