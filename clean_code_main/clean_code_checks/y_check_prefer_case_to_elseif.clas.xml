@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_PREFER_CASE_TO_ELSEIF</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Chain Declarations</DESCRIPT>
+    <DESCRIPT>Clean Code Check - Prefer CASE to ELSE IF</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
