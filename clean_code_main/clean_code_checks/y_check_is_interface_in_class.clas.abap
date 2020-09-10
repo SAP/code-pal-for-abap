@@ -91,10 +91,12 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
 
   METHOD inspect_tokens.
     CHECK get_token_abs( statement-from ) = 'METHODS'
-      AND NOT get_token_abs( statement-from + 1 ) = 'CONSTRUCTOR'
-      AND NOT get_token_abs( statement-from + 2 ) = 'ABSTRACT'
-      AND NOT get_token_abs( statement-to ) = 'REDEFINITION'.
-
+      AND get_token_abs( statement-from + 1 ) <> 'CONSTRUCTOR'
+      AND get_token_abs( statement-from + 2 ) <> 'ABSTRACT'
+      AND get_token_abs( statement-to ) <> 'REDEFINITION'.
+    CHECK get_token_abs( statement-from ) = 'METHODS'
+      AND get_token_abs( statement-from + 2 ) <> 'FOR'
+      AND get_token_abs( statement-from + 3 ) <> 'TESTING'.
     ADD 1 TO public_method_counter.
   ENDMETHOD.
 ENDCLASS.
