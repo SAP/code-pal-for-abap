@@ -38,18 +38,39 @@ CLASS y_check_prefere_is_not IMPLEMENTATION.
   METHOD inspect_tokens.
 
     CHECK get_token_abs( statement-from ) = 'IF'.
-    CHECK get_token_abs( statement-from + 1 ) = 'NOT'.
 
-    DATA(configuration) = detect_check_configuration( statement ).
+    DATA(tokens) = ref_scan_manager->get_tokens( ).
 
-    IF configuration IS INITIAL.
+    LOOP AT tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to
+    WHERE str = 'IF'
+    OR str = 'AND'
+    OR str = 'OR'.
+
+      TRY.
+          DATA(next_token) = tokens[ sy-tabix + 1 ].
+        CATCH cx_sy_itab_line_not_found.
+      ENDTRY.
+
+      IF next_token-str <> 'NOT'.
+        CONTINUE.
+      ENDIF.
+
+      DATA(configuration) = detect_check_configuration( statement ).
+
+      IF configuration IS INITIAL.
+        RETURN.
+      ENDIF.
+
+      raise_error( statement_level     = statement-level
+                   statement_index     = index
+                   statement_from      = statement-from
+                   error_priority      = configuration-prio ).
+
+      " Report the issue only once
       RETURN.
-    ENDIF.
 
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = configuration-prio ).
+    ENDLOOP.
 
   ENDMETHOD.
 
