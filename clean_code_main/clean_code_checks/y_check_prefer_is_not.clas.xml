@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_PREFER_IS_NOT</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Chain Declarations</DESCRIPT>
+    <DESCRIPT>Clean Code Check - Prefer IS NOT to NOT IS</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
