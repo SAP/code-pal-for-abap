@@ -14,24 +14,12 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Prefer IS NOT to NOT IS'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '0810'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC PREFER_IS_NOT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }prefer-is-not-to-not-is.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Prefer IS NOT to NOT IS!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Prefer IS NOT to NOT IS!' ).
   ENDMETHOD.
 
 

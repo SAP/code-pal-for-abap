@@ -5,27 +5,13 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_OPTIONAL_PARAMETERS</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Optional Parameters</DESCRIPT>
+    <DESCRIPT>Optional Parameters</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
     <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>Optional Parameters</ENTRY>
-     <LENGTH>54</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Split methods instead of adding OPTIONAL parameters!</ENTRY>
-     <LENGTH>82</LENGTH>
-    </item>
-   </TPOOL>
   </asx:values>
  </asx:abap>
 </abapGit>

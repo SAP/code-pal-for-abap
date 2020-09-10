@@ -5,27 +5,13 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_METHOD_RETURN_BOOL</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Method Name misleading for Boolean Return</DESCRIPT>
+    <DESCRIPT>Method Name Misleading for Boolean Return</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
     <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>Method Name misleading for Boolean Return Type</ENTRY>
-     <LENGTH>92</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Method &amp;1 has a misleading name for boolean return type!</ENTRY>
-     <LENGTH>122</LENGTH>
-    </item>
-   </TPOOL>
   </asx:values>
  </asx:abap>
 </abapGit>

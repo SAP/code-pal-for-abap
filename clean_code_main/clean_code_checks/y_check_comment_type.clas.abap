@@ -4,10 +4,8 @@ CLASS y_check_comment_type DEFINITION PUBLIC INHERITING FROM y_check_base CREATE
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
-    METHODS has_wrong_comment_type IMPORTING statement TYPE sstmnt
-                                   RETURNING VALUE(result) TYPE abap_bool.
-    METHODS get_first_character IMPORTING token TYPE stokesx
-                                   RETURNING VALUE(result) TYPE char1.
+    METHODS has_wrong_comment_type IMPORTING statement TYPE sstmnt RETURNING VALUE(result) TYPE abap_bool.
+    METHODS get_first_character IMPORTING token TYPE stokesx RETURNING VALUE(result) TYPE char1.
 ENDCLASS.
 
 CLASS y_check_comment_type IMPLEMENTATION.
@@ -15,22 +13,11 @@ CLASS y_check_comment_type IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Comment Type'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '123'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }comment-type.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name = me->myname
-        text = '[Clean Code]: Comment with ", not with *!'(102)
-      CHANGING
-        messages = me->scimessages ).
+    set_check_message( '[Clean Code]: Comment with ", not with *!' ).
   ENDMETHOD.
 
   METHOD inspect_tokens.

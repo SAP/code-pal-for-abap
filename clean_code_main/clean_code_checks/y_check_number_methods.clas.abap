@@ -45,23 +45,11 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Number of Methods'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '660'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC NUMBER_METHODS' ##NO_TEXT.
     settings-threshold = 20.
     settings-documentation = |{ c_docs_path-checks }number-methods.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: &1 methods, exceeding threshold of &2'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: &1 methods, exceeding threshold of &2' ).
   ENDMETHOD.
 
 

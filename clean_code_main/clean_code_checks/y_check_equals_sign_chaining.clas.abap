@@ -19,24 +19,12 @@ CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Equals sign chaining'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '320'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC EQUALS_CHAINING'.
     settings-documentation = |{ c_docs_path-checks }equals-sign-chaining.md|.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Values should not be allocated more than once within one statement!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Values should not be allocated more than once within one statement!' ).
   ENDMETHOD.
 
 

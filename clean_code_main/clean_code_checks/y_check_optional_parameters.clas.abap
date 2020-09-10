@@ -15,24 +15,12 @@ CLASS Y_CHECK_OPTIONAL_PARAMETERS IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Optional Parameters'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '800'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC OPTL_PARAM' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }optional-parameters.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Split methods instead of adding OPTIONAL parameters!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Split methods instead of adding OPTIONAL parameters!' ).
   ENDMETHOD.
 
   METHOD execute_check.

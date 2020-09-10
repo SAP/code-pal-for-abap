@@ -43,23 +43,11 @@ CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Number of Interfaces'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '630'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC NMBR_INTERFACES' ##NO_TEXT.
     settings-threshold = 4.
     settings-documentation = |{ c_docs_path-checks }number-interfaces.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: There are &1 interfaces, exceeding threshold of &2'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: There are &1 interfaces, exceeding threshold of &2' ).
   ENDMETHOD.
 
 

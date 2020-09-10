@@ -23,24 +23,12 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'FORM Routine Usage'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '330'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC CI_FORM' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }form-routine.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: "FORM" Routine should not be used!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: "FORM" Routine should not be used!' ).
   ENDMETHOD.
 
 

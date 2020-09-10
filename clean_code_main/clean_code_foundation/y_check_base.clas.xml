@@ -15,6 +15,18 @@
    <TPOOL>
     <item>
      <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Check Description</ENTRY>
+     <LENGTH>30</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>002</KEY>
+     <ENTRY>Check Message</ENTRY>
+     <LENGTH>120</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
      <KEY>106</KEY>
      <ENTRY>Maintain Attributes for the Code Inspector Check!</ENTRY>
      <LENGTH>132</LENGTH>

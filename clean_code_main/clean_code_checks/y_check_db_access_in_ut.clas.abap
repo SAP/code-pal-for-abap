@@ -31,12 +31,6 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Database Access within Unit Tests'(001).
-    category  = 'Y_CHECK_CATEGORY'.
-    position  = '180'.
-    version   = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC DB_ACCESS_UT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
@@ -46,13 +40,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-checks }db-access-in-ut.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Database access(es) within a Unit-Test should be removed!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Database access(es) within a Unit-Test should be removed!' ).
   ENDMETHOD.                    "CONSTRUCTOR
 
 

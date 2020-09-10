@@ -17,24 +17,12 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Boolean Input Parameter'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '020'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC BOOL_PARAM' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }boolean-input-parameter.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Split method instead of Boolean input parameter!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Split method instead of Boolean input parameter!' ).
   ENDMETHOD.
 
   METHOD execute_check.

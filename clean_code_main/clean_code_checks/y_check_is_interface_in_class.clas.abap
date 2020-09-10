@@ -22,25 +22,13 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Interface missing'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '390'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC INTF_IN_CLASS' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }interface-in-class.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: &1 public methods without interface'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: &1 public methods without interface' ).
   ENDMETHOD.
 
 

@@ -20,25 +20,13 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'RECEIVING Statement Usage'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position = '780'.
-    version = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC RECEIVING_USAGE' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }receiving-usage.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: ABAP Keyword: "RECEIVING", should not be used!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
-  ENDMETHOD.                    "CONSTRUCTOR
+    set_check_message( '[Clean Code]: ABAP Keyword: "RECEIVING", should not be used!' ).
+  ENDMETHOD.
 
 
   METHOD inspect_tokens.

@@ -25,23 +25,11 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Prefer CASE to ELSE IF'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '0805'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC PREFER_CASE' ##NO_TEXT.
     settings-threshold = 5.
     settings-documentation = |{ c_docs_path-checks }prefer-case-to-elseif.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Prefer CASE to ELSE IF for multiple alternative conditions!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Prefer CASE to ELSE IF for multiple alternative conditions!' ).
   ENDMETHOD.
 
 

@@ -46,25 +46,13 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Number of Executable Statements'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '600'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC CI_NOES' ##NO_TEXT.
     settings-threshold = 40.
     settings-documentation = |{ c_docs_path-checks }number-executable-statements.md|.
 
     add_obj_type( c_type_program ).
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: &1 executable statements in method, exceeds threshold &2'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: &1 executable statements in method, exceeds threshold &2' ).
   ENDMETHOD.
 
 

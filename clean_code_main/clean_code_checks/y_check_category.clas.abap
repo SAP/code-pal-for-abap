@@ -10,6 +10,8 @@ CLASS y_check_category DEFINITION
     METHODS if_ci_test~display_documentation
         REDEFINITION .
   PROTECTED SECTION.
+    METHODS get_class_description
+        RETURNING VALUE(result) TYPE string.
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -19,8 +21,8 @@ CLASS y_check_category IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
-    description = '[Clean Code]: Check Category'(000).
-    category    = 'CL_CI_CATEGORY_TOP'(001).
+    description = get_class_description(  ).
+    category    = 'CL_CI_CATEGORY_TOP'.
     position    = '001'.
   ENDMETHOD.
 
@@ -43,4 +45,14 @@ CLASS y_check_category IMPLEMENTATION.
             WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
     ENDIF.
   ENDMETHOD.
+
+
+  METHOD get_class_description.
+    TRY.
+      result = NEW cl_oo_class( myname )->class-descript.
+    CATCH cx_class_not_existent.
+      result = 'Description Not Available'.
+    ENDTRY.
+  ENDMETHOD.
+
 ENDCLASS.

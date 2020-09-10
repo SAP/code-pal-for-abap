@@ -16,11 +16,7 @@ CLASS Y_CHECK_PROFILE_USAGE IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Profile Usage'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '740'.
-    has_documentation = abap_true.
+    has_documentation = abap_false.
 
     settings-disable_on_testcode_selection = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
@@ -30,12 +26,7 @@ CLASS Y_CHECK_PROFILE_USAGE IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-prio = c_note.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name = me->myname
-        text       = '[Clean Code]: Profile is Active'(102)
-      CHANGING
-        messages   = me->scimessages ).
+    set_check_message( '[Clean Code]: Profile is Active' ).
   ENDMETHOD.
 
 

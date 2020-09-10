@@ -5,26 +5,12 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_PROFILE_USAGE</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Pseudo Comment Usage</DESCRIPT>
+    <DESCRIPT>Profile Usage</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>Profile Usage</ENTRY>
-     <LENGTH>30</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Profile is Active</ENTRY>
-     <LENGTH>100</LENGTH>
-    </item>
-   </TPOOL>
   </asx:values>
  </asx:abap>
 </abapGit>

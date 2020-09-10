@@ -39,25 +39,13 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
   METHOD constructor .
     super->constructor( ).
 
-    description = 'Magic Number Usage'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '420'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC CI_MAGIC' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_false.
     settings-documentation = |{ c_docs_path-checks }magic-number.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Magic Number Violation - &1 is a Magic Number'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Magic Number Violation - &1 is a Magic Number' ).
   ENDMETHOD.
 
 

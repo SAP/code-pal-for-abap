@@ -32,25 +32,13 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Empty Procedure'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '300'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC EMPTY_PROCEDURE' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }empty-procedure.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Empty Procedure should be removed!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Empty Procedure should be removed!' ).
   ENDMETHOD.
 
 

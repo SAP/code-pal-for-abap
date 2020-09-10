@@ -28,26 +28,14 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Declaration in IF'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '210'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC DECL_IN_IF' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }declaration-in-if.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Declarations in IF-Blocks should be removed!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
-  ENDMETHOD.                    "CONSTRUCTOR
+    set_check_message( '[Clean Code]: Declarations in IF-Blocks should be removed!' ).
+  ENDMETHOD.
 
 
   METHOD execute_check.
