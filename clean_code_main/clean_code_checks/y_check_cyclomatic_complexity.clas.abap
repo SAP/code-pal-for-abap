@@ -56,23 +56,11 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Cyclomatic Complexity'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '150'.
-    version     = '000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC CI_CYCLO' ##NO_TEXT.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }cyclomatic-complexity.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Cyclomatic complexity is &1, exceeding threshold of &2'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Cyclomatic complexity is &1, exceeding threshold of &2' ).
   ENDMETHOD.
 
 

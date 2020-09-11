@@ -13,24 +13,12 @@ CLASS y_check_omit_optional_exp IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Omit Optional EXPORTING'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '790'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC OPTL_EXP' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }omit-optional-exporting.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Omit the optional keyword EXPORTING!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Omit the optional keyword EXPORTING!' ).
   ENDMETHOD.
 
   METHOD inspect_tokens.

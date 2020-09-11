@@ -12,31 +12,19 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_CALL_METHOD_USAGE IMPLEMENTATION.
+CLASS y_check_call_method_usage IMPLEMENTATION.
 
 
   METHOD constructor.
     super->constructor( ).
-
-    description = 'CALL METHOD Usage'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position = '030'.
-    version = '0000'.
-    has_documentation = abap_true.
 
     settings-pseudo_comment = '"#EC CALL_METH_USAGE' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }call-method-usage.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: "CALL METHOD" Statement should not be used!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
-  ENDMETHOD.                    "CONSTRUCTOR
+    set_check_message( '[Clean Code]: "CALL METHOD" Statement should not be used!' ).
+  ENDMETHOD.
 
 
   METHOD inspect_tokens.

@@ -65,23 +65,12 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Comment Usage'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position = '120'.
-    version = '0000'.
-    has_documentation = abap_true.
-
     settings-prio = c_note.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: &1 comments found! This is &2% of the productive code, exceeding threshold of &3%'(102)
-      CHANGING
-        messages       = me->scimessages ).
-  ENDMETHOD.                    "CONSTRUCTOR
+    set_check_message( '[Clean Code]: &1 comments found! This is &2% of the productive code, exceeding threshold of &3%' ).
+  ENDMETHOD.
 
 
   METHOD execute_check.

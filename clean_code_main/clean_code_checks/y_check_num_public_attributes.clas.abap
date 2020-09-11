@@ -78,24 +78,12 @@ CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Number of Public Attributes'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '720'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC NUM_PUBLIC_ATTR' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
     settings-documentation = |{ c_docs_path-checks }number-public-attributes.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: &1 public attributes. All attributes should be private by default.'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: &1 public attributes. All attributes should be private by default.' ).
   ENDMETHOD.
 
 

@@ -16,25 +16,13 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Number of Output Parameters'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '690'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC NUM_OUTPUT_PARA' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 2.
     settings-documentation = |{ c_docs_path-checks }number-output-parameter.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Too many output parameters!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
-  ENDMETHOD.                    "CONSTRUCTOR
+    set_check_message( '[Clean Code]: Too many output parameters!' ).
+  ENDMETHOD.
 
 
   METHOD execute_check.

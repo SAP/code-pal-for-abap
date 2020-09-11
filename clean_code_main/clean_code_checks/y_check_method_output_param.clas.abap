@@ -61,25 +61,13 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Combination of Output Parameters'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '090'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC PARAMETER_OUT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
     settings-documentation = |{ c_docs_path-checks }method-output-parameter.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Combination of parameters(RETURNING/EXPORTING) should not be used!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
-  ENDMETHOD.                    "CONSTRUCTOR
+    set_check_message( '[Clean Code]: Combination of parameters(RETURNING/EXPORTING) should not be used!' ).
+  ENDMETHOD.
 
 
   METHOD execute_check.

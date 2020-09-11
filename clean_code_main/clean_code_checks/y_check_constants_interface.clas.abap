@@ -40,24 +40,12 @@ CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Constants Interface'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    version     = '0000'.
-    position    = '125'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC CONS_INTF' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }constants-interface.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: There are only constants in this interface!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: There are only constants in this interface!' ).
   ENDMETHOD.
 
 

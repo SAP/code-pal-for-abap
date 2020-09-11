@@ -5,27 +5,13 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_CHAIN_DECL_USAGE</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Chain Declarations</DESCRIPT>
+    <DESCRIPT>Chain Declarations Usage</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
     <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>Chain Declarations Usage</ENTRY>
-     <LENGTH>54</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Do not chain up-front declarations!</ENTRY>
-     <LENGTH>82</LENGTH>
-    </item>
-   </TPOOL>
   </asx:values>
  </asx:abap>
 </abapGit>

@@ -5,27 +5,13 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_DB_ACCESS_IN_UT</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Database Access within Unit Tests</DESCRIPT>
+    <DESCRIPT>Database Access within Unit Tests</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
     <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>Database Access within Unit Tests</ENTRY>
-     <LENGTH>66</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Database access(es) within a Unit-Test should be removed!</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-   </TPOOL>
   </asx:values>
  </asx:abap>
 </abapGit>

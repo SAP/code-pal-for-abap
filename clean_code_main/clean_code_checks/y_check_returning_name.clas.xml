@@ -5,27 +5,13 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_RETURNING_NAME</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Returning Name</DESCRIPT>
+    <DESCRIPT>Returning Name</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
     <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>Returning Name</ENTRY>
-     <LENGTH>54</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Consider calling the RETURNING parameter RESULT!</ENTRY>
-     <LENGTH>82</LENGTH>
-    </item>
-   </TPOOL>
   </asx:values>
  </asx:abap>
 </abapGit>

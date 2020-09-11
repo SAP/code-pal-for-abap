@@ -15,24 +15,12 @@ CLASS y_check_returning_name IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Returning Name'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position    = '785'.
-    version     = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC RET_NAME' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }returning-name.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: Consider calling the RETURNING parameter RESULT!'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
+    set_check_message( '[Clean Code]: Consider calling the RETURNING parameter RESULT!' ).
   ENDMETHOD.
 
   METHOD execute_check.

@@ -115,6 +115,10 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         REDEFINITION .
     METHODS keyword
         REDEFINITION .
+    METHODS set_check_message
+        IMPORTING message TYPE itex132.
+    METHODS get_class_description
+        RETURNING VALUE(result) TYPE string.
   PRIVATE SECTION.
     METHODS do_attributes_exist
       RETURNING
@@ -143,6 +147,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     super->constructor( ).
     enable_rfc( ).
 
+    description = get_class_description(  ).
+    category = 'Y_CHECK_CATEGORY'.
+    position = '000'.
+    version = '0000'.
+    has_documentation = abap_true.
+
     settings-object_created_on = '20190101'.
     settings-prio = c_error.
     settings-threshold = 5.
@@ -155,7 +165,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     INSERT VALUE #( test = me->myname
                     code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
-                    text = 'Maintain Attributes for the Code Inspector Check!'(106) ) INTO TABLE me->scimessages[].
+                    text = text-106 ) INTO TABLE me->scimessages[].
   ENDMETHOD.
 
 
@@ -712,4 +722,23 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
     UNASSIGN: <remote_rfc_enabled>, <remote_enabled>.
   ENDMETHOD.
+
+  METHOD set_check_message.
+    y_message_registration=>add_message(
+      EXPORTING
+        check_name     = myname
+        text           = message
+        pseudo_comment = settings-pseudo_comment
+      CHANGING
+        messages       = scimessages ).
+  ENDMETHOD.
+
+  METHOD get_class_description.
+    TRY.
+      result = NEW cl_oo_class( myname )->class-descript.
+    CATCH cx_class_not_existent.
+      result = 'Description Not Available'.
+    ENDTRY.
+  ENDMETHOD.
+
 ENDCLASS.

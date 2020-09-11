@@ -23,25 +23,13 @@ CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = 'Deprecated Key Word'(001).
-    category    = 'Y_CHECK_CATEGORY'.
-    position = '240'.
-    version = '0000'.
-    has_documentation = abap_true.
-
     settings-pseudo_comment = '"#EC DEPRECATED_KEY' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }deprecated-key-word.md|.
 
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = me->myname
-        text           = '[Clean Code]: "&1" is deprecated'(102)
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = me->scimessages ).
-  ENDMETHOD.                    "CONSTRUCTOR
+    set_check_message( '[Clean Code]: "&1" is deprecated' ).
+  ENDMETHOD.
 
 
   METHOD inspect_tokens.

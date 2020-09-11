@@ -5,27 +5,13 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_DECLARATION_IN_IF</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Clean Code Check - Declaration in IF</DESCRIPT>
+    <DESCRIPT>Declaration in IF</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
     <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>Declaration in IF</ENTRY>
-     <LENGTH>27</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>102</KEY>
-     <ENTRY>[Clean Code]: Declarations in IF-Blocks should be removed!</ENTRY>
-     <LENGTH>88</LENGTH>
-    </item>
-   </TPOOL>
   </asx:values>
  </asx:abap>
 </abapGit>
