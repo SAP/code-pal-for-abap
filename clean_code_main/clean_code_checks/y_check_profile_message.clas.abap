@@ -1,4 +1,4 @@
-CLASS y_check_profile_usage DEFINITION
+CLASS y_check_profile_message DEFINITION
   PUBLIC
   INHERITING FROM y_check_base
   CREATE PUBLIC .
@@ -10,7 +10,7 @@ CLASS y_check_profile_usage DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS Y_CHECK_PROFILE_USAGE IMPLEMENTATION.
+CLASS Y_CHECK_PROFILE_MESSAGE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -26,7 +26,7 @@ CLASS Y_CHECK_PROFILE_USAGE IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-prio = c_note.
 
-    set_check_message( '[Clean Code]: Profile is Active' ).
+    set_check_message( 'Code Pal for ABAP Profile is being used.' ).
   ENDMETHOD.
 
 
