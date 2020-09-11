@@ -34,7 +34,7 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
     settings-documentation = |{ c_docs_path-checks }check-statement-position.md|.
 
     set_check_message( '"CHECK" Statement should be the very first statement.' ).
-  ENDMETHOD.                    "CONSTRUCTOR
+  ENDMETHOD.
 
 
   METHOD execute_check.
