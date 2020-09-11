@@ -18,8 +18,8 @@ CLASS ltc_exporting IMPLEMENTATION.
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                               exporting_02 TYPE REF TO cl_abap_xsd ' )
+      ( '     METHODS example EXPORTING exporting_01 TYPE REF TO cl_oo_class ' )
+      ( '                               exporting_02 TYPE REF TO cl_oo_class ' )
       ( '                     RAISING  cx_dynamic_check. ' )
       ( ' ENDCLASS. ' )
 
@@ -36,7 +36,7 @@ CLASS ltc_exporting IMPLEMENTATION.
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
+      ( '     METHODS example EXPORTING exporting_01 TYPE REF TO cl_oo_class ' )
       ( '                     RAISING  cx_dynamic_check. ' )
       ( ' ENDCLASS. ' )
 
@@ -53,8 +53,8 @@ CLASS ltc_exporting IMPLEMENTATION.
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example EXPORTING exporting_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                               exporting_02 TYPE REF TO cl_abap_xsd ' )
+      ( '     METHODS example EXPORTING exporting_01 TYPE REF TO cl_oo_class ' )
+      ( '                               exporting_02 TYPE REF TO cl_oo_class ' )
       ( '                     RAISING  cx_dynamic_check. "#EC NUM_OUTPUT_PARA ' )
       ( ' ENDCLASS. ' )
 
@@ -87,8 +87,8 @@ CLASS ltc_changing IMPLEMENTATION.
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     CLASS-METHODS example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                              changing_02 TYPE REF TO cl_abap_xsd ' )
+      ( '     CLASS-METHODS example CHANGING changing_01 TYPE REF TO cl_oo_class ' )
+      ( '                              changing_02 TYPE REF TO cl_oo_class ' )
       ( '                     RAISING  cx_dynamic_check. ' )
       ( ' ENDCLASS. ' )
 
@@ -105,7 +105,7 @@ CLASS ltc_changing IMPLEMENTATION.
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     CLASS-METHODS example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
+      ( '     CLASS-METHODS example CHANGING changing_01 TYPE REF TO cl_oo_class ' )
       ( '                           RAISING  cx_dynamic_check. ' )
       ( ' ENDCLASS. ' )
 
@@ -122,8 +122,8 @@ CLASS ltc_changing IMPLEMENTATION.
 
       ( ' CLASS y_example_class DEFINITION. ' )
       ( '   PROTECTED SECTION. ' )
-      ( '     CLASS-METHODS example CHANGING changing_01 TYPE REF TO cl_abap_xsd ' )
-      ( '                              changing_02 TYPE REF TO cl_abap_xsd ' )
+      ( '     CLASS-METHODS example CHANGING changing_01 TYPE REF TO cl_oo_class ' )
+      ( '                              changing_02 TYPE REF TO cl_oo_class ' )
       ( '                     RAISING  cx_dynamic_check. "#EC NUM_OUTPUT_PARA ' )
       ( ' ENDCLASS. ' )
 

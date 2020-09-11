@@ -28,20 +28,20 @@ CLASS ltc_error_fail IMPLEMENTATION.
 
   METHOD external_call_in_ut.
 
-    SUBMIT demo_program_submit_rep AND RETURN.  "#EC EXT_CALL_UT
+    SUBMIT demo_program_submit_rep AND RETURN.         "#EC EXT_CALL_UT
 
     DATA date TYPE sy-datum.
     CALL FUNCTION 'DATE_TO_DAY' DESTINATION ''
       EXPORTING
-        date = sy-datum
+        date    = sy-datum
       IMPORTING
-         weekday = date.
+        weekday = date.
 
     CALL FUNCTION 'DATE_TO_DAY' IN UPDATE TASK
       EXPORTING
-        date = sy-datum
+        date    = sy-datum
       IMPORTING
-         weekday = date.
+        weekday = date.
 
     CALL FUNCTION 'DATE_TO_DAY' STARTING NEW TASK 'task' DESTINATION ''
       EXPORTING

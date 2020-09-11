@@ -20,7 +20,7 @@ CLASS local_test_class IMPLEMENTATION.
       ( '   PERFORM example. ' )
 
       ( ' FORM example. ' )
-      ( '   DATA file TYPE REF TO cl_abap_json.' )
+      ( '   DATA class TYPE REF TO cl_oo_class.' )
       ( ' ENDFORM.' )
     ).
   ENDMETHOD.
@@ -37,7 +37,7 @@ CLASS local_test_class IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD test. ' )
-      ( '     DATA file TYPE REF TO cl_abap_json.' )
+      ( '     DATA class TYPE REF TO cl_oo_class.' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -51,7 +51,7 @@ CLASS local_test_class IMPLEMENTATION.
       ( '   PERFORM example. ' )
 
       ( ' FORM example. ' )
-      ( '   DATA file TYPE REF TO cl_abap_json.' )
+      ( '   DATA class TYPE REF TO cl_oo_class.' )
       ( ' ENDFORM. "#EC CI_FORM' )
     ).
   ENDMETHOD.

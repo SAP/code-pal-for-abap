@@ -19,8 +19,7 @@ CLASS ltc_exporting IMPLEMENTATION.
       ( 'CLASS lcl_classname DEFINITION.' )
       ( '  PUBLIC SECTION.' )
       ( '    METHODS: get_user EXPORTING name TYPE abap_bool' )
-      ( '                      RETURNING VALUE(active) TYPE abap_bool' )
-      ( '                      RAISING   cx_sy_no_reference.' )
+      ( '                      RETURNING VALUE(active) TYPE abap_bool.' )
       ( 'ENDCLASS.' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION.' )
@@ -36,10 +35,8 @@ CLASS ltc_exporting IMPLEMENTATION.
 
       ( 'CLASS lcl_classname DEFINITION.' )
       ( '  PUBLIC SECTION.' )
-      ( '    METHODS: get_name RETURNING VALUE(result) TYPE abap_bool' )
-      ( '                      RAISING   cx_sy_no_reference.' )
-      ( '    METHODS: get_active RETURNING VALUE(result) TYPE abap_bool' )
-      ( '                        RAISING   cx_sy_no_reference.' )
+      ( '    METHODS: get_name RETURNING VALUE(result) TYPE abap_bool.' )
+      ( '    METHODS: get_active RETURNING VALUE(result) TYPE abap_bool.' )
       ( 'ENDCLASS.' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION.' )
@@ -58,8 +55,7 @@ CLASS ltc_exporting IMPLEMENTATION.
       ( 'CLASS lcl_classname DEFINITION.' )
       ( '  PUBLIC SECTION.' )
       ( '    METHODS: get_user EXPORTING name TYPE abap_bool' )
-      ( '                      RETURNING VALUE(active) TYPE abap_bool' )
-      ( '                      RAISING   cx_sy_no_reference. "#EC PARAMETER_OUT ' )
+      ( '                      RETURNING VALUE(active) TYPE abap_bool. "#EC PARAMETER_OUT ' )
       ( 'ENDCLASS.' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION.' )
@@ -92,8 +88,7 @@ CLASS ltc_changing IMPLEMENTATION.
       ( 'CLASS lcl_classname DEFINITION.' )
       ( '  PUBLIC SECTION.' )
       ( '    METHODS: get_user CHANGING  name TYPE abap_bool' )
-      ( '                      RETURNING VALUE(active) TYPE abap_bool' )
-      ( '                      RAISING   cx_sy_no_reference.' )
+      ( '                      RETURNING VALUE(active) TYPE abap_bool.' )
       ( 'ENDCLASS.' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION.' )
@@ -109,10 +104,8 @@ CLASS ltc_changing IMPLEMENTATION.
 
       ( 'CLASS lcl_classname DEFINITION.' )
       ( '  PUBLIC SECTION.' )
-      ( '    METHODS: get_name CHANGING VALUE(result) TYPE abap_bool' )
-      ( '                      RAISING  cx_sy_no_reference.' )
-      ( '    METHODS: get_active CHANGING VALUE(result) TYPE abap_bool' )
-      ( '                        RAISING  cx_sy_no_reference.' )
+      ( '    METHODS: get_name CHANGING VALUE(result) TYPE abap_bool.' )
+      ( '    METHODS: get_active CHANGING VALUE(result) TYPE abap_bool.' )
       ( 'ENDCLASS.' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION.' )
@@ -131,8 +124,7 @@ CLASS ltc_changing IMPLEMENTATION.
       ( 'CLASS lcl_classname DEFINITION.' )
       ( '  PUBLIC SECTION.' )
       ( '    METHODS: get_user CHANGING  name TYPE abap_bool' )
-      ( '                      RETURNING VALUE(active) TYPE abap_bool' )
-      ( '                      RAISING   cx_sy_no_reference. "#EC PARAMETER_OUT ' )
+      ( '                      RETURNING VALUE(active) TYPE abap_bool. "#EC PARAMETER_OUT ' )
       ( 'ENDCLASS.' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION.' )
