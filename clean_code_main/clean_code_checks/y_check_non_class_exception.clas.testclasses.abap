@@ -46,7 +46,6 @@ CLASS ltc_raise IMPLEMENTATION.
       ( '   METHOD example. ' )
       ( '     RAISE EXCEPTION TYPE cx_demo. ' )
       ( '     RAISE RESUMABLE EXCEPTION TYPE cx_demo. ' )
-      ( '     RAISE SHORTDUMP TYPE cx_demo. ' )
       ( '     RAISE EVENT event. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
@@ -120,7 +119,7 @@ CLASS ltc_message IMPLEMENTATION.
       ( '     DATA cflag TYPE abap_bool. ' )
       ( '     DATA(iflag) = COND i( WHEN cflag = abap_true  THEN 1 ' )
       ( '                           WHEN cflag = abap_false THEN 0 ' )
-      ( |                           ELSE THROW cx_demo_dyn_t100( MESSAGE e888(sabapdemos) WITH 'Illegal value!' ) ). | )
+      ( |                           ELSE THROW cx_demo_exception( ) ). | )
       ( '   ENDMETHOD.')
       ( ' ENDCLASS. ' )
     ).
