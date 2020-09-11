@@ -28,7 +28,7 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }form-routine.md|.
 
-    set_check_message( '[Clean Code]: "FORM" Routine should not be used!' ).
+    set_check_message( '"FORM" Routine should not be used!' ).
   ENDMETHOD.
 
 

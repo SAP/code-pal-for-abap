@@ -32,7 +32,7 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }empty-catch.md|.
 
-    set_check_message( '[Clean Code]: Empty catch should be removed!' ).
+    set_check_message( 'Empty catch should be removed!' ).
   ENDMETHOD.
 
 

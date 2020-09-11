@@ -28,7 +28,7 @@ CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }deprecated-key-word.md|.
 
-    set_check_message( '[Clean Code]: "&1" is deprecated' ).
+    set_check_message( '"&1" is deprecated' ).
   ENDMETHOD.
 
 

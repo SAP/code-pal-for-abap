@@ -27,7 +27,7 @@ CLASS Y_CHECK_CX_ROOT_USAGE IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }cx_root_usage.md|.
 
-    set_check_message( '[Clean Code]: CX_ROOT should not be used!' ).
+    set_check_message( 'CX_ROOT should not be used!' ).
   ENDMETHOD.
 
 

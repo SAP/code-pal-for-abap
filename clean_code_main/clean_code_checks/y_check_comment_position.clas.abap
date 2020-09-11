@@ -21,7 +21,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }comment-position.md|.
 
-    set_check_message( '[Clean Code]: Quote comments indent along with the statements they comment!' ).
+    set_check_message( 'Quote comments indent along with the statements they comment!' ).
   ENDMETHOD.
 
   METHOD inspect_tokens.

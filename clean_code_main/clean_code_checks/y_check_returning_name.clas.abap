@@ -20,7 +20,7 @@ CLASS y_check_returning_name IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }returning-name.md|.
 
-    set_check_message( '[Clean Code]: Consider calling the RETURNING parameter RESULT!' ).
+    set_check_message( 'Consider calling the RETURNING parameter RESULT!' ).
   ENDMETHOD.
 
   METHOD execute_check.

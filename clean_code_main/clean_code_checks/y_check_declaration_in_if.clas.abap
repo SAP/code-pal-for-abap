@@ -34,7 +34,7 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }declaration-in-if.md|.
 
-    set_check_message( '[Clean Code]: Declarations in IF-Blocks should be removed!' ).
+    set_check_message( 'Declarations in IF-Blocks should be removed!' ).
   ENDMETHOD.
 
 

@@ -54,7 +54,7 @@ CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
     settings-pseudo_comment = '"#EC CI_NESTING' ##NO_TEXT.
     settings-documentation = |{ c_docs_path-checks }maximum-nesting-depth.md|.
 
-    set_check_message( '[Clean Code]: Maximal nesting depth is &1, exceeding threshold of &2' ).
+    set_check_message( 'Maximal nesting depth is &1, exceeding threshold of &2' ).
   ENDMETHOD.
 
 

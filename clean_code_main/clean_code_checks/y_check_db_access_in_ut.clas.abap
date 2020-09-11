@@ -40,7 +40,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-checks }db-access-in-ut.md|.
 
-    set_check_message( '[Clean Code]: Database access(es) within a Unit-Test should be removed!' ).
+    set_check_message( 'Database access(es) within a Unit-Test should be removed!' ).
   ENDMETHOD.                    "CONSTRUCTOR
 
 

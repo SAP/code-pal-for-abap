@@ -18,7 +18,7 @@ CLASS y_check_omit_optional_exp IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }omit-optional-exporting.md|.
 
-    set_check_message( '[Clean Code]: Omit the optional keyword EXPORTING!' ).
+    set_check_message( 'Omit the optional keyword EXPORTING!' ).
   ENDMETHOD.
 
   METHOD inspect_tokens.

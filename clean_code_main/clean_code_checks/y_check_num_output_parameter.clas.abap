@@ -21,7 +21,7 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
     settings-threshold = 2.
     settings-documentation = |{ c_docs_path-checks }number-output-parameter.md|.
 
-    set_check_message( '[Clean Code]: Too many output parameters!' ).
+    set_check_message( 'Too many output parameters!' ).
   ENDMETHOD.
 
 

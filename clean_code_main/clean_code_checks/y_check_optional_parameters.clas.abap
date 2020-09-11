@@ -20,7 +20,7 @@ CLASS Y_CHECK_OPTIONAL_PARAMETERS IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }optional-parameters.md|.
 
-    set_check_message( '[Clean Code]: Split methods instead of adding OPTIONAL parameters!' ).
+    set_check_message( 'Split methods instead of adding OPTIONAL parameters!' ).
   ENDMETHOD.
 
   METHOD execute_check.

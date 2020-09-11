@@ -29,7 +29,7 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }function-routine.md|.
 
-    set_check_message( '[Clean Code]: Function-Module should not be created!' ).
+    set_check_message( 'Function-Module should not be created!' ).
   ENDMETHOD.
 
 

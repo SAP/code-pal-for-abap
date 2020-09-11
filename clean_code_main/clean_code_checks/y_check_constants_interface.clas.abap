@@ -45,7 +45,7 @@ CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }constants-interface.md|.
 
-    set_check_message( '[Clean Code]: There are only constants in this interface!' ).
+    set_check_message( 'There are only constants in this interface!' ).
   ENDMETHOD.
 
 
