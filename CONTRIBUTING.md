@@ -20,4 +20,5 @@ Thank you in advance for contributing and sharing your ideas within our communit
 
 ### Some usefull information
 
-* Write a [good commit message](https://chris.beams.io/posts/git-commit/).
+* Write a [good commit message](https://chris.beams.io/posts/git-commit/)
+* abapGit - [Contributing to a project](https://docs.abapgit.org/guide-contributing.html)
