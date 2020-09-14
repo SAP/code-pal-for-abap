@@ -96,7 +96,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
     TRY.
         result = xsdbool( token-str(1) = '*' ).
       CATCH cx_sy_range_out_of_bounds.
-        CLEAR result.
+        result = abap_false.
     ENDTRY.
   ENDMETHOD.
 
