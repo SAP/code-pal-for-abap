@@ -10,6 +10,9 @@ CLASS y_check_comment_position DEFINITION PUBLIC INHERITING FROM y_check_base CR
                                 RETURNING VALUE(result) TYPE char1.
     METHODS is_pseudo_comment IMPORTING token TYPE stokesx
                               RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_type_asterisk IMPORTING token TYPE stokesx
+                             RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 CLASS y_check_comment_position IMPLEMENTATION.
@@ -43,37 +46,58 @@ CLASS y_check_comment_position IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD has_wrong_position.
-    DATA comment TYPE stokesx.
-    DATA next_token TYPE stokesx.
+    DATA(tokens) = ref_scan_manager->get_tokens( ).
 
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-to.
-      IF <token>-type = 'C'
-      AND get_first_character( <token> ) = '"'
-      AND is_pseudo_comment( <token> ) = abap_false.
-        comment = <token>.
-      ELSE.
-        next_token = <token>.
-        EXIT.
-      ENDIF.
-    ENDLOOP.
+    DATA(previous_token) = tokens[ statement-to - 1 ].
+    DATA(current_token) = tokens[ statement-to ].
+    DATA(next_token) = tokens[ statement-to + 1 ].
 
-    IF comment-row = next_token-row.
-      result = abap_true.
+    IF is_pseudo_comment( current_token ) = abap_true
+    OR is_type_asterisk( current_token ) = abap_true.
+      RETURN.
     ENDIF.
 
-    IF comment-row = next_token-row - 1
-    AND comment-col <> next_token-col.
+    " In-line Comment
+    IF current_token-row = previous_token-row.
+      result = abap_true.
+      RETURN.
+    ENDIF.
+
+    IF next_token-str = 'ENDFORM'
+    OR next_token-str = 'ENDMETHOD'
+    OR next_token-str = 'ENDMODULE'.
+      RETURN.
+    ENDIF.
+
+    " Wrong Position
+    IF current_token-row = next_token-row - 1
+    AND current_token-col <> next_token-col.
       result = abap_true.
     ENDIF.
   ENDMETHOD.
 
   METHOD get_first_character.
-    result = token-str(1).
+    TRY.
+        result = token-str(1).
+      CATCH cx_sy_range_out_of_bounds.
+        CLEAR result.
+    ENDTRY.
   ENDMETHOD.
 
   METHOD is_pseudo_comment.
-    result = COND #( WHEN token-str(4) = '"#EC' THEN abap_true ).
+    TRY.
+        result = xsdbool( token-str(4) = '"#EC' ).
+      CATCH cx_sy_range_out_of_bounds.
+        result = abap_false.
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD is_type_asterisk.
+    TRY.
+        result = xsdbool( token-str(1) = '*' ).
+      CATCH cx_sy_range_out_of_bounds.
+        result = abap_false.
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.
