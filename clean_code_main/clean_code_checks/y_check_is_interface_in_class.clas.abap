@@ -28,7 +28,7 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }interface-in-class.md|.
 
-    set_check_message( '[Clean Code]: &1 public methods without interface' ).
+    set_check_message( '&1 public methods without interface' ).
   ENDMETHOD.
 
 

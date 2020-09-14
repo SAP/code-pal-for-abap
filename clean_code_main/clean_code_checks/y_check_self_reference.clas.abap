@@ -19,7 +19,7 @@ CLASS Y_CHECK_SELF_REFERENCE IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }self-reference.md|.
 
-    set_check_message( '[Clean Code]: Omit the self-reference me when calling an instance method!' ).
+    set_check_message( 'Omit the self-reference me when calling an instance method!' ).
   ENDMETHOD.
 
   METHOD inspect_tokens.

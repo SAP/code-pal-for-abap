@@ -61,7 +61,7 @@ CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-prio = c_note.
 
-    set_check_message( '[Clean Code]: &1 pseudo comments' ).
+    set_check_message( '&1 pseudo comments' ).
   ENDMETHOD.
 
 

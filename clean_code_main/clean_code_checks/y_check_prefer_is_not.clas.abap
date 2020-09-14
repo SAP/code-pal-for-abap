@@ -19,7 +19,7 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }prefer-is-not-to-not-is.md|.
 
-    set_check_message( '[Clean Code]: Prefer IS NOT to NOT IS!' ).
+    set_check_message( 'Prefer IS NOT to NOT IS!' ).
   ENDMETHOD.
 
 

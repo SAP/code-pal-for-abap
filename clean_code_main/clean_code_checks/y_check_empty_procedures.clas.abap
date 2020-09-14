@@ -38,7 +38,7 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }empty-procedure.md|.
 
-    set_check_message( '[Clean Code]: Empty Procedure should be removed!' ).
+    set_check_message( 'Empty Procedure should be removed!' ).
   ENDMETHOD.
 
 

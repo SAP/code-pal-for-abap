@@ -24,7 +24,7 @@ CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
 
-    set_check_message( '[Clean Code]: Values should not be allocated more than once within one statement!' ).
+    set_check_message( 'Values should not be allocated more than once within one statement!' ).
   ENDMETHOD.
 
 

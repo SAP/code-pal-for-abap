@@ -23,7 +23,7 @@ CLASS y_check_call_method_usage IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }call-method-usage.md|.
 
-    set_check_message( '[Clean Code]: "CALL METHOD" Statement should not be used!' ).
+    set_check_message( '"CALL METHOD" Statement should not be used!' ).
   ENDMETHOD.
 
 

@@ -21,7 +21,7 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }chain-declaration-usage.md|.
 
-    set_check_message( '[Clean Code]: Do not chain up-front declarations!' ).
+    set_check_message( 'Do not chain up-front declarations!' ).
   ENDMETHOD.
 
 

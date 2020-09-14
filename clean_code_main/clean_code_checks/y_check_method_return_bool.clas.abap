@@ -38,7 +38,7 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }method-return-bool.md|.
 
-    set_check_message( '[Clean Code]: Method &1 has a misleading name for boolean return type!' ).
+    set_check_message( 'Method &1 has a misleading name for boolean return type!' ).
 
     APPEND 'IS_'     TO good_method_names_beginning.
     APPEND 'HAS_'    TO good_method_names_beginning.

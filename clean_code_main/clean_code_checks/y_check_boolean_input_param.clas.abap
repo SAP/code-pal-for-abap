@@ -22,7 +22,7 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }boolean-input-parameter.md|.
 
-    set_check_message( '[Clean Code]: Split method instead of Boolean input parameter!' ).
+    set_check_message( 'Split method instead of Boolean input parameter!' ).
   ENDMETHOD.
 
   METHOD execute_check.

@@ -25,7 +25,7 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }receiving-usage.md|.
 
-    set_check_message( '[Clean Code]: ABAP Keyword: "RECEIVING", should not be used!' ).
+    set_check_message( 'ABAP Keyword: "RECEIVING", should not be used!' ).
   ENDMETHOD.
 
 

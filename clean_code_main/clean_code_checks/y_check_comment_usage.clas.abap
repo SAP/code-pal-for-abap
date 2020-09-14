@@ -69,7 +69,7 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
 
-    set_check_message( '[Clean Code]: &1 comments found! This is &2% of the productive code, exceeding threshold of &3%' ).
+    set_check_message( '&1 comments found! This is &2% of the productive code, exceeding threshold of &3%' ).
   ENDMETHOD.
 
 

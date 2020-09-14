@@ -85,7 +85,7 @@ CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }empty-if-branches.md|.
 
-    set_check_message( '[Clean Code]: Empty IF-Branch should be removed!' ).
+    set_check_message( 'Empty IF-Branch should be removed!' ).
   ENDMETHOD.
 
 

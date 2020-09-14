@@ -29,7 +29,7 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
     settings-threshold = 5.
     settings-documentation = |{ c_docs_path-checks }prefer-case-to-elseif.md|.
 
-    set_check_message( '[Clean Code]: Prefer CASE to ELSE IF for multiple alternative conditions!' ).
+    set_check_message( 'Prefer CASE to ELSE IF for multiple alternative conditions!' ).
   ENDMETHOD.
 
 

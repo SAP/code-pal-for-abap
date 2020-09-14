@@ -24,7 +24,7 @@ CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }sub-assign-read-table.md|.
 
-    set_check_message( '[Clean Code]: "READ TABLE" with subsequent memory assignment should not be used!' ).
+    set_check_message( '"READ TABLE" with subsequent memory assignment should not be used!' ).
   ENDMETHOD.
 
 

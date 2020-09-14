@@ -42,7 +42,7 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }non-class-exception.md|.
 
-    set_check_message( '[Clean Code]: Non-class-based exceptions should not be used!' ).
+    set_check_message( 'Non-class-based exceptions should not be used!' ).
   ENDMETHOD.
 
 

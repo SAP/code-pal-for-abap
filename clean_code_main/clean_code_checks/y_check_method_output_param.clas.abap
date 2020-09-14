@@ -66,7 +66,7 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
     settings-threshold = 1.
     settings-documentation = |{ c_docs_path-checks }method-output-parameter.md|.
 
-    set_check_message( '[Clean Code]: Combination of parameters(RETURNING/EXPORTING) should not be used!' ).
+    set_check_message( 'Combination of parameters(RETURNING/EXPORTING) should not be used!' ).
   ENDMETHOD.
 
 

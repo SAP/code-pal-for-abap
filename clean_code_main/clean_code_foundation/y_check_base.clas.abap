@@ -659,6 +659,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
               p_checksum_1 = checksum
               p_comments = pseudo_comments ).
     ENDIF.
+
+
   ENDMETHOD.
 
 

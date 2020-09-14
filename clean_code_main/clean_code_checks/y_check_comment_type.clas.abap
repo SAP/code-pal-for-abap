@@ -17,7 +17,7 @@ CLASS y_check_comment_type IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }comment-type.md|.
 
-    set_check_message( '[Clean Code]: Comment with ", not with *!' ).
+    set_check_message( 'Comment with ", not with *!' ).
   ENDMETHOD.
 
   METHOD inspect_tokens.
