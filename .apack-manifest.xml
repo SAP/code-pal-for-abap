@@ -4,7 +4,7 @@
   <DATA>
    <GROUP_ID>github.com/SAP</GROUP_ID>
    <ARTIFACT_ID>code-pal-for-abap</ARTIFACT_ID>
-   <VERSION>1.0.0</VERSION>
+   <VERSION>1.00.0</VERSION>
    <REPOSITORY_TYPE>abapGit</REPOSITORY_TYPE>
    <GIT_URL>https://github.com/SAP/code-pal-for-abap</GIT_URL>
   </DATA>
