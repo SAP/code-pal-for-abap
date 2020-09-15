@@ -8,6 +8,10 @@ Legend
 + : added
 - : removed
 
+2020-09-14 v1.01.0
+------------------
++ profile feature
+
 2020-09-14 v1.00.0
 ------------------
 + changelog
