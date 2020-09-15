@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CODE_PAL_APACK</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>APACK Manifest for Code Pal for ABAP</DESCRIPT>
+    <DESCRIPT>APACK Manifest for code pal for ABAP</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

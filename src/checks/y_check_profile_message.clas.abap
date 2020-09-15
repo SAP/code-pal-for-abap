@@ -10,7 +10,7 @@ CLASS y_check_profile_message DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS Y_CHECK_PROFILE_MESSAGE IMPLEMENTATION.
+CLASS y_check_profile_message IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -26,7 +26,7 @@ CLASS Y_CHECK_PROFILE_MESSAGE IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-prio = c_note.
 
-    set_check_message( 'Code Pal for ABAP Profile is being used.' ).
+    set_check_message( 'code pal for ABAP Profile is being used.' ).
   ENDMETHOD.
 
 
