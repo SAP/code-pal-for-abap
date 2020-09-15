@@ -1,0 +1,8 @@
+When code pal is in your system, just go to Transaction `SCI` or `SCII` and execute the Checks with your prefered Thresholds. To have a consistent set of Checks and Thresholds you can always create a Code Inspector Variant.
+
+To understand how the checks work, please refer to the [Check Documentation](/docs/check_documentation.md).
+![Screenshot of Check Execution](./img/SCI_Check_Execution.jpg)
+
+Then simply execute the Checks.
+
+Note: You can simulate the checks using the `Y_DEMO_FAILURES` class. 

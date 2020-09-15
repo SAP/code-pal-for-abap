@@ -12,6 +12,7 @@ Legend
 ------------------
 ! folder logic to prefix logic
 ! name to code pal for ABAP
+! documentation (readme.md)
 
 2020-09-15 v1.01.0
 ------------------
