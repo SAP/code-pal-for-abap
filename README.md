@@ -1,4 +1,4 @@
-[![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/SAP/code-pal-for-abap/clean_code_main/y_code_pal_version.intf.abap/abap&label=version)](https://github.com/SAP/code-pal-for-abap/blob/master/clean_code_main/y_code_pal_version.intf.abap)
+[![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/SAP/code-pal-for-abap/clean_code_main/y_code_pal_version.intf.abap/abap&label=version)](https://github.com/SAP/code-pal-for-abap/blob/master/changelog.txt)
 
 # Code Pal for ABAP
 
@@ -8,14 +8,15 @@ Code pal is a tool which supports you in writing clean ABAP code. Clean Code all
 
 Furthermore... It's free and open source: code pal is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE)
 
-* [Features](#features)
-* [How to bring Code Pal into your system?](#how-to-bring-code-pal-into-your-system)
-  * [1. Create a local package](#1-create-a-local-package)
-  * [2. Start Transaction ZABAPGIT](#2-start-transaction-zabapgit)
-  * [3. Include the new Checks into Code Inspector](#3-include-the-new-checks-into-code-inspector)
-* [How to use Code Pal](#how-to-use-code-pal)
-* [Further Reading](#further-reading)
-* [Other interesting projects](#other-interesting-projects)
+- [Code Pal for ABAP](#code-pal-for-abap)
+  - [Features](#features)
+  - [How to bring Code Pal into your system](#how-to-bring-code-pal-into-your-system)
+    - [1. Create a local package](#1-create-a-local-package)
+    - [2. Start Transaction ZABAPGIT*](#2-start-transaction-zabapgit)
+    - [3. Include the new Checks into Code Inspector](#3-include-the-new-checks-into-code-inspector)
+  - [How to use Code Pal](#how-to-use-code-pal)
+  - [Further Reading](#further-reading)
+  - [Other interesting projects](#other-interesting-projects)
 
 ## Features
 - Checks can be executed via Code Inspector and via ATC (e.g. within SE80, Eclipse)
