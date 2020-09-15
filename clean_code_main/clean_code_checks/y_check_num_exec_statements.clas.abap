@@ -136,7 +136,6 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
         OR if_kaizen_keywords_c=>gc_define
         OR if_kaizen_keywords_c=>gc_end_of_definition
         OR if_kaizen_keywords_c=>gc_include
-        OR if_kaizen_keywords_c=>gc_selection_screen
         OR if_kaizen_keywords_c=>gc_parameters
         OR if_kaizen_keywords_c=>gc_parameter
         OR if_kaizen_keywords_c=>gc_select_options
