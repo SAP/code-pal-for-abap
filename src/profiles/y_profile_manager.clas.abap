@@ -24,6 +24,10 @@ CLASS y_profile_manager DEFINITION
                delegates_type TYPE tabname VALUE 'YTAB_DELEGATES',
                profiles_type  TYPE tabname VALUE 'YTAB_PROFILES'.
     CONSTANTS standardprofile TYPE ytab_profiles-profile VALUE 'SYSTEM-WIDE STANDARD'.
+    METHODS get_checks_package RETURNING value(result) TYPE devclass.
+    METHODS get_checks_from_db IMPORTING package TYPE devclass
+                               RETURNING value(result) TYPE tt_tadir.
+    METHODS get_check_base_package RETURNING value(result) TYPE devclass.
 ENDCLASS.
 
 
@@ -266,21 +270,27 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~select_existing_checks.
-    SELECT obj_name FROM tadir WHERE devclass EQ '$CLEAN_CODE_CHECKS'
-                               AND obj_name NE 'Y_CHECK_BASE'
-                               INTO TABLE @DATA(itable).
-    IF sy-subrc <> 0.
+    DATA(package) = get_checks_package( ).
+    DATA(checks) = get_checks_from_db( package ).
+
+    IF checks IS INITIAL.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
 
-    LOOP AT itable ASSIGNING FIELD-SYMBOL(<line>).
+    LOOP AT checks ASSIGNING FIELD-SYMBOL(<line>).
 
-      SELECT SINGLE clsname, descript FROM vseoclass WHERE ( langu EQ @sy-langu OR langu EQ 'E' ) AND clsname EQ @<line>-obj_name
-          INTO @DATA(line).
+      SELECT SINGLE clsname, descript
+      FROM vseoclass
+      INTO @DATA(line)
+      WHERE ( langu EQ @sy-langu OR langu EQ 'E' )
+      AND clsname EQ @<line>-obj_name.
+
       IF sy-subrc = 0.
         APPEND line TO result.
       ENDIF.
+
     ENDLOOP.
+
   ENDMETHOD.
 
 
@@ -313,6 +323,28 @@ CLASS y_profile_manager IMPLEMENTATION.
       catch ycx_entry_not_found.
         result = abap_false.
     endtry.
+  ENDMETHOD.
+
+
+  METHOD get_checks_package.
+    result = get_check_base_package( ).
+    REPLACE 'FOUNDATION' IN result WITH 'CHECKS'.
+  ENDMETHOD.
+
+
+  METHOD get_checks_from_db.
+    SELECT *
+    FROM tadir
+    WHERE devclass = @package
+    INTO TABLE @result.
+  ENDMETHOD.
+
+
+  METHOD get_check_base_package.
+    SELECT SINGLE devclass
+    FROM tadir
+    INTO result
+    WHERE obj_name = 'Y_CHECK_BASE'.
   ENDMETHOD.
 
 ENDCLASS.

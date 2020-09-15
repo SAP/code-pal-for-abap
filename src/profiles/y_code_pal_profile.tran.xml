@@ -6,6 +6,7 @@
     <TCODE>Y_CODE_PAL_PROFILE</TCODE>
     <PGMNA>Y_PROFILE_ADMINISTRATOR</PGMNA>
     <DYPNO>1000</DYPNO>
+    <CINFO>gA==</CINFO>
    </TSTC>
    <TSTCC>
     <TCODE>Y_CODE_PAL_PROFILE</TCODE>
@@ -13,7 +14,7 @@
    <TSTCT>
     <SPRSL>E</SPRSL>
     <TCODE>Y_CODE_PAL_PROFILE</TCODE>
-    <TTEXT>Profile for code pal for ABAP</TTEXT>
+    <TTEXT>Profile Manager for code pal for ABA</TTEXT>
    </TSTCT>
   </asx:values>
  </asx:abap>
