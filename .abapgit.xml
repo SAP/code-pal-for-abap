@@ -15,6 +15,7 @@
     <item>/*.jpg</item>
     <item>/*.jpeg</item>
     <item>/*.txt</item>
+    <item>/.apack-manifest.xml</item>    
    </IGNORE>
   </DATA>
  </asx:values>
