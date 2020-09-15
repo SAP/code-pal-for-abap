@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <PROGDIR>
-    <NAME>Y_CLEAN_CODE_ADMIN_CLASSES</NAME>
+    <NAME>Y_PROFILE_ADMIN_DATA</NAME>
     <SUBC>I</SUBC>
     <RLOAD>E</RLOAD>
     <UCCHECK>X</UCCHECK>
@@ -11,8 +11,8 @@
    <TPOOL>
     <item>
      <ID>R</ID>
-     <ENTRY>Include Y_CLEAN_CODE_ADMIN_CLASSES</ENTRY>
-     <LENGTH>34</LENGTH>
+     <ENTRY>Include Y_PROFILE_ADMIN_DATA</ENTRY>
+     <LENGTH>28</LENGTH>
     </item>
    </TPOOL>
   </asx:values>

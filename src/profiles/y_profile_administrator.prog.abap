@@ -1,7 +1,7 @@
-REPORT y_clean_code_administrator.
+REPORT y_profile_administrator.
 
-INCLUDE y_clean_code_admin_data.
-INCLUDE y_clean_code_admin_classes.
+INCLUDE y_profile_admin_data.
+INCLUDE y_profile_admin_classes.
 
 START-OF-SELECTION.
   profile_manager = NEW y_profile_manager( ).

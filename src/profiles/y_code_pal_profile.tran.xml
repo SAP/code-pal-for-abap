@@ -3,19 +3,17 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <TSTC>
-    <TCODE>Y_CLEAN_CODE_PROFILE</TCODE>
-    <PGMNA>Y_CLEAN_CODE_ADMINISTRATOR</PGMNA>
+    <TCODE>Y_CODE_PAL_PROFILE</TCODE>
+    <PGMNA>Y_PROFILE_ADMINISTRATOR</PGMNA>
     <DYPNO>1000</DYPNO>
-    <CINFO>gA==</CINFO>
    </TSTC>
    <TSTCC>
-    <TCODE>Y_CLEAN_CODE_PROFILE</TCODE>
-    <S_WIN32>X</S_WIN32>
+    <TCODE>Y_CODE_PAL_PROFILE</TCODE>
    </TSTCC>
    <TSTCT>
     <SPRSL>E</SPRSL>
-    <TCODE>Y_CLEAN_CODE_PROFILE</TCODE>
-    <TTEXT>Clean Code Profile Manager</TTEXT>
+    <TCODE>Y_CODE_PAL_PROFILE</TCODE>
+    <TTEXT>Profile for code pal for ABAP</TTEXT>
    </TSTCT>
   </asx:values>
  </asx:abap>

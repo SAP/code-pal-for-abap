@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <PROGDIR>
-    <NAME>Y_CLEAN_CODE_ADMINISTRATOR</NAME>
+    <NAME>Y_PROFILE_ADMINISTRATOR</NAME>
     <SUBC>1</SUBC>
     <RLOAD>E</RLOAD>
     <FIXPT>X</FIXPT>
@@ -12,7 +12,7 @@
    <DYNPROS>
     <item>
      <HEADER>
-      <PROGRAM>Y_CLEAN_CODE_ADMINISTRATOR</PROGRAM>
+      <PROGRAM>Y_PROFILE_ADMINISTRATOR</PROGRAM>
       <SCREEN>0100</SCREEN>
       <LANGUAGE>E</LANGUAGE>
       <DESCRIPT>Main Screen</DESCRIPT>
@@ -59,7 +59,7 @@
     </item>
     <item>
      <HEADER>
-      <PROGRAM>Y_CLEAN_CODE_ADMINISTRATOR</PROGRAM>
+      <PROGRAM>Y_PROFILE_ADMINISTRATOR</PROGRAM>
       <SCREEN>0200</SCREEN>
       <LANGUAGE>E</LANGUAGE>
       <DESCRIPT>Assign or Create Profile</DESCRIPT>
@@ -146,7 +146,7 @@
     </item>
     <item>
      <HEADER>
-      <PROGRAM>Y_CLEAN_CODE_ADMINISTRATOR</PROGRAM>
+      <PROGRAM>Y_PROFILE_ADMINISTRATOR</PROGRAM>
       <SCREEN>0300</SCREEN>
       <LANGUAGE>E</LANGUAGE>
       <DESCRIPT>Assign Delegate</DESCRIPT>
@@ -223,7 +223,7 @@
     </item>
     <item>
      <HEADER>
-      <PROGRAM>Y_CLEAN_CODE_ADMINISTRATOR</PROGRAM>
+      <PROGRAM>Y_PROFILE_ADMINISTRATOR</PROGRAM>
       <SCREEN>0400</SCREEN>
       <LANGUAGE>E</LANGUAGE>
       <DESCRIPT>Check Customizing</DESCRIPT>
@@ -582,7 +582,7 @@
     </item>
     <item>
      <HEADER>
-      <PROGRAM>Y_CLEAN_CODE_ADMINISTRATOR</PROGRAM>
+      <PROGRAM>Y_PROFILE_ADMINISTRATOR</PROGRAM>
       <SCREEN>0500</SCREEN>
       <LANGUAGE>E</LANGUAGE>
       <DESCRIPT>Create a New Profile with Template Checks</DESCRIPT>
@@ -659,7 +659,7 @@
     </item>
     <item>
      <HEADER>
-      <PROGRAM>Y_CLEAN_CODE_ADMINISTRATOR</PROGRAM>
+      <PROGRAM>Y_PROFILE_ADMINISTRATOR</PROGRAM>
       <SCREEN>0600</SCREEN>
       <LANGUAGE>E</LANGUAGE>
       <DESCRIPT>Create a copy of a existing Profile</DESCRIPT>
@@ -1544,8 +1544,8 @@
     </item>
     <item>
      <ID>R</ID>
-     <ENTRY>Clean Code Administrator</ENTRY>
-     <LENGTH>24</LENGTH>
+     <ENTRY>Profile Administrator for code pal for ABAP</ENTRY>
+     <LENGTH>43</LENGTH>
     </item>
    </TPOOL>
   </asx:values>
