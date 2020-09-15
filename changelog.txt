@@ -1,0 +1,13 @@
+code-pal-for-abap changelog
+=================
+
+Legend
+------
+* : fixed
+! : changed
++ : added
+- : removed
+
+2020-09-14 v1.00.0
+------------------
++ changelog

@@ -1,3 +1,5 @@
+[![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/SAP/code-pal-for-abap/clean_code_main/y_code_pal_version.intf.abap/abap&label=version)](https://github.com/SAP/code-pal-for-abap/blob/master/clean_code_main/y_code_pal_version.intf.abap)
+
 # Code Pal for ABAP
 
 ***Note: Netweaver release 7.40 SP8 or higher is required.***
