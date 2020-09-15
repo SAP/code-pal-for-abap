@@ -24,7 +24,7 @@ CLASS lcl_file IMPLEMENTATION.
     DATA file_path TYPE string.
     DATA file_fullpath TYPE string.
 
-    CONCATENATE 'CLEAN_CODE_PROFILE-' sy-sysid sy-mandt '-' profile-profile INTO DATA(file_name).
+    CONCATENATE 'CODE_PAL_PROFILE-' sy-sysid sy-mandt '-' profile-profile INTO DATA(file_name).
 
     DATA(structure) = NEW structure( profile = profile
                                      checks = checks
