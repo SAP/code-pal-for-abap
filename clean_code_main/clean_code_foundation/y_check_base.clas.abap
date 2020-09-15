@@ -148,7 +148,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     enable_rfc( ).
 
     description = get_class_description(  ).
-    category = 'Y_CHECK_CATEGORY'.
+    category = 'Y_CATEGORY_CODE_PAL'.
     position = '000'.
     version = '0000'.
     has_documentation = abap_true.
