@@ -1,4 +1,4 @@
-CLASS y_check_category DEFINITION
+CLASS y_category_code_pal DEFINITION
   PUBLIC
   INHERITING FROM cl_ci_category_root
   CREATE PUBLIC .
@@ -16,7 +16,7 @@ CLASS y_check_category DEFINITION
 ENDCLASS.
 
 
-CLASS y_check_category IMPLEMENTATION.
+CLASS y_category_code_pal IMPLEMENTATION.
 
 
   METHOD constructor.
