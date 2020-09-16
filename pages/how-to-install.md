@@ -8,6 +8,8 @@
 
 Follow the step-by-step available in the abapGit documentation: [Installing online repo](https://docs.abapgit.org/guide-online-install.html).
 
+> Please, use folder logic `PREFIX`.
+
 ![how to clone repository](imgs/clone-repository.png)
 
 ### 2. Activate code pal for ABAP category

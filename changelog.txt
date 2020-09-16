@@ -12,7 +12,7 @@ Legend
 ------------------
 + new check y_check_external_call_in_ut
 + threshold support to 'less equal' and 'greater than'
-! folder logic to prefix logic (reinstall required)
+! folder logic to prefix logic
 ! name to code pal for ABAP
 ! project documentation 
 
