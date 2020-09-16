@@ -2,7 +2,7 @@
 
 [Code Pal for ABAP](../README.md) > [How to Configure](how-to-configure.md)
 
-## Customize Checks
+## How to Configure
 
 **The default customizing is not an SAP delivered standard value.**  
 

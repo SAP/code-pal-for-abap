@@ -1,4 +1,8 @@
-# Contributing
+# Code Pal for ABAP
+
+[Code Pal for ABAP](../README.md) > [How to Contribute](how-to-contribute.md)
+
+## How to Contribute
 
 We are a team with limited capacity dedicated to several projects. Every single contribution is valid and more than welcome. Feel free to help us in developing new ABAP Checks and keeping this project up & running! Hereby a short how-to tutorial.
 
@@ -18,6 +22,6 @@ At this point of time, we will verify your code and authorize/approve the merge 
 
 Thank you in advance for contributing and sharing your ideas within our community! We really appreciate this!
 
-### Some usefull information
+## Further Reading
 
-* Write a [good commit message](https://chris.beams.io/posts/git-commit/).
+* Write a [good commit message](https://chris.beams.io/posts/git-commit/)
