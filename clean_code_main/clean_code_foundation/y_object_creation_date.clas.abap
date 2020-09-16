@@ -114,8 +114,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_db_vers_hstry_crtd_on_clas.
-    DATA: class_search_table TYPE RANGE OF sobj_name,
-          class_search       LIKE LINE OF class_search_table.
+    DATA: class_search_table TYPE RANGE OF sobj_name.
     DATA: class_search_string TYPE string.
 
     class_search_string = class_name.
