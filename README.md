@@ -10,9 +10,8 @@ Furthermore... It's **free** and **open-source**!
 It is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE).
 
 > **:warning: Migration Required :warning:**  
-> The folder logic was changed from `FULL` to `PREFIX` to allow the installation in any package. Consequently, the abapGit will not be able to upgrade it from `v1.01.0` to `v.1.02.0`, and you have to uninstall and install it completely. For the further versions, it will work as before.  
->  
-> Please, follow the step-by-step described in [How To Migrate](pages/how-to-migrate.md)!
+> From version `v1.01.0` to `v.1.02.0` the folder logic was changed, and the abapGit is not able to perform this migration automatically.  
+> Therefore, please, follow the step-by-step described in [How To Migrate](pages/how-to-migrate.md)!
 
 ## Features
 
