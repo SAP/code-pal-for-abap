@@ -13,17 +13,17 @@ It is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE).
 
 - Checks ready-to-use
 - Checks can be executed via Code Inspector and via ATC (e.g. within SE80, Eclipse)
-- Automatic Exclusion of Code which shall not be checked (like generated code, …)
-- Execution of Checks is user-based or group-based (using profile feature)
+- Automatic exclusion of code which shall not be checked (e.g. generated code)
+- Execution of checks is user-based or group-based (using profile feature)
 - The scope is customizable (via the object creation date)
 - Thresholds are customizable
 - Message severity is customizable (error, warning, or notification)
 - Checking productive code and/or test code is customizable
 - Findings can be suppressed via Code Inspector Pragmas
 
-## Example
+## List of Checks
 
-![code-pal-for-abap example](pages/imgs/code-pal-example.png)
+You can check it in the [Check Documentation](docs/check_documentation.md).
 
 ## Dependencies
 
@@ -39,4 +39,6 @@ It is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE).
 
 ## Further Reading
 
-- [Style Guides - Clean ABAP](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md)
+- [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md)
+- [Writing Testable Code for ABAP](https://open.sap.com/courses/wtc1/items/2gzG0sRlN1yjkTUREB02L9)
+- [ABAP Development for S/4HANA](https://open.sap.com/courses/a4h1)

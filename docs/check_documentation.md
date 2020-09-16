@@ -1,4 +1,9 @@
-# Check Documentation
+# Code Pal for ABAP
+
+[Code Pal for ABAP](../README.md) > [Documentation](check_documentation.md)
+
+## Check Documentation
+
 - [Boolean Input Parameter](checks/boolean-input-parameter.md)
 - [CALL Method Usage](checks/call-method-usage.md)
 - [Chain Declaration Usage](checks/chain-declaration-usage.md)
@@ -40,8 +45,3 @@
 - [Self-Reference](checks/self-reference.md)
 - [Subsequent Memory Assign Read Table](checks/sub-assign-read-table.md)
 - [Test Seam Usage](checks/test-seam-usage.md)
-
-## Useful information concerning all Clean Code Checks:
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md)
-* [Writing Testable Code for ABAP](https://open.sap.com/courses/wtc1/items/2gzG0sRlN1yjkTUREB02L9)
-* [ABAP Development for S/4HANA](https://open.sap.com/courses/a4h1)
