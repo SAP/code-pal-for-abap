@@ -64,6 +64,6 @@ Note: You can simulate the checks using the `Y_DEMO_FAILURES` class.
 * [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md)
 
 ## Other interesting projects
-* [ABAPgit](https://github.com/larshp/abapGit)
-* [ABAP Open Checks](https://github.com/larshp/abapOpenChecks)
+* [abapGit](https://github.com/larshp/abapGit)
+* [abapOpenChecks](https://github.com/larshp/abapOpenChecks)
 * [Many ABAP Open Source Projects](https://dotabap.org/)
