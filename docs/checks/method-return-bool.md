@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Method Return Bool Check](method-return-bool.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Method Return Bool Check](method-return-bool.md)
 
 ## Method Return Bool Check
 

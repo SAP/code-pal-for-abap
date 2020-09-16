@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Interface in Class Check](interface-in-class.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Interface in Class Check](interface-in-class.md)
 
 ## Interface in Class Check
 

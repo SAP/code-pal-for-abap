@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [CALL METHOD Usage Check](call-method-usage.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [CALL METHOD Usage Check](call-method-usage.md)
 
 ## CALL METHOD Usage Check
 

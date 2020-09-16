@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Equals Sign Chaining](equals-sign-chaining.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Equals Sign Chaining](equals-sign-chaining.md)
 
 ## Equals Sign Chaining
 

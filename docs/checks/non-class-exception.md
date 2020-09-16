@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Non-Class Exception Check](non-class-exception.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Non-Class Exception Check](non-class-exception.md)
 
 ## Non-Class Exception Check
 

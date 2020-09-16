@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [FUNCTION Routine Check](function-routine.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [FUNCTION Routine Check](function-routine.md)
 
 ## FUNCTION Routine Check
 

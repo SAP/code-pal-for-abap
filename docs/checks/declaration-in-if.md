@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Declaration in IF Check](declaration-in-if.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Declaration in IF Check](declaration-in-if.md)
 
 ## Declaration in IF Check
 

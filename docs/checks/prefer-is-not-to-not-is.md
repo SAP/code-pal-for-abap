@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Prefer IS NOT to NOT IS](prefer-is-not-to-not-is.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Prefer IS NOT to NOT IS](prefer-is-not-to-not-is.md)
 
 ## Prefer IS NOT to NOT IS
 

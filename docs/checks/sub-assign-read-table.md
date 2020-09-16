@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Subsequent Memory Assign Read Table Check](sub-assign-read-table.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Subsequent Memory Assign Read Table Check](sub-assign-read-table.md)
 
 ## Subsequent Memory Assign Read Table Check
 

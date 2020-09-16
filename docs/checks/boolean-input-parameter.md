@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Boolean Input Parameter](boolean-input-parameter.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Boolean Input Parameter](boolean-input-parameter.md)
 
 ## Boolean Input Parameter
 

@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Method Output Parameter Check](method-output-parameter.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Method Output Parameter Check](method-output-parameter.md)
 
 ## Method Output Parameter Check
 

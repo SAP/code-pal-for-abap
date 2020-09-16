@@ -1,6 +1,6 @@
-# Code Pal for ABAP
+# code pal for ABAP
 
-[Code Pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Omit Optional EXPORTING](omit-optional-exporting.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Omit Optional EXPORTING](omit-optional-exporting.md)
 
 ## Omit Optional EXPORTING
 
