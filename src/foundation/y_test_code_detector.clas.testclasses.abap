@@ -69,9 +69,7 @@ CLASS ltc_test_code_detector IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound(
-      EXPORTING
-        act = cut ).
+    cl_abap_unit_assert=>assert_bound( cut ).
   ENDMETHOD.
 
   METHOD is_test_class_no.
