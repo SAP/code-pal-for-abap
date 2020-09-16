@@ -223,6 +223,6 @@ CLASS lcl_list_ut IMPLEMENTATION.
                                     act = cut->get_line_index( 'c' )
                                     msg = 'cannot get line index!'
                                     quit  = if_aunit_constants=>quit-no ).
-  ENDMETHOD..
+  ENDMETHOD.
 
 ENDCLASS.
