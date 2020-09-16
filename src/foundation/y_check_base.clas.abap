@@ -29,6 +29,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         apply_on_productive_code      TYPE ycicc_productive_code,
         apply_on_test_code            TYPE ycicc_testcode,
         documentation                 TYPE c LENGTH 1000,
+        is_threshold_reversed         TYPE abap_bool,
       END OF settings .
 
     METHODS constructor .
@@ -125,6 +126,21 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         VALUE(result) TYPE abap_bool .
     METHODS instantiate_objects.
     METHODS enable_rfc.
+
+    METHODS is_skipped
+      IMPORTING config        TYPE y_if_clean_code_manager=>check_configuration
+                error_count   TYPE int4
+      RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_treshold_config_valid
+      IMPORTING previous_threshold TYPE int4
+                config_threshold   TYPE int4
+      RETURNING VALUE(result)      TYPE abap_bool.
+
+    METHODS is_config_setup_valid
+      IMPORTING previous_config TYPE y_if_clean_code_manager=>check_configuration
+                config          TYPE y_if_clean_code_manager=>check_configuration
+      RETURNING VALUE(result)   TYPE abap_bool.
 ENDCLASS.
 
 
@@ -170,32 +186,23 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
-
     DATA(include) = get_include( p_level = statement-level ).
     DATA(creation_date) =  NEW y_object_creation_date( )->y_if_object_creation_date~get_program_create_date( include ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
-    WHERE object_creation_date <= creation_date
-    AND threshold <= error_count.
+    WHERE object_creation_date <= creation_date.
 
-      IF is_testcode = abap_true AND <configuration>-apply_on_testcode = abap_false.
-        CONTINUE.
-      ELSEIF is_testcode = abap_false AND <configuration>-apply_on_productive_code = abap_false.
+      IF is_skipped( config      = <configuration>
+                     error_count = error_count ) = abap_true.
         CONTINUE.
       ENDIF.
 
-      IF result IS INITIAL.
-        result = <configuration>.
-
-      ELSEIF result-prio = <configuration>-prio
-      AND result-threshold >= <configuration>-threshold.
-        result = <configuration>.
-
-      ELSEIF ( result-prio <> c_error AND <configuration>-prio = c_error )
-      OR     ( result-prio = c_note AND <configuration>-prio = c_warning ).
+      IF result IS INITIAL OR is_config_setup_valid( previous_config = result
+                                                     config          = <configuration> ) = abap_true.
         result = <configuration>.
       ENDIF.
     ENDLOOP.
+
   ENDMETHOD.
 
 
@@ -743,5 +750,27 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       CATCH cx_class_not_existent.
         result = 'Description Not Available'.
     ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD is_config_setup_valid.
+    result = xsdbool( ( previous_config-prio = config-prio AND is_treshold_config_valid( config_threshold = config-threshold
+                                                                                         previous_threshold = previous_config-threshold ) = abap_true ) OR
+                      ( previous_config-prio <> c_error AND config-prio = c_error ) OR
+                      ( previous_config-prio = c_note AND config-prio = c_warning ) ).
+  ENDMETHOD.
+
+
+  METHOD is_skipped.
+    result = xsdbool( ( config-threshold <= error_count AND settings-is_threshold_reversed = abap_true ) OR
+                      ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false ) OR
+                      ( is_testcode = abap_true AND config-apply_on_testcode = abap_false ) OR
+                      ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).
+  ENDMETHOD.
+
+
+  METHOD is_treshold_config_valid.
+    result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false ) OR
+                      ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
   ENDMETHOD.
 ENDCLASS.
