@@ -19,6 +19,7 @@ This check checks the usage of the `RECEIVING` statement.
 ### How to solve the issue?
 
 `RECEIVING` shall not be used.
+
 ```abap
 DATA(sum) = aggregate_values( values ).
 ```

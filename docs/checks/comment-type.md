@@ -14,7 +14,7 @@ Replacing the comment type from `*` to `"`.
 
 ### Example
 
-Before the check: 
+Before the check:
 
 ```abap
   METHOD do_it.

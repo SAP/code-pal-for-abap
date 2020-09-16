@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The Number of Public Attributes Check counts the number of public attributes up to a maximum (usually 0). All attributes and methods should be private by default. The {data encapsulation principle](https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)) helps you to protect your attributes from being changed and adds readability for others, they only see what they need.
+The Number of Public Attributes Check counts the number of public attributes up to a maximum (usually 0). All attributes and methods should be private by default. The [data encapsulation principle](https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)) helps you to protect your attributes from being changed and adds readability for others, they only see what they need.
 
 ### How does the check work?
 

@@ -40,7 +40,7 @@ ELSE.
 ENDIF.
 
 IF name = ''.
-  " Source Code. 
+  " Source Code.
 ELSE. "#EC EMPTY_IF_BRANCH
 
 ENDIF.
