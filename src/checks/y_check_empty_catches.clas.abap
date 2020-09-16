@@ -10,8 +10,6 @@ CLASS y_check_empty_catches DEFINITION
 
     METHODS inspect_tokens REDEFINITION .
   PRIVATE SECTION.
-    DATA is_empty TYPE abap_bool VALUE abap_false.
-
     METHODS get_next_token_from_index
       IMPORTING index         TYPE i
       RETURNING VALUE(result) TYPE stokesx.

@@ -121,11 +121,10 @@ CLASS Y_PSEUDO_COMMENT_DETECTOR IMPLEMENTATION.
 
 
   METHOD is_pseudo_comment.
-    determine_pseudo_comments(
-      EXPORTING scimessages = scimessages
-                test        = test
-                code        = code
-                suppress    = suppress ).
+    determine_pseudo_comments( scimessages = scimessages
+                               test        = test
+                               code        = code
+                               suppress    = suppress ).
 
     IF NOT ( pcom = cl_ci_test_root=>c_exceptn_imposibl OR
              pcom = '' ).
