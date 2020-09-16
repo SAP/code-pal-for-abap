@@ -2,7 +2,7 @@ CLASS y_clean_code_manager DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES y_if_clean_code_manager.
     ALIASES calculate_obj_creation_date FOR y_if_clean_code_manager~calculate_obj_creation_date.
-    ALIASES read_check_customizing FOR y_if_clean_code_manager~read_check_customizing..
+    ALIASES read_check_customizing FOR y_if_clean_code_manager~read_check_customizing.
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA object_creation_date TYPE REF TO y_if_object_creation_date.
