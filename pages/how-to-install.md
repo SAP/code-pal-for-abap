@@ -28,7 +28,7 @@ Then, select all the `Y_CHECK_*` check classes and save it.
 
 ### 4. Create code inspector variant
 
-Start the transaction `SCI` again, and create a new Global Check Variant.  
+Start the transaction `SCI` again, and create a new global check variant.  
 Then, select the `code pal for ABAP` group and save it.
 
 ![how to create code inspector variant](imgs/sci-check-variant.png)

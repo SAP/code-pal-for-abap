@@ -4,22 +4,26 @@
 
 You can simulate the checks using the provided `Y_DEMO_FAILURES` class.
 
-## SAP Gui
+## SAP GUI
 
+You can execute via `Code Inspector` and `ABAP Test Cockpit (ATC)` in most of the transactions as usual. However, you have to inform your global check variant.
+
+### ABAP Test Cockpit (ATC)
+
+![sap gui execution](imgs/execute-sap-gui.png)
+
+In the tab `Options`, you have to inform your global check variant:  
+
+![sap gui atc execution](imgs/sap-gui-atc.png)
+
+### Code Inspector
+
+Start the transaction `SCII`, inform the object selection, and inform your global check variant.
+
+![code inspector execution](imgs/sap-gui-code-inspector.png)
 
 ## Eclipse
 
-Select `Run As` > `ABAP Test Cockpit With...`, and enter your Global Variant Name.
+Select `Run As` > `ABAP Test Cockpit With...`, and inform your global check variant.
 
-![](imgs/execute-eclipse.png)
-
-## Result
-
-![](imgs/execute-result.png)
-
-
-When code pal is in your system, just go to Transaction `SCI` or `SCII` 
-
-To understand how the checks work, please refer to the 
-
-
+![eclipse execution](imgs/execute-eclipse.png)
