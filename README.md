@@ -23,7 +23,7 @@ It is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE).
 
 ## List of Checks
 
-You can check it in the [Check Documentation](docs/check_documentation.md).
+- [Check Documentation](docs/check_documentation.md)
 
 ## Dependencies
 
