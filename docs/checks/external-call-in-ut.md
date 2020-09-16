@@ -15,7 +15,7 @@ The check also searches for any Remote Calls (RFCs) as well as instances or usag
 
 ### Which attributes can be maintained?
 
-![Attributes](./img/external_call_in_ut.png)
+![Attributes](imgs/external_call_in_ut.png)
 
 ### How to solve the issue?
 
