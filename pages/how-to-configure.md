@@ -1,17 +1,17 @@
-# Code Pal for ABAP 
+# Code Pal for ABAP
 
-## How to Configure
+[Code Pal for ABAP](../README.md) > [How to Configure](how-to-configure.md)
 
-**The checks have a default customizing which doesn't mean the SAP standards.**  
+## Customize Checks
 
-Consequently, you can:
-* Define its validity period;
-* Restrict it to objects created since a specific date;
-* Define its criticality (error, warning, or information);
-* Define its threshold;
-* Define if it is applicable on productive codes;
-* Define if it is applicable on test codes.
+The checks can be customized via **[Profiles](how-to-customize-profiles.md)**.
 
-There are two ways to configure the checks.
-1. **[Via Code Inspector](how-to-configure-code-inspector.md)**;
-2. **[Via Profiles](how-to-configure-profiles.md)**.
+**The default customizing is not an SAP delivered standard value.**  
+
+## User Parameter
+
+It requires you to set the ABAP Test Cockpit (ATC) to run in Code Inspector mode.
+
+Start the transaction `SU3`, and add/set the user parameter `SATC_CI_MODE` to `X`:
+
+![user parameter](imgs/user-parameter.png)

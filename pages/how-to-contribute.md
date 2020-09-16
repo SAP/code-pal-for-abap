@@ -2,7 +2,7 @@
 
 We are a team with limited capacity dedicated to several projects. Every single contribution is valid and more than welcome. Feel free to help us in developing new ABAP Checks and keeping this project up & running! Hereby a short how-to tutorial.
 
-### How-to
+## How-to
 
 Fork our repository, then clone/pull the forked repo via ABAPgit into your system:
 
