@@ -12,6 +12,7 @@ It is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE).
 ## News
 
 **:warning: Migration Required :warning:**  
+
 From version `v1.01.0` to `v.1.02.0` the folder logic was changed, and the abapGit is not able to perform this migration automatically. Therefore, please, follow the step-by-step described in [How To Migrate](pages/how-to-migrate.md)!
 
 Check the [change log](changelog.txt) for further infromation.
