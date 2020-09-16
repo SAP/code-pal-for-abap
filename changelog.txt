@@ -10,6 +10,8 @@ Legend
 
 2020-09-15 v1.02.0
 ------------------
++ new check y_check_external_call_in_ut
++ thresholds based on 'less equal' and 'greater than'
 ! folder logic to prefix logic
 ! name to code pal for ABAP
 ! documentation (readme.md)
