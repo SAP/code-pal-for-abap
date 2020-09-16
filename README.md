@@ -27,7 +27,7 @@ It is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE).
 
 ## Dependencies
 
-- **SAP NetWeaver 7.40 SP8 or higher**
+- SAP NetWeaver **7.40 SP8** or higher
 - [abapGit](https://docs.abapgit.org/)
 
 ## How-to Guides
