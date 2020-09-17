@@ -8,7 +8,15 @@ Legend
 + : added
 - : removed
 
-2020-09-14 v1.01.0
+2020-09-15 v1.02.0
+------------------
++ new check y_check_external_call_in_ut
++ threshold support to 'less equal' and 'greater than'
+! folder logic to prefix logic
+! name to code pal for ABAP
+! project documentation 
+
+2020-09-15 v1.01.0
 ------------------
 + profile feature
 

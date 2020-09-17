@@ -3,8 +3,8 @@
  <asx:values>
   <DATA>
    <MASTER_LANGUAGE>E</MASTER_LANGUAGE>
-   <STARTING_FOLDER>/clean_code_main/</STARTING_FOLDER>
-   <FOLDER_LOGIC>FULL</FOLDER_LOGIC>
+   <STARTING_FOLDER>/src/</STARTING_FOLDER>
+   <FOLDER_LOGIC>PREFIX</FOLDER_LOGIC>
    <IGNORE>
     <item>/.gitattributes</item>
     <item>/.gitignore</item>
@@ -15,6 +15,7 @@
     <item>/*.jpg</item>
     <item>/*.jpeg</item>
     <item>/*.txt</item>
+    <item>/.apack-manifest.xml</item>
    </IGNORE>
   </DATA>
  </asx:values>
