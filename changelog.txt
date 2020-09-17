@@ -11,6 +11,7 @@ Legend
 2020-09-15 v1.02.0
 ------------------
 + new check y_check_external_call_in_ut
++ new check y_check_statement_coverage
 + threshold support to 'less equal' and 'greater than'
 ! folder logic to prefix logic
 ! name to code pal for ABAP
