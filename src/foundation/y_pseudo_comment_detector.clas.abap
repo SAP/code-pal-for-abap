@@ -30,7 +30,7 @@ ENDCLASS.
 
 
 
-CLASS Y_PSEUDO_COMMENT_DETECTOR IMPLEMENTATION.
+CLASS y_pseudo_comment_detector IMPLEMENTATION.
 
 
   METHOD determine_pseudo_comments.
