@@ -15,15 +15,16 @@ You can:
 * Define if it is applicable in productive codes;
 * Define if it is applicable in test codes.
 
-Profile behaviors:
-
-* If you unassign a profile from your user, it will not delete it from the database. It means, you can reassign it to your user, and all the checks with respective customization will return;
-
 Check behaviors:
 
 * If a profile is assigned to your user, it will execute the checks assigned to it only;
 * If multiple profiles are assigned to your user, it will execute the checks assigned to them only;
-* If have no profile assigned to your user, it will execute all the checks assigned to the variant;
+* If have no profile assigned to your user, it will execute all the checks assigned to the variant.
+
+Profile behaviors:
+
+* If you unassign a profile from your user, it will not delete it from the database. It means, you can reassign it to your user, and all the checks with respective customization will return;
+* If you assign the `Y_CHECK_PROFILE_MESSAGE` check to the profile, you will receive an info message every time you execute the global check variant. It means, not all the checks from the variant were executed, but so the ones related to the active profile.
 
 Threshold behaviors:
 
