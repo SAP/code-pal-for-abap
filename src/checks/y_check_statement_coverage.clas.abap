@@ -1,6 +1,7 @@
 CLASS y_check_statement_coverage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
@@ -23,7 +24,6 @@ CLASS y_check_statement_coverage DEFINITION PUBLIC INHERITING FROM y_check_base 
       RETURNING VALUE(result) TYPE REF TO if_scv_result
       RAISING   cx_scv_execution_error
                 cx_scv_call_error.
-
 ENDCLASS.
 
 

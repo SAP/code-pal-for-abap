@@ -94,7 +94,7 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
     DATA(token4) = get_token_abs( statement-from + 3 ).
     DATA(token5) = get_token_abs( statement-from + 4 ).
     DATA(token6) = get_token_abs( statement-from + 5 ).
-    DATA(token4to6) = token4 + space + token5 + space + token6.
+    DATA(token4to6) = |{ token4 } { token5 } { token6 }|.
 
     DATA has_redirection TYPE abap_bool VALUE abap_false.
 
@@ -104,10 +104,11 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
       WHEN 'CALL'.
         IF ( token2 = 'FUNCTION' ) AND
            ( ( token4 = 'DESTINATION' ) OR
-           ( ( token4 = 'STARTING' ) AND ( token5 = 'NEW' ) AND ( token6 = 'TASK' ) ) OR
-           ( ( token4 = 'IN' ) AND ( token5 = 'UPDATE' ) AND ( token6 = 'TASK' ) ) ).
+           ( ( token4to6 = 'STARTING NEW TASK' ) ) OR
+           ( ( token4to6 = 'IN UPDATE TASK' ) ) ).
           has_redirection = abap_true.
-        ELSEIF ( token2 = 'METHOD' ) AND ( token3 CS 'CL_GUI_' ).
+        ELSEIF ( token2 = 'METHOD' ) AND
+               ( token3 CS 'CL_GUI_' ).
           has_redirection = abap_true.
         ENDIF.
       WHEN OTHERS.

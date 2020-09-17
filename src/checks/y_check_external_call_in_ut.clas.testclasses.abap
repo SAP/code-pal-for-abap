@@ -1,4 +1,4 @@
-CLASS ltc_select DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_submit DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -6,7 +6,75 @@ CLASS ltc_select DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LE
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_select IMPLEMENTATION.
+CLASS ltc_submit IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW Y_CHECK_EXTERNAL_CALL_IN_UT( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT ut_test. ' )
+
+      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS submit FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
+      ( '   METHOD submit. ' )
+      ( '     SUBMIT demo_program_submit_rep AND RETURN. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT ut_test. ' )
+
+      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     RETURN. ' )
+      ( '     "No external call or redirection ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( ' REPORT ut_test. ' )
+
+      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     SUBMIT demo_program_submit_rep AND RETURN.   "#EC EXT_CALL_UT ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_rfc_call_dest DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_rfc_call_dest IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW Y_CHECK_EXTERNAL_CALL_IN_UT( ).
@@ -23,8 +91,13 @@ CLASS ltc_select IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA tadir TYPE tadir. ' )
-      ( '     SELECT SINGLE * FROM tadir INTO tadir. ' )
+      ( |     DATA dest TYPE RFCDEST VALUE 'NONE'. | )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' DESTINATION dest | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum ' )
+      ( '       IMPORTING ' )
+      ( '         weekday = date. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -41,7 +114,12 @@ CLASS ltc_select IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '    DATA(tadir) = VALUE tt_tadir( ).' )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum ' )
+      ( '       IMPORTING ' )
+      ( '         weekday = date. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -58,8 +136,13 @@ CLASS ltc_select IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA tadir TYPE tadir. ' )
-      ( '     SELECT SINGLE * FROM tadir INTO tadir. "#EC DB_ACCESS_UT ' )
+      ( |     DATA dest TYPE RFCDEST VALUE 'NONE'. | )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' DESTINATION dest  "#EC EXT_CALL_UT | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum ' )
+      ( '       IMPORTING ' )
+      ( '         weekday = date. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -67,7 +150,7 @@ CLASS ltc_select IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS ltc_delete DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_rfc_call_task DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -75,7 +158,7 @@ CLASS ltc_delete DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LE
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_delete IMPLEMENTATION.
+CLASS ltc_rfc_call_task IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW Y_CHECK_EXTERNAL_CALL_IN_UT( ).
@@ -92,8 +175,13 @@ CLASS ltc_delete IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( |     DATA(line) = VALUE tadir( obj_name = 'xyz' ). | )
-      ( '     DELETE tadir FROM line. ' )
+      ( |     DATA dest TYPE RFCDEST VALUE 'NONE'. | )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' IN UPDATE TASK | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum ' )
+      ( '       IMPORTING ' )
+      ( '         weekday = date. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -110,7 +198,12 @@ CLASS ltc_delete IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     "No db use ' )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum ' )
+      ( '       IMPORTING ' )
+      ( '         weekday = date. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -127,8 +220,13 @@ CLASS ltc_delete IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( |     DATA(line) = VALUE tadir( obj_name = 'xyz' ). | )
-      ( '     DELETE tadir FROM line. "#EC DB_ACCESS_UT ' )
+      ( |     DATA dest TYPE RFCDEST VALUE 'NONE'. | )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' IN UPDATE TASK  "#EC EXT_CALL_UT | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum ' )
+      ( '       IMPORTING ' )
+      ( '         weekday = date. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -136,7 +234,8 @@ CLASS ltc_delete IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS ltc_modify DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+
+CLASS ltc_rfc_call_newtask DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -144,7 +243,7 @@ CLASS ltc_modify DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LE
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_modify IMPLEMENTATION.
+CLASS ltc_rfc_call_newtask IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW Y_CHECK_EXTERNAL_CALL_IN_UT( ).
@@ -161,8 +260,11 @@ CLASS ltc_modify IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     MODIFY tadir FROM line. ' )
+      ( |     DATA dest TYPE RFCDEST VALUE 'NONE'. | )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' STARTING NEW TASK 'task' DESTINATION dest | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -179,7 +281,12 @@ CLASS ltc_modify IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     "No db use ' )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum ' )
+      ( '       IMPORTING ' )
+      ( '         weekday = date. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -196,8 +303,11 @@ CLASS ltc_modify IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     MODIFY tadir FROM line. "#EC DB_ACCESS_UT ' )
+      ( |     DATA dest TYPE RFCDEST VALUE 'NONE'. | )
+      ( '     DATA date TYPE sy-datum. ' )
+      ( |     CALL FUNCTION 'DATE_TO_DAY' STARTING NEW TASK 'task' DESTINATION dest  "#EC EXT_CALL_UT | )
+      ( '       EXPORTING ' )
+      ( '         date    = sy-datum. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -205,7 +315,7 @@ CLASS ltc_modify IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS ltc_update DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_cl_gui_usage DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -213,7 +323,7 @@ CLASS ltc_update DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LE
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_update IMPLEMENTATION.
+CLASS ltc_cl_gui_usage IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW Y_CHECK_EXTERNAL_CALL_IN_UT( ).
@@ -230,8 +340,7 @@ CLASS ltc_update IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     UPDATE tadir FROM line. ' )
+      ( '     DATA lo_gui_alv_cont TYPE REF TO cl_gui_alv_grid. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -248,7 +357,8 @@ CLASS ltc_update IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     "No db use ' )
+      ( '     RETURN. ' )
+      ( '     "no instance of CL_GUI_* classes ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -265,211 +375,7 @@ CLASS ltc_update IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     UPDATE tadir FROM line. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_insert DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_insert IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_external_call_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     INSERT tadir FROM line. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     INSERT tadir FROM line. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_rollback DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_rollback IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_external_call_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     ROLLBACK WORK. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     ROLLBACK WORK. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_commit DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_commit IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_external_call_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     COMMIT WORK. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     SUBMIT demo_program_submit_rep AND RETURN. "#EC EXT_CALL_UT ')
+      ( '     DATA lo_gui_alv_cont TYPE REF TO cl_gui_alv_grid.  "#EC EXT_CALL_UT ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).

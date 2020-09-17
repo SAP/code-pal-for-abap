@@ -27,11 +27,15 @@ CLASS ltc_error_fail IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD external_call_in_ut.
-
-    SUBMIT demo_program_submit_rep AND RETURN.         "#EC EXT_CALL_UT
-
+    DATA dest TYPE RFCDEST VALUE 'NONE'.
     DATA date TYPE sy-datum.
-    CALL FUNCTION 'DATE_TO_DAY' DESTINATION ''
+    DATA lo_gui_alv_cont TYPE REF TO cl_gui_alv_grid.
+    DATA(bool) = cl_gui_alv_grid=>offline( ).
+
+    SUBMIT demo_program_submit_rep AND RETURN.    "#EC EXT_CALL_UT
+    SUBMIT demo_program_submit_rep AND RETURN.
+
+    CALL FUNCTION 'DATE_TO_DAY' DESTINATION dest
       EXPORTING
         date    = sy-datum
       IMPORTING
@@ -43,7 +47,7 @@ CLASS ltc_error_fail IMPLEMENTATION.
       IMPORTING
         weekday = date.
 
-    CALL FUNCTION 'DATE_TO_DAY' STARTING NEW TASK 'task' DESTINATION ''
+    CALL FUNCTION 'DATE_TO_DAY' STARTING NEW TASK 'task' DESTINATION dest
       EXPORTING
         date = sy-datum.
 

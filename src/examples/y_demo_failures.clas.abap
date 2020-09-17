@@ -83,7 +83,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
                                                output_2 TYPE string.
     METHODS pseudo_comment_usage.
     METHODS receiving_usage.
-    METHODS ext_call_in_prod_code.
+    METHODS external_call_in_prod_code_ok.
     METHODS boolean_input_parameter IMPORTING do_save TYPE abap_bool.
     METHODS omit_optional_exporting.
     METHODS optional_parameters IMPORTING name TYPE string OPTIONAL.
@@ -107,7 +107,7 @@ ENDCLASS.
 
 
 
-CLASS y_demo_failures IMPLEMENTATION.
+CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
   METHOD test_seam_usage.
@@ -389,11 +389,6 @@ CLASS y_demo_failures IMPLEMENTATION.
   ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
 
 
-  METHOD ext_call_in_prod_code.
-    SUBMIT demo_program_submit_rep AND RETURN.
-  ENDMETHOD.
-
-
   METHOD prefer_is_not_to_not_is.
     IF NOT attribute_1 IS INITIAL.
       attribute_1 = attribute_2.
@@ -419,4 +414,8 @@ CLASS y_demo_failures IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
+  METHOD external_call_in_prod_code_ok.
+    SUBMIT demo_program_submit_rep AND RETURN.
+  ENDMETHOD.
 ENDCLASS.

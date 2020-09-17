@@ -10,7 +10,7 @@ CLASS y_check_empty_catches DEFINITION
 
     METHODS inspect_tokens REDEFINITION .
   PRIVATE SECTION.
-    METHODS gt_next_token_from_index
+    METHODS get_next_token_from_index
       IMPORTING index         TYPE i
       RETURNING VALUE(result) TYPE stokesx.
 
@@ -18,7 +18,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_empty_catches IMPLEMENTATION.
+CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
 
 
   METHOD constructor.
