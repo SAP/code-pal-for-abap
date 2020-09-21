@@ -65,3 +65,15 @@ You can export and import profiles, with respective delegates and checks, using 
 It is useful when you work with multiple systems, and you want to sync the profiles between them.
 
 ![import and export feature](imgs/import-export-feature.png)
+
+### Import via API
+
+Once you export a profile to a `JSON` file, you can import it using the service created in the [How To Install](how-to-install.md) guide.
+
+To consume the API, you have to `POST` the `JSON` file to the service with the respective authentication you configured to the service (usually basic, user/pass) and with the header `Content-Type` as `application/json` and `action` as `import_profile`.
+
+The API returns an `HTTP 400 - Bad Request` if the file format is not valid, or if the request has a wrong `Content-Type`.
+
+The API returns an `HTTP 403 - Forbidden` if the profile already exists in the system and the authentication user is not listed as a delegate.
+
+The API returns an `HTTP 500 - Internal Server Error` if the functionality is not working as expected.
