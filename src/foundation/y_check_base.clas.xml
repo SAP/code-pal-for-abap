@@ -62,6 +62,14 @@
      <LENGTH>50</LENGTH>
     </item>
    </TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>Y_CHECK_BASE</CLSNAME>
+     <CMPNAME>SETTINGS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>settings</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>
