@@ -13,6 +13,7 @@ Legend
 + statement coverage check
 + branch coverage check
 + procedure coverage check
++ API to import profile
 
 2020-09-17 v1.02.1
 ------------------
