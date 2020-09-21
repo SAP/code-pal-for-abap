@@ -36,7 +36,7 @@ METHOD constructor.
     settings-threshold = <its_threshold>.
     settings-documentation = |{ c_docs_path-checks }<its_documentation>.md|.
     settings-pseudo_comment = '"#EC <its_pseudo_comment>' ##NO_TEXT.
-    ...
+    " settings...
 
     set_check_message( '<its_message>' ).
 ENDMETHOD.
@@ -48,7 +48,7 @@ Here, you can use the imported `structures` and `statements` to loop the `tokens
 ```abap
 LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
 FROM statement-from TO statement-to.
-    ...
+    " ...
 ENDLOOP.
 ```
 
