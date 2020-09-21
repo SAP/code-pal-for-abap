@@ -19,7 +19,7 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
     settings-is_threshold_reversed = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
     settings-disable_on_testcode_selection = abap_true.
-    settings-documentation = |{ c_docs_path-checks }procedure-coverage.md|.
+    settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
     set_check_message( 'Procedure Coverage of &1% is under the threshold of &2%.' ).
   ENDMETHOD.
