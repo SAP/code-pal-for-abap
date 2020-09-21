@@ -55,7 +55,7 @@ ENDLOOP.
 > :bulb: Before start implementing the `inspect_tokens` method, we recommend you to create the unit tests to follow the Test Driven Development (TDD) approach.
 
 The `detect_check_configuration` method validates the check customizing.
-If an empty structure is received, it means the check should not raised.
+If an empty structure is received, it means the check should not be raise.
 
 ```abap
 DATA(check_configuration) = detect_check_configuration( error_count = <error_count>
