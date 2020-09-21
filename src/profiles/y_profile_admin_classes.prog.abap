@@ -1,19 +1,11 @@
 CLASS lcl_file DEFINITION.
   PUBLIC SECTION.
-    TYPES: BEGIN OF structure,
-             profile   TYPE ytab_profiles,
-             checks    TYPE y_if_profile_manager=>check_assignments,
-             delegates TYPE y_if_profile_manager=>delegate_assigments,
-           END OF structure.
-
-    CLASS-METHODS upload EXPORTING profile   TYPE structure-profile
-                                   checks    TYPE structure-checks
-                                   delegates TYPE structure-delegates
+    CLASS-METHODS upload RETURNING VALUE(result) TYPE y_if_profile_manager=>file
                          RAISING   ycx_object_not_processed
                                    cx_abap_invalid_value.
-    CLASS-METHODS download IMPORTING profile   TYPE structure-profile
-                                     checks    TYPE structure-checks
-                                     delegates TYPE structure-delegates
+    CLASS-METHODS download IMPORTING profile   TYPE y_if_profile_manager=>file-profile
+                                     checks    TYPE y_if_profile_manager=>file-checks
+                                     delegates TYPE y_if_profile_manager=>file-delegates
                            RAISING   ycx_object_not_processed.
 ENDCLASS.
 
@@ -26,9 +18,9 @@ CLASS lcl_file IMPLEMENTATION.
 
     CONCATENATE 'CODE_PAL_PROFILE-' sy-sysid sy-mandt '-' profile-profile INTO DATA(file_name).
 
-    DATA(structure) = NEW structure( profile = profile
-                                     checks = checks
-                                     delegates = delegates ).
+    DATA(structure) = NEW y_if_profile_manager=>file( profile = profile
+                                                      checks = checks
+                                                      delegates = delegates ).
 
     APPEND /ui2/cl_json=>serialize( structure ) TO file_content.
 
@@ -95,7 +87,6 @@ CLASS lcl_file IMPLEMENTATION.
     DATA filename TYPE string.
     DATA data_tab TYPE TABLE OF string.
     DATA json TYPE /ui2/cl_json=>json.
-    DATA structure TYPE structure.
 
     cl_gui_frontend_services=>file_open_dialog(
       EXPORTING
@@ -153,15 +144,11 @@ CLASS lcl_file IMPLEMENTATION.
     ENDLOOP.
 
     /ui2/cl_json=>deserialize( EXPORTING json = json
-                               CHANGING data = structure ).
+                               CHANGING data = result ).
 
-    IF structure IS INITIAL.
+    IF result IS INITIAL.
       RAISE EXCEPTION TYPE cx_abap_invalid_value.
     ENDIF.
-
-    profile = structure-profile.
-    checks = structure-checks.
-    delegates = structure-delegates.
 
   ENDMETHOD.
 
@@ -262,8 +249,6 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
       remove_check
         IMPORTING check TYPE ytab_checks,
       remove_selected_check,
-      remove_all_checks
-        IMPORTING profile TYPE ycicc_profile,
       check_check_rights
         IMPORTING profile       TYPE ycicc_profile
         RETURNING VALUE(result) TYPE abap_bool,
@@ -1004,52 +989,25 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD import_profile.
     TRY.
-        lcl_file=>upload( IMPORTING profile = DATA(profile)
-                                    checks = DATA(checks)
-                                    delegates = DATA(delegates) ).
+        DATA(structure) = lcl_file=>upload( ).
       CATCH ycx_object_not_processed.
         MESSAGE 'Failed to Import!'(054) TYPE 'E'.
       CATCH cx_abap_invalid_value.
         MESSAGE 'Invalid Imported File!'(055) TYPE 'E'.
     ENDTRY.
 
-    IF profile_manager->profile_exists( profile-profile ) = abap_true.
-      request_to_replace( profile-profile ).
-      check_check_rights( profile-profile ).
+    IF profile_manager->profile_exists( structure-profile-profile ) = abap_true.
+      request_to_replace( structure-profile-profile ).
+      check_check_rights( structure-profile-profile ).
     ENDIF.
 
-    profile-last_changed_by = sy-uname.
-    profile-last_changed_on = sy-datum.
-    profile-last_changed_at = sy-timlo.
-
     TRY.
-        profile_manager->insert_profile( profile ).
-        set_selected_profile( profile ).
-      CATCH ycx_failed_to_add_a_line.
-*        set_selected_profile( existing_profile ).
+        profile_manager->import_profile( structure ).
+      CATCH ycx_failed_to_add_a_line
+            ycx_time_overlap
+            ycx_no_delegation_rights.
+        MESSAGE 'Failed to Import!'(054) TYPE 'E'.
     ENDTRY.
-
-    LOOP AT delegates ASSIGNING FIELD-SYMBOL(<delegate>).
-      TRY.
-          profile_manager->insert_delegate( <delegate> ).
-        CATCH ycx_failed_to_add_a_line.
-      ENDTRY.
-    ENDLOOP.
-
-    remove_all_checks( profile-profile ).
-
-    LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
-      <check>-last_changed_by = sy-uname.
-      <check>-last_changed_on = sy-datum.
-      <check>-last_changed_at = sy-timlo.
-      TRY.
-          profile_manager->insert_check( <check> ).
-        CATCH ycx_failed_to_add_a_line.
-          MESSAGE 'Check already exist!'(016) TYPE 'E'.
-        CATCH ycx_time_overlap.
-          MESSAGE 'Please select a different start / end date to avoid a time overlap!'(037) TYPE 'E'.
-      ENDTRY.
-    ENDLOOP.
 
     MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
   ENDMETHOD.
@@ -1302,17 +1260,6 @@ CLASS lcl_util IMPLEMENTATION.
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a check!'(015) TYPE 'W'.
     ENDTRY.
-  ENDMETHOD.
-
-  METHOD remove_all_checks.
-    TRY.
-        DATA(checks) = profile_manager->select_checks( profile ).
-      CATCH ycx_entry_not_found.
-        RETURN.
-    ENDTRY.
-    LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
-      remove_check( <check> ).
-    ENDLOOP.
   ENDMETHOD.
 
   METHOD check_check_rights.

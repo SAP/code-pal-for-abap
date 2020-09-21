@@ -1,10 +1,7 @@
-CLASS y_profile_manager DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
-
+CLASS y_profile_manager DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
-
-    INTERFACES y_if_profile_manager .
+    INTERFACES y_if_profile_manager.
+    ALIASES create FOR y_if_profile_manager~create.
   PROTECTED SECTION.
     METHODS has_time_collision
       IMPORTING timeline_one_start TYPE dats
@@ -196,6 +193,37 @@ CLASS y_profile_manager IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD y_if_profile_manager~import_profile.
+    DATA(profile) = structure-profile.
+    DATA(delegates) = structure-delegates.
+    DATA(checks) = structure-checks.
+
+    IF y_if_profile_manager~profile_exists( profile-profile ).
+      y_if_profile_manager~check_delegation_rights( profile-profile ).
+    ENDIF.
+
+    profile-last_changed_by = sy-uname.
+    profile-last_changed_on = sy-datum.
+    profile-last_changed_at = sy-timlo.
+
+    y_if_profile_manager~insert_profile( profile ).
+
+    y_if_profile_manager~cleanup_profile( profile-profile ).
+
+    LOOP AT delegates ASSIGNING FIELD-SYMBOL(<delegate>).
+       y_if_profile_manager~insert_delegate( <delegate> ).
+    ENDLOOP.
+
+    LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
+      <check>-last_changed_by = sy-uname.
+      <check>-last_changed_on = sy-datum.
+      <check>-last_changed_at = sy-timlo.
+
+      y_if_profile_manager~insert_check( <check> ).
+    ENDLOOP.
+  ENDMETHOD.
+
+
   METHOD y_if_profile_manager~insert_check.
     INSERT INTO ytab_checks VALUES check.
     IF sy-subrc NE 0.
@@ -219,8 +247,7 @@ CLASS y_profile_manager IMPLEMENTATION.
        profile-profile EQ standardprofile.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
-
-    INSERT INTO ytab_profiles VALUES profile.
+    MODIFY ytab_profiles FROM profile.
     IF sy-subrc NE 0.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
@@ -316,6 +343,43 @@ CLASS y_profile_manager IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD y_if_profile_manager~cleanup_profile.
+    y_if_profile_manager~remove_all_delegates( profile ).
+    y_if_profile_manager~remove_all_checks( profile ).
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~remove_all_delegates.
+    TRY.
+        DATA(delegates) = y_if_profile_manager~select_delegates( profile ).
+      CATCH ycx_entry_not_found.
+        RETURN.
+    ENDTRY.
+    LOOP AT delegates ASSIGNING FIELD-SYMBOL(<delegate>).
+      TRY.
+          y_if_profile_manager~delete_delegate( <delegate> ).
+        CATCH ycx_failed_to_remove_a_line.
+          CONTINUE.
+      ENDTRY.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~remove_all_checks.
+    TRY.
+        DATA(checks) = y_if_profile_manager~select_checks( profile ).
+      CATCH ycx_entry_not_found.
+        RETURN.
+    ENDTRY.
+    LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
+      TRY.
+          y_if_profile_manager~delete_check( <check> ).
+        CATCH ycx_failed_to_remove_a_line.
+          CONTINUE.
+      ENDTRY.
+    ENDLOOP.
+  ENDMETHOD.
+
   METHOD y_if_profile_manager~profile_exists.
     try.
         "Based on Delegates because the profile might be inactive
@@ -345,6 +409,11 @@ CLASS y_profile_manager IMPLEMENTATION.
     FROM tadir
     INTO result
     WHERE obj_name = 'Y_CHECK_BASE'.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~create.
+    result = NEW y_profile_manager( ).
   ENDMETHOD.
 
 ENDCLASS.
