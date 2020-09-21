@@ -8,6 +8,8 @@ We are a team with limited capacity dedicated to several projects. Every single 
 
 Feel free to help us in developing new ABAP Checks and keeping this project up & running!
 
+> :bulb: [Keep it Simple](https://en.wikipedia.org/wiki/KISS_principle): One check validates one single behavior.
+
 ### How to Fork the Repository
 
 Fork our repository, then clone/pull the forked repo via abapGit into your system.  
@@ -82,7 +84,7 @@ The `execute_check` method can be redefined when the check searches for an issue
 Create a local test class under the global test class created above. It should inherit and implement the abstract methods from the `y_unit_test_base` class.  
 We will use the `y_check_prefer_is_not` check as an example.
 
-> :bulb: We recommend you to keep the test class as simple as possible. You can create multiples local test classes to validate distinct behaviors valid for the check.
+> :bulb: Create multiples local test classes to validate distinct behaviors.
 
 ```abap
 CLASS ltc_not_is_initial DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
