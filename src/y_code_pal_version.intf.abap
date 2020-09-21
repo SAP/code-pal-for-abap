@@ -1,3 +1,3 @@
 INTERFACE y_code_pal_version PUBLIC .
-  CONSTANTS abap TYPE string VALUE '1.02.2' ##NO_TEXT.
+  CONSTANTS abap TYPE string VALUE '1.03.0' ##NO_TEXT.
 ENDINTERFACE.
