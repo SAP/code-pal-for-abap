@@ -16,7 +16,7 @@ Multiple methods with specific parameters for the use case avoid this confusion 
 
 ### How to solve the issue?
 
-Spliting methods instead of adding `OPTIONAL` parameters.
+Splitting methods instead of adding `OPTIONAL` parameters.
 
 ### What to do in case of exception?
 

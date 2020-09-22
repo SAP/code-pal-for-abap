@@ -10,14 +10,6 @@
     <STATE>1</STATE>
     <UNICODE>X</UNICODE>
    </VSEOINTERF>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CLSNAME>Y_IF_PROFILE_MANAGER</CLSNAME>
-     <CMPNAME>PROFILE_ASSIGNMENTS</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>4 Byte Signed Integer</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>

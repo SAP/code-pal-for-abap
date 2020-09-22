@@ -8,6 +8,13 @@ Legend
 + : added
 - : removed
 
+2020-09-22 v1.03.0
+------------------
++ statement coverage check
++ branch coverage check
++ procedure coverage check
++ API to import profile
+
 2020-09-17 v1.02.1
 ------------------
 * unit test of external call in ut

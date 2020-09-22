@@ -12,12 +12,6 @@ CLASS y_check_external_call_in_ut DEFINITION
 
   PRIVATE SECTION.
 
-    METHODS is_persistent_object
-      IMPORTING
-        !obj_name     TYPE string
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-
     METHODS check_if_error
       IMPORTING
         !index     TYPE i OPTIONAL
@@ -77,7 +71,6 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
 
       LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
         FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-
         inspect_tokens( index = index
                         statement = <statement> ).
 
@@ -125,36 +118,5 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
       check_if_error( index = index
                       statement = statement ).
     ENDIF.
-  ENDMETHOD.
-
-
-  METHOD is_persistent_object.
-
-    TRY.
-        SELECT SINGLE devclass FROM tadir INTO @DATA(package)
-          WHERE pgmid = 'R3TR' AND
-                object = 'TABL' AND
-                obj_name = @obj_name.
-        IF sy-subrc NE 0.
-          result = abap_false.
-          RETURN.
-        ENDIF.
-
-        DATA(checked_object) = cl_abap_dyn_prg=>check_table_name_str(
-             val             = obj_name
-             packages        = package ).
-
-        DATA dynamic_line TYPE REF TO data.
-        FIELD-SYMBOLS <table_structure> TYPE any.
-
-        CREATE DATA dynamic_line TYPE (checked_object).
-        ASSIGN dynamic_line->* TO <table_structure>.
-
-        SELECT SINGLE * FROM (checked_object) INTO <table_structure>.
-        result = abap_true.
-
-      CATCH cx_abap_not_a_table cx_abap_not_in_package cx_sy_dynamic_osql_semantics cx_root.
-        result = abap_false.
-    ENDTRY.
   ENDMETHOD.
 ENDCLASS.

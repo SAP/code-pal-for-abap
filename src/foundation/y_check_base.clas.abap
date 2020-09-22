@@ -1,7 +1,8 @@
 CLASS y_check_base DEFINITION PUBLIC ABSTRACT
   INHERITING FROM cl_ci_test_scan
   CREATE PUBLIC
-  GLOBAL FRIENDS y_unit_test_base.
+  GLOBAL FRIENDS y_unit_test_base
+                 y_unit_test_coverage.
 
   PUBLIC SECTION.
 
@@ -61,6 +62,10 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
       RAISING
         ycx_object_not_processed
         ycx_object_is_exempted .
+    "! Method to validate the check customizing
+    "! @parameter statement | Received in the inspect_tokens method.
+    "! @parameter error_count | Number of issues found to compare against the threshold.
+    "! @parameter result | Configuration structure if the check must be raised
     METHODS detect_check_configuration
       IMPORTING
         statement     TYPE sstmnt

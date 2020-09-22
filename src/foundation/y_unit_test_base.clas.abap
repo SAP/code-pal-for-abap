@@ -5,10 +5,20 @@ CLASS y_unit_test_base DEFINITION PUBLIC ABSTRACT FOR TESTING RISK LEVEL HARMLES
     METHODS without_issue FOR TESTING.
     METHODS with_exmeption FOR TESTING.
   PROTECTED SECTION.
+    "! Method to get a check class instance.
+    "! @parameter result | Instance of the `Y_CHECK_*` class.
     METHODS get_cut ABSTRACT RETURNING VALUE(result) TYPE REF TO y_check_base.
+    "! Method to get a code snippet that raises the check.
+    "! @parameter result | Table of strings with the code.
     METHODS get_code_with_issue ABSTRACT RETURNING VALUE(result) TYPE y_char255_tab.
+    "! Method to get a code snippet that will not raise the check.
+    "! @parameter result | Table of strings with the code.
     METHODS get_code_without_issue ABSTRACT RETURNING VALUE(result) TYPE y_char255_tab.
+    "! Method to get a code snippet that will not raise the check because it has a pseudo comment.
+    "! @parameter result | Table of strings with the code.
     METHODS get_code_with_exemption ABSTRACT RETURNING VALUE(result) TYPE y_char255_tab.
+    "! Method to get the count of raises that the code provided in `get_code_with_issue` will do.
+    "! @parameter result | Count of expected raises (Default 1).
     METHODS get_expected_count RETURNING VALUE(result) TYPE i.
   PRIVATE SECTION.
     DATA cut TYPE REF TO y_check_base.

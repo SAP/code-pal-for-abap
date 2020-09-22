@@ -8,6 +8,12 @@ INTERFACE y_if_profile_manager
   TYPES:
     check_assignments TYPE STANDARD TABLE OF ytab_checks WITH DEFAULT KEY .
 
+  TYPES: BEGIN OF file,
+             profile   TYPE ytab_profiles,
+             checks    TYPE check_assignments,
+             delegates TYPE delegate_assigments,
+         END OF file.
+
   TYPES:
     BEGIN OF ts_profile,
       profile TYPE ycicc_profile,
@@ -34,6 +40,9 @@ INTERFACE y_if_profile_manager
   CLASS-METHODS get_delegates_type_name
     RETURNING
       VALUE(result) TYPE tabname .
+  CLASS-METHODS create
+    RETURNING
+      VALUE(result) TYPE REF TO y_if_profile_manager.
   METHODS select_profiles
     IMPORTING
       !username     TYPE syst_uname
@@ -80,6 +89,13 @@ INTERFACE y_if_profile_manager
       !delegate TYPE ytab_delegates
     RAISING
       ycx_failed_to_remove_a_line .
+  METHODS import_profile
+    IMPORTING
+      !structure TYPE file
+    RAISING
+      ycx_failed_to_add_a_line
+      ycx_time_overlap
+      ycx_no_delegation_rights.
   METHODS insert_profile
     IMPORTING
       !profile TYPE ytab_profiles
@@ -122,6 +138,15 @@ INTERFACE y_if_profile_manager
   METHODS register_standard_profile
     RAISING
       cx_failed .
+  METHODS cleanup_profile
+    IMPORTING
+      profile TYPE ycicc_profile.
+  METHODS remove_all_checks
+    IMPORTING
+      profile TYPE ycicc_profile.
+  METHODS remove_all_delegates
+    IMPORTING
+      profile TYPE ycicc_profile.
   METHODS profile_exists
     IMPORTING
       name TYPE ytab_profiles-profile

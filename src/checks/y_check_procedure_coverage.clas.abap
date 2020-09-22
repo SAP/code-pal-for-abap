@@ -1,4 +1,4 @@
-CLASS y_check_statement_coverage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_procedure_coverage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
   PROTECTED SECTION.
@@ -8,7 +8,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_statement_coverage IMPLEMENTATION.
+CLASS y_check_procedure_coverage IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -21,7 +21,7 @@ CLASS y_check_statement_coverage IMPLEMENTATION.
     settings-disable_on_testcode_selection = abap_true.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
-    set_check_message( 'Statement Coverage of &1% is under the threshold of &2%.' ).
+    set_check_message( 'Procedure Coverage of &1% is under the threshold of &2%.' ).
   ENDMETHOD.
 
 
@@ -31,7 +31,7 @@ CLASS y_check_statement_coverage IMPLEMENTATION.
 
     unit_test_coverage->execute( me ).
 
-    DATA(coverage) = unit_test_coverage->get_statement_coverage( ).
+    DATA(coverage) = unit_test_coverage->get_procedure_coverage( ).
 
     DATA(check_configuration) = detect_check_configuration( error_count = CONV #( coverage )
                                                             statement = VALUE #( level = 1 ) ).
