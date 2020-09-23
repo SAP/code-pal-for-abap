@@ -369,7 +369,7 @@ CLASS lcl_check_events IMPLEMENTATION.
             lcl_util=>auto_re_start_check( ).
 
           CATCH ycx_entry_not_found
-                cx_sy_create_object_error .
+                cx_sy_create_object_error.
             MESSAGE 'Please select a check!'(015) TYPE 'I'.
 
         ENDTRY.

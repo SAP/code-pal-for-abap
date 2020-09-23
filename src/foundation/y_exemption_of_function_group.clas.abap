@@ -91,7 +91,7 @@ CLASS Y_EXEMPTION_OF_FUNCTION_GROUP IMPLEMENTATION.
 
   METHOD is_table_maintenance_generate.
     SELECT SINGLE area AS object FROM tlibt INTO @DATA(l_area)
-      WHERE area = @name AND ( areat = 'Extended Table Maintenance (Generated)' ) ##NO_TEXT . "#EC CI_GENBUFF
+      WHERE area = @name AND ( areat = 'Extended Table Maintenance (Generated)' ) ##NO_TEXT. "#EC CI_GENBUFF
     IF sy-subrc = 0.
       result = abap_true.
     ENDIF.
