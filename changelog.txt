@@ -11,8 +11,8 @@ Legend
 2020-09-22 v1.04.0
 ------------------
 + API to read version
-* minor clean code changes
-! documentation (naming)
+! minor clean code refactoring
+! minor documentation fixes
 
 2020-09-22 v1.03.1
 ------------------
