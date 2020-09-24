@@ -8,6 +8,11 @@ Legend
 + : added
 - : removed
 
+2020-09-22 v1.03.2
+------------------
+* minor clean code changes
+! documentation (naming)
+
 2020-09-22 v1.03.1
 ------------------
 * if_apack_manifest does not exist
