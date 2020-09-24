@@ -6,11 +6,12 @@
 
 ### What is the Intent of the Check?
 
-The pseudo comment usage check lists the number of Clean Code pseudo comments per object. Pseudo comments completely suppress the findings in ATC. Thus, this check can be used whether objects without any other finding use a lot of clean code pseudo comments to suppress findings.
+The pseudo comment usage check lists the number of code pal for ABAP pseudo comments per object.  
+Pseudo comments completely suppress the findings in ATC. Thus, this check can be used whether objects without any other finding use a lot of pseudo comments to suppress findings.
 
 ### How does the check work?
 
-It simply counts the number of used clean code pseudo comments.
+It simply counts the number of used code pal for ABAP pseudo comments.
 
 ### Which attributes can be maintained?
 
