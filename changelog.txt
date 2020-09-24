@@ -8,8 +8,9 @@ Legend
 + : added
 - : removed
 
-2020-09-22 v1.03.2
+2020-09-22 v1.04.0
 ------------------
++ API to read version
 * minor clean code changes
 ! documentation (naming)
 
