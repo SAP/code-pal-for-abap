@@ -1,6 +1,11 @@
 CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES if_http_extension.
+    TYPES: BEGIN OF versions,
+             code_pal_for_abap TYPE string,
+             sap_basis TYPE string,
+             abapGit TYPE string,
+           END OF versions.
   PROTECTED SECTION.
     METHODS raise_bad_request.
     METHODS raise_method_not_allowed.
@@ -10,6 +15,8 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
                                       RETURNING value(result) TYPE y_if_profile_manager=>file
                                       RAISING cx_abap_invalid_value.
     METHODS execute_import_profile.
+    METHODS execute_get_versions.
+    METHODS get_basis_version RETURNING VALUE(result) TYPE string.
   PRIVATE SECTION.
     DATA request TYPE REF TO if_http_request.
     DATA response TYPE ref to if_http_response.
@@ -25,6 +32,8 @@ CLASS y_code_pal_service IMPLEMENTATION.
     CASE request->get_header_field( 'action' ).
       WHEN 'import_profile'.
         execute_import_profile( ).
+      WHEN 'get_versions'.
+        execute_get_versions( ).
       WHEN OTHERS.
         raise_bad_request( ).
         RETURN.
@@ -65,6 +74,22 @@ CLASS y_code_pal_service IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+  METHOD execute_get_versions.
+    IF request->get_method( ) <> 'GET'.
+      raise_method_not_allowed( ).
+      RETURN.
+    ENDIF.
+
+    DATA(structure) = VALUE versions( code_pal_for_abap = y_code_pal_version=>abap
+                                      sap_basis = get_basis_version( )
+                                      abapGit = zif_abapgit_version=>gc_abap_version ).
+
+    DATA(json) = /ui2/cl_json=>serialize( structure ).
+
+    response->set_content_type( 'application/json' ).
+    response->set_cdata( json ).
+  ENDMETHOD.
+
   METHOD raise_bad_request.
     response->set_status( code   = '400'
                           reason = 'Bad Request' ).
@@ -92,6 +117,11 @@ CLASS y_code_pal_service IMPLEMENTATION.
     IF result IS INITIAL.
       RAISE EXCEPTION TYPE cx_abap_invalid_value.
     ENDIF.
+  ENDMETHOD.
+
+  METHOD get_basis_version.
+    SELECT SINGLE * FROM cvers INTO @DATA(cver) WHERE component = 'SAP_BASIS'.
+    result = |{ cver-release }-{ cver-extrelease }|.
   ENDMETHOD.
 
 ENDCLASS.
