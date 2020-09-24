@@ -45,7 +45,7 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    settings-pseudo_comment = '“#EC EXT_CALL_UT' ##NO_TEXT.
+    settings-pseudo_comment = '"#EC EXT_CALL_UT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
     settings-disable_on_testcode_selection = abap_true.
