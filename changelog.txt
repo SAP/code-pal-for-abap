@@ -27,7 +27,7 @@ Legend
 2020-09-17 v1.02.1
 ------------------
 * unit test of external call in ut
-! decription of the profile management tool
+! description of the profile management tool
 
 2020-09-17 v1.02.0
 ------------------
