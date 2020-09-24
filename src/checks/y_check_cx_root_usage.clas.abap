@@ -19,7 +19,7 @@ ENDCLASS.
 CLASS Y_CHECK_CX_ROOT_USAGE IMPLEMENTATION.
 
 
-  METHOD constructor .
+  METHOD constructor.
     super->constructor( ).
 
     settings-pseudo_comment = '"#EC NEED_CX_ROOT' ##NO_TEXT.

@@ -36,7 +36,7 @@ ENDCLASS.
 CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
 
 
-  METHOD constructor .
+  METHOD constructor.
     super->constructor( ).
 
     settings-pseudo_comment = '"#EC CI_MAGIC' ##NO_TEXT.

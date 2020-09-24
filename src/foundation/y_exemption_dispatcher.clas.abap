@@ -53,7 +53,7 @@ CLASS Y_EXEMPTION_DISPATCHER IMPLEMENTATION.
 
   METHOD is_dataset_outdated.
     DATA(compare_date) = storedate + 14.
-    is_outdated = xsdbool( compare_date < sy-datum ) .
+    is_outdated = xsdbool( compare_date < sy-datum ).
   ENDMETHOD.
 
 
