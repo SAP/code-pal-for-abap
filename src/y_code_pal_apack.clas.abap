@@ -1,4 +1,4 @@
-CLASS y_code_pal_apack DEFINITION PUBLIC FINAL CREATE PUBLIC .
+CLASS y_code_pal_apack DEFINITION PUBLIC FINAL CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES zif_apack_manifest.
     ALIASES descriptor FOR zif_apack_manifest~descriptor.
