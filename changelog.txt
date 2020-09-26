@@ -1,0 +1,48 @@
+code-pal-for-abap changelog
+=================
+
+Legend
+------
+* : fixed
+! : changed
++ : added
+- : removed
+
+2020-09-22 v1.04.0
+------------------
++ API to read version
+! minor clean code refactoring
+! minor documentation fixes
+
+2020-09-22 v1.03.1
+------------------
+* if_apack_manifest does not exist
+
+2020-09-22 v1.03.0
+------------------
++ statement coverage check
++ branch coverage check
++ procedure coverage check
++ API to import profile
+
+2020-09-17 v1.02.1
+------------------
+* unit test of external call in ut
+! description of the profile management tool
+
+2020-09-17 v1.02.0
+------------------
++ new check y_check_external_call_in_ut
++ new check y_check_statement_coverage
++ threshold support to 'less equal' and 'greater than'
+! folder logic to prefix logic
+! name to code pal for ABAP
+! project documentation 
+
+2020-09-15 v1.01.0
+------------------
++ profile feature
+
+2020-09-14 v1.00.0
+------------------
++ changelog

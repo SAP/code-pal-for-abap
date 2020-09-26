@@ -3,22 +3,19 @@
  <asx:values>
   <DATA>
    <MASTER_LANGUAGE>E</MASTER_LANGUAGE>
-   <STARTING_FOLDER>/clean_code_main/</STARTING_FOLDER>
-   <FOLDER_LOGIC>FULL</FOLDER_LOGIC>
+   <STARTING_FOLDER>/src/</STARTING_FOLDER>
+   <FOLDER_LOGIC>PREFIX</FOLDER_LOGIC>
    <IGNORE>
+    <item>/.gitattributes</item>
     <item>/.gitignore</item>
     <item>/LICENSE</item>
-    <item>/README.md</item>
-    <item>/package.json</item>
-    <item>/.travis.yml</item>
-    <item>/.gitlab-ci.yml</item>
-    <item>/abaplint.json</item>
-    <item>/azure-pipelines.yml</item>
+    <item>/*.md</item>
+    <item>/*.yml</item>
     <item>/*.json</item>
     <item>/*.jpg</item>
     <item>/*.jpeg</item>
-    <item>/license.txt</item>
-    <item>/notice.txt</item>
+    <item>/*.txt</item>
+    <item>/.apack-manifest.xml</item>
    </IGNORE>
   </DATA>
  </asx:values>

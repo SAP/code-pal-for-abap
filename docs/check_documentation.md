@@ -1,14 +1,26 @@
-# Check Documentation
+# code pal for ABAP
+
+[code pal for ABAP](../README.md) > [Documentation](check_documentation.md)
+
+## Check Documentation
+
+- [Boolean Input Parameter](checks/boolean-input-parameter.md)
 - [CALL Method Usage](checks/call-method-usage.md)
+- [Chain Declaration Usage](checks/chain-declaration-usage.md)
 - [CHECK Statement Position](checks/check-statement-position.md)
+- [Comment Position](checks/comment-position.md)
+- [Comment Type](checks/comment-type.md)
 - [Comment Usage](checks/comment-usage.md)
 - [Constants Interface](checks/constants-interface.md)
 - [Cyclomatic Complexity](checks/cyclomatic-complexity.md)
-- [DB Access in Unit Tests](checks/db-access-in-ut.md)
+- [DB Access in Unit Test](checks/db-access-in-ut.md)
 - [Declaration in IF](checks/declaration-in-if.md)
 - [Deprecated Key Word](checks/deprecated-key-word.md)
+- [Empty Catch](checks/empty_catch.md)
 - [Empty IF Branches](checks/empty-if-branches.md)
 - [Empty Procedure](checks/empty-procedure.md)
+- [Equals Sign Chaining](checks/equals-sign-chaining.md)
+- [External Call in Unit Test](checks/external-call-in-ut.md)
 - [FORM Routine](checks/form-routine.md)
 - [FUNCTION Routine](checks/function-routine.md)
 - [Interface in Class](checks/interface-in-class.md)
@@ -24,12 +36,14 @@
 - [Number Methods](checks/number-methods.md)
 - [Number Output Parameter](checks/number-output-parameter.md)
 - [Number of Public Attributes](checks/number-public-attributes.md)
+- [Prefer CASE to ELSEIF](checks/prefer-case-to-elseif.md)
+- [Prefer IS NOT to NOT IS](checks/prefer-is-not-to-not-is.md)
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
+- [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
+- [Optional Parameters](checks/optional-parameters.md)
 - [RECEIVING Usage](checks/receiving-usage.md)
+- [Returning Name](checks/returning-name.md)
+- [Self-Reference](checks/self-reference.md)
 - [Subsequent Memory Assign Read Table](checks/sub-assign-read-table.md)
 - [Test Seam Usage](checks/test-seam-usage.md)
-
-## Useful information concerning all Clean Code Checks:
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md)
-* [Writing Testable Code for ABAP](https://open.sap.com/courses/wtc1/items/2gzG0sRlN1yjkTUREB02L9)
-* [ABAP Development for S/4HANA](https://open.sap.com/courses/a4h1)
+- [Unit Test Coverages](checks/unit-test-coverages.md)
