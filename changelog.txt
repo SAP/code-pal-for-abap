@@ -8,6 +8,10 @@ Legend
 + : added
 - : removed
 
+2020-09-30 v1.04.1
+------------------
+* Fixes #156 (Prefer CASE to ELSE IF)
+
 2020-09-22 v1.04.0
 ------------------
 + API to read version
