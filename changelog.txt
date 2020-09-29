@@ -10,7 +10,8 @@ Legend
 
 2020-09-30 v1.04.1
 ------------------
-* #156
++ enabling table log for exemptions
+* prefer case to else if (#156)
 
 2020-09-22 v1.04.0
 ------------------
