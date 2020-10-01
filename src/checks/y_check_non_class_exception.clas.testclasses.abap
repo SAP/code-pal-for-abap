@@ -34,6 +34,14 @@ CLASS ltc_raise IMPLEMENTATION.
       ( 'REPORT y_example. ' )
 
       ( ' CLASS cx_demo DEFINITION INHERITING FROM cx_static_check. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     CLASS-METHODS create RETURNING VALUE(result) TYPE REF TO cx_demo. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS cx_demo IMPLEMENTATION. ' )
+      ( '   METHOD create. ' )
+      ( '     result = NEW cx_demo( ). ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example DEFINITION. ' )
@@ -47,6 +55,7 @@ CLASS ltc_raise IMPLEMENTATION.
       ( '     RAISE EXCEPTION TYPE cx_demo. ' )
       ( '     RAISE RESUMABLE EXCEPTION TYPE cx_demo. ' )
       ( '     RAISE EVENT event. ' )
+      ( '     RAISE EXCEPTION cx_demo=>create( ). ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).

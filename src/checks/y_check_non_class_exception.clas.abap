@@ -1,20 +1,16 @@
-CLASS y_check_non_class_exception DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_non_class_exception DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-
+    METHODS inspect_message IMPORTING statement TYPE sstmnt
+                                      index     TYPE i.
+    METHODS inspect_raise IMPORTING statement TYPE sstmnt
+                                    index     TYPE i.
   PRIVATE SECTION.
-    METHODS checkif_error
-      IMPORTING index     TYPE i
-                statement TYPE sstmnt.
+    METHODS checkif_error IMPORTING index     TYPE i
+                                    statement TYPE sstmnt.
 ENDCLASS.
-
 
 
 CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
@@ -47,19 +43,35 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CASE get_token_abs( statement-from ).
-      WHEN 'RAISE'.
-        IF 'RESUMABLE SHORTDUMP EVENT' NS get_token_abs( statement-from + 1 ) AND NOT
-          ( get_token_abs( statement-from + 1 ) EQ 'EXCEPTION' AND get_token_abs( statement-from + 2 ) EQ 'TYPE' ).
-          checkif_error( index = index
-                         statement = statement ).
-        ENDIF.
-      WHEN 'MESSAGE'.
-        LOOP AT ref_scan_manager->get_tokens( ) TRANSPORTING NO FIELDS
-          FROM statement-from TO statement-to WHERE str = 'RAISING' AND type EQ 'I'.
-          checkif_error( index = index
-                         statement = statement ).
-        ENDLOOP.
-    ENDCASE.
+    inspect_raise( statement = statement
+                   index = index ).
+
+    inspect_message( statement = statement
+                     index = index ).
   ENDMETHOD.
+
+
+  METHOD inspect_message.
+    CHECK get_token_abs( statement-from ) = 'MESSAGE'.
+
+    LOOP AT ref_scan_manager->get_tokens( ) TRANSPORTING NO FIELDS
+    FROM statement-from TO statement-to
+    WHERE str = 'RAISING' AND type EQ 'I'.
+
+      checkif_error( index = index
+                     statement = statement ).
+
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD inspect_raise.
+    CHECK get_token_abs( statement-from ) = 'RAISE'.
+    CHECK statement-from + 1 = statement-to.
+
+    checkif_error( index = index
+                   statement = statement ).
+  ENDMETHOD.
+
+
 ENDCLASS.
