@@ -103,7 +103,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    FIND REGEX '^(?![01]$)\d*$' IN token_string.
+    FIND REGEX `^(?!'?[01]'?$)'?\d+'?$` IN token_string.
     IF sy-subrc EQ 0.
       magic_number = token_string.
       result = abap_true.
