@@ -10,6 +10,7 @@ Legend
 
 2020-09-30 v1.04.1
 ------------------
+* magic number to support numeric strings (#142)
 + enabling table log for exemptions
 * prefer case to else if (#156)
 
