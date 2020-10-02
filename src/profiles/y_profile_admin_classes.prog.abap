@@ -258,11 +258,18 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
     CLASS-METHODS:
       get_cursor_field
         RETURNING VALUE(result) TYPE char20,
-      call_check_info.
-  PRIVATE SECTION.
-    CLASS-METHODS request_to_replace
+      call_check_info,
+      add_all_checks.
+    CLASS-METHODS add_check
       IMPORTING
-        profile TYPE ytab_profiles-profile.
+        edit_mode TYPE abap_bool DEFAULT abap_false
+      RAISING
+        cx_failed.
+    CLASS-METHODS remove_all_checks.
+  PRIVATE SECTION.
+    CLASS-METHODS request_confirmation
+      IMPORTING
+        text_question TYPE string.
 
 ENDCLASS.
 
@@ -387,6 +394,12 @@ CLASS lcl_check_events IMPLEMENTATION.
       WHEN 'BTN_REMOVE'.
         lcl_util=>remove_selected_check( ).
 
+      WHEN 'BTN_ADD_ALL'.
+        lcl_util=>add_all_checks( ).
+
+      WHEN 'BTN_REMOVE_ALL'.
+        lcl_util=>remove_all_checks( ).
+
     ENDCASE.
     lcl_util=>refresh_checks( ).
   ENDMETHOD.
@@ -463,6 +476,7 @@ CLASS lcl_util IMPLEMENTATION.
                                               sy_repid        = sy_repid
                                               events          = NEW lcl_check_events( ) ).
 
+
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_ADD'
                                                      icon      = '@04@'
                                                      butn_type = cntb_btype_button
@@ -482,6 +496,16 @@ CLASS lcl_util IMPLEMENTATION.
                                                      icon      = '@5E@'
                                                      butn_type = cntb_btype_button
                                                      quickinfo = 'Check Documentation'(052) ).
+
+        checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_ADD_ALL'
+                                                     icon      = '@VY@'
+                                                     butn_type = cntb_btype_button
+                                                     quickinfo = 'Add All'(058) ).
+
+        checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_REMOVE_ALL'
+                                                     icon      = '@VZ@'
+                                                     butn_type = cntb_btype_button
+                                                     quickinfo = 'Remove All'(059) ).
 
         checks_tree->set_field_visibility( fieldname = 'START_DATE'
                                            is_visible = abap_true ).
@@ -997,7 +1021,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
 
     IF profile_manager->profile_exists( structure-profile-profile ) = abap_true.
-      request_to_replace( structure-profile-profile ).
+      request_confirmation( | Would you like to replace the { structure-profile-profile } profile? | ).
       check_check_rights( structure-profile-profile ).
     ENDIF.
 
@@ -1146,7 +1170,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD init_add_check.
     DATA obj TYPE REF TO y_check_base.
 
-    io_check_id = ''.
+    "io_check_id = ''.
     io_check_description = ''.
     io_start_date = '20190101'.
     io_end_date = '99991231'.
@@ -1193,46 +1217,59 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD check_customization.
-    CHECK user_command EQ 'ENTR_400' AND
-          io_check_id NE space.
+    CHECK user_command EQ 'ENTR_400'
+    AND io_check_id NE space.
+
+    add_check( edit_mode ).
+  ENDMETHOD.
+
+  METHOD add_check.
+    TRY.
+        DATA(profile) = lcl_util=>get_selected_profile( )-profile.
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+    ENDTRY.
+
+    DATA(check) = VALUE ytab_checks( profile = profile
+                                     checkid = io_check_id
+                                     start_date = io_start_date
+                                     end_date = io_end_date
+                                     objects_created_on = io_creation_date
+                                     threshold = io_threshold
+                                     prio = io_prio
+                                     apply_on_productive_code = chbx_on_prodcode
+                                     apply_on_testcode = chbx_on_testcode
+                                     last_changed_by = sy-uname
+                                     last_changed_on = sy-datum
+                                     last_changed_at = sy-timlo ).
 
     TRY.
-        DATA(check) = VALUE ytab_checks( profile = lcl_util=>get_selected_profile( )-profile
-                                         checkid = io_check_id
-                                         start_date = io_start_date
-                                         end_date = io_end_date
-                                         objects_created_on = io_creation_date
-                                         threshold = io_threshold
-                                         prio = io_prio
-                                         apply_on_productive_code = chbx_on_prodcode
-                                         apply_on_testcode = chbx_on_testcode
-                                         last_changed_by = sy-uname
-                                         last_changed_on = sy-datum
-                                         last_changed_at = sy-timlo ).
+        profile_manager->get_check_description( check-checkid ).
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Check is not registered!'(044) TYPE 'I'.
+        RAISE EXCEPTION TYPE cx_failed.
+    ENDTRY.
 
-        TRY.
-            profile_manager->get_check_description( check-checkid ).
+    IF chbx_on_prodcode = abap_false
+    AND chbx_on_testcode = abap_false.
+      MESSAGE 'Please choose Productive Code and/or Testcode for check execution!'(051) TYPE 'I'.
+      RAISE EXCEPTION TYPE cx_failed.
+    ENDIF.
 
-          CATCH ycx_entry_not_found.
-            MESSAGE 'Check is not registered!'(044) TYPE 'I'.
-            RAISE EXCEPTION TYPE cx_failed.
-        ENDTRY.
-        IF chbx_on_prodcode EQ abap_false AND chbx_on_testcode EQ abap_false.
-          MESSAGE 'Please choose Productive Code and/or Testcode for check execution!'(051) TYPE 'I'.
-          RAISE EXCEPTION TYPE cx_failed.
-        ENDIF.
-        IF edit_mode EQ abap_true.
+    TRY.
+        IF edit_mode = abap_true.
           profile_manager->check_time_overlap( check = check
                                                selected_check = lcl_util=>get_selected_check( ) ).
+
           profile_manager->delete_check( lcl_util=>get_selected_check( ) ).
         ELSE.
           profile_manager->check_time_overlap( check = check ).
         ENDIF.
 
         profile_manager->insert_check( check ).
-
       CATCH ycx_entry_not_found.
-        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+        MESSAGE 'Check is not registered!'(044) TYPE 'I'.
+        RAISE EXCEPTION TYPE cx_failed.
 
       CATCH ycx_failed_to_add_a_line
             ycx_failed_to_remove_a_line.
@@ -1281,13 +1318,13 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-  METHOD request_to_replace.
+  METHOD request_confirmation.
     DATA answer TYPE c.
 
     CALL FUNCTION 'POPUP_TO_CONFIRM'
       EXPORTING
         titlebar              = | Confirmation |
-        text_question         = | Would you like to replace the { profile } profile? |
+        text_question         = text_question
         display_cancel_button = abap_false
       IMPORTING
         answer                = answer.
@@ -1295,6 +1332,74 @@ CLASS lcl_util IMPLEMENTATION.
     IF answer <> 1.
       MESSAGE 'Action Canceled.' TYPE 'W'.
     ENDIF.
+  ENDMETHOD.
+
+  METHOD add_all_checks.
+    TRY.
+        DATA(profile) = lcl_util=>get_selected_profile( )-profile.
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+    ENDTRY.
+
+    TRY.
+        profile_manager->check_delegation_rights( profile ).
+      CATCH ycx_no_delegation_rights.
+        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'W'.
+    ENDTRY.
+
+    TRY.
+        profile_manager->select_checks( profile ).
+        request_confirmation( | Would you like to replace the current checks? | ).
+      CATCH ycx_entry_not_found.
+        request_confirmation( | Would you like to add all the checks? | ).
+    ENDTRY.
+
+    profile_manager->remove_all_checks( profile ).
+
+    TRY.
+        DATA(available_checks) = profile_manager->select_existing_checks( ).
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Checks not registered!'(021) TYPE 'S'.
+    ENDTRY.
+
+    LOOP AT available_checks ASSIGNING FIELD-SYMBOL(<check>).
+      io_check_id = <check>-checkid.
+      init_add_check( ).
+      TRY.
+          add_check( ).
+        CATCH cx_failed.
+          CONTINUE.
+      ENDTRY.
+    ENDLOOP.
+
+    MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
+  ENDMETHOD.
+
+
+  METHOD remove_all_checks.
+    TRY.
+        DATA(profile) = lcl_util=>get_selected_profile( )-profile.
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+    ENDTRY.
+
+    TRY.
+        profile_manager->check_delegation_rights( profile ).
+      CATCH ycx_no_delegation_rights.
+        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'W'.
+    ENDTRY.
+
+    TRY.
+        DATA(checks) = profile_manager->select_checks( profile ).
+      CATCH ycx_entry_not_found.
+        RETURN.
+    ENDTRY.
+
+    request_confirmation( | Would you like to remove all the checks? | ).
+
+    profile_manager->remove_all_checks( profile ).
+
+    MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
   ENDMETHOD.
 
 ENDCLASS.
