@@ -50,3 +50,4 @@ Check the [change log](changelog.txt) for further infromation.
 - [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md)
 - [Writing Testable Code for ABAP](https://open.sap.com/courses/wtc1/items/2gzG0sRlN1yjkTUREB02L9)
 - [ABAP Development for S/4HANA](https://open.sap.com/courses/a4h1)
+- [ABAP 7.40 Quick Reference](https://blogs.sap.com/2015/10/25/abap-740-quick-reference/)
