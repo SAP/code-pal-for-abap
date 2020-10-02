@@ -52,3 +52,4 @@ Check the [change log](changelog.txt) for further infromation.
 - [ABAP Development for S/4HANA](https://open.sap.com/courses/a4h1)
 - [ABAP 7.40 Quick Reference](https://blogs.sap.com/2015/10/25/abap-740-quick-reference/)
 - [ABAP Built-in Functions](https://blogs.sap.com/2015/11/30/reminder-abap-built-in-functions/)
+- [ABAP - Release-Specific Changes](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/abennews.htm)
