@@ -51,3 +51,4 @@ Check the [change log](changelog.txt) for further infromation.
 - [Writing Testable Code for ABAP](https://open.sap.com/courses/wtc1/items/2gzG0sRlN1yjkTUREB02L9)
 - [ABAP Development for S/4HANA](https://open.sap.com/courses/a4h1)
 - [ABAP 7.40 Quick Reference](https://blogs.sap.com/2015/10/25/abap-740-quick-reference/)
+- [ABAP Built-in Functions](https://blogs.sap.com/2015/11/30/reminder-abap-built-in-functions/)
