@@ -7,7 +7,8 @@ CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_ba
   PRIVATE SECTION.
     TYPES: BEGIN OF counter,
              if_structure TYPE sstruc,
-             if_statement TYPE sstmnt,
+             if_statement type sstmnt,
+             condition    TYPE string,
              count        TYPE i,
            END OF counter.
     TYPES counters TYPE TABLE OF counter.
@@ -19,7 +20,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
+CLASS Y_CHECK_PREFER_CASE_TO_ELSEIF IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -42,26 +43,34 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
     DATA(tokens) = ref_scan_manager->get_tokens( ).
 
     LOOP AT structures ASSIGNING FIELD-SYMBOL(<structure>)
-    WHERE type EQ scan_struc_type-condition.
+    WHERE type = scan_struc_type-condition
+    OR type = scan_struc_type-alternation.
 
       IF skip( <structure> ) = abap_true.
         CONTINUE.
       ENDIF.
 
-      DATA(structure) = structures[ <structure>-back ].
-      DATA(statement) = statements[ structure-stmnt_from ].
+      DATA(statement) = statements[ <structure>-stmnt_from ].
       DATA(token) = tokens[ statement-from ].
 
-      IF token-str <> 'IF'.
+      DATA(if_structure) = COND #( WHEN token-str = 'IF' THEN <structure>
+                                   WHEN token-str = 'ELSEIF' THEN structures[ <structure>-back ] ).
+
+      IF if_structure IS INITIAL.
         CONTINUE.
       ENDIF.
 
+      DATA(condition) = tokens[ statement-from + 1 ].
+
       TRY.
-          counters[ if_statement = statement ]-count = counters[ if_statement = statement ]-count + 1.
+          counters[ if_structure = if_structure
+                    condition = condition-str ]-count = counters[ if_structure = if_structure
+                                                                  condition = condition-str ]-count + 1.
         CATCH cx_sy_itab_line_not_found.
           counters = VALUE #( BASE counters
-                            ( if_structure = structure
-                              if_statement = statement
+                            ( if_structure = if_structure
+                              if_statement = statements[ if_structure-stmnt_from ]
+                              condition = condition-str
                               count = 1 ) ).
       ENDTRY.
 
@@ -86,6 +95,7 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
 
   METHOD handle_result.
     LOOP AT counters ASSIGNING FIELD-SYMBOL(<counter>).
+
       DATA(configuration) = detect_check_configuration( error_count = <counter>-count
                                                         statement = <counter>-if_statement ).
 
@@ -99,6 +109,4 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
                    error_priority      = configuration-prio ).
     ENDLOOP.
   ENDMETHOD.
-
-
 ENDCLASS.
