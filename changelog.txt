@@ -10,6 +10,7 @@ Legend
 
 2020-10-10 v1.05.1
 ------------------
++ report to activate or deactivate the SCI entries
 + add/remove all check in profiles
 
 2020-10-05 v1.04.1
