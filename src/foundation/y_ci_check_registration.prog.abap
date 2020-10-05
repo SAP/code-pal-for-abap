@@ -2,7 +2,7 @@ REPORT y_ci_check_registration.
 
 DATA: BEGIN OF comments,
         title   TYPE string VALUE 'code pal for ABAP - Check Activation Tool (Local Only)',
-        runmode TYPE string VALUE 'Please choose a runmode',
+        runmode TYPE string VALUE 'Please choose a run mode',
       END OF comments.
 
 DATA: BEGIN OF messages,
