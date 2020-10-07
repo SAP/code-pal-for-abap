@@ -10,6 +10,8 @@ Legend
 
 2020-10-10 v1.05.1
 ------------------
+* profile check run only once
++ run only once feature
 + report to activate or deactivate the SCI entries
 + add/remove all check in profiles
 
