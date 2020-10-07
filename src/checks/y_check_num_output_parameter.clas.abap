@@ -21,7 +21,7 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
     settings-threshold = 2.
     settings-documentation = |{ c_docs_path-checks }number-output-parameter.md|.
 
-    set_check_message( 'Too many output parameters!' ).
+    set_check_message( '&1 attributes reach threshold of &2' ).
   ENDMETHOD.
 
 
@@ -67,7 +67,9 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
     raise_error( statement_level     = statement-level
                  statement_index     = index
                  statement_from      = statement-from + 1
-                 error_priority      = configuration-prio ).
+                 error_priority      = configuration-prio
+                 parameter_01        = |{ outputs_of_statement }|
+                 parameter_02        = |{ configuration-threshold }| ).
 
   ENDMETHOD.
 
