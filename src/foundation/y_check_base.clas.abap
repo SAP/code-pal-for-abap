@@ -31,7 +31,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         apply_on_test_code            TYPE ycicc_testcode,
         documentation                 TYPE c LENGTH 1000,
         is_threshold_reversed         TYPE abap_bool,
-        run_only_once                 TYPE abap_bool,
       END OF settings .
 
     METHODS constructor .
@@ -48,17 +47,16 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         REDEFINITION .
   PROTECTED SECTION.
 
-    DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
-    DATA check_name TYPE seoclsname.
-    DATA clean_code_exemption_handler TYPE REF TO y_exemption_handler.
-    DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
-    DATA is_testcode TYPE abap_bool.
-    DATA ref_scan_manager TYPE REF TO y_if_scan_manager.
-    DATA statistics TYPE REF TO y_if_scan_statistics.
-    DATA test_code_detector TYPE REF TO y_if_testcode_detector.
+    DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations .
+    DATA check_name TYPE seoclsname .
+    DATA clean_code_exemption_handler TYPE REF TO y_exemption_handler .
+    DATA clean_code_manager TYPE REF TO y_if_clean_code_manager .
+    DATA is_testcode TYPE abap_bool .
+    DATA ref_scan_manager TYPE REF TO y_if_scan_manager .
+    DATA statistics TYPE REF TO y_if_scan_statistics .
+    DATA test_code_detector TYPE REF TO y_if_testcode_detector .
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
-    DATA attributes_maintained TYPE abap_bool.
-    CLASS-DATA already_ran TYPE abap_bool.
+    DATA attributes_maintained TYPE abap_bool .
 
     METHODS check_start_conditions
       RAISING
@@ -127,11 +125,10 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
       IMPORTING message TYPE itex132.
     METHODS get_class_description
       RETURNING VALUE(result) TYPE string.
-    "! Method to enable run only once feature.
-    "! It raises the check only once per code inspector execution.
-    METHODS enable_run_only_once.
   PRIVATE SECTION.
-    METHODS do_attributes_exist RETURNING VALUE(result) TYPE abap_bool .
+    METHODS do_attributes_exist
+      RETURNING
+        VALUE(result) TYPE abap_bool .
     METHODS instantiate_objects.
     METHODS enable_rfc.
 
@@ -149,9 +146,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
       IMPORTING previous_config TYPE y_if_clean_code_manager=>check_configuration
                 config          TYPE y_if_clean_code_manager=>check_configuration
       RETURNING VALUE(result)   TYPE abap_bool.
-    METHODS run_only_once
-      RETURNING
-        value(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -683,8 +677,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD run.
-    CHECK run_only_once( ).
-
     instantiate_objects( ).
 
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
@@ -786,15 +778,4 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false ) OR
                       ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
   ENDMETHOD.
-
-  METHOD run_only_once.
-    CHECK settings-run_only_once = abap_true.
-    result = xsdbool( already_ran = abap_false ).
-    already_ran = abap_true.
-  ENDMETHOD.
-
-  METHOD enable_run_only_once.
-    settings-run_only_once = abap_true.
-  ENDMETHOD.
-
 ENDCLASS.

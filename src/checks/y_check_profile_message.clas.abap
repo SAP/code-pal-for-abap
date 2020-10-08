@@ -7,6 +7,7 @@ CLASS y_check_profile_message DEFINITION
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 CLASS y_check_profile_message IMPLEMENTATION.
@@ -24,8 +25,6 @@ CLASS y_check_profile_message IMPLEMENTATION.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
     settings-prio = c_note.
-
-    enable_run_only_once( ).
 
     set_check_message( 'code pal for ABAP Profile is being used.' ).
   ENDMETHOD.

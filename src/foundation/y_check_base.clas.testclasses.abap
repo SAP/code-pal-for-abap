@@ -16,28 +16,14 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 ENDCLASS.
 
 CLASS ltc_check_base_double DEFINITION FOR TESTING INHERITING FROM y_check_base.
-  PUBLIC SECTION.
-    METHODS constructor.
-    METHODS get_already_ran RETURNING VALUE(result) TYPE abap_bool.
   PROTECTED SECTION.
-    METHODS inspect_tokens REDEFINITION.
+    METHODS: inspect_tokens REDEFINITION.
 ENDCLASS.
 
 CLASS ltc_check_base_double IMPLEMENTATION.
-
-  METHOD constructor.
-    super->constructor( ).
-    enable_run_only_once( ).
-  ENDMETHOD.
-
-  METHOD get_already_ran.
-    result = already_ran.
-  ENDMETHOD.
-
   METHOD inspect_tokens.
     RETURN.
   ENDMETHOD.
-
 ENDCLASS.
 
 CLASS ltc_check_configuration DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
@@ -541,45 +527,6 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     when_eight_errors( ).
     then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
     cleanup( ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_run_only_once DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PUBLIC SECTION.
-    METHODS frist_execution FOR TESTING.
-    METHODS second_execution FOR TESTING.
-  PROTECTED SECTION.
-    METHODS given_instance.
-    METHODS when_run.
-    METHODS then_ran.
-  PRIVATE SECTION.
-    DATA cut TYPE REF TO ltc_check_base_double.
-ENDCLASS.
-
-CLASS ltc_run_only_once IMPLEMENTATION.
-
-  METHOD frist_execution.
-    given_instance( ).
-    when_run( ).
-    then_ran( ).
-  ENDMETHOD.
-
-  METHOD second_execution.
-    given_instance( ).
-    then_ran( ).
-  ENDMETHOD.
-
-  METHOD given_instance.
-    cut = NEW ltc_check_base_double( ).
-  ENDMETHOD.
-
-  METHOD when_run.
-    cut->run( ).
-  ENDMETHOD.
-
-  METHOD then_ran.
-    cl_abap_unit_assert=>assert_true( cut->get_already_ran( ) ).
   ENDMETHOD.
 
 ENDCLASS.
