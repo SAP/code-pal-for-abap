@@ -8,6 +8,7 @@ CLASS y_check_profile_message DEFINITION
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
+    CLASS-DATA ran TYPE abap_bool.
 ENDCLASS.
 
 CLASS y_check_profile_message IMPLEMENTATION.
@@ -32,6 +33,7 @@ CLASS y_check_profile_message IMPLEMENTATION.
 
   METHOD execute_check.
 
+    CHECK ran = abap_false.
     CHECK has_attributes = abap_false.
 
     DATA(check_configuration) = detect_check_configuration( VALUE #( level = 1 ) ).
@@ -44,6 +46,8 @@ CLASS y_check_profile_message IMPLEMENTATION.
                  statement_index     = 1
                  statement_from      = 1
                  error_priority      = check_configuration-prio ).
+
+    ran = abap_true.
 
   ENDMETHOD.
 
