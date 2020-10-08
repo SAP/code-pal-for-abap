@@ -26,7 +26,7 @@ CLASS y_check_profile_message IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
-    settings-prio = c_info.
+    settings-prio = c_note.
 
     set_check_message( 'code pal for ABAP Profile is being used.' ).
   ENDMETHOD.
