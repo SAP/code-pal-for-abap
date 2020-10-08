@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CATEGORY_CODE_PAL</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>code pal for ABAP</DESCRIPT>
+    <DESCRIPT>code pal for ABAP (open source plugin)</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
