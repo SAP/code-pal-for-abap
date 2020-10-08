@@ -21,7 +21,7 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
     settings-threshold = 2.
     settings-documentation = |{ c_docs_path-checks }number-output-parameter.md|.
 
-    set_check_message( '&1 attributes reach threshold of &2' ).
+    set_check_message( '&1 attributes reaching threshold of &2' ).
   ENDMETHOD.
 
 

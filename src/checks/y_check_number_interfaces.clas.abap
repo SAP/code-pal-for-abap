@@ -47,7 +47,7 @@ CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
     settings-threshold = 4.
     settings-documentation = |{ c_docs_path-checks }number-interfaces.md|.
 
-    set_check_message( '&1 interfaces reach threshold of &2' ).
+    set_check_message( '&1 interfaces reaching threshold of &2' ).
   ENDMETHOD.
 
 

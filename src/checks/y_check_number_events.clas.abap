@@ -45,7 +45,7 @@ CLASS Y_CHECK_NUMBER_EVENTS IMPLEMENTATION.
     settings-pseudo_comment = '"#EC NUMBER_EVENTS' ##NO_TEXT.
     settings-documentation = |{ c_docs_path-checks }number-events.md|.
 
-    set_check_message( '&1 events reach threshold of &2' ).
+    set_check_message( '&1 events reaching threshold of &2' ).
   ENDMETHOD.
 
 
