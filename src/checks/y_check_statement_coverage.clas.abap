@@ -19,6 +19,7 @@ CLASS y_check_statement_coverage IMPLEMENTATION.
     settings-is_threshold_reversed = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
     settings-disable_on_testcode_selection = abap_true.
+    settings-apply_on_test_code = abap_false.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
     set_check_message( 'Statement Coverage of &1% is under the threshold of &2%.' ).
