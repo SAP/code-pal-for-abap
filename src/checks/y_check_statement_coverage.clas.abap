@@ -22,7 +22,7 @@ CLASS y_check_statement_coverage IMPLEMENTATION.
     settings-apply_on_test_code = abap_false.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
-    set_check_message( 'Statement Coverage of &1% is under the threshold of &2%.' ).
+    set_check_message( 'Statement Coverage of &1% does not reach the threshold of &2%!' ).
   ENDMETHOD.
 
 

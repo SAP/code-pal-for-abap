@@ -49,7 +49,7 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
     settings-threshold = 20.
     settings-documentation = |{ c_docs_path-checks }number-methods.md|.
 
-    set_check_message( '&1 methods reaching threshold of &2' ).
+    set_check_message( '&1 methods reaching threshold of &2!' ).
   ENDMETHOD.
 
 
