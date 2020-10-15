@@ -52,7 +52,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
 
     add_obj_type( c_type_program ).
 
-    set_check_message( '&1 executable statements in method reaching threshold of &2' ).
+    set_check_message( '&1 executable statements in method reaching threshold of &2!' ).
   ENDMETHOD.
 
 
