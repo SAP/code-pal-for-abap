@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_PROFILE_MESSAGE</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>code pal for ABAP Profile Message</DESCRIPT>
+    <DESCRIPT>Profile Feature Notification (code pal for ABAP)</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
