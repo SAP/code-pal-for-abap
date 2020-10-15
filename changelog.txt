@@ -10,7 +10,7 @@ Legend
 
 2020-10-10 v1.05.0
 ------------------
-! profile message check runs only once
+* profile message check runs only once
 ! check messages
 - db access in ut when OSQL/CDS framework is being used
 ! category description
