@@ -104,7 +104,6 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
                ( token3 CS 'CL_GUI_' ).
           has_redirection = abap_true.
         ENDIF.
-* CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
       WHEN OTHERS.
         LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
           FROM statement-from TO statement-to
