@@ -83,7 +83,7 @@ CLASS Y_CHECK_NUM_PUBLIC_ATTRIBUTES IMPLEMENTATION.
     settings-threshold = 1.
     settings-documentation = |{ c_docs_path-checks }number-public-attributes.md|.
 
-    set_check_message( '&1 public attributes. All attributes should be private by default.' ).
+    set_check_message( '&1 public attributes. All attributes should be private/protected by default!' ).
   ENDMETHOD.
 
 

@@ -45,7 +45,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
     settings-apply_on_test_code = abap_false.
     settings-documentation = |{ c_docs_path-checks }magic-number.md|.
 
-    set_check_message( 'Magic Number Violation - &1 is a Magic Number' ).
+    set_check_message( 'Magic Number Violation - &1 is a Magic Number!' ).
   ENDMETHOD.
 
 
