@@ -1,28 +1,16 @@
-CLASS y_check_db_access_in_ut DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
-    METHODS constructor .
+    METHODS constructor.
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-
+    METHODS has_osql_or_cds_framework RETURNING VALUE(result) TYPE abap_bool.
   PRIVATE SECTION.
-
-    METHODS is_persistent_object
-      IMPORTING
-        !obj_name     TYPE string
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-
-    METHODS check_if_error
-      IMPORTING
-        !index     TYPE i OPTIONAL
-        !statement TYPE sstmnt OPTIONAL .
+    METHODS is_persistent_object IMPORTING obj_name TYPE string
+                                 RETURNING VALUE(result) TYPE abap_bool .
+    METHODS check_if_error IMPORTING index     TYPE i OPTIONAL
+                                     statement TYPE sstmnt OPTIONAL .
 ENDCLASS.
-
 
 
 CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
@@ -45,6 +33,9 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD execute_check.
+
+    CHECK has_osql_or_cds_framework( ) = abap_false.
+
     LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
       WHERE stmnt_type EQ scan_struc_stmnt_type-method.
 
@@ -144,4 +135,14 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
                  parameter_01        = |{ key_word }| ).
 
   ENDMETHOD.
+
+  METHOD has_osql_or_cds_framework.
+    DATA(tokens) = ref_scan_manager->get_tokens( ).
+
+    IF line_exists( tokens[ str = 'IF_OSQL_TEST_ENVIRONMENT' ] )
+    OR line_exists( tokens[ str = 'IF_CDS_TEST_ENVIRONMENT' ] ).
+      result = abap_true.
+    ENDIF.
+  ENDMETHOD.
+
 ENDCLASS.

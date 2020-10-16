@@ -1543,6 +1543,18 @@
      <LENGTH>25</LENGTH>
     </item>
     <item>
+     <ID>I</ID>
+     <KEY>058</KEY>
+     <ENTRY>Add All</ENTRY>
+     <LENGTH>17</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>059</KEY>
+     <ENTRY>Remove All</ENTRY>
+     <LENGTH>27</LENGTH>
+    </item>
+    <item>
      <ID>R</ID>
      <ENTRY>Profile Administrator for code pal for ABAP</ENTRY>
      <LENGTH>43</LENGTH>

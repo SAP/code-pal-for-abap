@@ -1,14 +1,14 @@
-CLASS y_category_code_pal DEFINITION
-  PUBLIC
-  INHERITING FROM cl_ci_category_root
-  CREATE PUBLIC .
+class Y_CATEGORY_CODE_PAL definition
+  public
+  inheriting from CL_CI_CATEGORY_ROOT
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    METHODS constructor .
+  methods CONSTRUCTOR .
 
-    METHODS if_ci_test~display_documentation
-        REDEFINITION .
+  methods IF_CI_TEST~DISPLAY_DOCUMENTATION
+    redefinition .
   PROTECTED SECTION.
     METHODS get_class_description
         RETURNING VALUE(result) TYPE string.
@@ -16,7 +16,8 @@ CLASS y_category_code_pal DEFINITION
 ENDCLASS.
 
 
-CLASS y_category_code_pal IMPLEMENTATION.
+
+CLASS Y_CATEGORY_CODE_PAL IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -54,5 +55,4 @@ CLASS y_category_code_pal IMPLEMENTATION.
       result = 'Description Not Available'.
     ENDTRY.
   ENDMETHOD.
-
 ENDCLASS.

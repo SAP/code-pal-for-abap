@@ -25,7 +25,7 @@ CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }test-seam-usage.md|.
 
-    set_check_message( '"TEST-SEAM" Statement should no longer be used!' ).
+    set_check_message( '"TEST-SEAM" statement should no longer be used!' ).
   ENDMETHOD.
 
 

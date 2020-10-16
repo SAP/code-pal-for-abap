@@ -33,7 +33,7 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }check-statement-position.md|.
 
-    set_check_message( '"CHECK" Statement should be the very first statement.' ).
+    set_check_message( '"CHECK" statement should be the very first statement!' ).
   ENDMETHOD.
 
 
