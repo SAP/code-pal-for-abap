@@ -11,7 +11,6 @@ CLASS y_clean_code_manager DEFINITION PUBLIC CREATE PUBLIC.
                                RAISING ycx_no_check_customizing.
     METHODS determine_checks IMPORTING profile TYPE string
                                        checkid TYPE seoclsname
-                                       obj_creation_date TYPE datum
                              RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configurations
                              RAISING ycx_no_check_customizing .
 ENDCLASS.
@@ -74,8 +73,7 @@ CLASS y_clean_code_manager IMPLEMENTATION.
 
             IF <checkid> = checkid AND
                <start_date> <= sy-datlo AND
-               <end_date> >= sy-datlo AND
-               <objects_created_on> <= obj_creation_date.
+               <end_date> >= sy-datlo.
 
               check_configuration-object_creation_date = <objects_created_on>.
               check_configuration-threshold = <threshold>.
@@ -184,13 +182,10 @@ CLASS y_clean_code_manager IMPLEMENTATION.
         RAISE EXCEPTION TYPE ycx_no_check_customizing.
     ENDTRY.
 
-    DATA(obj_creation_date) = y_if_clean_code_manager~calculate_obj_creation_date( object_name = object_name
-                                                                                   object_type = object_type ).
     LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
       TRY.
           DATA(check_configurations) = determine_checks( profile = <profile>
-                                                         checkid = checkid
-                                                         obj_creation_date = obj_creation_date ).
+                                                         checkid = checkid ).
         CATCH ycx_no_check_customizing.
           CONTINUE.
       ENDTRY.
