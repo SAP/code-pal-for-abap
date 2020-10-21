@@ -177,19 +177,18 @@ CLASS y_clean_code_manager IMPLEMENTATION.
 
   METHOD read_check_customizing.
     TRY.
-        DATA(profiles) = determine_profiles( username ).
+        DATA(profiles) = determine_profiles( sy-uname ).
       CATCH ycx_no_check_customizing.
         RAISE EXCEPTION TYPE ycx_no_check_customizing.
     ENDTRY.
 
     LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
       TRY.
-          DATA(check_configurations) = determine_checks( profile = <profile>
-                                                         checkid = checkid ).
+          APPEND LINES OF determine_checks( profile = <profile>
+                                            checkid = checkid ) TO result.
         CATCH ycx_no_check_customizing.
           CONTINUE.
       ENDTRY.
-      APPEND LINES OF check_configurations TO result.
     ENDLOOP.
 
     IF lines( result ) = 0.
