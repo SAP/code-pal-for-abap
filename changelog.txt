@@ -8,6 +8,10 @@ Legend
 + : added
 - : removed
 
+2020-10-23 v1.05.1
+------------------
+* 'object creation date' in the include level
+
 2020-10-10 v1.05.0
 ------------------
 * profile message check runs only once

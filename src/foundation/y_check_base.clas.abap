@@ -693,9 +693,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     TRY.
         check_start_conditions( ).
         profile_configurations = clean_code_manager->read_check_customizing( username    = sy-uname
-                                                                             checkid     = myname
-                                                                             object_name = object_name
-                                                                             object_type = object_type ).
+                                                                             checkid     = myname ).
       CATCH ycx_no_check_customizing.
         IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
           FREE ref_scan_manager.
@@ -709,11 +707,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         RETURN.
 
     ENDTRY.
-
-    IF lines( check_configurations ) > 0.
-      DELETE check_configurations WHERE object_creation_date > clean_code_manager->calculate_obj_creation_date( object_name = object_name
-                                                                                                                object_type = object_type ).
-    ENDIF.
 
     IF lines( profile_configurations ) > 0.
       check_configurations = profile_configurations.

@@ -17,8 +17,6 @@ interface Y_IF_CLEAN_CODE_MANAGER
     importing
       !USERNAME type XUBNAME
       !CHECKID type SEOCLSNAME
-      !OBJECT_NAME type SOBJ_NAME
-      !OBJECT_TYPE type TROBJTYPE
     returning
       value(RESULT) type CHECK_CONFIGURATIONS
     raising
