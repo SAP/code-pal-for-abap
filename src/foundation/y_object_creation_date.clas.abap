@@ -87,13 +87,10 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_created_on_from_buffer.
-    SELECT SINGLE created_on FROM ytab_exemptions INTO @creation_date
-      WHERE object                 = @object_type AND
-            obj_name               = @object_name AND
-            is_created_on_buffered = @abap_true.
-    IF sy-subrc = 0 AND creation_date IS NOT INITIAL AND creation_date <> '000000'.
-      is_in_buffer = abap_true.
-    ENDIF.
+    DATA(exemption) = y_exemption_buffer=>get( object_type = object_type
+                                               object_name = CONV #( object_name ) ).
+    is_in_buffer = xsdbool( exemption IS NOT INITIAL ).
+    creation_date = exemption-created_on.
   ENDMETHOD.
 
 
@@ -189,21 +186,8 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
     exemption-as4date_co = sy-datum.
     exemption-is_created_on_buffered = abap_true.
 
-    INSERT ytab_exemptions FROM exemption.
-    IF sy-subrc = 0.
-      is_stored = abap_true.
-    ELSE.
-      UPDATE ytab_exemptions SET
-        created_on = @creation_date,
-        as4date_co = @sy-datum,
-        is_created_on_buffered = @abap_true
-      WHERE
-        object = @object_type AND
-        obj_name = @object_name.
-      IF sy-subrc = 0.
-        is_stored = abap_true.
-      ENDIF.
-    ENDIF.
+    y_exemption_buffer=>modify( exemption ).
+    is_stored = abap_true.
   ENDMETHOD.
 
 

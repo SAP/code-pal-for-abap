@@ -22,12 +22,6 @@ protected section.
         is_exempted      TYPE abap_bool
       RETURNING
         VALUE(is_stored) TYPE abap_bool.
-
-    METHODS is_dataset_outdated
-      IMPORTING
-        storedate          TYPE d
-      RETURNING
-        VALUE(is_outdated) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -36,24 +30,11 @@ CLASS Y_EXEMPTION_DISPATCHER IMPLEMENTATION.
 
 
   METHOD get_exemption_from_database.
-    is_in_buffer = abap_true.
-    SELECT SINGLE is_exempted, as4date FROM ytab_exemptions
-        INTO ( @is_exempted, @DATA(storedate) )
-        WHERE object = @object_type AND obj_name = @object_name.
-    IF sy-subrc = 4.
-      is_in_buffer = abap_false.
-      RETURN.
-    ENDIF.
+    DATA(exemption) = y_exemption_buffer=>get( object_type = object_type
+                                               object_name = CONV #( object_name ) ).
 
-    IF is_dataset_outdated( storedate ).
-      is_in_buffer = abap_false.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD is_dataset_outdated.
-    DATA(compare_date) = storedate + 14.
-    is_outdated = xsdbool( compare_date < sy-datum ).
+    is_in_buffer = xsdbool( exemption IS NOT INITIAL ).
+    is_exempted = exemption-is_exempted.
   ENDMETHOD.
 
 
@@ -62,20 +43,8 @@ CLASS Y_EXEMPTION_DISPATCHER IMPLEMENTATION.
                                         obj_name    = object_name
                                         is_exempted = is_exempted
                                         as4date     = sy-datum ).
-    INSERT INTO ytab_exemptions VALUES @line.
-
-    IF sy-subrc = 0.
-      is_stored = abap_true.
-    ELSE.
-      UPDATE ytab_exemptions SET as4date = @sy-datum,
-                                 is_exempted = @is_exempted
-       WHERE object = @object_type AND obj_name = @object_name.
-      IF sy-subrc = 0.
-        is_stored = abap_true.
-      ELSE.
-        ASSERT sy-subrc <> 0.
-      ENDIF.
-    ENDIF.
+    y_exemption_buffer=>modify( line ).
+    is_stored = abap_true.
   ENDMETHOD.
 
 
