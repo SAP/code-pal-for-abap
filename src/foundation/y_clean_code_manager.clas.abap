@@ -117,43 +117,16 @@ CLASS y_clean_code_manager IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
-    DATA profile_manager TYPE REF TO object.
-    DATA profiles_ref TYPE REF TO data.
-    FIELD-SYMBOLS <profiles> TYPE ANY TABLE.
-    DATA profile_ref TYPE REF TO data.
-    FIELD-SYMBOLS <profile> TYPE any.
-    FIELD-SYMBOLS <profile_name> TYPE any.
-
     TRY.
-        CREATE DATA profiles_ref TYPE STANDARD TABLE OF (`YTAB_PROFILES`) WITH DEFAULT KEY.
-        ASSIGN profiles_ref->* TO <profiles>.
-
-        CREATE DATA profile_ref TYPE (`YTAB_PROFILES`).
-        ASSIGN profile_ref->* TO <profile>.
-
-        CREATE OBJECT profile_manager TYPE (`Y_PROFILE_MANAGER`).
-      CATCH cx_sy_create_object_error
-            cx_sy_create_data_error.
-        RETURN.
-    ENDTRY.
-
-    DATA(ptab) = VALUE abap_parmbind_tab( ( name  = 'USERNAME'
-                                            kind  = cl_abap_objectdescr=>exporting
-                                            value = REF #( username ) )
-                                          ( name  = 'RESULT'
-                                            kind  = cl_abap_objectdescr=>returning
-                                            value = REF #( <profiles> ) ) ).
-    TRY.
-        CALL METHOD profile_manager->(`Y_IF_PROFILE_MANAGER~SELECT_PROFILES`)
-          PARAMETER-TABLE ptab.
+        DATA(profiles) = y_profile_manager=>create( )->select_profiles( username ).
       CATCH ycx_entry_not_found.
         RAISE EXCEPTION TYPE ycx_no_check_customizing.
     ENDTRY.
 
-    LOOP AT <profiles> ASSIGNING <profile>.
-      ASSIGN COMPONENT `PROFILE` OF STRUCTURE <profile> TO <profile_name>.
-      APPEND <profile_name> TO result.
+    LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
+      APPEND <profile>-profile TO result.
     ENDLOOP.
+
   ENDMETHOD.
 
 
