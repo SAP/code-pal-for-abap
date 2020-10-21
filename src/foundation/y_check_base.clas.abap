@@ -50,7 +50,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations .
     DATA check_name TYPE seoclsname .
     DATA clean_code_exemption_handler TYPE REF TO y_exemption_handler .
-    DATA clean_code_manager TYPE REF TO y_if_clean_code_manager .
     DATA is_testcode TYPE abap_bool .
     DATA ref_scan_manager TYPE REF TO y_if_scan_manager .
     DATA statistics TYPE REF TO y_if_scan_statistics .
@@ -212,44 +211,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD do_attributes_exist.
-    DATA profile_manager TYPE REF TO object.
-    DATA profiles_ref TYPE REF TO data.
-    FIELD-SYMBOLS <profiles> TYPE ANY TABLE.
-
     TRY.
-        attributes_ok = abap_false.
-        CREATE DATA profiles_ref TYPE STANDARD TABLE OF (`YTAB_PROFILES`) WITH DEFAULT KEY.
-        ASSIGN profiles_ref->* TO <profiles>.
-
-        CREATE OBJECT profile_manager TYPE (`Y_PROFILE_MANAGER`).
-
-        DATA(ptab) = VALUE abap_parmbind_tab( ( name  = 'USERNAME'
-                                                kind  = cl_abap_objectdescr=>exporting
-                                                value = REF #( sy-uname ) )
-                                              ( name  = 'RESULT'
-                                                kind  = cl_abap_objectdescr=>returning
-                                                value = REF #( <profiles> ) ) ).
-
-        CALL METHOD profile_manager->('Y_IF_PROFILE_MANAGER~SELECT_PROFILES')
-          PARAMETER-TABLE ptab.
-
-        IF <profiles> IS NOT ASSIGNED.
-          RETURN.
-        ENDIF.
-
-        IF lines( <profiles> ) > 0.
-          result = abap_false.
-        ELSE.
-          attributes_ok = abap_true.
-          result = abap_true.
-        ENDIF.
-
-      CATCH cx_sy_create_data_error
-            cx_sy_create_object_error
-            ycx_entry_not_found.
+        DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
+        attributes_ok = xsdbool( profiles IS INITIAL ).
+      CATCH ycx_entry_not_found.
         attributes_ok = abap_true.
-        result = abap_true.
     ENDTRY.
+    result = attributes_ok.
   ENDMETHOD.
 
 
@@ -589,10 +557,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
     ref_scan_manager->set_ref_scan( ref_scan ).
 
-    IF clean_code_manager IS NOT BOUND.
-      clean_code_manager = NEW y_clean_code_manager( ).
-    ENDIF.
-
     IF clean_code_exemption_handler IS NOT BOUND.
       clean_code_exemption_handler = NEW y_exemption_handler( ).
     ENDIF.
@@ -692,8 +656,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     TRY.
         check_start_conditions( ).
-        profile_configurations = clean_code_manager->read_check_customizing( username    = sy-uname
-                                                                             checkid     = myname ).
+        profile_configurations = NEW y_clean_code_manager( )->read_check_customizing( myname ).
       CATCH ycx_no_check_customizing.
         IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
           FREE ref_scan_manager.
