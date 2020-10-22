@@ -50,6 +50,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations .
     DATA check_name TYPE seoclsname .
     DATA clean_code_exemption_handler TYPE REF TO y_exemption_handler .
+    DATA clean_code_manager TYPE REF TO y_if_clean_code_manager .
     DATA is_testcode TYPE abap_bool .
     DATA ref_scan_manager TYPE REF TO y_if_scan_manager .
     DATA statistics TYPE REF TO y_if_scan_statistics .
@@ -557,6 +558,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
     ref_scan_manager->set_ref_scan( ref_scan ).
 
+    IF clean_code_manager IS NOT BOUND.
+      clean_code_manager = NEW y_clean_code_manager( ).
+    ENDIF.
+
     IF clean_code_exemption_handler IS NOT BOUND.
       clean_code_exemption_handler = NEW y_exemption_handler( ).
     ENDIF.
@@ -656,7 +661,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     TRY.
         check_start_conditions( ).
-        profile_configurations = NEW y_clean_code_manager( )->read_check_customizing( myname ).
+        profile_configurations = clean_code_manager->read_check_customizing( myname ).
       CATCH ycx_no_check_customizing.
         IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
           FREE ref_scan_manager.
