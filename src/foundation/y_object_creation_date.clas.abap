@@ -89,7 +89,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
   METHOD get_created_on_from_buffer.
     DATA(exemption) = y_exemption_buffer=>get( object_type = object_type
                                                object_name = CONV #( object_name ) ).
-    is_in_buffer = xsdbool( exemption IS NOT INITIAL ).
+    is_in_buffer = xsdbool( exemption IS NOT INITIAL AND exemption-created_on <> '00000000' ).
     creation_date = exemption-created_on.
   ENDMETHOD.
 
