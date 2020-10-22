@@ -743,11 +743,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_class_description.
-    TRY.
-        result = NEW cl_oo_class( myname )->class-descript.
-      CATCH cx_class_not_existent.
-        result = 'Description Not Available'.
-    ENDTRY.
+    SELECT SINGLE descript INTO @DATA(description) FROM seoclasstx WHERE clsname = @myname.
+    result = COND #( WHEN description IS NOT INITIAL THEN description
+                     ELSE 'Description Not Available' ).
   ENDMETHOD.
 
 
