@@ -712,8 +712,9 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD get_class_description.
     SELECT SINGLE descript INTO @DATA(description) FROM seoclasstx WHERE clsname = @myname.
-    result = COND #( WHEN description IS NOT INITIAL THEN description
-                     ELSE 'Description Not Available' ).
+    IF sy-subrc <> 0.
+      result = 'Description Not Available'.
+    ENDIF.
   ENDMETHOD.
 
 
