@@ -83,8 +83,7 @@ CLASS y_check_profile_message IMPLEMENTATION.
                    p_inclspec        = p_inclspec
                    p_detail          = p_detail
                    p_checksum_1      = p_checksum_1
-                   p_comments        = p_comments
-                   p_finding_origins = p_finding_origins ).
+                   p_comments        = p_comments ).
   ENDMETHOD.
 
 
