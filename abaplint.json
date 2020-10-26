@@ -215,7 +215,7 @@
     "identical_contents": true,
     "identical_form_names": true,
     "if_in_if": true,
-    "implement_methods": true,
+    "implement_methods": false,
     "in_statement_indentation": false,
     "indentation": false,
     "inline_data_old_versions": true,
@@ -237,12 +237,8 @@
     "method_parameter_names": false,
     "mix_returning": false,
     "msag_consistency": true,
+    "nesting": false,
     "names_no_dash": true,
-    "nesting": {
-      "exclude": [],
-      "severity": "Error",
-      "depth": 5
-    },
     "newline_between_methods": {
       "exclude": [],
       "severity": "Error",
@@ -315,7 +311,7 @@
     "try_without_catch": true,
     "type_form_parameters": true,
     "types_naming": false,
-    "unknown_types": true,
+    "unknown_types": false,
     "unreachable_code": true,
     "unused_methods": false,
     "unused_types": false,
