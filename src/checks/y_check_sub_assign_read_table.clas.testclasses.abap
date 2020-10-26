@@ -23,7 +23,7 @@ CLASS local_test_class IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD test. ' )
-      ( '     DATA clients TYPE TABLE OF t000. ')
+      ( '     DATA clients TYPE TABLE OF t000. ' )
       ( '     READ TABLE clients ASSIGNING FIELD-SYMBOL(<client>) INDEX 1. ' )
       ( '     DATA(i) = 1. ' )
       ( '     READ TABLE clients ASSIGNING <client> INDEX 2. ' )
@@ -43,7 +43,7 @@ CLASS local_test_class IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD test. ' )
-      ( '     DATA clients TYPE TABLE OF t000. ')
+      ( '     DATA clients TYPE TABLE OF t000. ' )
       ( '     READ TABLE clients INTO DATA(client) INDEX 1. ' )
       ( '     READ TABLE clients ASSIGNING FIELD-SYMBOL(<client>) INDEX 1. ' )
       ( '   ENDMETHOD. ' )
@@ -62,7 +62,7 @@ CLASS local_test_class IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD test. ' )
-      ( '     DATA clients TYPE TABLE OF t000. ')
+      ( '     DATA clients TYPE TABLE OF t000. ' )
       ( '     READ TABLE clients ASSIGNING FIELD-SYMBOL(<client>) INDEX 1. ' )
       ( '     DATA(i) = 1. ' )
       ( '     READ TABLE clients ASSIGNING <client> INDEX 2. "#EC SUB_ASSIGN' )
