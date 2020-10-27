@@ -8,9 +8,10 @@ Legend
 + : added
 - : removed
 
-2020-10-23 v1.05.1
+2020-10-27 v1.06.0
 ------------------
 * subsequent memory assignment check
+* 7.40 compatibility issue
 ! abapLint support
 * performance
 * 'object creation date' in the include level
