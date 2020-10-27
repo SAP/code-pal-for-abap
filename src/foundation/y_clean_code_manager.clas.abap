@@ -6,12 +6,10 @@ CLASS y_clean_code_manager DEFINITION PUBLIC CREATE PUBLIC.
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA object_creation_date TYPE REF TO y_if_object_creation_date.
-    METHODS determine_profiles IMPORTING username TYPE xubname
-                               RETURNING VALUE(result) TYPE string_table
+    METHODS determine_profiles RETURNING VALUE(result) TYPE string_table
                                RAISING ycx_no_check_customizing.
-    METHODS determine_checks IMPORTING profile TYPE string
+    METHODS determine_checks IMPORTING profile TYPE ycicc_profile
                                        checkid TYPE seoclsname
-                                       obj_creation_date TYPE datum
                              RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configurations
                              RAISING ycx_no_check_customizing .
 ENDCLASS.
@@ -21,78 +19,23 @@ CLASS y_clean_code_manager IMPLEMENTATION.
 
 
   METHOD determine_checks.
-    DATA profile_manager TYPE REF TO object.
-    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
-    DATA checks_ref TYPE REF TO data.
-    DATA check_ref TYPE REF TO data.
-    DATA profile_name_ref TYPE REF TO data.
-    FIELD-SYMBOLS <checks> TYPE ANY TABLE.
-    FIELD-SYMBOLS <check> TYPE any.
-    FIELD-SYMBOLS <profile_name> TYPE any.
-    FIELD-SYMBOLS <checkid> TYPE any.
-    FIELD-SYMBOLS <start_date> TYPE any.
-    FIELD-SYMBOLS <end_date> TYPE any.
-    FIELD-SYMBOLS <objects_created_on> TYPE any.
-    FIELD-SYMBOLS <threshold> TYPE any.
-    FIELD-SYMBOLS <prio> TYPE any.
-    FIELD-SYMBOLS <apply_on_productive_code> TYPE any.
-    FIELD-SYMBOLS <apply_on_testcode> TYPE any.
-
     TRY.
-        CREATE DATA checks_ref TYPE STANDARD TABLE OF (`YTAB_CHECKS`) WITH DEFAULT KEY.
-        ASSIGN checks_ref->* TO <checks>.
-
-        CREATE DATA profile_name_ref TYPE (`YCICC_PROFILE`).
-        ASSIGN profile_name_ref->* TO <profile_name>.
-        <profile_name> = profile.
-
-        CREATE OBJECT profile_manager TYPE (`Y_PROFILE_MANAGER`).
-
-        DATA(ptab) = VALUE abap_parmbind_tab( ( name  = 'PROFILE'
-                                                      kind  = cl_abap_objectdescr=>exporting
-                                                      value = REF #( <profile_name> ) )
-                                                    ( name  = 'RESULT'
-                                                      kind  = cl_abap_objectdescr=>returning
-                                                      value = REF #( <checks> ) ) ).
-
-        CALL METHOD profile_manager->(`Y_IF_PROFILE_MANAGER~SELECT_CHECKS`)
-          PARAMETER-TABLE ptab.
-
-        IF <checks> IS ASSIGNED.
-          CREATE DATA check_ref TYPE (`YTAB_CHECKS`).
-          ASSIGN check_ref->* TO <check>.
-
-          LOOP AT <checks> ASSIGNING <check>.
-            ASSIGN COMPONENT `CHECKID` OF STRUCTURE <check> TO <checkid>.
-            ASSIGN COMPONENT `START_DATE` OF STRUCTURE <check> TO <start_date>.
-            ASSIGN COMPONENT `END_DATE` OF STRUCTURE <check> TO <end_date>.
-            ASSIGN COMPONENT `OBJECTS_CREATED_ON` OF STRUCTURE <check> TO <objects_created_on>.
-            ASSIGN COMPONENT `THRESHOLD` OF STRUCTURE <check> TO <threshold>.
-            ASSIGN COMPONENT `PRIO` OF STRUCTURE <check> TO <prio>.
-            ASSIGN COMPONENT `APPLY_ON_PRODUCTIVE_CODE` OF STRUCTURE <check> TO <apply_on_productive_code>.
-            ASSIGN COMPONENT `APPLY_ON_TESTCODE` OF STRUCTURE <check> TO <apply_on_testcode>.
-
-            IF <checkid> = checkid AND
-               <start_date> <= sy-datlo AND
-               <end_date> >= sy-datlo AND
-               <objects_created_on> <= obj_creation_date.
-
-              check_configuration-object_creation_date = <objects_created_on>.
-              check_configuration-threshold = <threshold>.
-              check_configuration-prio = <prio>.
-              check_configuration-apply_on_productive_code = <apply_on_productive_code>.
-              check_configuration-apply_on_testcode = <apply_on_testcode>.
-
-              result = VALUE #( BASE result
-                              ( CORRESPONDING #( check_configuration ) ) ).
-            ENDIF.
-          ENDLOOP.
-        ENDIF.
-      CATCH cx_sy_create_data_error
-            cx_sy_create_object_error
-            ycx_entry_not_found.
+        DATA(checks) = y_profile_manager=>create( )->select_checks( profile ).
+      CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
+
+    LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>)
+    WHERE checkid = checkid
+    AND start_date <= sy-datlo
+    AND end_date >= sy-datlo.
+      DATA(check_configuration) = VALUE y_if_clean_code_manager=>check_configuration( object_creation_date = <check>-objects_created_on
+                                                                                      threshold = <check>-threshold
+                                                                                      prio = <check>-prio
+                                                                                      apply_on_productive_code = <check>-apply_on_productive_code
+                                                                                      apply_on_testcode = <check>-apply_on_testcode ).
+      result = VALUE #( BASE result ( CORRESPONDING #( check_configuration ) ) ).
+    ENDLOOP.
   ENDMETHOD.
 
 
@@ -119,43 +62,16 @@ CLASS y_clean_code_manager IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
-    DATA profile_manager TYPE REF TO object.
-    DATA profiles_ref TYPE REF TO data.
-    FIELD-SYMBOLS <profiles> TYPE ANY TABLE.
-    DATA profile_ref TYPE REF TO data.
-    FIELD-SYMBOLS <profile> TYPE any.
-    FIELD-SYMBOLS <profile_name> TYPE any.
-
     TRY.
-        CREATE DATA profiles_ref TYPE STANDARD TABLE OF (`YTAB_PROFILES`) WITH DEFAULT KEY.
-        ASSIGN profiles_ref->* TO <profiles>.
-
-        CREATE DATA profile_ref TYPE (`YTAB_PROFILES`).
-        ASSIGN profile_ref->* TO <profile>.
-
-        CREATE OBJECT profile_manager TYPE (`Y_PROFILE_MANAGER`).
-      CATCH cx_sy_create_object_error
-            cx_sy_create_data_error.
-        RETURN.
-    ENDTRY.
-
-    DATA(ptab) = VALUE abap_parmbind_tab( ( name  = 'USERNAME'
-                                            kind  = cl_abap_objectdescr=>exporting
-                                            value = REF #( username ) )
-                                          ( name  = 'RESULT'
-                                            kind  = cl_abap_objectdescr=>returning
-                                            value = REF #( <profiles> ) ) ).
-    TRY.
-        CALL METHOD profile_manager->(`Y_IF_PROFILE_MANAGER~SELECT_PROFILES`)
-          PARAMETER-TABLE ptab.
+        DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
       CATCH ycx_entry_not_found.
         RAISE EXCEPTION TYPE ycx_no_check_customizing.
     ENDTRY.
 
-    LOOP AT <profiles> ASSIGNING <profile>.
-      ASSIGN COMPONENT `PROFILE` OF STRUCTURE <profile> TO <profile_name>.
-      APPEND <profile_name> TO result.
+    LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
+      APPEND <profile>-profile TO result.
     ENDLOOP.
+
   ENDMETHOD.
 
 
@@ -179,22 +95,18 @@ CLASS y_clean_code_manager IMPLEMENTATION.
 
   METHOD read_check_customizing.
     TRY.
-        DATA(profiles) = determine_profiles( username ).
+        DATA(profiles) = determine_profiles( ).
       CATCH ycx_no_check_customizing.
         RAISE EXCEPTION TYPE ycx_no_check_customizing.
     ENDTRY.
 
-    DATA(obj_creation_date) = y_if_clean_code_manager~calculate_obj_creation_date( object_name = object_name
-                                                                                   object_type = object_type ).
     LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
       TRY.
-          DATA(check_configurations) = determine_checks( profile = <profile>
-                                                         checkid = checkid
-                                                         obj_creation_date = obj_creation_date ).
+          APPEND LINES OF determine_checks( profile = CONV #( <profile> )
+                                            checkid = checkid ) TO result.
         CATCH ycx_no_check_customizing.
           CONTINUE.
       ENDTRY.
-      APPEND LINES OF check_configurations TO result.
     ENDLOOP.
 
     IF lines( result ) = 0.

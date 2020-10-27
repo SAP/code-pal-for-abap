@@ -52,7 +52,7 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
     IF token-str EQ 'CHANGING'.
       has_changing_parameter = abap_true.
     ENDIF.
-    IF token-str EQ'RETURNING'.
+    IF token-str EQ 'RETURNING'.
       has_returning_parameter = abap_true.
     ENDIF.
   ENDMETHOD.
