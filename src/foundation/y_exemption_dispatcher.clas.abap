@@ -21,13 +21,13 @@ protected section.
         object_name      TYPE sobj_name
         is_exempted      TYPE abap_bool
       RETURNING
-        VALUE(is_stored) TYPE abap_bool.
+        VALUE(result) TYPE abap_bool.
 
     METHODS is_dataset_outdated
       IMPORTING
         storedate          TYPE d
       RETURNING
-        VALUE(is_outdated) TYPE abap_bool.
+        VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -53,7 +53,7 @@ CLASS Y_EXEMPTION_DISPATCHER IMPLEMENTATION.
 
   METHOD is_dataset_outdated.
     DATA(compare_date) = storedate + 14.
-    is_outdated = xsdbool( compare_date < sy-datum ).
+    result = xsdbool( compare_date < sy-datum ).
   ENDMETHOD.
 
 
@@ -65,13 +65,13 @@ CLASS Y_EXEMPTION_DISPATCHER IMPLEMENTATION.
     INSERT INTO ytab_exemptions VALUES @line.
 
     IF sy-subrc = 0.
-      is_stored = abap_true.
+      result = abap_true.
     ELSE.
       UPDATE ytab_exemptions SET as4date = @sy-datum,
                                  is_exempted = @is_exempted
        WHERE object = @object_type AND obj_name = @object_name.
       IF sy-subrc = 0.
-        is_stored = abap_true.
+        result = abap_true.
       ELSE.
         ASSERT sy-subrc <> 0.
       ENDIF.
