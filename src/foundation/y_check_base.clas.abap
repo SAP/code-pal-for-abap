@@ -328,9 +328,8 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_include.
-    DATA:
-      l_levels_wa LIKE LINE OF ref_scan->levels,
-      l_level     TYPE i.
+    DATA l_levels_wa LIKE LINE OF ref_scan->levels.
+    DATA l_level TYPE i.
 
     IF p_level IS SUPPLIED.
       l_level = p_level.
@@ -435,7 +434,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_token_rel.
-    DATA: l_index TYPE i.
+    DATA l_index TYPE i.
 
     l_index = statement_wa-from + p_n - 1.
     IF l_index > statement_wa-to.

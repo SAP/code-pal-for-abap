@@ -38,9 +38,10 @@ CLASS y_exemption_general IMPLEMENTATION.
   METHOD is_object_existing.
     CONSTANTS object_exists TYPE char1 VALUE 'X'.
 
-    DATA: existence_flag TYPE strl_pari-flag,
-          l_object_type  TYPE e071-object,
-          l_object_name  TYPE e071-obj_name.
+    DATA existence_flag TYPE strl_pari-flag.
+    DATA l_object_type  TYPE e071-object.
+    DATA l_object_name  TYPE e071-obj_name.
+
     l_object_type = object_type.
     l_object_name = object_name.
 

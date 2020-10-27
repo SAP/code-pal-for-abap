@@ -37,9 +37,9 @@ CLASS Y_EXEMPTION_OF_FUNCTION_GROUP IMPLEMENTATION.
 
 
   METHOD is_configuration_tablegenerate.
-    DATA: fugr_name TYPE tfdir-pname.
-    DATA: fugr_func           TYPE i,
-          fugr_func_viewframe TYPE i.
+    DATA fugr_name TYPE tfdir-pname.
+    DATA fugr_func TYPE i.
+    DATA fugr_func_viewframe TYPE i.
 
     IF name(1) = '/'. "Handling of ABAP Namespaces
       FIND FIRST OCCURRENCE OF '/' IN name+1 MATCH OFFSET DATA(l_offset).
@@ -65,7 +65,7 @@ CLASS Y_EXEMPTION_OF_FUNCTION_GROUP IMPLEMENTATION.
 
 
   METHOD is_object_indepenent_generate.
-    DATA: l_object TYPE sobj_name.
+    DATA l_object TYPE sobj_name.
     DATA(programming_object) = NEW y_exemption_general( ).
     l_object = name.
     result = programming_object->is_object_exempted( object_type = 'FUGR' object_name = name ).
