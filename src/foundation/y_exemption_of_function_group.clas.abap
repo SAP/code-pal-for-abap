@@ -41,7 +41,8 @@ CLASS Y_EXEMPTION_OF_FUNCTION_GROUP IMPLEMENTATION.
     DATA fugr_func TYPE i.
     DATA fugr_func_viewframe TYPE i.
 
-    IF name(1) = '/'. "Handling of ABAP Namespaces
+    "Handling of ABAP Namespaces
+    IF name(1) = '/'.
       FIND FIRST OCCURRENCE OF '/' IN name+1 MATCH OFFSET DATA(l_offset).
       l_offset = l_offset + 2.
       fugr_name = insert( val = name sub = 'SAPL' off = l_offset ).

@@ -115,7 +115,8 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DO. "Multi Inheritence
+    "Multi Inheritence
+    DO.
       LOOP AT it_bsp_classes TRANSPORTING NO FIELDS WHERE table_line = inherited_by.
         result = abap_true.
         RETURN.
