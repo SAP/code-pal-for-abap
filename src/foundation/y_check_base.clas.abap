@@ -79,7 +79,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
       RETURNING
         VALUE(result) TYPE sci_errc .
     METHODS inspect_tokens
-      ABSTRACT
+          ABSTRACT
       IMPORTING
         !structure TYPE sstruc OPTIONAL
         !index     TYPE i OPTIONAL
@@ -150,7 +150,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_BASE IMPLEMENTATION.
+CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -711,11 +711,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_class_description.
-    TRY.
-        result = NEW cl_oo_class( myname )->class-descript.
-      CATCH cx_class_not_existent.
-        result = 'Description Not Available'.
-    ENDTRY.
+    SELECT SINGLE descript INTO @DATA(description) FROM seoclasstx WHERE clsname = @myname.
+    IF sy-subrc <> 0.
+      result = 'Description Not Available'.
+    ENDIF.
   ENDMETHOD.
 
 
