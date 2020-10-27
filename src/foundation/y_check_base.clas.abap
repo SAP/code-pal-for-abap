@@ -711,7 +711,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_class_description.
-    SELECT SINGLE descript INTO @DATA(description) FROM seoclasstx WHERE clsname = @myname.
+    SELECT SINGLE descript INTO @result FROM seoclasstx WHERE clsname = @myname.
     IF sy-subrc <> 0.
       result = 'Description Not Available'.
     ENDIF.
