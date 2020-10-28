@@ -13,42 +13,42 @@ CLASS y_object_creation_date DEFINITION
         VALUE(object_type)   TYPE trobjtype
         VALUE(object_name)   TYPE sobj_name
       RETURNING
-        VALUE(creation_date) TYPE rdir_cdate .
+        VALUE(result) TYPE rdir_cdate .
     METHODS get_db_reposource_created_on
       IMPORTING
         VALUE(reposrc_prog_search_string) TYPE string
       RETURNING
-        VALUE(creation_date)              TYPE rdir_cdate .
+        VALUE(result)              TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_clas
       IMPORTING
         VALUE(class_name)    TYPE sobj_name
       RETURNING
-        VALUE(creation_date) TYPE rdir_cdate .
+        VALUE(result) TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_prog
       IMPORTING
         VALUE(prog_name)     TYPE sobj_name
       RETURNING
-        VALUE(creation_date) TYPE rdir_cdate .
+        VALUE(result) TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_fugr
       IMPORTING
         VALUE(fugr_name)     TYPE sobj_name
       RETURNING
-        VALUE(creation_date) TYPE rdir_cdate .
+        VALUE(result) TYPE rdir_cdate .
     METHODS convert_fugr_for_db_access
       IMPORTING
         VALUE(name)              TYPE sobj_name
       RETURNING
-        VALUE(reposrc_searchkey) TYPE string .
+        VALUE(result) TYPE string .
     METHODS convert_class_for_repos_access
       IMPORTING
         VALUE(name)              TYPE sobj_name
       RETURNING
-        VALUE(reposrc_searchkey) TYPE string .
+        VALUE(result) TYPE string .
     METHODS get_lowest_date
       IMPORTING
         VALUE(dates)      TYPE created_on_dates
       RETURNING
-        VALUE(lowestdate) TYPE as4date .
+        VALUE(result) TYPE as4date .
     METHODS get_created_on_from_buffer
       IMPORTING
         VALUE(object_type)   TYPE trobjtype
@@ -71,7 +71,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD convert_class_for_repos_access.
-    reposrc_searchkey = name && '%'.
+    result = name && '%'.
   ENDMETHOD.
 
 
@@ -79,9 +79,9 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
     IF name(1) = '/'.
       SEARCH name FOR '/' STARTING AT 2.
       DATA(l_textcount) = sy-fdpos + 2.
-      reposrc_searchkey = name(l_textcount) && 'SAPL' && name+l_textcount.
+      result = name(l_textcount) && 'SAPL' && name+l_textcount.
     ELSE.
-      reposrc_searchkey = 'SAPL' && name.
+      result = 'SAPL' && name.
     ENDIF.
   ENDMETHOD.
 
@@ -98,7 +98,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_db_reposource_created_on.
-    SELECT SINGLE MIN( cdat ) AS creation_date  FROM reposrc INTO @creation_date WHERE
+    SELECT SINGLE MIN( cdat ) AS creation_date  FROM reposrc INTO @result WHERE
         progname LIKE @reposrc_prog_search_string AND
         r3state = 'A' AND
         cdat > '00000000'.
@@ -106,7 +106,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_db_tadir_data.
-    SELECT SINGLE created_on FROM tadir INTO @creation_date WHERE
+    SELECT SINGLE created_on FROM tadir INTO @result WHERE
         pgmid = 'R3TR' AND
         object = @object_type AND
         obj_name = @object_name.
@@ -128,7 +128,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
       datum IS NOT NULL                                       "only in HRI
     INTO @DATA(earliest_transport).
 
-    creation_date = earliest_transport.
+    result = earliest_transport.
   ENDMETHOD.
 
 
@@ -154,8 +154,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
       objname IN @function_search_table AND
       datum IS NOT NULL AND                                     "only in HRI
       datum NE '00000000'
-    INTO @DATA(earliest_transport).
-    creation_date = earliest_transport.
+    INTO @result.
   ENDMETHOD.
 
 
@@ -164,9 +163,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
       objtype = 'REPS' AND
       objname LIKE @prog_name AND
       datum IS NOT NULL                             "only in HRI
-    INTO @DATA(earliest_transport).
-
-    creation_date = earliest_transport.
+    INTO @result.
   ENDMETHOD.
 
 
@@ -175,7 +172,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
     DESCRIBE TABLE dates LINES DATA(lines).
     IF lines > 0.
       SORT dates ASCENDING.
-      READ TABLE dates INDEX 1 INTO lowestdate.
+      READ TABLE dates INDEX 1 INTO result.
     ENDIF.
   ENDMETHOD.
 
