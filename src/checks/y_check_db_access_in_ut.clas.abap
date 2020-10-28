@@ -112,7 +112,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
         SELECT SINGLE * FROM (checked_object) INTO <table_structure>.
         result = abap_true.
 
-      CATCH cx_abap_not_a_table cx_abap_not_in_package cx_sy_dynamic_osql_semantics cx_root.
+      CATCH cx_root. "#EC NEED_CX_ROOT
         result = abap_false.
     ENDTRY.
   ENDMETHOD.

@@ -63,7 +63,7 @@ CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
 
     TRY.
         CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
-      CATCH cx_root.
+      CATCH cx_sy_create_object_error.
         DELETE parameters WHERE name = 'P_NO_CLASSIFICATION'.
         CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
     ENDTRY.

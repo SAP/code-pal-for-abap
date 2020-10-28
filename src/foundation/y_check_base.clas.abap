@@ -605,7 +605,7 @@ CLASS y_check_base IMPLEMENTATION.
           apply_on_testcode = check_configuration-apply_on_testcode
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
-      CATCH cx_root.
+      CATCH cx_root. "#EC NEED_CX_ROOT
         attributes_maintained = abap_false.
     ENDTRY.
   ENDMETHOD.
