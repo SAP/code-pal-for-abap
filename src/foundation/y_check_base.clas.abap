@@ -47,6 +47,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         REDEFINITION .
   PROTECTED SECTION.
 
+    CONSTANTS initial_date TYPE datum VALUE '19000101'.
+
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations .
     DATA check_name TYPE seoclsname .
     DATA clean_code_exemption_handler TYPE REF TO y_exemption_handler .
@@ -79,7 +81,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
       RETURNING
         VALUE(result) TYPE sci_errc .
     METHODS inspect_tokens
-          ABSTRACT
+      ABSTRACT
       IMPORTING
         !structure TYPE sstruc OPTIONAL
         !index     TYPE i OPTIONAL
@@ -534,8 +536,8 @@ CLASS y_check_base IMPLEMENTATION.
       ELSEIF check_configuration-prio IS INITIAL.
         message = 'Choose a Message Severity'(301).
       ELSE.
-        IF check_configuration-object_creation_date = '00000000'.
-          check_configuration-object_creation_date = '19000101'.
+        IF check_configuration-object_creation_date IS INITIAL.
+          check_configuration-object_creation_date = initial_date.
         ENDIF.
 
         attributes_ok = abap_true.
@@ -575,8 +577,8 @@ CLASS y_check_base IMPLEMENTATION.
       statistics = NEW y_scan_statistics( ).
     ENDIF.
 
-    IF lines( check_configurations ) = 1 AND
-       check_configurations[ 1 ]-object_creation_date = '00000000'.
+    IF lines( check_configurations ) = 1
+    AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
       CLEAR check_configurations.
     ENDIF.
   ENDMETHOD.
@@ -605,7 +607,7 @@ CLASS y_check_base IMPLEMENTATION.
           apply_on_testcode = check_configuration-apply_on_testcode
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
-      CATCH cx_root. "#EC NEED_CX_ROOT
+      CATCH cx_root.                                  "#EC NEED_CX_ROOT
         attributes_maintained = abap_false.
     ENDTRY.
   ENDMETHOD.
