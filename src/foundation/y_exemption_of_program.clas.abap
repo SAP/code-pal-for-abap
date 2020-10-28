@@ -97,43 +97,41 @@ CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
     DATA:
       lv_object_name TYPE  vrsd-objname,
       lt_repos_tab   TYPE STANDARD TABLE OF  abaptxt255,
-      lw_repos_tab   LIKE LINE OF lt_repos_tab,
-      lt_trdir_tab   TYPE STANDARD TABLE OF trdir,
-      lv_lines       TYPE i.
+      lt_trdir_tab   TYPE STANDARD TABLE OF trdir.
 
-    IF name(10) = 'DTINF_ADJ_' OR name CO '/DTINF_ADJ_CO'.
+    CHECK name(10) = 'DTINF_ADJ_' OR name CO '/DTINF_ADJ_CO'.
 
-      CALL FUNCTION 'SVRS_GET_REPS_FROM_OBJECT'
-        EXPORTING
-          object_name = lv_object_name
-          object_type = 'REPS'
-          versno      = 0
-        TABLES
-          repos_tab   = lt_repos_tab
-          trdir_tab   = lt_trdir_tab
-        EXCEPTIONS
-          no_version  = 1
-          OTHERS      = 2.
+    CALL FUNCTION 'SVRS_GET_REPS_FROM_OBJECT'
+      EXPORTING
+        object_name = lv_object_name
+        object_type = 'REPS'
+        versno      = 0
+      TABLES
+        repos_tab   = lt_repos_tab
+        trdir_tab   = lt_trdir_tab
+      EXCEPTIONS
+        no_version  = 1
+        OTHERS      = 2.
 
-      IF sy-subrc = 0.
-        DESCRIBE TABLE lt_repos_tab LINES lv_lines.
-
-        IF lv_lines > 10.
-          READ TABLE   lt_repos_tab INTO lw_repos_tab INDEX 2.
-
-          IF lw_repos_tab = '*& Report DTINF_CORR_REPORT'.
-            READ TABLE   lt_repos_tab INTO lw_repos_tab INDEX 4.
-
-            IF lw_repos_tab = '*& !!!AUTO-GENERATED CODE: DO NOT CHANGE!!!'.
-              result = abap_true.
-            ENDIF.
-          ENDIF.
-        ENDIF.
-      ENDIF.
+    IF sy-subrc IS NOT INITIAL.
+      RETURN.
     ENDIF.
 
-    CLEAR lt_repos_tab.
-    CLEAR lt_trdir_tab.
+    IF lines( lt_repos_tab ) <= 10.
+      RETURN.
+    ENDIF.
+
+    READ TABLE lt_repos_tab INTO DATA(repos_tab) INDEX 2.
+
+    IF repos_tab <> '*& Report DTINF_CORR_REPORT'.
+      RETURN.
+    ENDIF.
+
+    READ TABLE lt_repos_tab INTO repos_tab INDEX 4.
+
+    IF repos_tab <> '*& !!!AUTO-GENERATED CODE: DO NOT CHANGE!!!'.
+      result = abap_true.
+    ENDIF.
   ENDMETHOD.
 
 
