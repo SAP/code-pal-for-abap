@@ -126,18 +126,20 @@ CLASS Y_PSEUDO_COMMENT_DETECTOR IMPLEMENTATION.
                                code        = code
                                suppress    = suppress ).
 
-    IF NOT ( pcom = cl_ci_test_root=>c_exceptn_imposibl OR
-             pcom = '' ).
-
-      IF position IS NOT INITIAL.
-        result = has_comment( ref_scan_manager = ref_scan_manager position = position ).
-
-        IF result <> cl_ci_test_root=>c_pc_exceptn_exists.
-          result = has_inline_comment( ref_scan_manager = ref_scan_manager position = position ).
-        ENDIF.
-      ELSE.
-        result = ''.
-      ENDIF.
+    IF pcom = cl_ci_test_root=>c_exceptn_imposibl
+    OR pcom IS INITIAL.
+      RETURN.
     ENDIF.
+
+    IF position IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    result = has_comment( ref_scan_manager = ref_scan_manager position = position ).
+
+    IF result <> cl_ci_test_root=>c_pc_exceptn_exists.
+      result = has_inline_comment( ref_scan_manager = ref_scan_manager position = position ).
+    ENDIF.
+
   ENDMETHOD.
 ENDCLASS.
