@@ -1,27 +1,18 @@
-CLASS y_check_method_return_bool DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC.
-
+CLASS y_check_method_return_bool DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
-
-    DATA method_name TYPE string.
-
     METHODS constructor.
   PROTECTED SECTION.
+    DATA method_name TYPE string.
+
     METHODS inspect_tokens REDEFINITION.
     METHODS execute_check REDEFINITION.
 
   PRIVATE SECTION.
-
     DATA good_method_names_beginning TYPE TABLE OF string.
     DATA good_method_names_containing TYPE TABLE OF string.
 
-    METHODS contains_name_condition
-      IMPORTING
-        !stmnt_index  TYPE i
-      RETURNING
-        VALUE(result) TYPE abap_bool.
+    METHODS contains_name_condition IMPORTING stmnt_index  TYPE i
+                                    RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 

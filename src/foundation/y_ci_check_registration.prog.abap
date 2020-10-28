@@ -26,7 +26,7 @@ CONSTANTS: BEGIN OF reference,
 
 CLASS lcl_check_registration DEFINITION.
   PUBLIC SECTION.
-    CLASS-DATA name_tab TYPE STANDARD TABLE OF scitests-name.
+    CLASS-DATA name_tab TYPE STANDARD TABLE OF scitests-name. "#EC NUM_PUBLIC_ATTR
 
     CLASS-METHODS select_object_list
       RETURNING VALUE(result) LIKE name_tab
