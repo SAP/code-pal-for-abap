@@ -367,7 +367,9 @@ CLASS lcl_check_events IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    CHECK lcl_util=>check_selected_check_rights( ) EQ abap_true.
+    IF lcl_util=>check_selected_check_rights( ) = abap_false.
+      RETURN.
+    ENDIF.
 
     CASE fcode.
       WHEN 'BTN_ADD'.
@@ -898,7 +900,12 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD assign_profile.
     CALL SCREEN 200 STARTING AT 10 10.
-    CHECK user_command EQ 'ENTR_200' AND io_profilename NE space.
+
+    IF user_command <> 'ENTR_200'
+    OR io_profilename IS INITIAL.
+      RETURN.
+    ENDIF.
+
     TRY.
         profile_manager->insert_profile( VALUE #( username = sy-uname
                                                   profile  = io_profilename
@@ -928,9 +935,12 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD copy_profile.
     CALL SCREEN 600 STARTING AT 10 10.
-    CHECK user_command EQ 'ENTR_600' AND
-          io_profilename NE space AND
-          io_to_profile NE space.
+
+    IF user_command <> 'ENTR_600'
+    OR io_profilename IS INITIAL
+    OR io_to_profile IS INITIAL.
+      RETURN.
+    ENDIF.
 
     TRY.
         TRY.
@@ -980,7 +990,11 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD  create_template_profile.
     CALL SCREEN 500 STARTING AT 10 10.
-    CHECK user_command EQ 'ENTR_500' AND io_profilename NE space.
+
+    IF user_command <> 'ENTR_500'
+    OR io_profilename IS INITIAL.
+      RETURN.
+    ENDIF.
 
     TRY.
 
