@@ -76,7 +76,7 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
         model_only   = 3
         OTHERS       = 4.
     IF sy-subrc <> 0.
-      " Implement suitable error handling here
+      RETURN.
     ENDIF.
 
     LOOP AT lt_interfaces TRANSPORTING NO FIELDS
@@ -115,7 +115,7 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    "Multi Inheritence
+    "Multi Inheritance
     DO.
       LOOP AT it_bsp_classes TRANSPORTING NO FIELDS WHERE table_line = inherited_by.
         result = abap_true.
@@ -175,7 +175,7 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
         model_only   = 3
         OTHERS       = 4.
     IF sy-subrc <> 0.
-      " Implement suitable error handling here
+      RETURN.
     ENDIF.
 
     LOOP AT lt_interfaces TRANSPORTING NO FIELDS
@@ -290,8 +290,9 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
         model_only   = 3
         OTHERS       = 4.
     IF sy-subrc <> 0.
-      " Implement suitable error handling here
+      RETURN.
     ENDIF.
+
     LOOP AT lt_interfaces TRANSPORTING NO FIELDS
       WHERE refclsname = 'IF_CTS_TABLE_CONVERSION'.
       result = abap_true.
