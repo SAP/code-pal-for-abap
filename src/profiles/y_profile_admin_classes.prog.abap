@@ -318,7 +318,6 @@ ENDCLASS.
 CLASS lcl_delegator_events DEFINITION INHERITING FROM y_alv_events.
   PUBLIC SECTION.
     METHODS y_if_alv_events~handle_function_selected REDEFINITION.
-  PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -343,27 +342,17 @@ ENDCLASS.
 CLASS lcl_check_events DEFINITION INHERITING FROM y_alv_events.
   PUBLIC SECTION.
     METHODS y_if_alv_events~handle_function_selected REDEFINITION.
-  PROTECTED SECTION.
   PRIVATE SECTION.
+    METHODS handle_btn_info.
+    METHODS handle_btn_add.
+    METHODS handle_btn_edit.
 ENDCLASS.
 
 CLASS lcl_check_events IMPLEMENTATION.
 
   METHOD y_if_alv_events~handle_function_selected.
     IF fcode EQ 'BTN_INFO'.
-      TRY.
-          DATA check TYPE REF TO y_check_base.
-          DATA(check_name) = lcl_util=>get_selected_check( )-checkid.
-          CREATE OBJECT check TYPE (check_name).
-
-          CALL FUNCTION 'CALL_BROWSER'
-            EXPORTING
-              url = check->settings-documentation.
-
-        CATCH ycx_entry_not_found
-              cx_sy_create_object_error.
-          MESSAGE 'Please select a check!'(015) TYPE 'I'.
-      ENDTRY.
+      handle_btn_info( ).
       RETURN.
     ENDIF.
 
@@ -373,25 +362,10 @@ CLASS lcl_check_events IMPLEMENTATION.
 
     CASE fcode.
       WHEN 'BTN_ADD'.
-        TRY.
-            lcl_util=>init_add_check( ).
-            lcl_util=>auto_re_start_check( ).
-
-          CATCH ycx_entry_not_found
-                cx_sy_create_object_error.
-            MESSAGE 'Please select a check!'(015) TYPE 'I'.
-
-        ENDTRY.
+        handle_btn_add( ).
 
       WHEN 'BTN_EDIT'.
-        TRY.
-            lcl_util=>init_edit_check( lcl_util=>get_selected_check( ) ).
-            lcl_util=>auto_re_start_check( abap_true ).
-
-          CATCH ycx_entry_not_found.
-            MESSAGE 'Please select a check!'(015) TYPE 'I'.
-
-        ENDTRY.
+        handle_btn_edit( ).
 
       WHEN 'BTN_REMOVE'.
         lcl_util=>remove_selected_check( ).
@@ -403,11 +377,39 @@ CLASS lcl_check_events IMPLEMENTATION.
         lcl_util=>remove_all_checks( ).
 
     ENDCASE.
+
     lcl_util=>refresh_checks( ).
   ENDMETHOD.
 
-ENDCLASS.
+  METHOD handle_btn_edit.
+    TRY.
+        lcl_util=>init_edit_check( lcl_util=>get_selected_check( ) ).
+        lcl_util=>auto_re_start_check( abap_true ).
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+    ENDTRY.
+  ENDMETHOD.
 
+  METHOD handle_btn_add.
+    TRY.
+        lcl_util=>init_add_check( ).
+        lcl_util=>auto_re_start_check( ).
+      CATCH ycx_entry_not_found
+            cx_sy_create_object_error.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD handle_btn_info.
+    TRY.
+        io_check_id = lcl_util=>get_selected_check( )-checkid.
+        lcl_util=>call_check_info(  ).
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+    ENDTRY.
+  ENDMETHOD.
+
+ENDCLASS.
 
 
 
@@ -591,9 +593,7 @@ CLASS lcl_util IMPLEMENTATION.
     DATA base TYPE REF TO y_check_base.
     TRY.
         CREATE OBJECT base TYPE (io_check_id).
-        CALL FUNCTION 'CALL_BROWSER'
-          EXPORTING
-            url = base->settings-documentation.
+        CALL FUNCTION 'CALL_BROWSER' EXPORTING url = base->settings-documentation.
 
       CATCH cx_sy_create_object_error.
         MESSAGE 'Failed to find the check!'(043) TYPE 'I'.
