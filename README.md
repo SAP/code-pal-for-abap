@@ -27,10 +27,9 @@ Check the [change log](changelog.txt) for further infromation.
 - Message severity is customizable (error, warning, or notification);
 - Checking may be activated in productive-code and/or test-code (customizable);
 - Findings can be suppressed via Code-Inspector Pragmas;
-- [Optional]: Usage of a "Profile Management Tool". **
+- Usage of a "Profile Management Tool" (Optional). 
 
-** This is an alternative of working with SCI based variant(s). The profile management tool offers among others:
-
+The Profile Management Tool, which is an alternative of working with SCI based variant(s), offers among others:
 - An user friendly UI;
 - A user-based or group-based execution of Checks;
 - Creation, assignment and unassignment of Profiles (unassigning a profile will only delete it if no checks are registered to this profile);
