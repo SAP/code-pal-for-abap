@@ -20,7 +20,9 @@ CLASS y_unit_test_coverage DEFINITION PUBLIC CREATE PUBLIC .
 ENDCLASS.
 
 
-CLASS y_unit_test_coverage IMPLEMENTATION.
+
+CLASS Y_UNIT_TEST_COVERAGE IMPLEMENTATION.
+
 
   METHOD get_instance.
     IF instance IS NOT BOUND.
@@ -28,6 +30,7 @@ CLASS y_unit_test_coverage IMPLEMENTATION.
     ENDIF.
     result = instance.
   ENDMETHOD.
+
 
   METHOD execute.
     DATA(object) = convert_check_to_object( check ).
@@ -37,12 +40,13 @@ CLASS y_unit_test_coverage IMPLEMENTATION.
     ENDIF.
 
     TRY.
-        me->measurement = execute_abap_unit_test( check ).
+        measurement = execute_abap_unit_test( check ).
         me->object = object.
       CATCH cx_scv_execution_error cx_scv_call_error cx_dynamic_check.
         RETURN.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD execute_abap_unit_test.
     DATA(abap_unit_test) = cl_aucv_task=>create( i_measure_coverage = abap_true
@@ -58,24 +62,27 @@ CLASS y_unit_test_coverage IMPLEMENTATION.
     result = abap_unit_test->get_coverage_measurement( )->build_program_result( check->program_name ).
   ENDMETHOD.
 
+
   METHOD get_branch_coverage.
     result = measurement->get_coverage( ce_scv_coverage_type=>branch )->get_percentage( ).
     result = round( val = result dec = 2 ).
   ENDMETHOD.
+
 
   METHOD get_procedure_coverage.
     result = measurement->get_coverage( ce_scv_coverage_type=>procedure )->get_percentage( ).
     result = round( val = result dec = 2 ).
   ENDMETHOD.
 
+
   METHOD get_statement_coverage.
     result = measurement->get_coverage( ce_scv_coverage_type=>statement )->get_percentage( ).
     result = round( val = result dec = 2 ).
   ENDMETHOD.
 
+
   METHOD convert_check_to_object.
     result = VALUE #( object = check->object_type
                       obj_name = check->object_name ).
   ENDMETHOD.
-
 ENDCLASS.

@@ -185,10 +185,10 @@ CLASS y_check_base IMPLEMENTATION.
 
     has_attributes = do_attributes_exist( ).
 
-    INSERT VALUE #( test = me->myname
+    INSERT VALUE #( test = myname
                     code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
-                    text = TEXT-106 ) INTO TABLE me->scimessages[].
+                    text = TEXT-106 ) INTO TABLE scimessages[].
   ENDMETHOD.
 
 
@@ -617,7 +617,7 @@ CLASS y_check_base IMPLEMENTATION.
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                    scimessages      = scimessages
-                                                                                   test             = me->myname
+                                                                                   test             = myname
                                                                                    code             = get_code( error_priority )
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
@@ -629,7 +629,7 @@ CLASS y_check_base IMPLEMENTATION.
               p_column = get_column_abs( statement_from )
               p_errcnt = error_counter
               p_kind = error_priority
-              p_test = me->myname
+              p_test = myname
               p_code = get_code( error_priority )
               p_suppress = settings-pseudo_comment
               p_param_1 = parameter_01
