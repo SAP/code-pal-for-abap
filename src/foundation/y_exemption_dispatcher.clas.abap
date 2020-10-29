@@ -21,7 +21,7 @@ CLASS y_exemption_dispatcher DEFINITION PUBLIC CREATE PUBLIC .
       RETURNING
         VALUE(result) TYPE abap_bool.
 
-    METHODS is_exempt
+    METHODS is_exempted
       IMPORTING
         object_type  TYPE trobjtype
         object_name  TYPE sobj_name
@@ -64,7 +64,7 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    UPDATE ytab_exemptions SET as4date = @sy-datum,
+    UPDATE ytab_exemptions SET as4date = @exemption-as4date,
                                is_exempted = @exemption-is_exempted
                            WHERE object = @exemption-object
                              AND obj_name = @exemption-obj_name.
@@ -74,35 +74,35 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
 
 
   METHOD y_if_exemption_dispatcher~is_class_exempted.
-    is_exempted = is_exempt( object_type = 'CLAS'
-                             object_name = name ).
+    is_exempted = is_exempted( object_type = 'CLAS'
+                               object_name = name ).
   ENDMETHOD.
 
 
   METHOD y_if_exemption_dispatcher~is_function_group_exempted.
-    is_exempted = is_exempt( object_type = 'FUGR'
-                             object_name = name ).
+    is_exempted = is_exempted( object_type = 'FUGR'
+                               object_name = name ).
   ENDMETHOD.
 
 
   METHOD y_if_exemption_dispatcher~is_program_exempted.
-    is_exempted = is_exempt( object_type = 'PROG'
-                             object_name = name ).
+    is_exempted = is_exempted( object_type = 'PROG'
+                               object_name = name ).
   ENDMETHOD.
 
 
-  METHOD is_exempt.
+  METHOD is_exempted.
      get_exemption_from_database(
         EXPORTING
           object_type  = object_type
           object_name  = object_name
         IMPORTING
-          is_exempted = DATA(is_exempt)
+          is_exempted = DATA(is_exempted)
           is_in_buffer = DATA(is_in_buffer)
     ).
 
     IF is_in_buffer = abap_true.
-      result = is_exempt.
+      result = is_exempted.
       RETURN.
     ENDIF.
 
