@@ -7,9 +7,7 @@ CLASS y_exemption_handler DEFINITION  PUBLIC CREATE PUBLIC .
                                                 object_name  TYPE sobj_name
                                       EXPORTING is_exempted  TYPE abap_bool
                                                 is_in_buffer TYPE abap_bool .
-    METHODS insert_exemption_into_buffer IMPORTING object_type     TYPE trobjtype
-                                                   object_name     TYPE sobj_name
-                                                   is_exempted     TYPE abap_bool .
+    METHODS insert_exemption_into_buffer IMPORTING exemption TYPE ytab_exemptions .
 ENDCLASS.
 
 
@@ -34,25 +32,17 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
 
 
   METHOD insert_exemption_into_buffer.
-    DATA: exemption TYPE ytab_exemptions.
-
-    exemption-object = object_type.
-    exemption-obj_name = object_name.
-    exemption-is_exempted = is_exempted.
-    exemption-as4date_co = sy-datum.
-    exemption-is_exemption_buffered = abap_true.
-
     INSERT ytab_exemptions FROM exemption.
 
     IF sy-subrc = 0.
       RETURN.
     ENDIF.
 
-    UPDATE ytab_exemptions SET is_exempted = @is_exempted,
-                               as4date_co = @sy-datum,
-                               is_exemption_buffered = @abap_true
-                           WHERE object = @object_type
-                           AND obj_name = @object_name.
+    UPDATE ytab_exemptions SET is_exempted = @exemption-is_exempted,
+                               as4date_co = @exemption-as4date_co,
+                               is_exemption_buffered = @exemption-is_exemption_buffered
+                           WHERE object = @exemption-object
+                           AND obj_name = @exemption-obj_name.
 
     ASSERT sy-subrc = 0.
   ENDMETHOD.
@@ -90,8 +80,12 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
                                                                    object_name  = object_name ).
     ENDIF.
 
-    insert_exemption_into_buffer( object_type = object_type
-                                  object_name = object_name
-                                  is_exempted = result ).
+    DATA(exemption) = VALUE ytab_exemptions( object = object_type
+                                             obj_name = object_name
+                                             is_exempted = result
+                                             as4date_co = sy-datum
+                                             is_exemption_buffered = abap_true ).
+
+    insert_exemption_into_buffer( exemption ).
   ENDMETHOD.
 ENDCLASS.
