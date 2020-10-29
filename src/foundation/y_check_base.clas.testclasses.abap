@@ -1,12 +1,13 @@
 CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING. "#EC INTF_IN_CLASS
   PUBLIC SECTION.
-    METHODS get_report.
-  PRIVATE SECTION.
+    METHODS constructor.
 ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
 
-  METHOD get_report.
+  METHOD constructor.
+    super->constructor( ).
+
     inject_code( VALUE #(
       ( 'REPORT y_example. ' )
       ( ' "Something ' )
@@ -16,32 +17,28 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
 ENDCLASS.
 
 CLASS ltc_check_base_double DEFINITION FOR TESTING INHERITING FROM y_check_base.
+  PUBLIC SECTION.
+    METHODS constructor.
   PROTECTED SECTION.
-    METHODS: inspect_tokens REDEFINITION.
+    METHODS inspect_tokens REDEFINITION.
 ENDCLASS.
 
 CLASS ltc_check_base_double IMPLEMENTATION.
+
+  METHOD constructor.
+    super->constructor( ).
+    ref_scan_manager = NEW ltd_ref_scan_manager( ).
+  ENDMETHOD.
+
   METHOD inspect_tokens.
     RETURN.
   ENDMETHOD.
+
 ENDCLASS.
 
-CLASS ltc_check_configuration DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_check_configuration_base DEFINITION ABSTRACT FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
-    METHODS is_bound FOR TESTING.
-    METHODS error_vs_error FOR TESTING.
-    METHODS error_vs_warning FOR TESTING.
-    METHODS error_vs_note FOR TESTING.
-    METHODS warning_vs_error FOR TESTING.
-    METHODS warning_vs_warning FOR TESTING.
-    METHODS warning_vs_note FOR TESTING.
-    METHODS note_vs_error FOR TESTING.
-    METHODS note_vs_warning FOR TESTING.
-    METHODS note_vs_note FOR TESTING.
-  PRIVATE SECTION.
     DATA cut TYPE REF TO y_check_base.
-    DATA actual TYPE y_if_clean_code_manager=>check_configuration.
-    METHODS setup.
     METHODS given_error_threshold_one.
     METHODS given_error_threshold_five.
     METHODS given_warning_threshold_one.
@@ -54,22 +51,13 @@ CLASS ltc_check_configuration DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATIO
     METHODS then_expect IMPORTING expected TYPE y_if_clean_code_manager=>check_configuration.
     METHODS then_expect_no_result.
     METHODS cleanup.
+  PRIVATE SECTION.
+    DATA actual TYPE y_if_clean_code_manager=>check_configuration.
 ENDCLASS.
 
-CLASS y_check_base DEFINITION LOCAL FRIENDS ltc_check_configuration.
+CLASS y_check_base DEFINITION LOCAL FRIENDS ltc_check_configuration_base.
 
-CLASS ltc_check_configuration IMPLEMENTATION.
-  METHOD setup.
-    DATA(ref_scan_manager) = NEW ltd_ref_scan_manager( ).
-    ref_scan_manager->get_report( ).
-
-    cut = NEW ltc_check_base_double( ).
-    cut->ref_scan_manager ?= ref_scan_manager.
-  ENDMETHOD.
-
-  METHOD is_bound.
-    cl_abap_unit_assert=>assert_bound( act = cut ).
-  ENDMETHOD.
+CLASS ltc_check_configuration_base IMPLEMENTATION.
 
   METHOD given_error_threshold_one.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
@@ -130,6 +118,40 @@ CLASS ltc_check_configuration IMPLEMENTATION.
   METHOD cleanup.
     CLEAR cut->check_configurations.
     CLEAR actual.
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_check_configuration_bound DEFINITION FOR TESTING INHERITING FROM ltc_check_configuration_base RISK LEVEL HARMLESS DURATION SHORT.
+  PRIVATE SECTION.
+    METHODS is_bound FOR TESTING.
+    METHODS setup.
+ENDCLASS.
+
+CLASS ltc_check_configuration_bound IMPLEMENTATION.
+
+  METHOD setup.
+    cut = NEW ltc_check_base_double( ).
+  ENDMETHOD.
+
+  METHOD is_bound.
+    cl_abap_unit_assert=>assert_bound( cut ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_check_configuration_error DEFINITION FOR TESTING INHERITING FROM ltc_check_configuration_base RISK LEVEL HARMLESS DURATION SHORT.
+  PRIVATE SECTION.
+    METHODS setup.
+    METHODS error_vs_error FOR TESTING.
+    METHODS error_vs_warning FOR TESTING.
+    METHODS error_vs_note FOR TESTING.
+ENDCLASS.
+
+CLASS ltc_check_configuration_error IMPLEMENTATION.
+
+  METHOD setup.
+    cut = NEW ltc_check_base_double( ).
   ENDMETHOD.
 
   METHOD error_vs_error.
@@ -264,136 +286,20 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     cleanup( ).
   ENDMETHOD.
 
-  METHOD note_vs_error.
-    given_note_threshold_one( ).
-    given_error_threshold_one( ).
-    when_zero_errors( ).
-    then_expect_no_result( ).
-    cleanup( ).
+ENDCLASS.
 
-    given_note_threshold_one( ).
-    given_error_threshold_one( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
-    cleanup( ).
+CLASS ltc_check_configuration_warn DEFINITION FOR TESTING INHERITING FROM ltc_check_configuration_base RISK LEVEL HARMLESS DURATION SHORT.
+  PRIVATE SECTION.
+    METHODS setup.
+    METHODS warning_vs_error FOR TESTING.
+    METHODS warning_vs_warning FOR TESTING.
+    METHODS warning_vs_note FOR TESTING.
+ENDCLASS.
 
-    given_note_threshold_one( ).
-    given_error_threshold_five( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
-    cleanup( ).
+CLASS ltc_check_configuration_warn IMPLEMENTATION.
 
-    given_note_threshold_five( ).
-    given_error_threshold_one( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_error_threshold_one( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_error_threshold_five( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 5 ] ).
-    cleanup( ).
-
-    given_note_threshold_five( ).
-    given_error_threshold_one( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
-    cleanup( ).
-  ENDMETHOD.
-
-  METHOD note_vs_note.
-    given_note_threshold_one( ).
-    given_note_threshold_one( ).
-    when_zero_errors( ).
-    then_expect_no_result( ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_note_threshold_one( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_note_threshold_five( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_five( ).
-    given_note_threshold_one( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_note_threshold_one( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_note_threshold_five( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_five( ).
-    given_note_threshold_one( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
-    cleanup( ).
-  ENDMETHOD.
-
-  METHOD note_vs_warning.
-    given_note_threshold_one( ).
-    given_warning_threshold_one( ).
-    when_zero_errors( ).
-    then_expect_no_result( ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_warning_threshold_one( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_warning_threshold_five( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_five( ).
-    given_warning_threshold_one( ).
-    when_four_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_warning_threshold_one( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
-    cleanup( ).
-
-    given_note_threshold_one( ).
-    given_warning_threshold_five( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 5 ] ).
-    cleanup( ).
-
-    given_note_threshold_five( ).
-    given_warning_threshold_one( ).
-    when_eight_errors( ).
-    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
-    cleanup( ).
+  METHOD setup.
+    cut = NEW ltc_check_base_double( ).
   ENDMETHOD.
 
   METHOD warning_vs_error.
@@ -522,6 +428,154 @@ CLASS ltc_check_configuration IMPLEMENTATION.
     cleanup( ).
 
     given_warning_threshold_five( ).
+    given_warning_threshold_one( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
+    cleanup( ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_check_configuration_note DEFINITION FOR TESTING INHERITING FROM ltc_check_configuration_base RISK LEVEL HARMLESS DURATION SHORT.
+  PRIVATE SECTION.
+    METHODS setup.
+    METHODS note_vs_error FOR TESTING.
+    METHODS note_vs_warning FOR TESTING.
+    METHODS note_vs_note FOR TESTING.
+ENDCLASS.
+
+CLASS ltc_check_configuration_note IMPLEMENTATION.
+
+  METHOD setup.
+    cut = NEW ltc_check_base_double( ).
+  ENDMETHOD.
+
+  METHOD note_vs_error.
+    given_note_threshold_one( ).
+    given_error_threshold_one( ).
+    when_zero_errors( ).
+    then_expect_no_result( ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_error_threshold_one( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_error_threshold_five( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_five( ).
+    given_error_threshold_one( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_error_threshold_one( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_error_threshold_five( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 5 ] ).
+    cleanup( ).
+
+    given_note_threshold_five( ).
+    given_error_threshold_one( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_error threshold = 1 ] ).
+    cleanup( ).
+  ENDMETHOD.
+
+  METHOD note_vs_note.
+    given_note_threshold_one( ).
+    given_note_threshold_one( ).
+    when_zero_errors( ).
+    then_expect_no_result( ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_note_threshold_one( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_note_threshold_five( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_five( ).
+    given_note_threshold_one( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_note_threshold_one( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_note_threshold_five( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_five( ).
+    given_note_threshold_one( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
+    cleanup( ).
+  ENDMETHOD.
+
+  METHOD note_vs_warning.
+    given_note_threshold_one( ).
+    given_warning_threshold_one( ).
+    when_zero_errors( ).
+    then_expect_no_result( ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_warning_threshold_one( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_warning_threshold_five( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_note threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_five( ).
+    given_warning_threshold_one( ).
+    when_four_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_warning_threshold_one( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
+    cleanup( ).
+
+    given_note_threshold_one( ).
+    given_warning_threshold_five( ).
+    when_eight_errors( ).
+    then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 5 ] ).
+    cleanup( ).
+
+    given_note_threshold_five( ).
     given_warning_threshold_one( ).
     when_eight_errors( ).
     then_expect( cut->check_configurations[ prio = cut->c_warning threshold = 1 ] ).
