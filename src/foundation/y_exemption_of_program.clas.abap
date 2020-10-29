@@ -1,11 +1,9 @@
-CLASS y_exemption_of_program DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
-
+CLASS y_exemption_of_program DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     INTERFACES y_if_exemption_of_objects .
+    ALIASES create FOR y_if_exemption_of_objects~create.
 
-protected section.
+  PROTECTED SECTION.
   PRIVATE SECTION.
     METHODS is_enterprise_search_generate
       IMPORTING
@@ -49,7 +47,12 @@ ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
+CLASS y_exemption_of_program IMPLEMENTATION.
+
+
+  METHOD create.
+    result = NEW y_exemption_of_program( ).
+  ENDMETHOD.
 
 
   METHOD is_downport_assist_generate.

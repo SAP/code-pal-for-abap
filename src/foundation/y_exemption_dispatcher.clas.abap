@@ -1,11 +1,7 @@
-CLASS y_exemption_dispatcher DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
-
+CLASS y_exemption_dispatcher DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     INTERFACES y_if_exemption_dispatcher.
 
-protected section.
   PRIVATE SECTION.
     METHODS get_exemption_from_database
       IMPORTING
@@ -17,20 +13,26 @@ protected section.
 
     METHODS store_exemption_in_database
       IMPORTING
-        object_type      TYPE trobjtype
-        object_name      TYPE sobj_name
-        is_exempted      TYPE abap_bool.
+        exemption TYPE ytab_exemptions.
 
     METHODS is_dataset_outdated
       IMPORTING
-        storedate          TYPE d
+        storedate     TYPE d
       RETURNING
         VALUE(result) TYPE abap_bool.
+
+    METHODS is_exempt
+      IMPORTING
+        object_type  TYPE trobjtype
+        object_name  TYPE sobj_name
+      returning
+        value(result) type abap_bool.
+
 ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_DISPATCHER IMPLEMENTATION.
+CLASS y_exemption_dispatcher IMPLEMENTATION.
 
 
   METHOD get_exemption_from_database.
@@ -56,82 +58,64 @@ CLASS Y_EXEMPTION_DISPATCHER IMPLEMENTATION.
 
 
   METHOD store_exemption_in_database.
-    DATA(line) = VALUE ytab_exemptions( object      = object_type
-                                        obj_name    = object_name
-                                        is_exempted = is_exempted
-                                        as4date     = sy-datum ).
-
-    INSERT INTO ytab_exemptions VALUES @line.
+    INSERT INTO ytab_exemptions VALUES @exemption.
 
     IF sy-subrc = 0.
       RETURN.
     ENDIF.
 
     UPDATE ytab_exemptions SET as4date = @sy-datum,
-                               is_exempted = @is_exempted
-                           WHERE object = @object_type
-                             AND obj_name = @object_name.
+                               is_exempted = @exemption-is_exempted
+                           WHERE object = @exemption-object
+                             AND obj_name = @exemption-obj_name.
 
     ASSERT sy-subrc = 0.
   ENDMETHOD.
 
 
   METHOD y_if_exemption_dispatcher~is_class_exempted.
-    get_exemption_from_database(
-       EXPORTING
-         object_type  = 'CLAS'
-         object_name  =  name
-       IMPORTING
-         is_exempted = is_exempted
-         is_in_buffer = DATA(is_in_buffer) ).
-    IF is_in_buffer = abap_true.
-      RETURN.
-    ENDIF.
-
-    is_exempted = NEW y_exemption_of_class( )->y_if_exemption_of_objects~is_exempted( name ).
-
-    store_exemption_in_database( object_type = 'CLAS'
-                                 object_name = name
-                                 is_exempted = is_exempted ).
+    is_exempted = is_exempt( object_type = 'CLAS'
+                             object_name = name ).
   ENDMETHOD.
 
 
   METHOD y_if_exemption_dispatcher~is_function_group_exempted.
-    get_exemption_from_database(
-        EXPORTING
-          object_type  = 'FUGR'
-          object_name  =  name
-        IMPORTING
-          is_exempted = is_exempted
-          is_in_buffer = DATA(is_in_buffer) ).
-    IF is_in_buffer = abap_true.
-      RETURN.
-    ENDIF.
-
-    is_exempted = NEW y_exemption_of_function_group( )->y_if_exemption_of_objects~is_exempted( name ).
-
-   store_exemption_in_database( object_type = 'FUGR'
-                                object_name = name
-                                is_exempted = is_exempted ).
+    is_exempted = is_exempt( object_type = 'FUGR'
+                             object_name = name ).
   ENDMETHOD.
 
 
   METHOD y_if_exemption_dispatcher~is_program_exempted.
-    get_exemption_from_database(
+    is_exempted = is_exempt( object_type = 'PROG'
+                             object_name = name ).
+  ENDMETHOD.
+
+
+  METHOD is_exempt.
+     get_exemption_from_database(
         EXPORTING
-          object_type  = 'PROG'
-          object_name  =  name
+          object_type  = object_type
+          object_name  = object_name
         IMPORTING
-          is_exempted = is_exempted
-          is_in_buffer = DATA(is_in_buffer) ).
+          is_exempted = DATA(is_exempt)
+          is_in_buffer = DATA(is_in_buffer)
+    ).
+
     IF is_in_buffer = abap_true.
+      result = is_exempt.
       RETURN.
     ENDIF.
 
-    is_exempted = NEW y_exemption_of_program( )->y_if_exemption_of_objects~is_exempted( name ).
+    result = COND #( WHEN object_type = 'PROG' THEN y_exemption_of_program=>create( )->is_exempted( object_name )
+                     WHEN object_type = 'CLAS' THEN y_exemption_of_class=>create( )->is_exempted( object_name )
+                     WHEN object_type = 'FUGR' THEN y_exemption_of_function_group=>create( )->is_exempted( object_name ) ).
 
-    store_exemption_in_database( object_type = 'PROG'
-                                 object_name = name
-                                 is_exempted = is_exempted ).
+    DATA(exemption) = VALUE ytab_exemptions( object      = object_type
+                                             obj_name    = object_name
+                                             is_exempted = result
+                                             as4date     = sy-datum ).
+
+    store_exemption_in_database( exemption ).
   ENDMETHOD.
+
 ENDCLASS.

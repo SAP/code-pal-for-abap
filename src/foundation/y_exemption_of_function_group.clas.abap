@@ -1,9 +1,7 @@
-CLASS y_exemption_of_function_group DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
-
+CLASS y_exemption_of_function_group DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     INTERFACES y_if_exemption_of_objects .
+    ALIASES create FOR y_if_exemption_of_objects~create.
 
   PRIVATE SECTION.
     METHODS is_table_maintenance_generate
@@ -33,7 +31,12 @@ ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_OF_FUNCTION_GROUP IMPLEMENTATION.
+CLASS y_exemption_of_function_group IMPLEMENTATION.
+
+
+  METHOD create.
+    result = NEW y_exemption_of_function_group( ).
+  ENDMETHOD.
 
 
   METHOD is_configuration_tablegenerate.

@@ -1,13 +1,9 @@
-class Y_EXEMPTION_OF_CLASS definition
-  public
-  create public .
+CLASS y_exemption_of_class DEFINITION PUBLIC CREATE PUBLIC .
+  PUBLIC SECTION.
+    INTERFACES y_if_exemption_of_objects .
+    ALIASES create FOR y_if_exemption_of_objects~create.
 
-public section.
-
-  interfaces Y_IF_EXEMPTION_OF_OBJECTS .
-  PROTECTED SECTION.
   PRIVATE SECTION.
-
     DATA class_header_data TYPE seoclassdf .
 
     METHODS is_srv_maint_ui_generate
@@ -56,7 +52,12 @@ ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
+CLASS y_exemption_of_class IMPLEMENTATION.
+
+
+  METHOD create.
+    result = NEW y_exemption_of_class( ).
+  ENDMETHOD.
 
 
   METHOD is_amdp_class.
