@@ -41,7 +41,7 @@ ENDCLASS.
 
 
 
-CLASS y_alv_tree_control IMPLEMENTATION.
+CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
 
 
   METHOD autosize_all_fields.
@@ -129,7 +129,7 @@ CLASS y_alv_tree_control IMPLEMENTATION.
     CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
     DATA index_table TYPE lvc_t_indx.
     APPEND index TO index_table.
-    alv_tree->set_selected_nodes(
+    alv_tree->set_selected_nodes( "#EC SELF_REF
       EXPORTING
         it_index_outtab         = index_table
       EXCEPTIONS

@@ -1,4 +1,4 @@
-CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING. "#EC INTF_IN_CLASS
   PUBLIC SECTION.
     METHODS get_report.
   PRIVATE SECTION.

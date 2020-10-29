@@ -41,7 +41,7 @@ CLASS Y_UNIT_TEST_COVERAGE IMPLEMENTATION.
 
     TRY.
         measurement = execute_abap_unit_test( check ).
-        me->object = object.
+        me->object = object. "#EC SELF_REF
       CATCH cx_scv_execution_error cx_scv_call_error cx_dynamic_check.
         RETURN.
     ENDTRY.

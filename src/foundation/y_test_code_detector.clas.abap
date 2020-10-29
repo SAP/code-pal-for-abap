@@ -176,6 +176,6 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
 
 
   METHOD y_if_testcode_detector~set_ref_scan_manager.
-    me->ref_scan_manager = ref_scan_manager.
+    me->ref_scan_manager = ref_scan_manager. "#EC SELF_REF
   ENDMETHOD.
 ENDCLASS.

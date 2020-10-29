@@ -15,7 +15,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_sub_assign_read_table IMPLEMENTATION.
+CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -72,6 +72,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD is_read_table.
     CHECK get_token_abs( statement-from ) = 'READ'.
     CHECK get_token_abs( statement-from + 1 ) = 'TABLE'.
@@ -91,7 +92,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD might_cause_undesired_changes.
+  METHOD might_cause_undesired_changes. "#EC METH_RET_BOOL
     DATA(tokens) = ref_scan_manager->get_tokens( ).
     LOOP AT tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
@@ -105,5 +106,4 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.

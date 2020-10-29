@@ -7,12 +7,16 @@ CLASS y_clean_code_manager_double DEFINITION PUBLIC INHERITING FROM y_clean_code
     DATA check_class TYPE REF TO y_check_base.
 ENDCLASS.
 
-CLASS y_clean_code_manager_double IMPLEMENTATION.
+
+
+CLASS Y_CLEAN_CODE_MANAGER_DOUBLE IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
-    me->check_class = check_class.
+    me->check_class = check_class. "#EC SELF_REF
   ENDMETHOD.
+
 
   METHOD read_check_customizing.
     result = VALUE #( ( apply_on_testcode        = check_class->settings-apply_on_test_code
@@ -21,9 +25,8 @@ CLASS y_clean_code_manager_double IMPLEMENTATION.
                         threshold                = check_class->settings-threshold ) ).
   ENDMETHOD.
 
+
   METHOD calculate_obj_creation_date.
     result = check_class->settings-object_created_on.
   ENDMETHOD.
-
 ENDCLASS.
-
