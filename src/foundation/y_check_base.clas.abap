@@ -51,7 +51,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations .
     DATA check_name TYPE seoclsname .
-    DATA clean_code_exemption_handler TYPE REF TO y_exemption_handler .
+    DATA clean_code_exemption_handler TYPE REF TO y_if_exemption .
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager .
     DATA is_testcode TYPE abap_bool .
     DATA ref_scan_manager TYPE REF TO y_if_scan_manager .
@@ -564,7 +564,7 @@ CLASS y_check_base IMPLEMENTATION.
     ENDIF.
 
     IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = NEW y_exemption_handler( ).
+      clean_code_exemption_handler = y_exemption_handler=>create( ).
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.

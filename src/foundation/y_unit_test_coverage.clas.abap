@@ -1,4 +1,4 @@
-CLASS y_unit_test_coverage DEFINITION PUBLIC CREATE PUBLIC .
+CLASS y_unit_test_coverage DEFINITION PUBLIC CREATE PUBLIC . "#EC INTF_IN_CLASS
   PUBLIC SECTION.
     CLASS-METHODS get_instance RETURNING VALUE(result) TYPE REF TO y_unit_test_coverage.
     METHODS execute IMPORTING check TYPE REF TO y_check_base.

@@ -1,4 +1,4 @@
-CLASS y_ref_scan_manager_double DEFINITION PUBLIC INHERITING FROM y_ref_scan_manager.
+CLASS y_ref_scan_manager_double DEFINITION PUBLIC INHERITING FROM y_ref_scan_manager. "#EC INTF_IN_CLASS
   PUBLIC SECTION.
     METHODS set_ref_scan REDEFINITION.
     METHODS inject_code IMPORTING source TYPE y_char255_tab.

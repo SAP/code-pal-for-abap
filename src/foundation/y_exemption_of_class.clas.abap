@@ -209,9 +209,9 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
 
   METHOD is_object_indepenent_generate.
     DATA: l_object TYPE sobj_name.
-    DATA(programming_object) = NEW y_exemption_general( ).
     l_object = class_header_data-clsname.
-    result = programming_object->is_object_exempted( object_type = 'CLAS' object_name = l_object ).
+    result = y_exemption_general=>create( )->is_object_exempted( object_type = 'CLAS'
+                                                                 object_name = l_object ).
   ENDMETHOD.
 
 

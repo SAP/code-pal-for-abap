@@ -1,35 +1,25 @@
-CLASS y_exemption_handler DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
-
+CLASS y_exemption_handler DEFINITION  PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
-
-    METHODS is_object_exempted
-      IMPORTING
-        !object_name  TYPE sobj_name
-        !object_type  TYPE trobjtype
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-  PROTECTED SECTION.
+    INTERFACES y_if_exemption.
+    ALIASES create FOR y_if_exemption~create.
   PRIVATE SECTION.
-
-    METHODS get_exemption_from_buffer
-      IMPORTING
-        !object_type  TYPE trobjtype
-        !object_name  TYPE sobj_name
-      EXPORTING
-        !is_exempted  TYPE abap_bool
-        !is_in_buffer TYPE abap_bool .
-    METHODS insert_exemption_into_buffer
-      IMPORTING
-        !object_type     TYPE trobjtype
-        !object_name     TYPE sobj_name
-        !is_exempted     TYPE abap_bool .
+    METHODS get_exemption_from_buffer IMPORTING object_type  TYPE trobjtype
+                                                object_name  TYPE sobj_name
+                                      EXPORTING is_exempted  TYPE abap_bool
+                                                is_in_buffer TYPE abap_bool .
+    METHODS insert_exemption_into_buffer IMPORTING object_type     TYPE trobjtype
+                                                   object_name     TYPE sobj_name
+                                                   is_exempted     TYPE abap_bool .
 ENDCLASS.
 
 
 
 CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
+
+
+  METHOD y_if_exemption~create.
+    result = NEW y_exemption_handler( ).
+  ENDMETHOD.
 
 
   METHOD get_exemption_from_buffer.
@@ -68,7 +58,7 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_object_exempted.
+  METHOD y_if_exemption~is_object_exempted.
     get_exemption_from_buffer( EXPORTING
                                  object_type  = object_type
                                  object_name  = object_name
@@ -96,8 +86,8 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
     ENDCASE.
 
     IF result EQ abap_false.
-      result =  NEW y_exemption_general( )->is_object_exempted( object_type  = object_type
-                                                                object_name  = object_name ).
+      result = y_exemption_general=>create( )->is_object_exempted( object_type  = object_type
+                                                                   object_name  = object_name ).
     ENDIF.
 
     insert_exemption_into_buffer( object_type = object_type

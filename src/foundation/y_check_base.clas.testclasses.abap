@@ -27,7 +27,21 @@ CLASS ltc_check_base_double IMPLEMENTATION.
 ENDCLASS.
 
 CLASS ltc_check_configuration DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PUBLIC SECTION.
+  PROTECTED SECTION.
+    METHODS is_bound FOR TESTING.
+    METHODS error_vs_error FOR TESTING.
+    METHODS error_vs_warning FOR TESTING.
+    METHODS error_vs_note FOR TESTING.
+    METHODS warning_vs_error FOR TESTING.
+    METHODS warning_vs_warning FOR TESTING.
+    METHODS warning_vs_note FOR TESTING.
+    METHODS note_vs_error FOR TESTING.
+    METHODS note_vs_warning FOR TESTING.
+    METHODS note_vs_note FOR TESTING.
+  PRIVATE SECTION.
+    DATA cut TYPE REF TO y_check_base.
+    DATA actual TYPE y_if_clean_code_manager=>check_configuration.
+    METHODS setup.
     METHODS given_error_threshold_one.
     METHODS given_error_threshold_five.
     METHODS given_warning_threshold_one.
@@ -40,21 +54,6 @@ CLASS ltc_check_configuration DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATIO
     METHODS then_expect IMPORTING expected TYPE y_if_clean_code_manager=>check_configuration.
     METHODS then_expect_no_result.
     METHODS cleanup.
-  PROTECTED SECTION.
-    DATA cut TYPE REF TO y_check_base.
-  PRIVATE SECTION.
-    DATA actual TYPE y_if_clean_code_manager=>check_configuration.
-    METHODS setup.
-    METHODS is_bound FOR TESTING.
-    METHODS error_vs_error FOR TESTING.
-    METHODS error_vs_warning FOR TESTING.
-    METHODS error_vs_note FOR TESTING.
-    METHODS warning_vs_error FOR TESTING.
-    METHODS warning_vs_warning FOR TESTING.
-    METHODS warning_vs_note FOR TESTING.
-    METHODS note_vs_error FOR TESTING.
-    METHODS note_vs_warning FOR TESTING.
-    METHODS note_vs_note FOR TESTING.
 ENDCLASS.
 
 CLASS y_check_base DEFINITION LOCAL FRIENDS ltc_check_configuration.

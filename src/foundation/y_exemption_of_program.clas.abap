@@ -137,9 +137,8 @@ CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
 
   METHOD is_object_indepenent_generate.
     DATA: l_object TYPE sobj_name.
-    DATA(programming_object) = NEW y_exemption_general( ).
     l_object = name.
-    result = programming_object->is_object_exempted( object_type = 'PROG' object_name = name ).
+    result = y_exemption_general=>create( )->is_object_exempted( object_type = 'PROG' object_name = name ).
   ENDMETHOD.
 
 

@@ -90,15 +90,13 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_clean_code_exemption_no DEFINITION FOR TESTING
-  INHERITING FROM y_exemption_handler.
-
+CLASS ltd_clean_code_exemption_no DEFINITION FOR TESTING INHERITING FROM y_exemption_handler.
   PUBLIC SECTION.
-    METHODS: is_object_exempted REDEFINITION.
+    METHODS y_if_exemption~is_object_exempted REDEFINITION.
 ENDCLASS.
 
 CLASS ltd_clean_code_exemption_no IMPLEMENTATION.
-  METHOD is_object_exempted.
+  METHOD y_if_exemption~is_object_exempted.
     RETURN.
   ENDMETHOD.
 ENDCLASS.
