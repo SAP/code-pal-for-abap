@@ -13,7 +13,7 @@ CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_ba
            END OF counter.
     TYPES counters TYPE TABLE OF counter.
 
-    METHODS skip IMPORTING structure TYPE sstruc
+    METHODS should_skip_test_code IMPORTING structure TYPE sstruc
                  RETURNING VALUE(result) TYPE abap_bool.
     METHODS handle_result IMPORTING counters TYPE counters.
 ENDCLASS.
@@ -46,7 +46,7 @@ CLASS Y_CHECK_PREFER_CASE_TO_ELSEIF IMPLEMENTATION.
     WHERE type = scan_struc_type-condition
     OR type = scan_struc_type-alternation.
 
-      IF skip( <structure> ) = abap_true.
+      IF should_skip_test_code( <structure> ) = abap_true.
         CONTINUE.
       ENDIF.
 
@@ -86,7 +86,7 @@ CLASS Y_CHECK_PREFER_CASE_TO_ELSEIF IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD skip.
+  METHOD should_skip_test_code.
     CHECK test_code_detector->is_testcode( structure ) = abap_true.
     CHECK line_exists( check_configurations[ apply_on_testcode = abap_false ] ).
     result = abap_true.

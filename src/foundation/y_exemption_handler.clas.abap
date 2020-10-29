@@ -24,9 +24,7 @@ CLASS y_exemption_handler DEFINITION
       IMPORTING
         !object_type     TYPE trobjtype
         !object_name     TYPE sobj_name
-        !is_exempted     TYPE abap_bool
-      RETURNING
-        VALUE(result) TYPE abap_bool .
+        !is_exempted     TYPE abap_bool .
 ENDCLASS.
 
 
@@ -55,17 +53,18 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
     exemption-is_exemption_buffered = abap_true.
 
     INSERT ytab_exemptions FROM exemption.
+
     IF sy-subrc = 0.
-      result = abap_true.
-    ELSE.
-      UPDATE ytab_exemptions SET is_exempted = @is_exempted,
-                                 as4date_co = @sy-datum,
-                                 is_exemption_buffered = @abap_true
-       WHERE object = @object_type AND obj_name = @object_name.
-      IF sy-subrc = 0.
-        result = abap_true.
-      ENDIF.
+      RETURN.
     ENDIF.
+
+    UPDATE ytab_exemptions SET is_exempted = @is_exempted,
+                               as4date_co = @sy-datum,
+                               is_exemption_buffered = @abap_true
+                           WHERE object = @object_type
+                           AND obj_name = @object_name.
+
+    ASSERT sy-subrc = 0.
   ENDMETHOD.
 
 
@@ -101,8 +100,8 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
                                                                 object_name  = object_name ).
     ENDIF.
 
-    DATA(is_stored) = insert_exemption_into_buffer( object_type = object_type
-                                                    object_name = object_name
-                                                    is_exempted = result ).
+    insert_exemption_into_buffer( object_type = object_type
+                                  object_name = object_name
+                                  is_exempted = result ).
   ENDMETHOD.
 ENDCLASS.

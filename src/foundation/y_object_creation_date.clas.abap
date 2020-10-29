@@ -60,9 +60,7 @@ CLASS y_object_creation_date DEFINITION
       IMPORTING
         VALUE(object_type)   TYPE trobjtype
         VALUE(object_name)   TYPE sobj_name
-        VALUE(creation_date) TYPE rdir_cdate
-      RETURNING
-        VALUE(is_stored)     TYPE abap_bool .
+        VALUE(creation_date) TYPE rdir_cdate .
 ENDCLASS.
 
 
@@ -188,19 +186,16 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     INSERT ytab_exemptions FROM exemption.
     IF sy-subrc = 0.
-      is_stored = abap_true.
-    ELSE.
-      UPDATE ytab_exemptions SET
-        created_on = @creation_date,
-        as4date_co = @sy-datum,
-        is_created_on_buffered = @abap_true
-      WHERE
-        object = @object_type AND
-        obj_name = @object_name.
-      IF sy-subrc = 0.
-        is_stored = abap_true.
-      ENDIF.
+      RETURN.
     ENDIF.
+
+    UPDATE ytab_exemptions SET created_on = @creation_date,
+                               as4date_co = @sy-datum,
+                               is_created_on_buffered = @abap_true
+                           WHERE object = @object_type
+                           AND obj_name = @object_name.
+
+    ASSERT sy-subrc = 0.
   ENDMETHOD.
 
 
@@ -228,10 +223,9 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     createdate = get_lowest_date( created_on_dates  ).
 
-    DATA(is_stored) = insert_created_on_to_buffer(
-     object_type   = 'CLAS'
-     object_name   = name
-     creation_date = createdate ).
+    insert_created_on_to_buffer( object_type   = 'CLAS'
+                                 object_name   = name
+                                 creation_date = createdate ).
   ENDMETHOD.
 
 
@@ -260,10 +254,9 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     createdate = get_lowest_date( created_on_dates  ).
 
-    DATA(is_stored) = insert_created_on_to_buffer(
-      object_type   = 'FUGR'
-      object_name   = name
-      creation_date = createdate ).
+    insert_created_on_to_buffer( object_type   = 'FUGR'
+                                 object_name   = name
+                                 creation_date = createdate ).
   ENDMETHOD.
 
 
@@ -291,10 +284,9 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     createdate = get_lowest_date( created_on_dates  ).
 
-    DATA(is_stored) = insert_created_on_to_buffer(
-     object_type   = 'INTF'
-     object_name   = name
-     creation_date = createdate ).
+   insert_created_on_to_buffer( object_type   = 'INTF'
+                                object_name   = name
+                                creation_date = createdate ).
   ENDMETHOD.
 
 
@@ -324,9 +316,8 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     createdate = get_lowest_date( created_on_dates  ).
 
-    DATA(is_stored) = insert_created_on_to_buffer(
-      object_type   = 'PROG'
-      object_name   = name
-      creation_date = createdate ).
+    insert_created_on_to_buffer( object_type   = 'PROG'
+                                 object_name   = name
+                                 creation_date = createdate ).
   ENDMETHOD.
 ENDCLASS.

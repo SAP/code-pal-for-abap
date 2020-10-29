@@ -14,10 +14,10 @@ CLASS y_test_code_detector DEFINITION PUBLIC CREATE PUBLIC.
         IMPORTING structure TYPE sstruc,
       process_tokens
         IMPORTING statement TYPE sstmnt,
-      testclass_added
+      try_testclass
         IMPORTING token         TYPE stokesx
         RETURNING VALUE(result) TYPE abap_bool,
-      testmethod_added
+      try_testmethod
         IMPORTING token         TYPE stokesx
         RETURNING VALUE(result) TYPE abap_bool,
       keyword
@@ -95,18 +95,18 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
-      IF testclass_added( <token> ).
+      IF try_testclass( <token> ).
         EXIT.
       ENDIF.
 
-      IF testmethod_added( <token> ).
+      IF try_testmethod( <token> ).
         EXIT.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
 
-  METHOD testclass_added.
+  METHOD try_testclass.
     IF token-str EQ 'TESTING' AND
        keyword( ) = 'CLASS'.
       test_code-class = get_token_rel( 2 ).
@@ -115,7 +115,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD testmethod_added.
+  METHOD try_testmethod.
     IF test_code-class IS NOT INITIAL AND (
         keyword( ) = 'METHODS' OR
         keyword( ) = 'CLASS-METHODS' ).
