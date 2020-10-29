@@ -104,7 +104,7 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     DATA(token_index) = statement-from.
 
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>) FROM statement-from TO statement-to.
-      IF <token>-str EQ 'ABAP_BOOL' AND get_token_abs( token_index - 3 ) EQ 'RETURNING'.
+      IF <token>-str EQ 'ABAP_BOOL' AND get_token_abs( token_index - 3 ) EQ 'RETURNING'. "#EC CI_MAGIC
         has_found_bool = abap_true.
       ENDIF.
       token_index = token_index + 1.
