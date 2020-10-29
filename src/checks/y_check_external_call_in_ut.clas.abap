@@ -1,21 +1,17 @@
-CLASS y_check_external_call_in_ut DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_external_call_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-
     METHODS constructor .
+
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-
     METHODS check_if_error
       IMPORTING
-        !index     TYPE i OPTIONAL
-        !statement TYPE sstmnt OPTIONAL .
+        !index     TYPE i
+        !statement TYPE sstmnt .
+
 ENDCLASS.
 
 

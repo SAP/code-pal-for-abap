@@ -7,9 +7,9 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS has_osql_or_cds_framework RETURNING VALUE(result) TYPE abap_bool.
   PRIVATE SECTION.
     METHODS is_persistent_object IMPORTING obj_name TYPE string
-                                 RETURNING VALUE(result) TYPE abap_bool .
-    METHODS check_if_error IMPORTING index     TYPE i OPTIONAL
-                                     statement TYPE sstmnt OPTIONAL .
+                                 RETURNING VALUE(result) TYPE abap_bool.
+    METHODS check_if_error IMPORTING index     TYPE i
+                                     statement TYPE sstmnt.
 ENDCLASS.
 
 
