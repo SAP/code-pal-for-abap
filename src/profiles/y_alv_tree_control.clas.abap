@@ -129,7 +129,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
     CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
     DATA index_table TYPE lvc_t_indx.
     APPEND index TO index_table.
-    alv_tree->set_selected_nodes( "#EC SELF_REF
+    alv_tree->set_selected_nodes(
       EXPORTING
         it_index_outtab         = index_table
       EXCEPTIONS
@@ -138,7 +138,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
         failed                  = 3
         error_in_node_key_table = 4
         others                  = 5
-    ).
+    ). "#EC OPTL_EXP
     IF SY-SUBRC <> 0.
       BREAK-POINT.
     ENDIF.
