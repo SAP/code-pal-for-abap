@@ -52,7 +52,7 @@ ENDCLASS.
 
 
 
-CLASS y_exemption_of_class IMPLEMENTATION.
+CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
 
 
   METHOD create.
@@ -89,25 +89,16 @@ CLASS y_exemption_of_class IMPLEMENTATION.
 
 
   METHOD is_bcp_application.
-    DATA: l_class        TYPE seoclsname,
-          it_bsp_classes TYPE STANDARD TABLE OF seoclsname.
+    DATA it_bsp_classes TYPE STANDARD TABLE OF seoclsname.
 
-    l_class = 'CL_BSP_WD_COMPONENT_CONTROLLER'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_CONTEXT'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_CONTEXT_NODE'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_WINDOW'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_CUSTOM_CONTROLLER'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_VIEW_CONTROLLER'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_ADVSEARCH_CONTROLLER'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_CONTEXT_NODE_ASP'.
-    APPEND l_class TO it_bsp_classes.
+    it_bsp_classes = VALUE #( ( 'CL_BSP_WD_COMPONENT_CONTROLLER' )
+                              ( 'CL_BSP_WD_CONTEXT' )
+                              ( 'CL_BSP_WD_CONTEXT_NODE' )
+                              (  'CL_BSP_WD_WINDOW' )
+                              ( 'CL_BSP_WD_CUSTOM_CONTROLLER' )
+                              ( 'CL_BSP_WD_VIEW_CONTROLLER' )
+                              ( 'CL_BSP_WD_ADVSEARCH_CONTROLLER' )
+                              ( 'CL_BSP_WD_CONTEXT_NODE_ASP' ) ).
 
     SELECT SINGLE refclsname FROM seometarel
       WHERE clsname = @class_header_data-clsname AND refclsname IS NOT NULL
@@ -130,7 +121,6 @@ CLASS y_exemption_of_class IMPLEMENTATION.
         RETURN.
       ENDIF.
     ENDDO.
-
   ENDMETHOD.
 
 
