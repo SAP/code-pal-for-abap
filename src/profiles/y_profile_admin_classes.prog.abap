@@ -188,7 +188,7 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
                   dynpro_number         TYPE sy-dynnr DEFAULT sy-dynnr
         CHANGING  value_table           TYPE STANDARD TABLE
         RETURNING VALUE(result)         TYPE y_if_profile_manager=>value_help
-        RAISING   cx_failed.                         "#EC PARAMETER_OUT
+        RAISING   cx_failed.    "#EC PARAMETER_OUT "#EC NUM_OUTPUT_PARA
 
 
     CLASS-METHODS:
