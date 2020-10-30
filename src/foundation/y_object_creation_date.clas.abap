@@ -53,14 +53,27 @@ CLASS y_object_creation_date DEFINITION
       IMPORTING
         VALUE(object_type)   TYPE trobjtype
         VALUE(object_name)   TYPE sobj_name
-      EXPORTING
-        VALUE(creation_date) TYPE rdir_cdate
-        VALUE(is_in_buffer)  TYPE abap_bool .
+      RETURNING
+        VALUE(result) TYPE rdir_cdate
+      RAISING
+        ycx_entry_not_found .
     METHODS insert_created_on_to_buffer
       IMPORTING
         VALUE(object_type)   TYPE trobjtype
         VALUE(object_name)   TYPE sobj_name
         VALUE(creation_date) TYPE rdir_cdate .
+    METHODS try_new_created_on
+      IMPORTING
+        object_type   TYPE trobjtype
+        object_name   TYPE sobj_name
+      RETURNING
+        value(result) TYPE as4date.
+    METHODS get_created_on
+      IMPORTING
+        object_type   TYPE trobjtype
+        object_name   TYPE sobj_name
+      RETURNING
+        value(result) TYPE as4date.
 ENDCLASS.
 
 
@@ -85,12 +98,17 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_created_on_from_buffer.
-    SELECT SINGLE created_on FROM ytab_exemptions INTO @creation_date
-      WHERE object                 = @object_type AND
-            obj_name               = @object_name AND
-            is_created_on_buffered = @abap_true.
-    IF sy-subrc = 0 AND creation_date IS NOT INITIAL AND creation_date <> '000000'.
-      is_in_buffer = abap_true.
+    SELECT SINGLE created_on
+    FROM ytab_exemptions
+    INTO @result
+    WHERE object = @object_type
+    AND obj_name = @object_name
+    AND is_created_on_buffered = @abap_true.
+
+    IF sy-subrc IS NOT INITIAL
+    OR result IS INITIAL
+    OR result = '000000'.
+      RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
   ENDMETHOD.
 
@@ -201,124 +219,68 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD y_if_object_creation_date~get_class_create_date.
-    DATA: created_on_dates TYPE created_on_dates.
-
-    get_created_on_from_buffer(
-         EXPORTING
-           object_type  = 'CLAS'
-           object_name  =  name
-         IMPORTING
-           creation_date = createdate
-           is_in_buffer = DATA(is_in_buffer) ).
-    IF is_in_buffer = abap_true.
-      RETURN.
-    ENDIF.
-
-    DATA(tadir_date) = get_db_tadir_data( object_type = 'CLAS' object_name = name ).
-    APPEND tadir_date TO created_on_dates.
-    DATA(reosource_key) = convert_class_for_repos_access( name ).
-    DATA(repo_date) = get_db_reposource_created_on( reposrc_prog_search_string = reosource_key ).
-    APPEND repo_date TO created_on_dates.
-    DATA(vers_date) = get_db_vers_hstry_crtd_on_clas( name ).
-    APPEND vers_date TO created_on_dates.
-
-    createdate = get_lowest_date( created_on_dates  ).
-
-    insert_created_on_to_buffer( object_type   = 'CLAS'
-                                 object_name   = name
-                                 creation_date = createdate ).
+    result = get_created_on( object_type = 'FUGR'
+                             object_name = name ).
   ENDMETHOD.
 
 
   METHOD y_if_object_creation_date~get_function_group_create_date.
-    DATA: created_on_dates TYPE created_on_dates.
-
-    get_created_on_from_buffer(
-     EXPORTING
-       object_type  = 'FUGR'
-       object_name  =  name
-     IMPORTING
-       creation_date = createdate
-       is_in_buffer = DATA(is_in_buffer) ).
-    IF is_in_buffer = abap_true.
-      RETURN.
-    ENDIF.
-
-
-    DATA(tadir_date) = get_db_tadir_data( object_type = 'FUGR' object_name = name ).
-    APPEND tadir_date TO created_on_dates.
-    DATA(reosource_key) = convert_fugr_for_db_access( name ).
-    DATA(repo_date) = get_db_reposource_created_on( reposrc_prog_search_string = reosource_key ).
-    APPEND repo_date TO created_on_dates.
-    DATA(vers_date) = get_db_vers_hstry_crtd_on_fugr( name ).
-    APPEND vers_date TO created_on_dates.
-
-    createdate = get_lowest_date( created_on_dates  ).
-
-    insert_created_on_to_buffer( object_type   = 'FUGR'
-                                 object_name   = name
-                                 creation_date = createdate ).
+    result = get_created_on( object_type = 'FUGR'
+                             object_name = name ).
   ENDMETHOD.
 
 
   METHOD y_if_object_creation_date~get_interface_create_date.
-    DATA: created_on_dates TYPE created_on_dates.
-
-    get_created_on_from_buffer(
-         EXPORTING
-           object_type  = 'INTF'
-           object_name  =  name
-         IMPORTING
-           creation_date = createdate
-           is_in_buffer = DATA(is_in_buffer) ).
-    IF is_in_buffer = abap_true.
-      RETURN.
-    ENDIF.
-
-    DATA(tadir_date) = get_db_tadir_data( object_type = 'INTF' object_name = name ).
-    APPEND tadir_date TO created_on_dates.
-    DATA(reosource_key) = convert_class_for_repos_access( name ).
-    DATA(repo_date) = get_db_reposource_created_on( reposrc_prog_search_string = reosource_key ).
-    APPEND repo_date TO created_on_dates.
-    DATA(vers_date) = get_db_vers_hstry_crtd_on_clas( name ).
-    APPEND vers_date TO created_on_dates.
-
-    createdate = get_lowest_date( created_on_dates  ).
-
-   insert_created_on_to_buffer( object_type   = 'INTF'
-                                object_name   = name
-                                creation_date = createdate ).
+    result = get_created_on( object_type = 'INTF'
+                             object_name = name ).
   ENDMETHOD.
 
 
   METHOD y_if_object_creation_date~get_program_create_date.
-    DATA: created_on_dates TYPE created_on_dates,
-          helper           TYPE string.
-
-    helper = name.
-
-    get_created_on_from_buffer(
-         EXPORTING
-           object_type  = 'PROG'
-           object_name  =  name
-         IMPORTING
-           creation_date = createdate
-           is_in_buffer = DATA(is_in_buffer) ).
-    IF is_in_buffer = abap_true.
-      RETURN.
-    ENDIF.
-
-    DATA(repo_date) = get_db_reposource_created_on( helper ).
-    APPEND repo_date TO created_on_dates.
-    DATA(tadir_date) = get_db_tadir_data( object_type = 'PROG' object_name = name ).
-    APPEND tadir_date TO created_on_dates.
-    DATA(vers_date) = get_db_vers_hstry_crtd_on_prog( name ).
-    APPEND vers_date TO created_on_dates.
-
-    createdate = get_lowest_date( created_on_dates  ).
-
-    insert_created_on_to_buffer( object_type   = 'PROG'
-                                 object_name   = name
-                                 creation_date = createdate ).
+    result = get_created_on( object_type = 'PROG'
+                             object_name = name ).
   ENDMETHOD.
+
+  METHOD get_created_on.
+    TRY.
+        result = get_created_on_from_buffer( object_type  = object_type
+                                             object_name  =  object_name ).
+      CATCH ycx_entry_not_found.
+        result = try_new_created_on( object_type  = object_type
+                                     object_name  =  object_name ).
+    ENDTRY.
+  ENDMETHOD.
+
+
+
+  METHOD try_new_created_on.
+
+    DATA created_on_dates TYPE created_on_dates.
+
+    APPEND get_db_tadir_data( object_type = object_type object_name = object_name ) TO created_on_dates.
+
+    DATA(repo_access) = COND #( WHEN object_type = 'FUGR' THEN convert_fugr_for_db_access( object_name )
+                                WHEN object_type = 'CLAS' THEN convert_class_for_repos_access( object_name )
+                                WHEN object_type = 'INTF' THEN convert_class_for_repos_access( object_name )
+                                WHEN object_type = 'PROG' THEN object_name ).
+
+    APPEND get_db_reposource_created_on( repo_access ) TO created_on_dates.
+
+
+    DATA(version_history) = COND #( WHEN object_type = 'FUGR' THEN get_db_vers_hstry_crtd_on_fugr( object_name )
+                                    WHEN object_type = 'CLAS' THEN get_db_vers_hstry_crtd_on_clas( object_name )
+                                    WHEN object_type = 'INTF' THEN get_db_vers_hstry_crtd_on_clas( object_name )
+                                    WHEN object_type = 'PROG' THEN get_db_vers_hstry_crtd_on_prog( object_name ) ).
+
+    APPEND version_history TO created_on_dates.
+
+    result = get_lowest_date( created_on_dates  ).
+
+    insert_created_on_to_buffer( object_type   = object_type
+                                 object_name   = object_name
+                                 creation_date = result ).
+
+  ENDMETHOD.
+
+
 ENDCLASS.
