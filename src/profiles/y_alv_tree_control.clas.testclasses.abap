@@ -86,7 +86,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     init_profiles( ).
     TRY.
         DATA(si) = cut->y_if_alv_tree_control~get_selected_index( ).
-          CATCH ycx_entry_not_found.
+      CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
     cl_aunit_assert=>assert_initial( act  = si
