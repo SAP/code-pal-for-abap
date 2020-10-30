@@ -87,7 +87,7 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
 
     IF statement_index GT 1 AND get_token_abs( statement-from ) EQ 'CHECK'.
 
-      DATA(check_configuration) = detect_check_configuration( statement ).
+      DATA(check_configuration) = detect_check_configuration( statement ). "#EC DECL_IN_IF
 
       IF check_configuration IS INITIAL.
         RETURN.
