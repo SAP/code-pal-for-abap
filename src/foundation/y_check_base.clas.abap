@@ -85,7 +85,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
       IMPORTING
         !structure TYPE sstruc OPTIONAL
         !index     TYPE i OPTIONAL
-        !statement TYPE sstmnt OPTIONAL .
+        !statement TYPE sstmnt OPTIONAL . "#EC OPTL_EXP
     METHODS raise_error
       IMPORTING
         !object_type            TYPE trobjtype DEFAULT c_type_include
@@ -101,7 +101,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         !is_include_specific    TYPE sci_inclspec DEFAULT ' '
         !additional_information TYPE xstring OPTIONAL
         !checksum               TYPE int4 OPTIONAL
-        !pseudo_comments        TYPE t_comments OPTIONAL .
+        !pseudo_comments        TYPE t_comments OPTIONAL . "#EC OPTL_EXP
 
     METHODS get_column_abs
         REDEFINITION .
