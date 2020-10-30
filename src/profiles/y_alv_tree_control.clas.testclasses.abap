@@ -163,7 +163,8 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                       events          = NEW y_alv_events( )
                                       event_mode      = y_if_alv_events=>mode_double_click
                                       ).
-      CATCH cx_sy_create_data_error.
+      CATCH cx_sy_create_data_error
+            cx_failed.
         cl_aunit_assert=>abort( msg    = 'cut cannot be initialized!'
                                 quit   = cl_aunit_assert=>class ).
     ENDTRY.

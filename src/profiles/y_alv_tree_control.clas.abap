@@ -18,7 +18,8 @@ CLASS y_alv_tree_control DEFINITION
         !events          TYPE REF TO y_if_alv_events
         !event_mode      TYPE i DEFAULT y_if_alv_events=>mode_double_click
       RAISING
-        cx_sy_create_data_error .
+        cx_sy_create_data_error
+        cx_failed.
   PROTECTED SECTION.
     METHODS set_all_fields_invisible.
 
@@ -85,10 +86,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
     sort = sort_table.
     structure_name = CONV tabname( type_name ).
 
-    TRY.
-        events->register_handler_to_toolbar( y_if_alv_tree_control~toolbar_control( ) ).
-      CATCH cx_failed.
-    ENDTRY.
+    events->register_handler_to_toolbar( y_if_alv_tree_control~toolbar_control( ) ).
 
     call_fieldcatalog_merge( ).
     set_all_fields_invisible( ).
