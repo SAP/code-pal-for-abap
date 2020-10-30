@@ -10,7 +10,7 @@ CLASS y_check_sub_assign_read_table DEFINITION PUBLIC INHERITING FROM y_check_ba
                               RETURNING VALUE(result) TYPE string.
     METHODS might_cause_undesired_changes IMPORTING statement     TYPE sstmnt
                                                     fieldname     TYPE string
-                                          RETURNING VALUE(result) TYPE abap_bool.
+                                          RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL
 ENDCLASS.
 
 
@@ -92,7 +92,7 @@ CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD might_cause_undesired_changes. "#EC METH_RET_BOOL
+  METHOD might_cause_undesired_changes.
     DATA(tokens) = ref_scan_manager->get_tokens( ).
     LOOP AT tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
