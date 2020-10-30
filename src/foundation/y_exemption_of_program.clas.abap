@@ -47,7 +47,7 @@ ENDCLASS.
 
 
 
-CLASS y_exemption_of_program IMPLEMENTATION.
+CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
 
 
   METHOD create.
@@ -97,10 +97,9 @@ CLASS y_exemption_of_program IMPLEMENTATION.
 
 
   METHOD is_irf_model_generate.
-    DATA:
-      lv_object_name TYPE  vrsd-objname,
-      lt_repos_tab   TYPE STANDARD TABLE OF  abaptxt255,
-      lt_trdir_tab   TYPE STANDARD TABLE OF trdir.
+    DATA lv_object_name TYPE vrsd-objname.
+    DATA lt_repos_tab TYPE STANDARD TABLE OF abaptxt255.
+    DATA lt_trdir_tab TYPE STANDARD TABLE OF trdir.
 
     CHECK name(10) = 'DTINF_ADJ_' OR name CO '/DTINF_ADJ_CO'.
 
