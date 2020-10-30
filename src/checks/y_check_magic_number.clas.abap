@@ -73,7 +73,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
       ENDIF.
 
       IF is_magic_number( <token>-str ).
-        DATA(check_configuration) = detect_check_configuration( statement_wa ).
+        DATA(check_configuration) = detect_check_configuration( statement_wa ). "#EC DECL_IN_IF
         IF check_configuration IS INITIAL.
           CONTINUE.
         ENDIF.

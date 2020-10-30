@@ -29,7 +29,7 @@ ENDCLASS.
 
 
 
-CLASS y_profile_manager IMPLEMENTATION.
+CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
 
 
   METHOD has_time_collision.
@@ -270,7 +270,7 @@ CLASS y_profile_manager IMPLEMENTATION.
                                            is_standard = abap_true
                                            last_changed_by = 'ADMIN'
                                            last_changed_on = sy-datlo
-                                           last_changed_at = sy-timlo ).
+                                           last_changed_at = sy-timlo ). "#EC DECL_IN_IF
 
       INSERT INTO ytab_profiles VALUES profile.
       IF sy-subrc NE 0.
@@ -380,6 +380,7 @@ CLASS y_profile_manager IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD y_if_profile_manager~profile_exists.
     try.
         "Based on Delegates because the profile might be inactive
@@ -415,5 +416,4 @@ CLASS y_profile_manager IMPLEMENTATION.
   METHOD y_if_profile_manager~create.
     result = NEW y_profile_manager( ).
   ENDMETHOD.
-
 ENDCLASS.

@@ -76,7 +76,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
   METHOD convert_fugr_for_db_access.
     IF name(1) = '/'.
       SEARCH name FOR '/' STARTING AT 2.
-      DATA(l_textcount) = sy-fdpos + 2.
+      DATA(l_textcount) = sy-fdpos + 2. "#EC DECL_IN_IF
       result = name(l_textcount) && 'SAPL' && name+l_textcount.
     ELSE.
       result = 'SAPL' && name.

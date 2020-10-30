@@ -91,7 +91,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
 
     IF index = structure-stmnt_to.
       DATA(check_configuration) = detect_check_configuration( error_count = no_exec_statements
-                                                              statement = statement_for_message ).
+                                                              statement = statement_for_message ). "#EC DECL_IN_IF
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.

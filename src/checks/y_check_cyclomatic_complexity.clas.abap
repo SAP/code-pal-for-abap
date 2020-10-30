@@ -86,7 +86,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
 
     IF index = structure-stmnt_to.
       DATA(check_configuration) = detect_check_configuration( error_count = cyclo_comp
-                                                              statement = statement_for_message ).
+                                                              statement = statement_for_message ). "#EC DECL_IN_IF
 
       IF check_configuration IS INITIAL.
         RETURN.

@@ -93,7 +93,7 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
   METHOD check_if_error.
     IF branch_counter = first_if.
 
-      DATA(check_configuration) = detect_check_configuration( statement ).
+      DATA(check_configuration) = detect_check_configuration( statement ). "#EC DECL_IN_IF
 
       IF check_configuration IS INITIAL.
         RETURN.
