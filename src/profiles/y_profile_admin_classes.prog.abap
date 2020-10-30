@@ -943,13 +943,9 @@ CLASS lcl_util IMPLEMENTATION.
     ENDIF.
 
     TRY.
-        TRY.
-            DATA(profiles) = profile_manager->get_registered_profiles( ).
-            LOOP AT profiles INTO DATA(line) WHERE table_line EQ io_to_profile.
-              RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
-            ENDLOOP.
-          CATCH ycx_entry_not_found.
-        ENDTRY.
+        IF profile_manager->profile_exists( io_to_profile ) = abap_true.
+          RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
+        ENDIF.
 
         DATA(checklist) = profile_manager->select_checks( io_profilename ).
 
@@ -998,20 +994,16 @@ CLASS lcl_util IMPLEMENTATION.
 
     TRY.
 
-        TRY.
-            DATA(profiles) = profile_manager->get_registered_profiles( ).
-            LOOP AT profiles INTO DATA(line) WHERE table_line EQ io_profilename.
-              RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
-            ENDLOOP.
-          CATCH ycx_entry_not_found.
-        ENDTRY.
+        IF profile_manager->profile_exists( io_profilename ) = abap_true.
+          RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
+        ENDIF.
 
         profile_manager->insert_profile( VALUE #( username = sy-uname
-                                            profile  = io_profilename
-                                            is_standard = abap_false
-                                            last_changed_by = sy-uname
-                                            last_changed_on = sy-datum
-                                            last_changed_at = sy-timlo ) ).
+                                                  profile  = io_profilename
+                                                  is_standard = abap_false
+                                                  last_changed_by = sy-uname
+                                                  last_changed_on = sy-datum
+                                                  last_changed_at = sy-timlo ) ).
 
         profile_manager->check_delegation_rights( io_profilename ).
 
