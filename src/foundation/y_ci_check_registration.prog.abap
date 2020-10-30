@@ -24,9 +24,9 @@ CONSTANTS: BEGIN OF reference,
              error                TYPE c LENGTH 1 VALUE 'E',
            END OF reference.
 
-CLASS lcl_check_registration DEFINITION.
+CLASS lcl_check_registration DEFINITION. "#EC NUM_PUBLIC_ATTR
   PUBLIC SECTION.
-    CLASS-DATA name_tab TYPE STANDARD TABLE OF scitests-name. "#EC NUM_PUBLIC_ATTR
+    CLASS-DATA name_tab TYPE STANDARD TABLE OF scitests-name.
 
     CLASS-METHODS select_object_list
       RETURNING VALUE(result) LIKE name_tab
