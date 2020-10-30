@@ -131,8 +131,9 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_db_vers_hstry_crtd_on_fugr.
-    DATA: function_search_table TYPE RANGE OF sobj_name,
-          function_search       LIKE LINE OF function_search_table.
+    DATA function_search_table TYPE RANGE OF sobj_name.
+    DATA function_search LIKE LINE OF function_search_table.
+
     DATA(search_pattern) = convert_fugr_for_db_access( fugr_name ).
 
     SELECT funcname INTO TABLE @DATA(functions) FROM tfdir WHERE pname = @search_pattern. "#EC CI_GENBUFF
