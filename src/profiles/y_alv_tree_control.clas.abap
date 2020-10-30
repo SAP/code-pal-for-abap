@@ -114,11 +114,8 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
     DATA index_table TYPE lvc_t_indx.
 
     IF sy-subrc EQ 0.
-      TRY.
-          alv_tree->get_selected_nodes( CHANGING ct_index_outtab = index_table ).
-          result = index_table[ 1 ].
-        CATCH cx_sy_itab_line_not_found.
-      ENDTRY.
+      alv_tree->get_selected_nodes( CHANGING ct_index_outtab = index_table ).
+      result = index_table[ 1 ].
     ENDIF.
   ENDMETHOD.
 
