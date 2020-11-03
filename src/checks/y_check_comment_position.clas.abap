@@ -63,9 +63,12 @@ CLASS y_check_comment_position IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF next_token-str = 'ENDFORM'
-    OR next_token-str = 'ENDMETHOD'
-    OR next_token-str = 'ENDMODULE'.
+    " Empty Branch
+    IF next_token-str CP 'END*'.
+      IF current_token-row = next_token-row - 1
+      AND current_token-col <> next_token-col + 2.
+        result = abap_true.
+      ENDIF.
       RETURN.
     ENDIF.
 
