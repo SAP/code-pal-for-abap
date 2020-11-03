@@ -15,7 +15,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_SUB_ASSIGN_READ_TABLE IMPLEMENTATION.
+CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
 
   METHOD constructor.
