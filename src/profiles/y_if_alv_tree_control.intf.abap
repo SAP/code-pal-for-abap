@@ -22,7 +22,7 @@ INTERFACE y_if_alv_tree_control
 
   METHODS get_selected_line
     RETURNING VALUE(result) TYPE REF TO data
-    RAISING ycx_entry_not_found .
+    RAISING ycx_entry_not_found.
 
   METHODS get_selected_index
     RETURNING VALUE(result) TYPE i

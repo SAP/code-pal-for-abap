@@ -110,12 +110,15 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
 
 
   METHOD y_if_alv_tree_control~get_selected_index.
-    CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
     DATA index_table TYPE lvc_t_indx.
-
+    CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
     IF sy-subrc EQ 0.
       alv_tree->get_selected_nodes( CHANGING ct_index_outtab = index_table ).
-      result = index_table[ 1 ].
+      TRY.
+        result = index_table[ 1 ].
+      CATCH cx_sy_itab_line_not_found.
+        RAISE EXCEPTION TYPE ycx_entry_not_found.
+      ENDTRY.
     ENDIF.
   ENDMETHOD.
 
