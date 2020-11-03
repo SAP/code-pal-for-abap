@@ -21,7 +21,7 @@ ENDCLASS.
 
 
 
-CLASS Y_UNIT_TEST_COVERAGE IMPLEMENTATION.
+CLASS y_unit_test_coverage IMPLEMENTATION.
 
 
   METHOD get_instance.

@@ -9,7 +9,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CLEAN_CODE_MANAGER_DOUBLE IMPLEMENTATION.
+CLASS y_clean_code_manager_double IMPLEMENTATION.
 
 
   METHOD constructor.

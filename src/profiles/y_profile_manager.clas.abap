@@ -29,7 +29,7 @@ ENDCLASS.
 
 
 
-CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
+CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD has_time_collision.

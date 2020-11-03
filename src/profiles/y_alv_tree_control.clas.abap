@@ -42,7 +42,7 @@ ENDCLASS.
 
 
 
-CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
+CLASS y_alv_tree_control IMPLEMENTATION.
 
 
   METHOD autosize_all_fields.
