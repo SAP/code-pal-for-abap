@@ -1,17 +1,19 @@
-CLASS y_check_is_interface_in_class DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_is_interface_in_class DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-
     METHODS constructor .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
     METHODS execute_check REDEFINITION.
-
   PRIVATE SECTION.
     DATA public_method_counter TYPE i VALUE 0.
+    METHODS get_first_token IMPORTING statement TYPE sstmnt
+                            RETURNING value(result) TYPE string.
+    METHODS get_second_token IMPORTING statement TYPE sstmnt
+                            RETURNING value(result) TYPE string.
+    METHODS get_third_token IMPORTING statement TYPE sstmnt
+                            RETURNING value(result) TYPE string.
+    METHODS get_last_token IMPORTING statement TYPE sstmnt
+                           RETURNING value(result) TYPE string.
 ENDCLASS.
 
 
@@ -78,13 +80,31 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) = 'METHODS'
-      AND get_token_abs( statement-from + 1 ) <> 'CONSTRUCTOR'
-      AND get_token_abs( statement-from + 2 ) <> 'ABSTRACT'
-      AND get_token_abs( statement-to ) <> 'REDEFINITION'.
-    CHECK get_token_abs( statement-from ) = 'METHODS'
-      AND get_token_abs( statement-from + 2 ) <> 'FOR'
-      AND get_token_abs( statement-from + 3 ) <> 'TESTING'.
+    CHECK get_first_token( statement ) = 'METHODS'
+      AND get_second_token( statement ) <> 'CONSTRUCTOR'
+      AND get_third_token( statement ) <> 'ABSTRACT'
+      AND get_last_token( statement ) <> 'REDEFINITION'.
+
+    CHECK get_first_token( statement ) = 'METHODS'
+      AND get_second_token( statement ) <> 'FOR'
+      AND get_third_token( statement ) <> 'TESTING'.
+
     ADD 1 TO public_method_counter.
+  ENDMETHOD.
+
+  METHOD get_last_token.
+    result = get_token_abs( statement-to ).
+  ENDMETHOD.
+
+  METHOD get_third_token.
+    result = get_token_abs( statement-from + 2 ).
+  ENDMETHOD.
+
+  METHOD get_second_token.
+    result = get_token_abs( statement-from + 1 ).
+  ENDMETHOD.
+
+  METHOD get_first_token.
+    result = get_token_abs( statement-from ).
   ENDMETHOD.
 ENDCLASS.

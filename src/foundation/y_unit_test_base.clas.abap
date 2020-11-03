@@ -1,10 +1,9 @@
-CLASS y_unit_test_base DEFINITION PUBLIC ABSTRACT FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PUBLIC SECTION.
+CLASS y_unit_test_base DEFINITION PUBLIC ABSTRACT FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. "#EC NUMBER_METHODS
+  PROTECTED SECTION.
     METHODS bound FOR TESTING.
     METHODS with_issue FOR TESTING.
     METHODS without_issue FOR TESTING.
     METHODS with_exmeption FOR TESTING.
-  PROTECTED SECTION.
     "! Method to get a check class instance.
     "! @parameter result | Instance of the `Y_CHECK_*` class.
     METHODS get_cut ABSTRACT RETURNING VALUE(result) TYPE REF TO y_check_base.

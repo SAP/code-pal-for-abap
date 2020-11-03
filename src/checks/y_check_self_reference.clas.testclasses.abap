@@ -27,7 +27,7 @@ CLASS ltc_constant IMPLEMENTATION.
       ( '     DATA(value) = me->cons1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ).
+    ). "#EC SELF_REF
   ENDMETHOD.
 
   METHOD get_code_without_issue.
@@ -63,7 +63,7 @@ CLASS ltc_constant IMPLEMENTATION.
       ( '     DATA(value) = me->cons1. "#EC SELF_REF ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ).
+    ). "#EC SELF_REF
   ENDMETHOD.
 
 ENDCLASS.
@@ -99,7 +99,7 @@ CLASS ltc_method IMPLEMENTATION.
       ( '   METHOD meth1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ).
+    ). "#EC SELF_REF
   ENDMETHOD.
 
   METHOD get_code_without_issue.
@@ -119,7 +119,7 @@ CLASS ltc_method IMPLEMENTATION.
       ( '   METHOD meth1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ).
+    ). "#EC SELF_REF
   ENDMETHOD.
 
   METHOD get_code_with_exemption.
@@ -139,7 +139,7 @@ CLASS ltc_method IMPLEMENTATION.
       ( '   METHOD meth1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ).
+    ). "#EC SELF_REF
   ENDMETHOD.
 
 ENDCLASS.
@@ -173,7 +173,7 @@ CLASS ltc_attribute IMPLEMENTATION.
       ( '     DATA(value) = me->attr1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ).
+    ). "#EC SELF_REF
   ENDMETHOD.
 
   METHOD get_code_without_issue.
@@ -191,7 +191,7 @@ CLASS ltc_attribute IMPLEMENTATION.
       ( '     DATA(value) = attr1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ).
+    ). "#EC SELF_REF
   ENDMETHOD.
 
   METHOD get_code_with_exemption.
@@ -209,7 +209,7 @@ CLASS ltc_attribute IMPLEMENTATION.
       ( '     DATA(value) = me->attr1. "#EC SELF_REF ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ).
+    ). "#EC SELF_REF
   ENDMETHOD.
 
 ENDCLASS.

@@ -10,7 +10,7 @@ CLASS y_check_sub_assign_read_table DEFINITION PUBLIC INHERITING FROM y_check_ba
                               RETURNING VALUE(result) TYPE string.
     METHODS might_cause_undesired_changes IMPORTING statement     TYPE sstmnt
                                                     fieldname     TYPE string
-                                          RETURNING VALUE(result) TYPE abap_bool.
+                                          RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL
 ENDCLASS.
 
 
@@ -72,6 +72,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD is_read_table.
     CHECK get_token_abs( statement-from ) = 'READ'.
     CHECK get_token_abs( statement-from + 1 ) = 'TABLE'.
@@ -105,5 +106,4 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.

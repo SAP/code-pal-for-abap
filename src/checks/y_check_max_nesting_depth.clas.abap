@@ -80,7 +80,7 @@ CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
 
       IF index = structure-stmnt_to.
         DATA(check_configuration) = detect_check_configuration( error_count = max_nesting
-                                                                statement = statement_for_message ).
+                                                                statement = statement_for_message ). "#EC DECL_IN_IF
         IF check_configuration IS INITIAL.
           CONTINUE.
         ENDIF.

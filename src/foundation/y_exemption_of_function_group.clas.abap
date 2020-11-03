@@ -1,9 +1,7 @@
-CLASS y_exemption_of_function_group DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
-
+CLASS y_exemption_of_function_group DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     INTERFACES y_if_exemption_of_objects .
+    ALIASES create FOR y_if_exemption_of_objects~create.
 
   PRIVATE SECTION.
     METHODS is_table_maintenance_generate
@@ -33,15 +31,21 @@ ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_OF_FUNCTION_GROUP IMPLEMENTATION.
+CLASS y_exemption_of_function_group IMPLEMENTATION.
+
+
+  METHOD create.
+    result = NEW y_exemption_of_function_group( ).
+  ENDMETHOD.
 
 
   METHOD is_configuration_tablegenerate.
-    DATA: fugr_name TYPE tfdir-pname.
-    DATA: fugr_func           TYPE i,
-          fugr_func_viewframe TYPE i.
+    DATA fugr_name TYPE tfdir-pname.
+    DATA fugr_func TYPE i.
+    DATA fugr_func_viewframe TYPE i.
 
-    IF name(1) = '/'. "Handling of ABAP Namespaces
+    "Handling of ABAP Namespaces
+    IF name(1) = '/'.
       FIND FIRST OCCURRENCE OF '/' IN name+1 MATCH OFFSET DATA(l_offset).
       l_offset = l_offset + 2.
       fugr_name = insert( val = name sub = 'SAPL' off = l_offset ).
@@ -65,10 +69,10 @@ CLASS Y_EXEMPTION_OF_FUNCTION_GROUP IMPLEMENTATION.
 
 
   METHOD is_object_indepenent_generate.
-    DATA: l_object TYPE sobj_name.
-    DATA(programming_object) = NEW y_exemption_general( ).
+    DATA l_object TYPE sobj_name.
     l_object = name.
-    result = programming_object->is_object_exempted( object_type = 'FUGR' object_name = name ).
+    result = y_exemption_general=>create( )->is_object_exempted( object_type = 'FUGR'
+                                                                 object_name = name ).
   ENDMETHOD.
 
 

@@ -7,9 +7,9 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS has_osql_or_cds_framework RETURNING VALUE(result) TYPE abap_bool.
   PRIVATE SECTION.
     METHODS is_persistent_object IMPORTING obj_name TYPE string
-                                 RETURNING VALUE(result) TYPE abap_bool .
-    METHODS check_if_error IMPORTING index     TYPE i OPTIONAL
-                                     statement TYPE sstmnt OPTIONAL .
+                                 RETURNING VALUE(result) TYPE abap_bool.
+    METHODS check_if_error IMPORTING index     TYPE i
+                                     statement TYPE sstmnt.
 ENDCLASS.
 
 
@@ -112,7 +112,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
         SELECT SINGLE * FROM (checked_object) INTO <table_structure>.
         result = abap_true.
 
-      CATCH cx_abap_not_a_table cx_abap_not_in_package cx_sy_dynamic_osql_semantics cx_root.
+      CATCH cx_root. "#EC NEED_CX_ROOT
         result = abap_false.
     ENDTRY.
   ENDMETHOD.

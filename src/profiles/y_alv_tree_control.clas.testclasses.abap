@@ -72,7 +72,11 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
   METHOD get_selected_line.
     init_profiles( ).
-    DATA(sl) = cut->y_if_alv_tree_control~get_selected_line( ).
+    TRY.
+        DATA(sl) = cut->y_if_alv_tree_control~get_selected_line( ).
+      CATCH ycx_entry_not_found.
+        RETURN.
+    ENDTRY.
     cl_aunit_assert=>assert_initial( act  = sl
                                      msg  = 'get selected line is not initial!'
                                      quit = if_aunit_constants=>quit-no ).
@@ -80,7 +84,11 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
   METHOD get_selected_index.
     init_profiles( ).
-    DATA(si) = cut->y_if_alv_tree_control~get_selected_index( ).
+    TRY.
+        DATA(si) = cut->y_if_alv_tree_control~get_selected_index( ).
+      CATCH ycx_entry_not_found.
+        RETURN.
+    ENDTRY.
     cl_aunit_assert=>assert_initial( act  = si
                                      msg  = 'get selected index is not initial!'
                                      quit = if_aunit_constants=>quit-no ).
@@ -163,7 +171,8 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                       events          = NEW y_alv_events( )
                                       event_mode      = y_if_alv_events=>mode_double_click
                                       ).
-      CATCH cx_sy_create_data_error.
+      CATCH cx_sy_create_data_error
+            cx_failed.
         cl_aunit_assert=>abort( msg    = 'cut cannot be initialized!'
                                 quit   = cl_aunit_assert=>class ).
     ENDTRY.

@@ -1,4 +1,4 @@
-CLASS ltd_ref_scan_manager DEFINITION FOR TESTING.
+CLASS ltd_ref_scan_manager DEFINITION FOR TESTING. "#EC INTF_IN_CLASS
   PUBLIC SECTION.
     INTERFACES: y_if_scan_manager PARTIALLY IMPLEMENTED.
 
@@ -33,7 +33,8 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD y_if_scan_manager~set_ref_scan.
-    RETURN.                                       "empty for test case
+    "Empty for test case
+    RETURN.
   ENDMETHOD.
 
   METHOD y_if_scan_manager~is_scan_ok.
@@ -89,15 +90,13 @@ CLASS ltd_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ltd_clean_code_exemption_no DEFINITION FOR TESTING
-  INHERITING FROM y_exemption_handler.
-
+CLASS ltd_clean_code_exemption_no DEFINITION FOR TESTING INHERITING FROM y_exemption_handler.
   PUBLIC SECTION.
-    METHODS: is_object_exempted REDEFINITION.
+    METHODS y_if_exemption~is_object_exempted REDEFINITION.
 ENDCLASS.
 
 CLASS ltd_clean_code_exemption_no IMPLEMENTATION.
-  METHOD is_object_exempted.
+  METHOD y_if_exemption~is_object_exempted.
     RETURN.
   ENDMETHOD.
 ENDCLASS.
@@ -159,7 +158,8 @@ CLASS local_test_class IMPLEMENTATION.
     cl_abap_unit_assert=>assert_bound( cut ).
   ENDMETHOD.
 
-  METHOD rfc_function_ok.                                                                          "TODO NAMING
+  "TODO: NAMING
+  METHOD rfc_function_ok.
     cut->db_reader = NEW ltd_rfc_function( ).
     ref_scan_manager_double->set_data_for_ok( ).
     cut->run( ).
