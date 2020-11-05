@@ -8,7 +8,7 @@
 
 It executes the ABAP Unit Test framework and verifies if the coverage is under the defined threshold.
 
-> :warn: Use it to check a few objects only.
+> :warning: Use it to check a few objects only.
 
 ### How to solve the issue?
 

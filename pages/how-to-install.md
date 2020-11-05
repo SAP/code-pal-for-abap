@@ -33,7 +33,7 @@ Start the transaction `SU3`, and add/set the user parameter `SATC_CI_MODE` to `X
 
 ### 5. Service
 
-> :warn: Optional Feature!
+> :warning: Optional Feature!
 
 Start the transaction `SICF`, and create a service using the `Y_CODE_PAL_SERVICE` handler. Use procedure `Standard`, set the security session to `Completely Restricted` and check the `Use all logon procedures`.
 
