@@ -48,7 +48,8 @@ CLASS y_check_omit_optional_exp IMPLEMENTATION.
           result = abap_true.
       ELSEIF <token>-str = 'IMPORTING'
       OR <token>-str = 'CHANGING'
-      OR <token>-str = 'RECEIVING'.
+      OR <token>-str = 'RECEIVING'
+      OR <token>-str = 'EXCEPTIONS'.
           result = abap_false.
           RETURN.
       ENDIF.
