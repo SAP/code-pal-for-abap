@@ -11,11 +11,11 @@ It is licensed under the Apache License, Version 2.0 - see [LICENSE](LICENSE).
 
 ## News
 
-**:warning: Migration Required :warning:**  
+**:warning: Migration Required :warning:**
 
 From version `v1.01.0` to `v1.02.0` the folder logic was changed, and the abapGit is not able to perform this migration automatically. Therefore, please, follow the step-by-step described in [How To Migrate](pages/how-to-migrate.md)!
 
-Check the [change log](changelog.txt) for further infromation.
+Check the [change log](changelog.txt) for further information.
 
 ## Features
 
@@ -27,16 +27,17 @@ Check the [change log](changelog.txt) for further infromation.
 - Message severity is customizable (error, warning, or notification);
 - Checking may be activated in productive-code and/or test-code (customizable);
 - Findings can be suppressed via Code-Inspector Pragmas;
-- Usage of a "Profile Management Tool" (Optional). 
+- Usage of a "Profile Management Tool" (Optional).
 
 The Profile Management Tool, which is an alternative of working with SCI based variant(s), offers among others:
+
 - An user friendly UI;
 - A user-based or group-based execution of Checks;
 - Creation, assignment and unassignment of Profiles (unassigning a profile will only delete it if no checks are registered to this profile);
 - Import/Export a profile among systems (download/upload function – UI button or API Post Service);
 - Single-Click registration of all code pal checks at once to a profile (UI button);
 - Multiple execution of several profiles at the same time (the sharpest/strongest and time valid configuration/threshold will be taken);
--	Delegation principle to facilitate team work (all delegates, for instance: team members, can work with the same profile);
+- Delegation principle to facilitate team work (all delegates, for instance: team members, can work with the same profile);
 
 ## List of Checks
 
