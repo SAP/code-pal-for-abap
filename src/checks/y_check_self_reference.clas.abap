@@ -4,12 +4,16 @@ CLASS y_check_self_reference DEFINITION PUBLIC INHERITING FROM y_check_base CREA
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
-    METHODS has_self_reference IMPORTING statement TYPE sstmnt
-                               RETURNING VALUE(result) TYPE abap_bool.
+    CONSTANTS method_call TYPE string VALUE 'A' ##NO_TEXT.
+    CONSTANTS compute TYPE string VALUE 'C' ##NO_TEXT.
+    METHODS has_method_self_referenced IMPORTING statement     TYPE sstmnt
+                                       RETURNING VALUE(result) TYPE abap_bool.
+    METHODS has_compute_sefl_referenced IMPORTING statement     TYPE sstmnt
+                                        RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
-CLASS Y_CHECK_SELF_REFERENCE IMPLEMENTATION.
+CLASS y_check_self_reference IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
@@ -24,10 +28,8 @@ CLASS Y_CHECK_SELF_REFERENCE IMPLEMENTATION.
 
   METHOD inspect_tokens.
 
-    CHECK statement-type = 'A'
-    OR statement-type = 'C'.
-
-    CHECK has_self_reference( statement ).
+    CHECK has_method_self_referenced( statement ) = abap_true
+    OR has_compute_sefl_referenced( statement ) = abap_true.
 
     DATA(configuration) = detect_check_configuration( statement ).
 
@@ -42,13 +44,21 @@ CLASS Y_CHECK_SELF_REFERENCE IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD has_self_reference.
+  METHOD has_method_self_referenced.
+    CHECK statement-type = method_call.
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
-    WHERE str CS 'me->'.
+    WHERE str CP 'me->*'.
       result = abap_true.
       RETURN.
     ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD has_compute_sefl_referenced.
+    CHECK statement-type = compute.
+
+
   ENDMETHOD.
 
 ENDCLASS.
