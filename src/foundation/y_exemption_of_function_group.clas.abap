@@ -54,7 +54,7 @@ CLASS y_exemption_of_function_group IMPLEMENTATION.
     ENDIF.
 
     SELECT SINGLE COUNT(*) FROM tfdir INTO fugr_func_viewframe
-      WHERE pname = fugr_name AND ( funcname LIKE 'VIEWFRAME%' OR funcname LIKE 'VIEWPROC%' OR funcname LIKE 'TABLEPROC%' OR funcname LIKE 'TABLEFRAME%' ). "#EC CI_BYPASS  "#EC CI_GENBUFF
+      WHERE pname = fugr_name AND ( funcname LIKE 'VIEWFRAME%' OR funcname LIKE 'VIEWPROC%' ). "#EC CI_BYPASS  "#EC CI_GENBUFF
 
     IF fugr_func_viewframe = 0 OR sy-subrc = 4.
       RETURN.
