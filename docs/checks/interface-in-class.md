@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The "Is Interface in Class" check searches for public methods without an interface.
+The "Interface Missing" (is interface in class?) check searches for public methods without an interface.
 
 ### How does the check work?
 
