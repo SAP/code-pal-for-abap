@@ -2,7 +2,7 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Interface in Class Check](interface-in-class.md)
 
-## Interface (missing) in Class Check
+## Interface Missing Check
 
 ### What is the Intent of the Check?
 
@@ -27,7 +27,7 @@ The pseudo comment must be placed right after the `PUBLIC SECTION` statement.
 
 ```abap
 CLASS class_name DEFINITION.
-  PUBLIC SECTION. "#EC INTF_IN_CLASS
+  PUBLIC SECTION. "#EC INTF_MISS
 ENDCLASS.
 ```
 
