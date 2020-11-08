@@ -2,7 +2,7 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [FORM Routine Check](form-routine.md)
 
-## FORM Routine Check
+## FORM Routine Usage Check
 
 ### What is the Intent of the Check?
 
