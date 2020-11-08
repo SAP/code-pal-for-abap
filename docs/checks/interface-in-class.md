@@ -6,11 +6,11 @@
 
 ### What is the Intent of the Check?
 
-The Is Interface in Class check searches for public methods without an interface.
+The "Is Interface in Class" check searches for public methods without an interface.
 
 ### How does the check work?
 
-This check counts only `DATA` and `CLASS-DATA` within a global or local, `CLASS DEFINITION` or `INTERFACE`. Inherited attributes and all constants are not counted. A structure is counted as one attribute, no matter how many attributes are in the structure.
+Since every class having at least one public method should implement an interface, this check searches for public methods within a class without having an associated interface (being implemented). 
 
 ### Which attributes can be maintained?
 
@@ -18,7 +18,7 @@ This check counts only `DATA` and `CLASS-DATA` within a global or local, `CLASS 
 
 ### How to solve the issue?
 
-Make sure to implement an interface for the public methods.
+Make sure to implement an interface for the public methods. Even though this seems to be unnecessary in some cases, having an interface will easily allow mocking data in the future.
 
 ### What to do in case of exception?
 
