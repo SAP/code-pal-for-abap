@@ -2,7 +2,7 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [FUNCTION Routine Check](function-routine.md)
 
-## FUNCTION Routine Check
+## FUNCTION Routine Usage Check
 
 ### What is the Intent of the Check?
 
