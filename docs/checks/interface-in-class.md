@@ -2,7 +2,7 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Interface in Class Check](interface-in-class.md)
 
-## Interface in Class Check
+## Interface (missing) in Class Check
 
 ### What is the Intent of the Check?
 
