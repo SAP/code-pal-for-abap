@@ -23,7 +23,7 @@ The solution is to mock these DB accesses with a proper dependency isolation tec
 ### What to do in case of exception?
 
 In special cases, it is possible to suppress a finding by using the pseudo comment `"#EC DB_ACCESS_UT`.  
-The pseudo comment must be placed right after the class definition header.
+The pseudo comment must be placed right after the DB access statement.
 
 ### Example
 
