@@ -2,11 +2,11 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [DB Access in Unit Tests Check](db-access-in-ut.md)
 
-## Database Access within Unit Tests Check
+## Database Access within Unit-Tests Check
 
 ### What is the Intent of the Check?
 
-The “Database Access within Unit Tests” Check scans test classes and its contents searching for any kind of explicit DB access within the tests. Since every DB access is considered to be a dependency, this should not be allowed in test code.
+The “Database Access within Unit-Tests” Check scans test classes and its contents searching for any kind of explicit DB access within the tests. Since every DB access is considered to be a dependency, this should not be allowed in test code.
 
 ### How does the check work?
 
