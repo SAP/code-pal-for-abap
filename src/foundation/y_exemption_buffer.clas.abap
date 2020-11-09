@@ -3,7 +3,8 @@ CLASS y_exemption_buffer DEFINITION SHARED MEMORY ENABLED PUBLIC CREATE PUBLIC.
     CLASS-METHODS modify IMPORTING exemption TYPE ytab_exemptions.
     CLASS-METHODS get IMPORTING object_type   TYPE ytab_exemptions-object
                                 object_name   TYPE ytab_exemptions-obj_name
-                      RETURNING VALUE(result) TYPE ytab_exemptions.
+                      RETURNING VALUE(result) TYPE ytab_exemptions
+                      RAISING cx_sy_itab_line_not_found.
   PROTECTED SECTION.
     CLASS-METHODS update IMPORTING exemption TYPE ytab_exemptions RAISING cx_sy_itab_line_not_found.
     CLASS-METHODS insert IMPORTING exemption TYPE ytab_exemptions.
@@ -23,6 +24,7 @@ CLASS y_exemption_buffer IMPLEMENTATION.
   METHOD insert.
     internal = VALUE #( BASE internal
                       ( CORRESPONDING #( exemption ) ) ).
+    ASSERT sy-subrc = 0.
   ENDMETHOD.
 
   METHOD modify.
@@ -34,12 +36,8 @@ CLASS y_exemption_buffer IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get.
-    TRY.
-        result = internal[ object = object_type
-                           obj_name = object_name ].
-      CATCH cx_sy_itab_line_not_found.
-        CLEAR result.
-    ENDTRY.
+    result = internal[ object = object_type
+                       obj_name = object_name ].
   ENDMETHOD.
 
 ENDCLASS.

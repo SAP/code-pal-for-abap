@@ -1,15 +1,13 @@
 CLASS y_exemption_dispatcher DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     INTERFACES y_if_exemption_dispatcher.
-      ALIASES create FOR y_if_exemption_dispatcher~create.
+    ALIASES create FOR y_if_exemption_dispatcher~create.
 
   PRIVATE SECTION.
     METHODS get_exemption_from_database IMPORTING object_type   TYPE trobjtype
                                                   object_name   TYPE sobj_name
                                         RETURNING VALUE(result) TYPE abap_bool
-                                        RAISING   ycx_entry_not_found.
-
-    METHODS store_exemption_in_database IMPORTING exemption TYPE ytab_exemptions.
+                                        RAISING   cx_sy_itab_line_not_found.
 
     METHODS is_dataset_outdated IMPORTING storedate     TYPE d
                                 RETURNING VALUE(result) TYPE abap_bool.
@@ -20,7 +18,7 @@ CLASS y_exemption_dispatcher DEFINITION PUBLIC CREATE PUBLIC .
 
     METHODS try_new_exemption IMPORTING object_type   TYPE trobjtype
                                         object_name   TYPE sobj_name
-                              RETURNING value(result) TYPE abap_bool.
+                              RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -35,26 +33,14 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
 
 
   METHOD get_exemption_from_database.
-    DATA(exemption) = y_exemption_buffer=>get( object_type = object_type
-                                               object_name = CONV #( object_name ) ).
-
-    result = exemption-is_exempted.
+    result = y_exemption_buffer=>get( object_type = object_type
+                                      object_name = CONV #( object_name ) )-is_exempted.
   ENDMETHOD.
 
 
   METHOD is_dataset_outdated.
     DATA(compare_date) = storedate + 14.
     result = xsdbool( compare_date < sy-datum ).
-  ENDMETHOD.
-
-
-  METHOD store_exemption_in_database.
-    DATA(line) = VALUE ytab_exemptions( object      = object_type
-                                        obj_name    = object_name
-                                        is_exempted = is_exempted
-                                        as4date     = sy-datum ).
-                                        
-    y_exemption_buffer=>modify( line ).
   ENDMETHOD.
 
 
@@ -80,7 +66,7 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
     TRY.
         result = get_exemption_from_database( object_type  = object_type
                                               object_name  = object_name ).
-      CATCH ycx_entry_not_found.
+      CATCH cx_sy_itab_line_not_found.
         result = try_new_exemption( object_type = object_type
                                     object_name = object_name ).
     ENDTRY.
@@ -103,10 +89,9 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
                                              is_exempted = result
                                              as4date     = sy-datum ).
 
-    store_exemption_in_database( exemption ).
+    y_exemption_buffer=>modify( exemption ).
 
   ENDMETHOD.
-
 
 
 ENDCLASS.

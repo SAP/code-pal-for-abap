@@ -56,12 +56,7 @@ CLASS y_object_creation_date DEFINITION
       RETURNING
         VALUE(result) TYPE rdir_cdate
       RAISING
-        ycx_entry_not_found .
-    METHODS insert_created_on_to_buffer
-      IMPORTING
-        VALUE(object_type)   TYPE trobjtype
-        VALUE(object_name)   TYPE sobj_name
-        VALUE(creation_date) TYPE rdir_cdate .
+        cx_sy_itab_line_not_found .
     METHODS try_new_created_on
       IMPORTING
         object_type   TYPE trobjtype
@@ -98,13 +93,12 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_created_on_from_buffer.
-    DATA(exemption) = y_exemption_buffer=>get( object_type = object_type
-                                               object_name = CONV #( object_name ) ).
-    result = exemption-created_on.
+    result = y_exemption_buffer=>get( object_type = object_type
+                                      object_name = CONV #( object_name ) )-created_on.
 
     IF result IS INITIAL
     OR result = '000000'.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE cx_sy_itab_line_not_found.
     ENDIF.
   ENDMETHOD.
 
@@ -126,7 +120,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_db_vers_hstry_crtd_on_clas.
-    DATA: class_search_string TYPE string.
+    DATA class_search_string TYPE string.
 
     class_search_string = class_name.
     WHILE strlen( class_search_string ) < 30.
@@ -190,19 +184,6 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD insert_created_on_to_buffer.
-    DATA exemption TYPE ytab_exemptions.
-
-    exemption-object = object_type.
-    exemption-obj_name = object_name.
-    exemption-created_on = creation_date.
-    exemption-as4date_co = sy-datum.
-    exemption-is_created_on_buffered = abap_true.
-
-    y_exemption_buffer=>modify( exemption ).
-  ENDMETHOD.
-
-
   METHOD y_if_object_creation_date~get_class_create_date.
     result = get_created_on( object_type = 'FUGR'
                              object_name = name ).
@@ -230,7 +211,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
     TRY.
         result = get_created_on_from_buffer( object_type  = object_type
                                              object_name  =  object_name ).
-      CATCH ycx_entry_not_found.
+      CATCH cx_sy_itab_line_not_found.
         result = try_new_created_on( object_type  = object_type
                                      object_name  =  object_name ).
     ENDTRY.
@@ -261,9 +242,13 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     result = get_lowest_date( created_on_dates  ).
 
-    insert_created_on_to_buffer( object_type   = object_type
-                                 object_name   = object_name
-                                 creation_date = result ).
+    DATA(exemption) = VALUE ytab_exemptions( object = object_type
+                                             obj_name = object_name
+                                             created_on = result
+                                             as4date_co = sy-datum
+                                             is_created_on_buffered = abap_true ).
+
+    y_exemption_buffer=>modify( exemption ).
 
   ENDMETHOD.
 

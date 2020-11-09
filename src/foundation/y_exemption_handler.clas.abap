@@ -4,22 +4,20 @@ CLASS y_exemption_handler DEFINITION  PUBLIC CREATE PUBLIC .
     ALIASES create FOR y_if_exemption~create.
 
   PRIVATE SECTION.
-    METHODS get_exemption_from_buffer IMPORTING object_type  TYPE trobjtype
-                                                object_name  TYPE sobj_name
+    METHODS get_exemption_from_buffer IMPORTING object_type   TYPE trobjtype
+                                                object_name   TYPE sobj_name
                                       RETURNING VALUE(result) TYPE abap_bool
-                                      RAISING ycx_entry_not_found.
+                                      RAISING   cx_sy_itab_line_not_found.
 
-    METHODS insert_exemption_into_buffer IMPORTING exemption TYPE ytab_exemptions.
-
-    METHODS try_new_exemption IMPORTING object_type TYPE trobjtype
-                                        object_name TYPE sobj_name
-                              RETURNING value(result) TYPE abap_bool.
+    METHODS try_new_exemption IMPORTING object_type   TYPE trobjtype
+                                        object_name   TYPE sobj_name
+                              RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
+CLASS y_exemption_handler IMPLEMENTATION.
 
 
   METHOD y_if_exemption~create.
@@ -28,23 +26,8 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
 
 
   METHOD get_exemption_from_buffer.
-    DATA(exemption) = y_exemption_buffer=>get( object_type = object_type
-                                               object_name = CONV #( object_name ) ).
-                                               
-    result = exemption-is_exempted.
-  ENDMETHOD.
-
-
-  METHOD insert_exemption_into_buffer.
-    DATA exemption TYPE ytab_exemptions.
-
-    exemption-object = object_type.
-    exemption-obj_name = object_name.
-    exemption-is_exempted = is_exempted.
-    exemption-as4date_co = sy-datum.
-    exemption-is_exemption_buffered = abap_true.
-
-    y_exemption_buffer=>modify( exemption ).
+    result = y_exemption_buffer=>get( object_type = object_type
+                                      object_name = CONV #( object_name ) )-is_exempted.
   ENDMETHOD.
 
 
@@ -52,9 +35,9 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
     TRY.
         result = get_exemption_from_buffer( object_type  = object_type
                                             object_name  = object_name ).
-      CATCH ycx_entry_not_found.
+      CATCH cx_sy_itab_line_not_found.
         result = try_new_exemption( object_type = object_type
-                              object_name = object_name ).
+                                    object_name = object_name ).
     ENDTRY.
   ENDMETHOD.
 
@@ -71,7 +54,7 @@ CLASS Y_EXEMPTION_HANDLER IMPLEMENTATION.
                                              as4date_co = sy-datum
                                              is_exemption_buffered = abap_true ).
 
-    insert_exemption_into_buffer( exemption ).
+    y_exemption_buffer=>modify( exemption ).
 
   ENDMETHOD.
 
