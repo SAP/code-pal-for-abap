@@ -10,75 +10,70 @@ CLASS y_object_creation_date DEFINITION
 
     METHODS get_db_tadir_data
       IMPORTING
-        VALUE(object_type)   TYPE trobjtype
-        VALUE(object_name)   TYPE sobj_name
+        VALUE(object_type) TYPE trobjtype
+        VALUE(object_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate .
+        VALUE(result)      TYPE rdir_cdate .
     METHODS get_db_reposource_created_on
       IMPORTING
         VALUE(reposrc_prog_search_string) TYPE string
       RETURNING
-        VALUE(result)              TYPE rdir_cdate .
+        VALUE(result)                     TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_clas
       IMPORTING
-        VALUE(class_name)    TYPE sobj_name
+        VALUE(class_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate .
+        VALUE(result)     TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_prog
       IMPORTING
-        VALUE(prog_name)     TYPE sobj_name
+        VALUE(prog_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate .
+        VALUE(result)    TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_fugr
       IMPORTING
-        VALUE(fugr_name)     TYPE sobj_name
+        VALUE(fugr_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate .
+        VALUE(result)    TYPE rdir_cdate .
     METHODS convert_fugr_for_db_access
       IMPORTING
-        VALUE(name)              TYPE sobj_name
+        VALUE(name)   TYPE sobj_name
       RETURNING
         VALUE(result) TYPE string .
     METHODS convert_class_for_repos_access
       IMPORTING
-        VALUE(name)              TYPE sobj_name
+        VALUE(name)   TYPE sobj_name
       RETURNING
         VALUE(result) TYPE string .
     METHODS get_lowest_date
       IMPORTING
-        VALUE(dates)      TYPE created_on_dates
+        VALUE(dates)  TYPE created_on_dates
       RETURNING
         VALUE(result) TYPE as4date .
     METHODS get_created_on_from_buffer
       IMPORTING
-        VALUE(object_type)   TYPE trobjtype
-        VALUE(object_name)   TYPE sobj_name
+        VALUE(object_type) TYPE trobjtype
+        VALUE(object_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate
+        VALUE(result)      TYPE rdir_cdate
       RAISING
-        ycx_entry_not_found .
-    METHODS insert_created_on_to_buffer
-      IMPORTING
-        VALUE(object_type)   TYPE trobjtype
-        VALUE(object_name)   TYPE sobj_name
-        VALUE(creation_date) TYPE rdir_cdate .
+        cx_sy_itab_line_not_found .
     METHODS try_new_created_on
       IMPORTING
         object_type   TYPE trobjtype
         object_name   TYPE sobj_name
       RETURNING
-        value(result) TYPE as4date.
+        VALUE(result) TYPE as4date.
     METHODS get_created_on
       IMPORTING
         object_type   TYPE trobjtype
         object_name   TYPE sobj_name
       RETURNING
-        value(result) TYPE as4date.
+        VALUE(result) TYPE as4date.
 ENDCLASS.
 
 
 
-CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
+CLASS y_object_creation_date IMPLEMENTATION.
 
 
   METHOD convert_class_for_repos_access.
@@ -89,7 +84,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
   METHOD convert_fugr_for_db_access.
     IF name(1) = '/'.
       SEARCH name FOR '/' STARTING AT 2.
-      DATA(l_textcount) = sy-fdpos + 2. "#EC DECL_IN_IF
+      DATA(l_textcount) = sy-fdpos + 2.                 "#EC DECL_IN_IF
       result = name(l_textcount) && 'SAPL' && name+l_textcount.
     ELSE.
       result = 'SAPL' && name.
@@ -98,17 +93,12 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_created_on_from_buffer.
-    SELECT SINGLE created_on
-    FROM ytab_exemptions
-    INTO @result
-    WHERE object = @object_type
-    AND obj_name = @object_name
-    AND is_created_on_buffered = @abap_true.
+    result = y_code_pal_buffer=>get( object_type = object_type
+                                     object_name = CONV #( object_name ) )-created_on.
 
-    IF sy-subrc IS NOT INITIAL
-    OR result IS INITIAL
+    IF result IS INITIAL
     OR result = '000000'.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE cx_sy_itab_line_not_found.
     ENDIF.
   ENDMETHOD.
 
@@ -130,7 +120,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_db_vers_hstry_crtd_on_clas.
-    DATA: class_search_string TYPE string.
+    DATA class_search_string TYPE string.
 
     class_search_string = class_name.
     WHILE strlen( class_search_string ) < 30.
@@ -194,30 +184,6 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD insert_created_on_to_buffer.
-    DATA: exemption TYPE ytab_exemptions.
-
-    exemption-object = object_type.
-    exemption-obj_name = object_name.
-    exemption-created_on = creation_date.
-    exemption-as4date_co = sy-datum.
-    exemption-is_created_on_buffered = abap_true.
-
-    INSERT ytab_exemptions FROM exemption.
-    IF sy-subrc = 0.
-      RETURN.
-    ENDIF.
-
-    UPDATE ytab_exemptions SET created_on = @creation_date,
-                               as4date_co = @sy-datum,
-                               is_created_on_buffered = @abap_true
-                           WHERE object = @object_type
-                           AND obj_name = @object_name.
-
-    ASSERT sy-subrc = 0.
-  ENDMETHOD.
-
-
   METHOD y_if_object_creation_date~get_class_create_date.
     result = get_created_on( object_type = 'FUGR'
                              object_name = name ).
@@ -245,7 +211,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
     TRY.
         result = get_created_on_from_buffer( object_type  = object_type
                                              object_name  =  object_name ).
-      CATCH ycx_entry_not_found.
+      CATCH cx_sy_itab_line_not_found.
         result = try_new_created_on( object_type  = object_type
                                      object_name  =  object_name ).
     ENDTRY.
@@ -266,7 +232,6 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     APPEND get_db_reposource_created_on( repo_access ) TO created_on_dates.
 
-
     DATA(version_history) = COND #( WHEN object_type = 'FUGR' THEN get_db_vers_hstry_crtd_on_fugr( object_name )
                                     WHEN object_type = 'CLAS' THEN get_db_vers_hstry_crtd_on_clas( object_name )
                                     WHEN object_type = 'INTF' THEN get_db_vers_hstry_crtd_on_clas( object_name )
@@ -276,9 +241,9 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     result = get_lowest_date( created_on_dates  ).
 
-    insert_created_on_to_buffer( object_type   = object_type
-                                 object_name   = object_name
-                                 creation_date = result ).
+    y_code_pal_buffer=>modify( VALUE #( object_type = object_type
+                                        object_name = object_name
+                                        created_on = result ) ).
 
   ENDMETHOD.
 
