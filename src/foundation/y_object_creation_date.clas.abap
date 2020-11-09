@@ -93,7 +93,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_created_on_from_buffer.
-    result = y_buffer=>get( object_type = object_type
+    result = y_code_pal_buffer=>get( object_type = object_type
                                       object_name = CONV #( object_name ) )-created_on.
 
     IF result IS INITIAL
@@ -241,7 +241,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     result = get_lowest_date( created_on_dates  ).
 
-    y_buffer=>modify( VALUE #( object_type = object_type
+    y_code_pal_buffer=>modify( VALUE #( object_type = object_type
                                object_name = object_name
                                created_on = result ) ).
 

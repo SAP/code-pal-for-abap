@@ -33,7 +33,7 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
 
 
   METHOD get_exemption_from_database.
-    result = y_buffer=>get( object_type = object_type
+    result = y_code_pal_buffer=>get( object_type = object_type
                             object_name = CONV #( object_name ) )-is_exempted.
   ENDMETHOD.
 
@@ -84,7 +84,7 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
                                                                    object_name  = object_name ).
     ENDIF.
 
-    y_buffer=>modify( VALUE #( object_type = object_type
+    y_code_pal_buffer=>modify( VALUE #( object_type = object_type
                                object_name = object_name
                                is_exempted = result ) ).
 

@@ -1,4 +1,4 @@
-INTERFACE y_if_buffer PUBLIC.
+INTERFACE y_if_code_pal_buffer PUBLIC.
 
   TYPES: BEGIN OF entry,
            object_type TYPE trobjtype,
