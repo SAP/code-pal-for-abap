@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The Declaration in IF check searches for declarative statements in optional structures as such statements can lead to confusion and issues during execution.
+The Declaration in IF check searches for declarative statements in optional structures as such statements can lead to confusion and issues during execution. ABAP's deepest scope is METHOD, so declarations inside an IF will be available outside the IF anyway.
 
 ### How does the check work?
 
