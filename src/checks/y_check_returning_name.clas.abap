@@ -18,6 +18,7 @@ CLASS y_check_returning_name IMPLEMENTATION.
     settings-pseudo_comment = '"#EC RET_NAME' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
+    settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }returning-name.md|.
 
     set_check_message( 'Consider calling the RETURNING parameter RESULT!' ).
