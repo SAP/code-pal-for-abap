@@ -24,7 +24,7 @@ CONSTANTS: BEGIN OF reference,
              error                TYPE c LENGTH 1 VALUE 'E',
            END OF reference.
 
-CLASS lcl_check_registration DEFINITION.
+CLASS lcl_check_registration DEFINITION. "#EC NUM_PUBLIC_ATTR
   PUBLIC SECTION.
     CLASS-DATA name_tab TYPE STANDARD TABLE OF scitests-name.
 
@@ -60,7 +60,7 @@ CLASS lcl_check_registration IMPLEMENTATION.
 
   METHOD is_check_compatible.
     IF name NE get_category_name( ).
-      DATA code_pal_check TYPE REF TO y_check_base.
+      DATA code_pal_check TYPE REF TO y_check_base. "#EC DECL_IN_IF
       CREATE OBJECT code_pal_check TYPE (name).
     ENDIF.
   ENDMETHOD.

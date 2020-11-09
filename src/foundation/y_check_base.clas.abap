@@ -47,9 +47,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         REDEFINITION .
   PROTECTED SECTION.
 
+    CONSTANTS initial_date TYPE datum VALUE '19000101'.
+
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations .
     DATA check_name TYPE seoclsname .
-    DATA clean_code_exemption_handler TYPE REF TO y_exemption_handler .
+    DATA clean_code_exemption_handler TYPE REF TO y_if_exemption .
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager .
     DATA is_testcode TYPE abap_bool .
     DATA ref_scan_manager TYPE REF TO y_if_scan_manager .
@@ -83,7 +85,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
       IMPORTING
         !structure TYPE sstruc OPTIONAL
         !index     TYPE i OPTIONAL
-        !statement TYPE sstmnt OPTIONAL .
+        !statement TYPE sstmnt OPTIONAL . "#EC OPTL_PARAM
     METHODS raise_error
       IMPORTING
         !object_type            TYPE trobjtype DEFAULT c_type_include
@@ -99,7 +101,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         !is_include_specific    TYPE sci_inclspec DEFAULT ' '
         !additional_information TYPE xstring OPTIONAL
         !checksum               TYPE int4 OPTIONAL
-        !pseudo_comments        TYPE t_comments OPTIONAL .
+        !pseudo_comments        TYPE t_comments OPTIONAL . "#EC OPTL_PARAM
 
     METHODS get_column_abs
         REDEFINITION .
@@ -150,7 +152,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_BASE IMPLEMENTATION.
+CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -183,10 +185,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     has_attributes = do_attributes_exist( ).
 
-    INSERT VALUE #( test = me->myname
+    INSERT VALUE #( test = myname
                     code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
-                    text = TEXT-106 ) INTO TABLE me->scimessages[].
+                    text = TEXT-106 ) INTO TABLE scimessages[].
   ENDMETHOD.
 
 
@@ -212,44 +214,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD do_attributes_exist.
-    DATA profile_manager TYPE REF TO object.
-    DATA profiles_ref TYPE REF TO data.
-    FIELD-SYMBOLS <profiles> TYPE ANY TABLE.
-
     TRY.
-        attributes_ok = abap_false.
-        CREATE DATA profiles_ref TYPE STANDARD TABLE OF (`YTAB_PROFILES`) WITH DEFAULT KEY.
-        ASSIGN profiles_ref->* TO <profiles>.
-
-        CREATE OBJECT profile_manager TYPE (`Y_PROFILE_MANAGER`).
-
-        DATA(ptab) = VALUE abap_parmbind_tab( ( name  = 'USERNAME'
-                                                kind  = cl_abap_objectdescr=>exporting
-                                                value = REF #( sy-uname ) )
-                                              ( name  = 'RESULT'
-                                                kind  = cl_abap_objectdescr=>returning
-                                                value = REF #( <profiles> ) ) ).
-
-        CALL METHOD profile_manager->('Y_IF_PROFILE_MANAGER~SELECT_PROFILES')
-          PARAMETER-TABLE ptab.
-
-        IF <profiles> IS NOT ASSIGNED.
-          RETURN.
-        ENDIF.
-
-        IF lines( <profiles> ) > 0.
-          result = abap_false.
-        ELSE.
-          attributes_ok = abap_true.
-          result = abap_true.
-        ENDIF.
-
-      CATCH cx_sy_create_data_error
-            cx_sy_create_object_error
-            ycx_entry_not_found.
+        DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
+        attributes_ok = xsdbool( profiles IS INITIAL ).
+      CATCH ycx_entry_not_found.
         attributes_ok = abap_true.
-        result = abap_true.
     ENDTRY.
+    result = attributes_ok.
   ENDMETHOD.
 
 
@@ -359,9 +330,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_include.
-    DATA:
-      l_levels_wa LIKE LINE OF ref_scan->levels,
-      l_level     TYPE i.
+    DATA l_levels_wa LIKE LINE OF ref_scan->levels.
+    DATA l_level TYPE i.
 
     IF p_level IS SUPPLIED.
       l_level = p_level.
@@ -466,7 +436,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_token_rel.
-    DATA: l_index TYPE i.
+    DATA l_index TYPE i.
 
     l_index = statement_wa-from + p_n - 1.
     IF l_index > statement_wa-to.
@@ -566,8 +536,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       ELSEIF check_configuration-prio IS INITIAL.
         message = 'Choose a Message Severity'(301).
       ELSE.
-        IF check_configuration-object_creation_date = '00000000'.
-          check_configuration-object_creation_date = '19000101'.
+        IF check_configuration-object_creation_date IS INITIAL.
+          check_configuration-object_creation_date = initial_date.
         ENDIF.
 
         attributes_ok = abap_true.
@@ -594,7 +564,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
 
     IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = NEW y_exemption_handler( ).
+      clean_code_exemption_handler = y_exemption_handler=>create( ).
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.
@@ -607,8 +577,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       statistics = NEW y_scan_statistics( ).
     ENDIF.
 
-    IF lines( check_configurations ) = 1 AND
-       check_configurations[ 1 ]-object_creation_date = '00000000'.
+    IF lines( check_configurations ) = 1
+    AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
       CLEAR check_configurations.
     ENDIF.
   ENDMETHOD.
@@ -637,7 +607,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
           apply_on_testcode = check_configuration-apply_on_testcode
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
-      CATCH cx_root.
+      CATCH cx_root.                                  "#EC NEED_CX_ROOT
         attributes_maintained = abap_false.
     ENDTRY.
   ENDMETHOD.
@@ -647,7 +617,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                    scimessages      = scimessages
-                                                                                   test             = me->myname
+                                                                                   test             = myname
                                                                                    code             = get_code( error_priority )
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
@@ -659,7 +629,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
               p_column = get_column_abs( statement_from )
               p_errcnt = error_counter
               p_kind = error_priority
-              p_test = me->myname
+              p_test = myname
               p_code = get_code( error_priority )
               p_suppress = settings-pseudo_comment
               p_param_1 = parameter_01
@@ -692,8 +662,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     TRY.
         check_start_conditions( ).
-        profile_configurations = clean_code_manager->read_check_customizing( username    = sy-uname
-                                                                             checkid     = myname ).
+        profile_configurations = clean_code_manager->read_check_customizing( myname ).
       CATCH ycx_no_check_customizing.
         IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
           FREE ref_scan_manager.
@@ -743,11 +712,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_class_description.
-    TRY.
-        result = NEW cl_oo_class( myname )->class-descript.
-      CATCH cx_class_not_existent.
-        result = 'Description Not Available'.
-    ENDTRY.
+    SELECT SINGLE descript INTO @result FROM seoclasstx WHERE clsname = @myname.
+    IF sy-subrc <> 0.
+      result = 'Description Not Available'.
+    ENDIF.
   ENDMETHOD.
 
 

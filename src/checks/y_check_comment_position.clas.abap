@@ -48,9 +48,12 @@ CLASS y_check_comment_position IMPLEMENTATION.
   METHOD has_wrong_position.
     DATA(tokens) = ref_scan_manager->get_tokens( ).
 
-    DATA(previous_token) = tokens[ statement-to - 1 ].
-    DATA(current_token) = tokens[ statement-to ].
-    DATA(next_token) = tokens[ statement-to + 1 ].
+    TRY.
+        DATA(previous_token) = tokens[ statement-to - 1 ].
+        DATA(current_token) = tokens[ statement-to ].
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
 
     IF is_pseudo_comment( current_token ) = abap_true
     OR is_type_asterisk( current_token ) = abap_true.
@@ -63,9 +66,18 @@ CLASS y_check_comment_position IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF next_token-str = 'ENDFORM'
-    OR next_token-str = 'ENDMETHOD'
-    OR next_token-str = 'ENDMODULE'.
+    TRY.
+        DATA(next_token) = tokens[ statement-to + 1 ].
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+
+    " Empty Branch
+    IF next_token-str CP 'END*'.
+      IF current_token-row = next_token-row - 1
+      AND current_token-col <> next_token-col + 2.
+        result = abap_true.
+      ENDIF.
       RETURN.
     ENDIF.
 

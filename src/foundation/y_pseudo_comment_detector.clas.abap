@@ -2,7 +2,7 @@ CLASS y_pseudo_comment_detector DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES: y_if_pseudo_comment_detector.
     ALIASES is_pseudo_comment FOR y_if_pseudo_comment_detector~is_pseudo_comment.
-  PROTECTED SECTION.
+
   PRIVATE SECTION.
     DATA: pcom     TYPE sci_pcom,
           pcom_alt TYPE sci_pcom.
@@ -13,7 +13,7 @@ CLASS y_pseudo_comment_detector DEFINITION PUBLIC CREATE PUBLIC.
           !scimessages TYPE scimessages
           !test        TYPE sci_chk
           !code        TYPE sci_errc
-          !suppress    TYPE sci_pcom OPTIONAL,
+          !suppress    TYPE sci_pcom,
       has_comment
         IMPORTING
           !ref_scan_manager TYPE REF TO y_if_scan_manager
@@ -30,7 +30,7 @@ ENDCLASS.
 
 
 
-CLASS Y_PSEUDO_COMMENT_DETECTOR IMPLEMENTATION.
+CLASS y_pseudo_comment_detector IMPLEMENTATION.
 
 
   METHOD determine_pseudo_comments.
@@ -126,18 +126,20 @@ CLASS Y_PSEUDO_COMMENT_DETECTOR IMPLEMENTATION.
                                code        = code
                                suppress    = suppress ).
 
-    IF NOT ( pcom = cl_ci_test_root=>c_exceptn_imposibl OR
-             pcom = '' ).
-
-      IF position IS NOT INITIAL.
-        result = has_comment( ref_scan_manager = ref_scan_manager position = position ).
-
-        IF result <> cl_ci_test_root=>c_pc_exceptn_exists.
-          result = has_inline_comment( ref_scan_manager = ref_scan_manager position = position ).
-        ENDIF.
-      ELSE.
-        result = ''.
-      ENDIF.
+    IF pcom = cl_ci_test_root=>c_exceptn_imposibl
+    OR pcom IS INITIAL.
+      RETURN.
     ENDIF.
+
+    IF position IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    result = has_comment( ref_scan_manager = ref_scan_manager position = position ).
+
+    IF result <> cl_ci_test_root=>c_pc_exceptn_exists.
+      result = has_inline_comment( ref_scan_manager = ref_scan_manager position = position ).
+    ENDIF.
+
   ENDMETHOD.
 ENDCLASS.

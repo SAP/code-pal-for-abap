@@ -1,11 +1,9 @@
-CLASS y_exemption_of_program DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
-
+CLASS y_exemption_of_program DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     INTERFACES y_if_exemption_of_objects .
+    ALIASES create FOR y_if_exemption_of_objects~create.
 
-protected section.
+  PROTECTED SECTION.
   PRIVATE SECTION.
     METHODS is_enterprise_search_generate
       IMPORTING
@@ -52,6 +50,11 @@ ENDCLASS.
 CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
 
 
+  METHOD create.
+    result = NEW y_exemption_of_program( ).
+  ENDMETHOD.
+
+
   METHOD is_downport_assist_generate.
     IF  name(5) = 'NOTE_'.
       result = abap_true.
@@ -94,54 +97,50 @@ CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
 
 
   METHOD is_irf_model_generate.
-    DATA:
-      lv_object_name TYPE  vrsd-objname,
-      lt_repos_tab   TYPE STANDARD TABLE OF  abaptxt255,
-      lw_repos_tab   LIKE LINE OF lt_repos_tab,
-      lt_trdir_tab   TYPE STANDARD TABLE OF trdir,
-      lv_lines       TYPE i.
+    DATA lv_object_name TYPE vrsd-objname.
+    DATA lt_repos_tab TYPE STANDARD TABLE OF abaptxt255.
+    DATA lt_trdir_tab TYPE STANDARD TABLE OF trdir.
 
-    IF name(10) = 'DTINF_ADJ_' OR name CO '/DTINF_ADJ_CO'.
+    CHECK name(10) = 'DTINF_ADJ_' OR name CO '/DTINF_ADJ_CO'.
 
-      CALL FUNCTION 'SVRS_GET_REPS_FROM_OBJECT'
-        EXPORTING
-          object_name = lv_object_name
-          object_type = 'REPS'
-          versno      = 0
-        TABLES
-          repos_tab   = lt_repos_tab
-          trdir_tab   = lt_trdir_tab
-        EXCEPTIONS
-          no_version  = 1
-          OTHERS      = 2.
+    CALL FUNCTION 'SVRS_GET_REPS_FROM_OBJECT'
+      EXPORTING
+        object_name = lv_object_name
+        object_type = 'REPS'
+        versno      = 0
+      TABLES
+        repos_tab   = lt_repos_tab
+        trdir_tab   = lt_trdir_tab
+      EXCEPTIONS
+        no_version  = 1
+        OTHERS      = 2.
 
-      IF sy-subrc = 0.
-        DESCRIBE TABLE lt_repos_tab LINES lv_lines.
-
-        IF lv_lines > 10.
-          READ TABLE   lt_repos_tab INTO lw_repos_tab INDEX 2.
-
-          IF lw_repos_tab = '*& Report DTINF_CORR_REPORT'.
-            READ TABLE   lt_repos_tab INTO lw_repos_tab INDEX 4.
-
-            IF lw_repos_tab = '*& !!!AUTO-GENERATED CODE: DO NOT CHANGE!!!'.
-              result = abap_true.
-            ENDIF.
-          ENDIF.
-        ENDIF.
-      ENDIF.
+    IF sy-subrc IS NOT INITIAL.
+      RETURN.
     ENDIF.
 
-    CLEAR lt_repos_tab.
-    CLEAR lt_trdir_tab.
+    IF lines( lt_repos_tab ) <= 10.
+      RETURN.
+    ENDIF.
+
+    READ TABLE lt_repos_tab INTO DATA(repos_tab) INDEX 2.
+
+    IF repos_tab <> '*& Report DTINF_CORR_REPORT'.
+      RETURN.
+    ENDIF.
+
+    READ TABLE lt_repos_tab INTO repos_tab INDEX 4.
+
+    IF repos_tab <> '*& !!!AUTO-GENERATED CODE: DO NOT CHANGE!!!'.
+      result = abap_true.
+    ENDIF.
   ENDMETHOD.
 
 
   METHOD is_object_indepenent_generate.
     DATA: l_object TYPE sobj_name.
-    DATA(programming_object) = NEW y_exemption_general( ).
     l_object = name.
-    result = programming_object->is_object_exempted( object_type = 'PROG' object_name = name ).
+    result = y_exemption_general=>create( )->is_object_exempted( object_type = 'PROG' object_name = name ).
   ENDMETHOD.
 
 

@@ -38,6 +38,7 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
       TRY.
           DATA(next_token) = tokens[ sy-tabix + 1 ].
         CATCH cx_sy_itab_line_not_found.
+          CONTINUE.
       ENDTRY.
 
       IF next_token-str <> 'NOT'.

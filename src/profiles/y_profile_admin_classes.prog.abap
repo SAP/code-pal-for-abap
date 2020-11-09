@@ -188,7 +188,7 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
                   dynpro_number         TYPE sy-dynnr DEFAULT sy-dynnr
         CHANGING  value_table           TYPE STANDARD TABLE
         RETURNING VALUE(result)         TYPE y_if_profile_manager=>value_help
-        RAISING   cx_failed.                         "#EC PARAMETER_OUT
+        RAISING   cx_failed.    "#EC PARAMETER_OUT "#EC NUM_OUTPUT_PARA
 
 
     CLASS-METHODS:
@@ -318,7 +318,6 @@ ENDCLASS.
 CLASS lcl_delegator_events DEFINITION INHERITING FROM y_alv_events.
   PUBLIC SECTION.
     METHODS y_if_alv_events~handle_function_selected REDEFINITION.
-  PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -343,53 +342,30 @@ ENDCLASS.
 CLASS lcl_check_events DEFINITION INHERITING FROM y_alv_events.
   PUBLIC SECTION.
     METHODS y_if_alv_events~handle_function_selected REDEFINITION.
-  PROTECTED SECTION.
   PRIVATE SECTION.
+    METHODS handle_btn_info.
+    METHODS handle_btn_add.
+    METHODS handle_btn_edit.
 ENDCLASS.
 
 CLASS lcl_check_events IMPLEMENTATION.
 
   METHOD y_if_alv_events~handle_function_selected.
     IF fcode EQ 'BTN_INFO'.
-      TRY.
-          DATA check TYPE REF TO y_check_base.
-          DATA(check_name) = lcl_util=>get_selected_check( )-checkid.
-          CREATE OBJECT check TYPE (check_name).
-
-          CALL FUNCTION 'CALL_BROWSER'
-            EXPORTING
-              url = check->settings-documentation.
-
-        CATCH ycx_entry_not_found
-              cx_sy_create_object_error.
-          MESSAGE 'Please select a check!'(015) TYPE 'I'.
-      ENDTRY.
+      handle_btn_info( ).
       RETURN.
     ENDIF.
 
-    CHECK lcl_util=>check_selected_check_rights( ) EQ abap_true.
+    IF lcl_util=>check_selected_check_rights( ) = abap_false.
+      RETURN.
+    ENDIF.
 
     CASE fcode.
       WHEN 'BTN_ADD'.
-        TRY.
-            lcl_util=>init_add_check( ).
-            lcl_util=>auto_re_start_check( ).
-
-          CATCH ycx_entry_not_found
-                cx_sy_create_object_error.
-            MESSAGE 'Please select a check!'(015) TYPE 'I'.
-
-        ENDTRY.
+        handle_btn_add( ).
 
       WHEN 'BTN_EDIT'.
-        TRY.
-            lcl_util=>init_edit_check( lcl_util=>get_selected_check( ) ).
-            lcl_util=>auto_re_start_check( abap_true ).
-
-          CATCH ycx_entry_not_found.
-            MESSAGE 'Please select a check!'(015) TYPE 'I'.
-
-        ENDTRY.
+        handle_btn_edit( ).
 
       WHEN 'BTN_REMOVE'.
         lcl_util=>remove_selected_check( ).
@@ -401,11 +377,39 @@ CLASS lcl_check_events IMPLEMENTATION.
         lcl_util=>remove_all_checks( ).
 
     ENDCASE.
+
     lcl_util=>refresh_checks( ).
   ENDMETHOD.
 
-ENDCLASS.
+  METHOD handle_btn_edit.
+    TRY.
+        lcl_util=>init_edit_check( lcl_util=>get_selected_check( ) ).
+        lcl_util=>auto_re_start_check( abap_true ).
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+    ENDTRY.
+  ENDMETHOD.
 
+  METHOD handle_btn_add.
+    TRY.
+        lcl_util=>init_add_check( ).
+        lcl_util=>auto_re_start_check( ).
+      CATCH ycx_entry_not_found
+            cx_sy_create_object_error.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD handle_btn_info.
+    TRY.
+        io_check_id = lcl_util=>get_selected_check( )-checkid.
+        lcl_util=>call_check_info(  ).
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+    ENDTRY.
+  ENDMETHOD.
+
+ENDCLASS.
 
 
 
@@ -589,9 +593,7 @@ CLASS lcl_util IMPLEMENTATION.
     DATA base TYPE REF TO y_check_base.
     TRY.
         CREATE OBJECT base TYPE (io_check_id).
-        CALL FUNCTION 'CALL_BROWSER'
-          EXPORTING
-            url = base->settings-documentation.
+        CALL FUNCTION 'CALL_BROWSER' EXPORTING url = base->settings-documentation.
 
       CATCH cx_sy_create_object_error.
         MESSAGE 'Failed to find the check!'(043) TYPE 'I'.
@@ -898,7 +900,12 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD assign_profile.
     CALL SCREEN 200 STARTING AT 10 10.
-    CHECK user_command EQ 'ENTR_200' AND io_profilename NE space.
+
+    IF user_command <> 'ENTR_200'
+    OR io_profilename IS INITIAL.
+      RETURN.
+    ENDIF.
+
     TRY.
         profile_manager->insert_profile( VALUE #( username = sy-uname
                                                   profile  = io_profilename
@@ -928,18 +935,17 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD copy_profile.
     CALL SCREEN 600 STARTING AT 10 10.
-    CHECK user_command EQ 'ENTR_600' AND
-          io_profilename NE space AND
-          io_to_profile NE space.
+
+    IF user_command <> 'ENTR_600'
+    OR io_profilename IS INITIAL
+    OR io_to_profile IS INITIAL.
+      RETURN.
+    ENDIF.
 
     TRY.
-        TRY.
-            DATA(profiles) = profile_manager->get_registered_profiles( ).
-            LOOP AT profiles INTO DATA(line) WHERE table_line EQ io_to_profile.
-              RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
-            ENDLOOP.
-          CATCH ycx_entry_not_found.
-        ENDTRY.
+        IF profile_manager->profile_exists( io_to_profile ) = abap_true.
+          RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
+        ENDIF.
 
         DATA(checklist) = profile_manager->select_checks( io_profilename ).
 
@@ -980,24 +986,24 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD  create_template_profile.
     CALL SCREEN 500 STARTING AT 10 10.
-    CHECK user_command EQ 'ENTR_500' AND io_profilename NE space.
+
+    IF user_command <> 'ENTR_500'
+    OR io_profilename IS INITIAL.
+      RETURN.
+    ENDIF.
 
     TRY.
 
-        TRY.
-            DATA(profiles) = profile_manager->get_registered_profiles( ).
-            LOOP AT profiles INTO DATA(line) WHERE table_line EQ io_profilename.
-              RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
-            ENDLOOP.
-          CATCH ycx_entry_not_found.
-        ENDTRY.
+        IF profile_manager->profile_exists( io_profilename ) = abap_true.
+          RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
+        ENDIF.
 
         profile_manager->insert_profile( VALUE #( username = sy-uname
-                                            profile  = io_profilename
-                                            is_standard = abap_false
-                                            last_changed_by = sy-uname
-                                            last_changed_on = sy-datum
-                                            last_changed_at = sy-timlo ) ).
+                                                  profile  = io_profilename
+                                                  is_standard = abap_false
+                                                  last_changed_by = sy-uname
+                                                  last_changed_on = sy-datum
+                                                  last_changed_at = sy-timlo ) ).
 
         profile_manager->check_delegation_rights( io_profilename ).
 

@@ -14,9 +14,9 @@ CLASS y_check_magic_number DEFINITION
   PRIVATE SECTION.
 
     DATA magic_number TYPE string .
-    DATA token_excluded TYPE abap_bool .
+    DATA has_case_with_subrc TYPE abap_bool .
 
-    METHODS exclude_token
+    METHODS is_exception
       IMPORTING
         !token        TYPE string
       RETURNING
@@ -49,15 +49,15 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD exclude_token.
-    IF token EQ 'ENDCASE' AND token_excluded EQ abap_true.
-      token_excluded = abap_false.
+  METHOD is_exception.
+    IF token EQ 'ENDCASE' AND has_case_with_subrc EQ abap_true.
+      has_case_with_subrc = abap_false.
     ENDIF.
 
-    IF token EQ 'SY-SUBRC' OR token_excluded EQ abap_true.
+    IF token EQ 'SY-SUBRC' OR has_case_with_subrc EQ abap_true.
       result = abap_true.
     ELSEIF token EQ 'CASE' AND get_token_rel( second_token ) = 'SY-SUBRC'.
-      token_excluded = abap_true.
+      has_case_with_subrc = abap_true.
     ENDIF.
   ENDMETHOD.
 
@@ -68,12 +68,12 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
-      IF exclude_token( <token>-str ) = abap_true.
+      IF is_exception( <token>-str ) = abap_true.
         EXIT.
       ENDIF.
 
       IF is_magic_number( <token>-str ).
-        DATA(check_configuration) = detect_check_configuration( statement_wa ).
+        DATA(check_configuration) = detect_check_configuration( statement_wa ). "#EC DECL_IN_IF
         IF check_configuration IS INITIAL.
           CONTINUE.
         ENDIF.

@@ -104,7 +104,7 @@ CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
 
   METHOD raise_error_wrapper.
     IF pseudo_comment_counter GT 0.
-      DATA(check_configuration) = detect_check_configuration( VALUE #( level = 1 ) ).
+      DATA(check_configuration) = detect_check_configuration( VALUE #( level = 1 ) ). "#EC DECL_IN_IF
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.

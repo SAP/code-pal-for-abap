@@ -1,10 +1,8 @@
-interface Y_IF_EXEMPTION_OF_OBJECTS
-  public .
+INTERFACE y_if_exemption_of_objects PUBLIC .
 
+  class-METHODS create RETURNING VALUE(result) TYPE REF TO y_if_exemption_of_objects.
 
-  methods IS_EXEMPTED
-    importing
-      !NAME type SOBJ_NAME
-    returning
-      value(RESULT) type ABAP_BOOL .
-endinterface.
+  METHODS is_exempted IMPORTING name          TYPE sobj_name
+                      RETURNING VALUE(result) TYPE abap_bool .
+
+ENDINTERFACE.

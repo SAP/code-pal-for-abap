@@ -27,11 +27,11 @@ CLASS y_check_num_exec_statements DEFINITION
       RETURNING
         VALUE(result) TYPE int4 .
 
-    METHODS skip_keyword
+    METHODS is_keyword_exempt
       RETURNING
         VALUE(result) TYPE abap_bool .
 
-    METHODS skip_statement
+    METHODS is_statement_exempt
       IMPORTING
         !type         TYPE stmnt_type
       RETURNING
@@ -57,10 +57,10 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
 
 
   METHOD count_statements.
-    IF skip_statement( statement_wa-type ).
+    IF is_statement_exempt( statement_wa-type ).
       RETURN.
     ENDIF.
-    IF skip_keyword( ).
+    IF is_keyword_exempt( ).
       RETURN.
     ENDIF.
     IF token_wa-type <> scan_token_type-comment AND token_wa-type <> scan_token_type-pragma.
@@ -91,7 +91,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
 
     IF index = structure-stmnt_to.
       DATA(check_configuration) = detect_check_configuration( error_count = no_exec_statements
-                                                              statement = statement_for_message ).
+                                                              statement = statement_for_message ). "#EC DECL_IN_IF
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.
@@ -106,7 +106,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD skip_keyword.
+  METHOD is_keyword_exempt.
     CASE keyword( ).
       WHEN if_kaizen_keywords_c=>gc_program
         OR if_kaizen_keywords_c=>gc_endclass
@@ -169,7 +169,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD skip_statement.
+  METHOD is_statement_exempt.
     CONSTANTS:
       include_program           TYPE stmnt_type VALUE 'I',
       include_program_not_exist TYPE stmnt_type VALUE 'J',
