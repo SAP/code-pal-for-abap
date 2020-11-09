@@ -93,7 +93,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
 
   METHOD get_created_on_from_buffer.
-    result = y_exemption_buffer=>get( object_type = object_type
+    result = y_buffer=>get( object_type = object_type
                                       object_name = CONV #( object_name ) )-created_on.
 
     IF result IS INITIAL
@@ -232,7 +232,6 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     APPEND get_db_reposource_created_on( repo_access ) TO created_on_dates.
 
-
     DATA(version_history) = COND #( WHEN object_type = 'FUGR' THEN get_db_vers_hstry_crtd_on_fugr( object_name )
                                     WHEN object_type = 'CLAS' THEN get_db_vers_hstry_crtd_on_clas( object_name )
                                     WHEN object_type = 'INTF' THEN get_db_vers_hstry_crtd_on_clas( object_name )
@@ -242,13 +241,9 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
     result = get_lowest_date( created_on_dates  ).
 
-    DATA(exemption) = VALUE ytab_exemptions( object = object_type
-                                             obj_name = object_name
-                                             created_on = result
-                                             as4date_co = sy-datum
-                                             is_created_on_buffered = abap_true ).
-
-    y_exemption_buffer=>modify( exemption ).
+    y_buffer=>modify( VALUE #( object_type = object_type
+                               object_name = object_name
+                               created_on = result ) ).
 
   ENDMETHOD.
 

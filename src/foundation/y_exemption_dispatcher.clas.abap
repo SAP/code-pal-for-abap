@@ -33,8 +33,8 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
 
 
   METHOD get_exemption_from_database.
-    result = y_exemption_buffer=>get( object_type = object_type
-                                      object_name = CONV #( object_name ) )-is_exempted.
+    result = y_buffer=>get( object_type = object_type
+                            object_name = CONV #( object_name ) )-is_exempted.
   ENDMETHOD.
 
 
@@ -84,12 +84,9 @@ CLASS y_exemption_dispatcher IMPLEMENTATION.
                                                                    object_name  = object_name ).
     ENDIF.
 
-    DATA(exemption) = VALUE ytab_exemptions( object      = object_type
-                                             obj_name    = object_name
-                                             is_exempted = result
-                                             as4date     = sy-datum ).
-
-    y_exemption_buffer=>modify( exemption ).
+    y_buffer=>modify( VALUE #( object_type = object_type
+                               object_name = object_name
+                               is_exempted = result ) ).
 
   ENDMETHOD.
 

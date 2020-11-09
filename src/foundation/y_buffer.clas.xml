@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>Y_EXEMPTION_BUFFER</CLSNAME>
+    <CLSNAME>Y_BUFFER</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Exemption Buffer</DESCRIPT>
+    <DESCRIPT>Buffer</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
