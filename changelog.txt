@@ -10,6 +10,7 @@ Legend
 
 2020-XX-XX v1.07.0
 ------------------
+* buffer deadlock
 ! Y_CHECK_RETURNING_NAME is Warning by default
 * Minor clean code refactoring
 + Automatic exemption for function modules with prefix TABLEFRAME* and TABLEPROC*
