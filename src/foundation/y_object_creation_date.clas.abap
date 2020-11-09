@@ -10,51 +10,51 @@ CLASS y_object_creation_date DEFINITION
 
     METHODS get_db_tadir_data
       IMPORTING
-        VALUE(object_type)   TYPE trobjtype
-        VALUE(object_name)   TYPE sobj_name
+        VALUE(object_type) TYPE trobjtype
+        VALUE(object_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate .
+        VALUE(result)      TYPE rdir_cdate .
     METHODS get_db_reposource_created_on
       IMPORTING
         VALUE(reposrc_prog_search_string) TYPE string
       RETURNING
-        VALUE(result)              TYPE rdir_cdate .
+        VALUE(result)                     TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_clas
       IMPORTING
-        VALUE(class_name)    TYPE sobj_name
+        VALUE(class_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate .
+        VALUE(result)     TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_prog
       IMPORTING
-        VALUE(prog_name)     TYPE sobj_name
+        VALUE(prog_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate .
+        VALUE(result)    TYPE rdir_cdate .
     METHODS get_db_vers_hstry_crtd_on_fugr
       IMPORTING
-        VALUE(fugr_name)     TYPE sobj_name
+        VALUE(fugr_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate .
+        VALUE(result)    TYPE rdir_cdate .
     METHODS convert_fugr_for_db_access
       IMPORTING
-        VALUE(name)              TYPE sobj_name
+        VALUE(name)   TYPE sobj_name
       RETURNING
         VALUE(result) TYPE string .
     METHODS convert_class_for_repos_access
       IMPORTING
-        VALUE(name)              TYPE sobj_name
+        VALUE(name)   TYPE sobj_name
       RETURNING
         VALUE(result) TYPE string .
     METHODS get_lowest_date
       IMPORTING
-        VALUE(dates)      TYPE created_on_dates
+        VALUE(dates)  TYPE created_on_dates
       RETURNING
         VALUE(result) TYPE as4date .
     METHODS get_created_on_from_buffer
       IMPORTING
-        VALUE(object_type)   TYPE trobjtype
-        VALUE(object_name)   TYPE sobj_name
+        VALUE(object_type) TYPE trobjtype
+        VALUE(object_name) TYPE sobj_name
       RETURNING
-        VALUE(result) TYPE rdir_cdate
+        VALUE(result)      TYPE rdir_cdate
       RAISING
         cx_sy_itab_line_not_found .
     METHODS try_new_created_on
@@ -62,18 +62,18 @@ CLASS y_object_creation_date DEFINITION
         object_type   TYPE trobjtype
         object_name   TYPE sobj_name
       RETURNING
-        value(result) TYPE as4date.
+        VALUE(result) TYPE as4date.
     METHODS get_created_on
       IMPORTING
         object_type   TYPE trobjtype
         object_name   TYPE sobj_name
       RETURNING
-        value(result) TYPE as4date.
+        VALUE(result) TYPE as4date.
 ENDCLASS.
 
 
 
-CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
+CLASS y_object_creation_date IMPLEMENTATION.
 
 
   METHOD convert_class_for_repos_access.
@@ -84,7 +84,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
   METHOD convert_fugr_for_db_access.
     IF name(1) = '/'.
       SEARCH name FOR '/' STARTING AT 2.
-      DATA(l_textcount) = sy-fdpos + 2. "#EC DECL_IN_IF
+      DATA(l_textcount) = sy-fdpos + 2.                 "#EC DECL_IN_IF
       result = name(l_textcount) && 'SAPL' && name+l_textcount.
     ELSE.
       result = 'SAPL' && name.
@@ -94,7 +94,7 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
 
   METHOD get_created_on_from_buffer.
     result = y_code_pal_buffer=>get( object_type = object_type
-                                      object_name = CONV #( object_name ) )-created_on.
+                                     object_name = CONV #( object_name ) )-created_on.
 
     IF result IS INITIAL
     OR result = '000000'.
@@ -242,8 +242,8 @@ CLASS Y_OBJECT_CREATION_DATE IMPLEMENTATION.
     result = get_lowest_date( created_on_dates  ).
 
     y_code_pal_buffer=>modify( VALUE #( object_type = object_type
-                               object_name = object_name
-                               created_on = result ) ).
+                                        object_name = object_name
+                                        created_on = result ) ).
 
   ENDMETHOD.
 

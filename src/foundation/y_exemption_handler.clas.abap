@@ -27,7 +27,7 @@ CLASS y_exemption_handler IMPLEMENTATION.
 
   METHOD get_exemption_from_buffer.
     result = y_code_pal_buffer=>get( object_type = object_type
-                            object_name = CONV #( object_name ) )-is_exempted.
+                                     object_name = CONV #( object_name ) )-is_exempted.
   ENDMETHOD.
 
 
@@ -49,8 +49,8 @@ CLASS y_exemption_handler IMPLEMENTATION.
                      WHEN object_type = 'PROG' THEN y_exemption_dispatcher=>create( )->is_program_exempted( object_name ) ).
 
     y_code_pal_buffer=>modify( VALUE #( object_type = object_type
-                               object_name = object_name
-                               is_exempted = result ) ).
+                                        object_name = object_name
+                                        is_exempted = result ) ).
 
   ENDMETHOD.
 
