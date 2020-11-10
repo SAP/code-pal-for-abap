@@ -14,13 +14,13 @@ A high value in cyclomatic complexity is an indicator that the source code is no
 
 In this implementation, the number of binary decision points "b" (for instance: IF-statements) is counted.
 
-The cyclomatic complexity # M = b + 1 is calculated as follows:
+The cyclomatic complexity M = b + 1 is calculated as follows:
 
 Every IF and ELSEIF are counted as decisions ("b") but not the "AND" and "OR" and other logical operands within them.
-Within a CASE statement all WHEN tokens are counted.
-LOOP, DO and WHILE are all counted and also CHECK within a loop as this is a conditional short circuit of the loop (avoid using CHECK, try to use an IF-Statement instead).
-FORM, METHOD and FUNCTION are counted as these are separate sections of code with distinct entry and exit points. 
-Within SQL statements a WHERE clause is also a decision point ("b") and is therefore counted in SELECT, MODIFY, UPDATE and DELETE statements, however, these statements are not counted if there is no WHERE clause. Similarly a KEY clause in a READ statement is counted.
+Within a CASE statement all WHEN tokens are counted ("b").
+LOOP, DO and WHILE are all counted ("b") and also CHECK within a loop as this is a conditional short circuit of the loop (avoid using CHECK, try to use an IF-Statement instead).
+FORM, METHOD and FUNCTION are counted ("b") as these are separate sections of code with distinct entry and exit points. 
+Within SQL statements a WHERE clause is also a decision point ("b") and is therefore counted in SELECT, MODIFY, UPDATE and DELETE statements, however, these statements are not counted if there is no WHERE clause. Similarly a KEY clause in a READ statement is counted ("b").
 
 ### Which attributes can be maintained?
 
