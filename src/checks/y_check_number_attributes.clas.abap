@@ -77,7 +77,7 @@ CLASS Y_CHECK_NUMBER_ATTRIBUTES IMPLEMENTATION.
     settings-threshold = 12.
     settings-documentation = |{ c_docs_path-checks }number-attributes.md|.
 
-    set_check_message( '&1 attributes reaching threshold of &2!' ).
+    set_check_message( 'Number of attributes must be lower than &2! (&1>=&2)' ).
   ENDMETHOD.
 
 
