@@ -14,7 +14,7 @@ A high value in cyclomatic complexity is an indicator that the source code is no
 
 In this implementation, the number of binary decision points "b" (for instance: IF-statements) is counted.
 
-The cyclomatic complexity * [M = b + 1] is calculated as follows:
+The cyclomatic complexity # M = b + 1 is calculated as follows:
 
 Every IF and ELSEIF are counted as decisions ("b") but not the "AND" and "OR" and other logical operands within them.
 Within a CASE statement all WHEN tokens are counted.
