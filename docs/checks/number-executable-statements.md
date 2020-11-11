@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The Number of Executable Statements Check counts the number of non-declarative ABAP Statements per modularization unit up to a maximum. If there are too many statements in a code block, it is probable that the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
+The Number of Executable Statements Check counts the number of non-declarative ABAP Statements per modularization unit up to a maximum. If there are too many statements in a code block, it is probable that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
 
 A high number of executable statements is an indicator that the source code is not readable anymore in a way that maintaining and extending the code can be done efficiently. In addition, the risk of introducing bugs is higher with a high number of executable statements in the code.
 
@@ -20,7 +20,7 @@ The check counts the number of non-declarative ABAP Statements, that is ABAP Sta
 
 ### How to solve the issue?
 
-Modularize your code. Follow the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle). Split the method into other smaller methods (create service classes whenever possible).
+Split the class or interface into multiple classes or interfaces which then contain less attributes. If there are many attributes related to one task, it's possible to group the attributes in structures.
 
 ### What to do in case of exception?
 

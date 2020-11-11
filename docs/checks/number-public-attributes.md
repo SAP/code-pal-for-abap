@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The "Number of Public Attributes" Check counts the number of public attributes. All attributes should be private (by default) or protected (if needed). The [data encapsulation principle](https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)) helps you to protect your attributes from being changed and adds readability for others; the basic principle: ["One only sees what is needed"](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#members-private-by-default-protected-only-if-needed).
+The Number of Public Attributes Check counts the number of public attributes up to a maximum (usually 0). All attributes and methods should be private by default. The [data encapsulation principle](https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)) helps you to protect your attributes from being changed and adds readability for others, they only see what they need.
 
 ### How does the check work?
 
@@ -32,8 +32,3 @@ CLASS class_name DEFINITION.   "#EC NUM_PUBLIC_ATTR
     DATA attribute2 TYPE i.
 ENDCLASS.
 ```
-
-### Further Reading
-[Clean ABAP Styleguides](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#members-private-by-default-protected-only-if-needed) 
-
-

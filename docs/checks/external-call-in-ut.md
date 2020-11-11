@@ -2,11 +2,11 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [External Call in Unit Tests Check](external-call-in-ut.md)
 
-## External Call in Unit Tests-Check
+## External Call in Unit Tests Check
 
 ### What is the Intent of the Check?
 
-The Check “External Call in Unit-Tests” scans test classes and its contents searching for any kind of explicit redirection (external call changing the main workflow to another program) within test methods. Since every external call/redirection is considered to be a dependency, this should not be allowed in test code.
+The Check “External Call in Unit-Test” scans test classes and its contents searching for any kind of explicit redirection (external call changing the main workflow to another program) within test methods. Since every external call/redirection is considered to be a dependency, this should not be allowed in test code.
 
 ### How does the check work?
 

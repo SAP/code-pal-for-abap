@@ -2,15 +2,15 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Interface in Class Check](interface-in-class.md)
 
-## Interface Missing Check
+## Interface in Class Check
 
 ### What is the Intent of the Check?
 
-The "Interface Missing" (is interface in class?) check searches for public methods without an interface.
+The Is Interface in Class check searches for public methods without an interface.
 
 ### How does the check work?
 
-Since every class having at least one public method should implement an interface, this check searches for public methods within a class without having an associated interface (being implemented). 
+This check counts only `DATA` and `CLASS-DATA` within a global or local, `CLASS DEFINITION` or `INTERFACE`. Inherited attributes and all constants are not counted. A structure is counted as one attribute, no matter how many attributes are in the structure.
 
 ### Which attributes can be maintained?
 
@@ -18,7 +18,7 @@ Since every class having at least one public method should implement an interfac
 
 ### How to solve the issue?
 
-Make sure to implement an interface for the public methods. Even though this seems to be unnecessary in some cases, having an interface will easily allow mocking data in the future.
+Make sure to implement an interface for the public methods.
 
 ### What to do in case of exception?
 
@@ -27,7 +27,7 @@ The pseudo comment must be placed right after the `PUBLIC SECTION` statement.
 
 ```abap
 CLASS class_name DEFINITION.
-  PUBLIC SECTION. "#EC INTF_MISS
+  PUBLIC SECTION. "#EC INTF_IN_CLASS
 ENDCLASS.
 ```
 

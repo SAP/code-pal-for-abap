@@ -2,15 +2,15 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Method Return Bool Check](method-return-bool.md)
 
-## Method Name Misleading for Boolean Return Check
+## Method Return Bool Check
 
 ### What is the Intent of the Check?
 
-This check aims for a meaningful name for methods returning boolean valued types.
+This check aims for a meaningful name for methods, which return boolean values.
 
 ### How does the check work?
 
-The check searches for methods with a boolean returning value and then verifies if the name starts with one of the following words:
+The check searches for methods with a boolean returning value and checks then, if the name starts with one of the following words:
 
 * `is_`
 * `has_`

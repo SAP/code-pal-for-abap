@@ -2,11 +2,11 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Empty IF Branches Check](empty-if-branches.md)
 
-## Empty IF-Branch Check
+## Empty IF Branches Check
 
 ### What is the Intent of the Check?
 
-The "Empty IF-Branch" check searches for empty `IF` statements and empty `IF` branches.
+The Empty IF Branches check searches for empty `IF` statements and empty `IF` branches.
 
 ### Which attributes can be maintained?
 
