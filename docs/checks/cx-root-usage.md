@@ -6,11 +6,11 @@
 
 ### What is the Intent of the Check?
 
-The “CX_ROOT Usage" Check searches for merely "CX_ROOT" exceptions being directly used in your code (e.g.: In a TRY-CATCH block). 
+The “CX_ROOT Usage" Check searches for merely "CX_ROOT" exceptions being directly used in the code (e.g.: In a TRY-CATCH block). 
 
 ### How does the check work?
 
-It search for the usage of direct CX_ROOT exceptions like:
+It search for the "direct" usage of CX_ROOT exceptions like:
 
 Explicitly:
 ```abap
