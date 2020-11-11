@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The "CALL METHOD Usage" check verifies the usage of the `CALL METHOD` ABAP statement. It is preferable not to call a method via this statement: CALL METHOD. Since it is preferable functional instead of procedural calls.
+The "Call Method Usage" check verifies the usage of the `CALL METHOD` ABAP statement. It is preferable not to call a method via this statement: CALL METHOD. Since it is preferable functional instead of procedural calls.
 
 ### How does the check work?
 

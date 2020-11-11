@@ -13,7 +13,6 @@
 - [Comment Usage](checks/comment-usage.md)
 - [Constants Interface](checks/constants-interface.md)
 - [Cyclomatic Complexity](checks/cyclomatic-complexity.md)
-- [CX_ROOT Usage](checks/cx-root-usage.md)
 - [DB Access in Unit Test](checks/db-access-in-ut.md)
 - [Declaration in IF](checks/declaration-in-if.md)
 - [Deprecated Key Word](checks/deprecated-key-word.md)

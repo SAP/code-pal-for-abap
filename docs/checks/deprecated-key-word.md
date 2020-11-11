@@ -10,7 +10,7 @@ The Deprecated Key Word check points out old syntax which should be replaced wit
 
 ### How does the check work?
 
-This check searches for the key words `MOVE` and `TRANSLATE` (but the CHECK will be soon enhanced with more deprecated ABAP Keywords).
+This check searches for the key words `MOVE` and `TRANSLATE`.
 
 ### Which attributes can be maintained?
 

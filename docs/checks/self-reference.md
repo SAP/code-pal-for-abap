@@ -2,15 +2,15 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Self-Reference](self-reference.md)
 
-## Self-Reference
+## Self-Reference]
 
 ### What is the Intent of the Check?
 
-The "Self-Reference" Check, searches for the usage of self-reference `me->`. Since this self-reference is implicitly set by the system, you should omit it when calling an instance method.
+Usage of self-reference `me->` because it is implicitly set by the system.
 
 ### How to solve the issue?
 
-Omitting the self-reference whenever calling an instance method.
+Omitting it when calling an instance method.
 
 ### What to do in case of exception?
 

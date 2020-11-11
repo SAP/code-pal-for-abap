@@ -6,8 +6,9 @@
 
 ### What is the Intent of the Check?
 
-The “Check Statement Position” verifies whether the CHECK statement is in the first position (first statement) within a method, function-module or form-routine.
-Do not use CHECK outside of the initialization section of a method. The statement behaves differently in different positions and may lead to unclear, unexpected effects.
+The “Check Statement Position” Check is part of the Clean Code Check Repository.
+
+This check proves that the CHECK statement is the first statement in a method, function module or form routine.
 
 ### Which attributes can be maintained?
 
@@ -15,11 +16,11 @@ Do not use CHECK outside of the initialization section of a method. The statemen
 
 ### How to solve the issue?
 
-The CHECK statement shall be the first statement of a method (suggested even before any DATA declaration); if not, try to substitute this keyword by an IF-statement instead.
+The CHECK statement shall be the first statement or use an IF statement instead.
 
 ### What to do in case of exception?
 
-In special cases you can suppress this finding by using the pseudo comment `"#EC CHECK_POSITION`.
+In special cases you can suppress this Check's finding by using the pseudo comment `"#EC CHECK_POSITION`.
 
 ### Example
 

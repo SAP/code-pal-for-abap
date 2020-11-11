@@ -2,17 +2,17 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Maximum Nesting Depth Check](maximum-nesting-depth.md)
 
-## Nesting Depth Check
+## Maximum Nesting Depth Check
 
 ### What is the Intent of the Check?
 
-The "Nesting Depth" check counts the nesting depth level of a method, function-module, form-routine or module. A high value of nesting depth is an indicator that the source code is not readable anymore in a way that maintaining and extending the code can be done efficiently. In addition, the risk of introducing bugs is increased with a high nesting depth value.
+The Maximum Nesting Depth is a count on the nesting level in a method, function module, form routine or module. A high value of nesting depth is an indicator that the source code is not readable anymore in a way that maintaining and extending the code can be done efficiently. In addition, the risk of introducing bugs is increased with a high nesting depth value.
 
 ### How does the check work?
 
-The check verifies if the number of nested code blocks within a method, function module, form routine or module has reached/exceeded a defined threshold (configurable).
+The check taks the maximum number of nested code blocks within a method, function module, form routine or module.
 
-OBS.: The `TEST-SEAM` statement does not count to the level of nesting depth (it is ignored).
+`TEST-SEAM` statemetns do not add to the level of nesting depth.
 
 ### Which attributes can be maintained?
 

@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-Good/proper method names are usually so meaningful, that the `RETURNING` parameter does not need a name of its own.  
+Good method names are usually so good that the `RETURNING` parameter does not need a name of its own.  
 The name would do little more than parrot the method name or repeat something obvious.
 
 ### How to solve the issue?
