@@ -16,7 +16,7 @@ Explicitly:
 ```abap
 TRY.
   cls=>meth( ).
-CATCH cx_root.   "#EC NEED_CX_ROOT
+CATCH cx_root.   
   cl_demo_output=>display( 'Catching exception' ).
 ENDTRY.
 ```
