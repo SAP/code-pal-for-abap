@@ -41,7 +41,7 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
 
     IF db_reader->is_fm_rfc_enabled( fm_name ) EQ abap_false.
 
-      DATA(check_configuration) = detect_check_configuration( statement ).
+      DATA(check_configuration) = detect_check_configuration( statement ). "#EC DECL_IN_IF
 
       IF check_configuration IS INITIAL.
         RETURN.

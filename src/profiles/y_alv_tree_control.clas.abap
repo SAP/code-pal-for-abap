@@ -18,7 +18,8 @@ CLASS y_alv_tree_control DEFINITION
         !events          TYPE REF TO y_if_alv_events
         !event_mode      TYPE i DEFAULT y_if_alv_events=>mode_double_click
       RAISING
-        cx_sy_create_data_error .
+        cx_sy_create_data_error
+        cx_failed.
   PROTECTED SECTION.
     METHODS set_all_fields_invisible.
 
@@ -85,10 +86,7 @@ CLASS y_alv_tree_control IMPLEMENTATION.
     sort = sort_table.
     structure_name = CONV tabname( type_name ).
 
-    TRY.
-        events->register_handler_to_toolbar( y_if_alv_tree_control~toolbar_control( ) ).
-      CATCH cx_failed.
-    ENDTRY.
+    events->register_handler_to_toolbar( y_if_alv_tree_control~toolbar_control( ) ).
 
     call_fieldcatalog_merge( ).
     set_all_fields_invisible( ).
@@ -112,14 +110,14 @@ CLASS y_alv_tree_control IMPLEMENTATION.
 
 
   METHOD y_if_alv_tree_control~get_selected_index.
-    CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
     DATA index_table TYPE lvc_t_indx.
-
+    CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
     IF sy-subrc EQ 0.
+      alv_tree->get_selected_nodes( CHANGING ct_index_outtab = index_table ).
       TRY.
-          alv_tree->get_selected_nodes( CHANGING ct_index_outtab = index_table ).
-          result = index_table[ 1 ].
-        CATCH cx_sy_itab_line_not_found.
+        result = index_table[ 1 ].
+      CATCH cx_sy_itab_line_not_found.
+        RAISE EXCEPTION TYPE ycx_entry_not_found.
       ENDTRY.
     ENDIF.
   ENDMETHOD.
@@ -138,7 +136,7 @@ CLASS y_alv_tree_control IMPLEMENTATION.
         failed                  = 3
         error_in_node_key_table = 4
         others                  = 5
-    ).
+    ). "#EC OPTL_EXP
     IF SY-SUBRC <> 0.
       BREAK-POINT.
     ENDIF.

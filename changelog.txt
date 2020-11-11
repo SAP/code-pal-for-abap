@@ -8,6 +8,16 @@ Legend
 + : added
 - : removed
 
+2020-XX-XX v1.07.0
+------------------
+! self reference check validates instance method only
+* buffer deadlock
+! Y_CHECK_RETURNING_NAME is Warning by default
+* Minor clean code refactoring
++ Automatic exemption for function modules with prefix TABLEFRAME* and TABLEPROC*
+* Short dump in the comment position check
+* Omit optional exporting with exceptions
+
 2020-10-27 v1.06.0
 ------------------
 * subsequent memory assignment check

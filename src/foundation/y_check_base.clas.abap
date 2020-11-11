@@ -47,9 +47,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         REDEFINITION .
   PROTECTED SECTION.
 
+    CONSTANTS initial_date TYPE datum VALUE '19000101'.
+
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations .
     DATA check_name TYPE seoclsname .
-    DATA clean_code_exemption_handler TYPE REF TO y_exemption_handler .
+    DATA clean_code_exemption_handler TYPE REF TO y_if_exemption .
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager .
     DATA is_testcode TYPE abap_bool .
     DATA ref_scan_manager TYPE REF TO y_if_scan_manager .
@@ -79,11 +81,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
       RETURNING
         VALUE(result) TYPE sci_errc .
     METHODS inspect_tokens
-          ABSTRACT
+      ABSTRACT
       IMPORTING
         !structure TYPE sstruc OPTIONAL
         !index     TYPE i OPTIONAL
-        !statement TYPE sstmnt OPTIONAL .
+        !statement TYPE sstmnt OPTIONAL . "#EC OPTL_PARAM
     METHODS raise_error
       IMPORTING
         !object_type            TYPE trobjtype DEFAULT c_type_include
@@ -99,7 +101,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
         !is_include_specific    TYPE sci_inclspec DEFAULT ' '
         !additional_information TYPE xstring OPTIONAL
         !checksum               TYPE int4 OPTIONAL
-        !pseudo_comments        TYPE t_comments OPTIONAL .
+        !pseudo_comments        TYPE t_comments OPTIONAL . "#EC OPTL_PARAM
 
     METHODS get_column_abs
         REDEFINITION .
@@ -183,10 +185,10 @@ CLASS y_check_base IMPLEMENTATION.
 
     has_attributes = do_attributes_exist( ).
 
-    INSERT VALUE #( test = me->myname
+    INSERT VALUE #( test = myname
                     code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
-                    text = TEXT-106 ) INTO TABLE me->scimessages[].
+                    text = TEXT-106 ) INTO TABLE scimessages[].
   ENDMETHOD.
 
 
@@ -328,9 +330,8 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_include.
-    DATA:
-      l_levels_wa LIKE LINE OF ref_scan->levels,
-      l_level     TYPE i.
+    DATA l_levels_wa LIKE LINE OF ref_scan->levels.
+    DATA l_level TYPE i.
 
     IF p_level IS SUPPLIED.
       l_level = p_level.
@@ -435,7 +436,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_token_rel.
-    DATA: l_index TYPE i.
+    DATA l_index TYPE i.
 
     l_index = statement_wa-from + p_n - 1.
     IF l_index > statement_wa-to.
@@ -535,8 +536,8 @@ CLASS y_check_base IMPLEMENTATION.
       ELSEIF check_configuration-prio IS INITIAL.
         message = 'Choose a Message Severity'(301).
       ELSE.
-        IF check_configuration-object_creation_date = '00000000'.
-          check_configuration-object_creation_date = '19000101'.
+        IF check_configuration-object_creation_date IS INITIAL.
+          check_configuration-object_creation_date = initial_date.
         ENDIF.
 
         attributes_ok = abap_true.
@@ -563,7 +564,7 @@ CLASS y_check_base IMPLEMENTATION.
     ENDIF.
 
     IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = NEW y_exemption_handler( ).
+      clean_code_exemption_handler = y_exemption_handler=>create( ).
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.
@@ -576,8 +577,8 @@ CLASS y_check_base IMPLEMENTATION.
       statistics = NEW y_scan_statistics( ).
     ENDIF.
 
-    IF lines( check_configurations ) = 1 AND
-       check_configurations[ 1 ]-object_creation_date = '00000000'.
+    IF lines( check_configurations ) = 1
+    AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
       CLEAR check_configurations.
     ENDIF.
   ENDMETHOD.
@@ -606,7 +607,7 @@ CLASS y_check_base IMPLEMENTATION.
           apply_on_testcode = check_configuration-apply_on_testcode
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
-      CATCH cx_root.
+      CATCH cx_root.                                  "#EC NEED_CX_ROOT
         attributes_maintained = abap_false.
     ENDTRY.
   ENDMETHOD.
@@ -616,7 +617,7 @@ CLASS y_check_base IMPLEMENTATION.
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                    scimessages      = scimessages
-                                                                                   test             = me->myname
+                                                                                   test             = myname
                                                                                    code             = get_code( error_priority )
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
@@ -628,7 +629,7 @@ CLASS y_check_base IMPLEMENTATION.
               p_column = get_column_abs( statement_from )
               p_errcnt = error_counter
               p_kind = error_priority
-              p_test = me->myname
+              p_test = myname
               p_code = get_code( error_priority )
               p_suppress = settings-pseudo_comment
               p_param_1 = parameter_01

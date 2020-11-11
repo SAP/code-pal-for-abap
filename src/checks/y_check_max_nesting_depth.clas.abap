@@ -54,7 +54,7 @@ CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
     settings-pseudo_comment = '"#EC CI_NESTING' ##NO_TEXT.
     settings-documentation = |{ c_docs_path-checks }maximum-nesting-depth.md|.
 
-    set_check_message( 'Maximal nesting depth is &1 reaching threshold of &2!' ).
+    set_check_message( 'Nesting depth must be lower than &2! (&1>=&2)' ).
   ENDMETHOD.
 
 
@@ -80,7 +80,7 @@ CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
 
       IF index = structure-stmnt_to.
         DATA(check_configuration) = detect_check_configuration( error_count = max_nesting
-                                                                statement = statement_for_message ).
+                                                                statement = statement_for_message ). "#EC DECL_IN_IF
         IF check_configuration IS INITIAL.
           CONTINUE.
         ENDIF.

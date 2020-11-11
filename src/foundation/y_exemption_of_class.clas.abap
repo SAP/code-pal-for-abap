@@ -1,13 +1,9 @@
-class Y_EXEMPTION_OF_CLASS definition
-  public
-  create public .
+CLASS y_exemption_of_class DEFINITION PUBLIC CREATE PUBLIC .
+  PUBLIC SECTION.
+    INTERFACES y_if_exemption_of_objects .
+    ALIASES create FOR y_if_exemption_of_objects~create.
 
-public section.
-
-  interfaces Y_IF_EXEMPTION_OF_OBJECTS .
-  PROTECTED SECTION.
   PRIVATE SECTION.
-
     DATA class_header_data TYPE seoclassdf .
 
     METHODS is_srv_maint_ui_generate
@@ -59,6 +55,11 @@ ENDCLASS.
 CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
 
 
+  METHOD create.
+    result = NEW y_exemption_of_class( ).
+  ENDMETHOD.
+
+
   METHOD is_amdp_class.
     DATA: lt_interfaces TYPE seor_implementing_keys.
     DATA: lv_seoclskey TYPE  seoclskey.
@@ -76,7 +77,7 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
         model_only   = 3
         OTHERS       = 4.
     IF sy-subrc <> 0.
-      " Implement suitable error handling here
+      RETURN.
     ENDIF.
 
     LOOP AT lt_interfaces TRANSPORTING NO FIELDS
@@ -88,25 +89,16 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
 
 
   METHOD is_bcp_application.
-    DATA: l_class        TYPE seoclsname,
-          it_bsp_classes TYPE STANDARD TABLE OF seoclsname.
+    DATA it_bsp_classes TYPE STANDARD TABLE OF seoclsname.
 
-    l_class = 'CL_BSP_WD_COMPONENT_CONTROLLER'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_CONTEXT'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_CONTEXT_NODE'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_WINDOW'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_CUSTOM_CONTROLLER'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_VIEW_CONTROLLER'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_ADVSEARCH_CONTROLLER'.
-    APPEND l_class TO it_bsp_classes.
-    l_class = 'CL_BSP_WD_CONTEXT_NODE_ASP'.
-    APPEND l_class TO it_bsp_classes.
+    it_bsp_classes = VALUE #( ( 'CL_BSP_WD_COMPONENT_CONTROLLER' )
+                              ( 'CL_BSP_WD_CONTEXT' )
+                              ( 'CL_BSP_WD_CONTEXT_NODE' )
+                              (  'CL_BSP_WD_WINDOW' )
+                              ( 'CL_BSP_WD_CUSTOM_CONTROLLER' )
+                              ( 'CL_BSP_WD_VIEW_CONTROLLER' )
+                              ( 'CL_BSP_WD_ADVSEARCH_CONTROLLER' )
+                              ( 'CL_BSP_WD_CONTEXT_NODE_ASP' ) ).
 
     SELECT SINGLE refclsname FROM seometarel
       WHERE clsname = @class_header_data-clsname AND refclsname IS NOT NULL
@@ -115,7 +107,8 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DO. "Multi Inheritence
+    "Multi Inheritance
+    DO.
       LOOP AT it_bsp_classes TRANSPORTING NO FIELDS WHERE table_line = inherited_by.
         result = abap_true.
         RETURN.
@@ -128,7 +121,6 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
         RETURN.
       ENDIF.
     ENDDO.
-
   ENDMETHOD.
 
 
@@ -174,7 +166,7 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
         model_only   = 3
         OTHERS       = 4.
     IF sy-subrc <> 0.
-      " Implement suitable error handling here
+      RETURN.
     ENDIF.
 
     LOOP AT lt_interfaces TRANSPORTING NO FIELDS
@@ -208,9 +200,9 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
 
   METHOD is_object_indepenent_generate.
     DATA: l_object TYPE sobj_name.
-    DATA(programming_object) = NEW y_exemption_general( ).
     l_object = class_header_data-clsname.
-    result = programming_object->is_object_exempted( object_type = 'CLAS' object_name = l_object ).
+    result = y_exemption_general=>create( )->is_object_exempted( object_type = 'CLAS'
+                                                                 object_name = l_object ).
   ENDMETHOD.
 
 
@@ -289,8 +281,9 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
         model_only   = 3
         OTHERS       = 4.
     IF sy-subrc <> 0.
-      " Implement suitable error handling here
+      RETURN.
     ENDIF.
+
     LOOP AT lt_interfaces TRANSPORTING NO FIELDS
       WHERE refclsname = 'IF_CTS_TABLE_CONVERSION'.
       result = abap_true.

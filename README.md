@@ -30,7 +30,6 @@ Check the [change log](changelog.txt) for further information.
 - Usage of a "Profile Management Tool" (Optional).
 
 The Profile Management Tool, which is an alternative of working with SCI based variant(s), offers among others:
-
 - An user friendly UI;
 - A user-based or group-based execution of Checks;
 - Creation, assignment and unassignment of Profiles (unassigning a profile will only delete it if no checks are registered to this profile);

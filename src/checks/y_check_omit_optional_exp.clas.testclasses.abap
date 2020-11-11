@@ -1,4 +1,4 @@
-CLASS ltc_single_parameter DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_exceptions DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -6,7 +6,7 @@ CLASS ltc_single_parameter DEFINITION INHERITING FROM y_unit_test_base FOR TESTI
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_single_parameter IMPLEMENTATION.
+CLASS ltc_exceptions IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_omit_optional_exp( ).
@@ -19,16 +19,15 @@ CLASS ltc_single_parameter IMPLEMENTATION.
       ( ' CLASS y_example DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS execute. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example IMPORTING param1 TYPE string ' )
-      ( '                     RETURNING VALUE(result) TYPE i. ' )
+      ( '     METHODS set_number IMPORTING number TYPE i ' )
+      ( '                        EXCEPTIONS failed. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
-      ( |     DATA(val1) = example( EXPORTING param1 = 'example' ). | )
+      ( '     set_number( EXPORTING number = 1 ). ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD example. ' )
+      ( '   METHOD set_number. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -41,23 +40,15 @@ CLASS ltc_single_parameter IMPLEMENTATION.
       ( ' CLASS y_example DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS execute. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example IMPORTING param1 TYPE string ' )
-      ( '                     RETURNING VALUE(result) TYPE i. ' )
-      ( '     METHODS no_issue IMPORTING param1 TYPE string ' )
-      ( '                      EXPORTING param2 TYPE string. ' )
+      ( '     METHODS set_number IMPORTING number TYPE i ' )
+      ( '                        EXCEPTIONS failed. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
-      ( |     DATA(val1) = example( 'example' ). | )
-
-      ( |     no_issue( EXPORTING param1 = 'example'     | )
-      ( |               IMPORTING param2 = DATA(val2) ). | )
+      ( '     set_number( EXPORTING number = 1 EXCEPTIONS failed = 2 ). ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD example. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD no_issue. ' )
+      ( '   METHOD set_number. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -70,16 +61,15 @@ CLASS ltc_single_parameter IMPLEMENTATION.
       ( ' CLASS y_example DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS execute. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example IMPORTING param1 TYPE string ' )
-      ( '                     RETURNING VALUE(result) TYPE i. ' )
+      ( '     METHODS set_number IMPORTING number TYPE i ' )
+      ( '                        EXCEPTIONS failed. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
-      ( |     DATA(val1) = example( EXPORTING param1 = 'example' ). "#EC OPTL_EXP | )
+      ( '     set_number( EXPORTING number = 1 ). "#EC OPTL_EXP ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD example. ' )
+      ( '   METHOD set_number. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -87,7 +77,7 @@ CLASS ltc_single_parameter IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS ltc_multiple_parameters DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_receiving DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -95,7 +85,7 @@ CLASS ltc_multiple_parameters DEFINITION INHERITING FROM y_unit_test_base FOR TE
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_multiple_parameters IMPLEMENTATION.
+CLASS ltc_receiving IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_omit_optional_exp( ).
@@ -108,18 +98,15 @@ CLASS ltc_multiple_parameters IMPLEMENTATION.
       ( ' CLASS y_example DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS execute. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example IMPORTING param1 TYPE string ' )
-      ( '                               param2 TYPE string ' )
-      ( '                     RETURNING VALUE(result) TYPE i. ' )
+      ( '     METHODS get_number IMPORTING position TYPE i ' )
+      ( '                        RETURNING VALUE(result) TYPE i. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
-      ( |     DATA(val1) = example( EXPORTING param1 = 'example'    | )
-      ( |                                     param2 = 'example' ). | )
+      ( '     DATA(number) = get_number( EXPORTING position = 10 ). ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD example. ' )
+      ( '   METHOD get_number. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -132,22 +119,15 @@ CLASS ltc_multiple_parameters IMPLEMENTATION.
       ( ' CLASS y_example DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS execute. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example IMPORTING param1 TYPE string ' )
-      ( '                               param2 TYPE string ' )
-      ( '                     RETURNING VALUE(result) TYPE string. ' )
-      ( '     METHODS no_issue EXPORTING param1 TYPE string. ' )
+      ( '     METHODS get_number IMPORTING position TYPE i ' )
+      ( '                        RETURNING VALUE(result) TYPE i. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
-      ( |     DATA(val1) = example( param1 = 'example'    | )
-      ( |                           param2 = 'example' ). | )
-      ( |     no_issue( IMPORTING param1 = val1 ). | )
+      ( '     get_number( EXPORTING position = 10 RECEIVING result = DATA(number) ). ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD example. ' )
-      ( '   ENDMETHOD. ' )
-      ( '   METHOD no_issue. ' )
+      ( '   METHOD get_number. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -160,18 +140,234 @@ CLASS ltc_multiple_parameters IMPLEMENTATION.
       ( ' CLASS y_example DEFINITION. ' )
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS execute. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS example IMPORTING param1 TYPE string ' )
-      ( '                               param2 TYPE string ' )
-      ( '                     RETURNING VALUE(result) TYPE i. ' )
+      ( '     METHODS get_number IMPORTING position TYPE i ' )
+      ( '                        RETURNING VALUE(result) TYPE i. ' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD execute. ' )
-      ( |     DATA(val1) = example( EXPORTING param1 = 'example'    | )
-      ( |                                     param2 = 'example' ). "#EC OPTL_EXP | )
+      ( '     DATA(number) = get_number( EXPORTING position = 10 ). "#EC OPTL_EXP ' )
       ( '   ENDMETHOD. ' )
-      ( '   METHOD example. ' )
+      ( '   METHOD get_number. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_single_exporting DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_single_exporting IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_omit_optional_exp( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS execute. ' )
+      ( '     METHODS set_number IMPORTING number TYPE i. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD execute. ' )
+      ( '     set_number( EXPORTING number = 1 ). ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD set_number. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS execute. ' )
+      ( '     METHODS set_number IMPORTING number TYPE i. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD execute. ' )
+      ( '     set_number( number = 1 ). ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD set_number. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS execute. ' )
+      ( '     METHODS set_number IMPORTING number TYPE i. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD execute. ' )
+      ( '     set_number( EXPORTING number = 1 ). "#EC OPTL_EXP ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD set_number. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_multiple_exportings DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_multiple_exportings IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_omit_optional_exp( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS execute. ' )
+      ( '     METHODS run IMPORTING param1 TYPE i ' )
+      ( '                           param2 TYPE i. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD execute. ' )
+      ( '     run( EXPORTING param1 = 1 ' )
+      ( '                    param2 = 2 ). ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD run. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS execute. ' )
+      ( '     METHODS run IMPORTING param1 TYPE i ' )
+      ( '                           param2 TYPE i. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD execute. ' )
+      ( '     run( param1 = 1 ' )
+      ( '          param2 = 2 ). ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD run. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS execute. ' )
+      ( '     METHODS run IMPORTING param1 TYPE i ' )
+      ( '                           param2 TYPE i. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD execute. ' )
+      ( '     run( EXPORTING param1 = 1 ' )
+      ( '                    param2 = 2 ). "#EC OPTL_EXP ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD run. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_importing DEFINITION INHERITING FROM ltc_single_exporting FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_importing IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS execute. ' )
+      ( '     METHODS run IMPORTING number TYPE i ' )
+      ( '                 EXPORTING id TYPE i. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD execute. ' )
+      ( '     run( EXPORTING number = 1 IMPORTING id = DATA(id) ). ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD run. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_changing DEFINITION INHERITING FROM ltc_single_exporting FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_changing IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS execute. ' )
+      ( '     METHODS get_number IMPORTING position TYPE i ' )
+      ( '                        CHANGING number TYPE i. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD execute. ' )
+      ( '     DATA(number) = 5. ' )
+      ( '     get_number( EXPORTING position = 10 CHANGING number = number ). ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD get_number. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).

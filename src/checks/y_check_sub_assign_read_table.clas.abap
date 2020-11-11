@@ -8,9 +8,9 @@ CLASS y_check_sub_assign_read_table DEFINITION PUBLIC INHERITING FROM y_check_ba
                           RETURNING VALUE(result) TYPE abap_bool.
     METHODS extract_fieldname IMPORTING statement     TYPE sstmnt
                               RETURNING VALUE(result) TYPE string.
-    METHODS might_cause_undesired_changes IMPORTING statement     TYPE sstmnt
-                                                    fieldname     TYPE string
-                                          RETURNING VALUE(result) TYPE abap_bool.
+    METHODS has_subsequent_read IMPORTING statement     TYPE sstmnt
+                                          fieldname     TYPE string
+                                RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL
 ENDCLASS.
 
 
@@ -50,10 +50,10 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      DATA(might_cause_undesired_changes) = might_cause_undesired_changes( statement = <statement>
-                                                                           fieldname = fieldname ).
+      DATA(has_subsequent_read) = has_subsequent_read( statement = <statement>
+                                                       fieldname = fieldname ).
 
-      IF might_cause_undesired_changes = abap_false.
+      IF has_subsequent_read = abap_false.
         position = position + 1.
         CONTINUE.
       ENDIF.
@@ -71,6 +71,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD is_read_table.
     CHECK get_token_abs( statement-from ) = 'READ'.
@@ -91,7 +92,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD might_cause_undesired_changes.
+  METHOD has_subsequent_read.
     DATA(tokens) = ref_scan_manager->get_tokens( ).
     LOOP AT tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
@@ -105,5 +106,4 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.

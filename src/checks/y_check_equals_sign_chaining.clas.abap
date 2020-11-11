@@ -1,19 +1,18 @@
-class Y_CHECK_EQUALS_SIGN_CHAINING definition
-  public
-  inheriting from Y_CHECK_BASE
-  create public .
-
-public section.
-
-  methods CONSTRUCTOR .
+CLASS y_check_equals_sign_chaining DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
+  PUBLIC SECTION.
+    METHODS constructor .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
+    METHODS get_second_token IMPORTING statement     TYPE sstmnt
+                             RETURNING VALUE(result) TYPE string.
+    METHODS get_fourth_token IMPORTING statement     TYPE sstmnt
+                             RETURNING VALUE(result) TYPE string.
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
+CLASS y_check_equals_sign_chaining IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -30,8 +29,8 @@ CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
 
   METHOD inspect_tokens.
 
-    CHECK get_token_abs( statement-from + 1 ) EQ '='.
-    CHECK get_token_abs( statement-from + 3 ) EQ '='.
+    CHECK get_second_token( statement ) EQ '='.
+    CHECK get_fourth_token( statement ) EQ '='.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
@@ -44,5 +43,13 @@ CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
                  statement_from      = statement-from
                  error_priority      = check_configuration-prio ).
 
+  ENDMETHOD.
+
+  METHOD get_fourth_token.
+    result = get_token_abs( statement-from + 3 ).
+  ENDMETHOD.
+
+  METHOD get_second_token.
+    result = get_token_abs( statement-from + 1 ).
   ENDMETHOD.
 ENDCLASS.

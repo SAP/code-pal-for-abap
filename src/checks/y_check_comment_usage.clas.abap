@@ -69,7 +69,7 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
 
-    set_check_message( '&1 comments found! This is &2% of the productive code reaching threshold of &3%!' ).
+    set_check_message( 'Percentage of comments must be lower than &3% of the productive code! (&2%>=&3%) (&1 lines found)' ).
   ENDMETHOD.
 
 
@@ -133,7 +133,7 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
            <token>-str+0(2) EQ |*?| OR
            <token>-str+0(2) EQ |"?| OR
            ( strlen( <token>-str ) GE 3 AND <token>-str+0(3) EQ |"#E| ) OR
-           <token>-str CP '"' && object_name && '*.' ).
+           <token>-str CP '"' && object_name && '*.' ). "#EC CI_MAGIC
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.

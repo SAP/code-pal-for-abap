@@ -21,7 +21,7 @@ CLASS Y_CHECK_NUM_OUTPUT_PARAMETER IMPLEMENTATION.
     settings-threshold = 2.
     settings-documentation = |{ c_docs_path-checks }number-output-parameter.md|.
 
-    set_check_message( '&1 output parameters reaching threshold of &2!' ).
+    set_check_message( 'Number of output parameters must be lower than &2! (&1>=&2)' ).
   ENDMETHOD.
 
 

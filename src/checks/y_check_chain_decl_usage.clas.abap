@@ -49,8 +49,8 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
 
 
   METHOD has_error_not_raised_yet.
-    IF NOT line_exists( rows_with_colon[ table_line = statement-colonrow ] ).
-      result = abap_true.
-    ENDIF.
+    result = xsdbool( NOT line_exists( rows_with_colon[ table_line = statement-colonrow ] ) ).
   ENDMETHOD.
+
+
 ENDCLASS.

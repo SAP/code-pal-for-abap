@@ -60,7 +60,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }cyclomatic-complexity.md|.
 
-    set_check_message( 'Cyclomatic complexity is &1 reaching threshold of &2!' ).
+    set_check_message( 'Cyclomatic complexity must be lower than &2! (&1>=&2)' ).
   ENDMETHOD.
 
 
@@ -86,7 +86,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
 
     IF index = structure-stmnt_to.
       DATA(check_configuration) = detect_check_configuration( error_count = cyclo_comp
-                                                              statement = statement_for_message ).
+                                                              statement = statement_for_message ). "#EC DECL_IN_IF
 
       IF check_configuration IS INITIAL.
         RETURN.

@@ -1,27 +1,18 @@
-CLASS y_check_method_return_bool DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC.
-
+CLASS y_check_method_return_bool DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
-
-    DATA method_name TYPE string.
-
     METHODS constructor.
   PROTECTED SECTION.
+    DATA method_name TYPE string.
+
     METHODS inspect_tokens REDEFINITION.
     METHODS execute_check REDEFINITION.
 
   PRIVATE SECTION.
-
     DATA good_method_names_beginning TYPE TABLE OF string.
     DATA good_method_names_containing TYPE TABLE OF string.
 
-    METHODS contains_name_condition
-      IMPORTING
-        !stmnt_index  TYPE i
-      RETURNING
-        VALUE(result) TYPE abap_bool.
+    METHODS contains_name_condition IMPORTING stmnt_index  TYPE i
+                                    RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -113,15 +104,16 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     DATA(token_index) = statement-from.
 
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>) FROM statement-from TO statement-to.
-      IF <token>-str EQ 'ABAP_BOOL' AND get_token_abs( token_index - 3 ) EQ 'RETURNING'.
+      IF <token>-str EQ 'ABAP_BOOL' AND get_token_abs( token_index - 3 ) EQ 'RETURNING'. "#EC CI_MAGIC
         has_found_bool = abap_true.
       ENDIF.
       token_index = token_index + 1.
     ENDLOOP.
 
-    IF has_found_bool = abap_true AND NOT contains_name_condition( statement-from ).
+    IF has_found_bool = abap_true
+    AND contains_name_condition( statement-from ) = abap_false.
 
-      DATA(check_configuration) = detect_check_configuration( statement ).
+      DATA(check_configuration) = detect_check_configuration( statement ). "#EC DECL_IN_IF
       IF check_configuration IS INITIAL.
         RETURN.
       ENDIF.

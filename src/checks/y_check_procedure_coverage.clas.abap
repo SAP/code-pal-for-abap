@@ -22,7 +22,7 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
     settings-apply_on_test_code = abap_false.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
-    set_check_message( 'Procedure Coverage of &1% does not reach the threshold of &2%!' ).
+    set_check_message( 'Procedure Coverage must be higher than &2%! (&1%<=&2%)' ).
   ENDMETHOD.
 
 
