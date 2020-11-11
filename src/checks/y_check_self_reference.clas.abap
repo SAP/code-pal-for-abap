@@ -4,12 +4,13 @@ CLASS y_check_self_reference DEFINITION PUBLIC INHERITING FROM y_check_base CREA
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
-    METHODS has_self_reference IMPORTING statement TYPE sstmnt
+    CONSTANTS method_call TYPE string VALUE 'A' ##NO_TEXT.
+    METHODS has_self_reference IMPORTING statement     TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
-CLASS Y_CHECK_SELF_REFERENCE IMPLEMENTATION.
+CLASS y_check_self_reference IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
@@ -24,10 +25,8 @@ CLASS Y_CHECK_SELF_REFERENCE IMPLEMENTATION.
 
   METHOD inspect_tokens.
 
-    CHECK statement-type = 'A'
-    OR statement-type = 'C'.
-
-    CHECK has_self_reference( statement ).
+    CHECK statement-type = method_call.
+    CHECK has_self_reference( statement ) = abap_true.
 
     DATA(configuration) = detect_check_configuration( statement ).
 
@@ -45,7 +44,7 @@ CLASS Y_CHECK_SELF_REFERENCE IMPLEMENTATION.
   METHOD has_self_reference.
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
-    WHERE str CS 'me->'.
+    WHERE str CP 'ME->*'.
       result = abap_true.
       RETURN.
     ENDLOOP.
