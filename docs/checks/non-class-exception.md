@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The “Non Class Exception” Check is part of the Clean Code Check Repository.
+The “Non-Class Exception” Check searches for non-class based execeptions raised in your code. 
 
 ### How does the check work?
 

@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The Number Output Parameter check searches for methods where more than one parameter in one of the output types (`EXPORTING`, `CHANGING` or `RETURNING`) is used.
+The "Number Output Parameter Check" searches for methods where more than one parameter in one of the output types (`EXPORTING`, `CHANGING` or `RETURNING`) is used.
 
 ### Which attributes can be maintained?
 

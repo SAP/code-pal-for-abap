@@ -6,8 +6,26 @@
 
 ### What is the Intent of the Check?
 
-The “Omit Optional EXPORTING” check is part of the Clean Code Check Repository.  
-The optional EXPORTING parameter makes the class method call needlessly longer.
+The “Omit Optional EXPORTING” check searches for the optional EXPORTING wording which makes the class method call needlessly longer:
+
+Anti-Pattern:
+```abap
+modify->update(
+  EXPORTING
+    node   = /dirty/my_bo_c=>node-item
+    key    = item->key
+    data   = item
+    fields = changed_fields ).
+```
+
+Pattern:
+```abap
+modify->update( node   = /clean/my_bo_c=>node-item
+                key    = item->key
+                data   = item
+                fields = changed_fields ).
+```
+
 
 ### How does the check work?
 
@@ -15,7 +33,7 @@ This check searches for the usage of the optional keyword EXPORTING in the class
 
 ### How to solve the issue?
 
-Omit the optional keyword EXPORTING.
+Omit the optional keyword EXPORTING (it works implicitly).
 
 ### What to do in case of exception?
 

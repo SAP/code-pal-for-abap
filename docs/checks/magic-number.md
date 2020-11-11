@@ -2,11 +2,11 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Magic Number Check](magic-number.md)
 
-## Magic Number Check
+## Magic Number Usage Check
 
 ### What is the Intent of the Check?
 
-The Magic Number check searches for numbers which are present in the source code without being able to directly understand their meaning.
+The "Magic Number Usage" check searches for numbers which are present in the source code without being able to directly understand their meaning.
 
 Using magic numbers has disadvantages:
 
