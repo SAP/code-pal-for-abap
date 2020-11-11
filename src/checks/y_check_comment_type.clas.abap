@@ -6,6 +6,7 @@ CLASS y_check_comment_type DEFINITION PUBLIC INHERITING FROM y_check_base CREATE
   PRIVATE SECTION.
     METHODS has_wrong_comment_type IMPORTING statement TYPE sstmnt RETURNING VALUE(result) TYPE abap_bool.
     METHODS get_first_character IMPORTING token TYPE stokesx RETURNING VALUE(result) TYPE char1.
+    METHODS get_second_character IMPORTING token TYPE stokesx RETURNING VALUE(result) TYPE char1.
 ENDCLASS.
 
 CLASS y_check_comment_type IMPLEMENTATION.
@@ -41,7 +42,8 @@ CLASS y_check_comment_type IMPLEMENTATION.
   METHOD has_wrong_comment_type.
     LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
-      IF get_first_character( <token> ) = '*'.
+      IF get_first_character( <token> ) = '*'
+      AND get_second_character( <token> ) <> '&'.
         result = abap_true.
         RETURN.
       ENDIF.
@@ -49,7 +51,19 @@ CLASS y_check_comment_type IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_first_character.
-    result = token-str(1).
+    TRY.
+        result = token-str(1).
+      CATCH cx_sy_range_out_of_bounds.
+        result = ''.
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD get_second_character.
+    TRY.
+        result = token-str(2).
+      CATCH cx_sy_range_out_of_bounds.
+        result = ''.
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.
