@@ -1,4 +1,4 @@
-CLASS local_test_class DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_asterisk DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -6,7 +6,7 @@ CLASS local_test_class DEFINITION INHERITING FROM y_unit_test_base FOR TESTING R
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS local_test_class IMPLEMENTATION.
+CLASS ltc_asterisk IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_comment_type( ).
@@ -17,7 +17,6 @@ CLASS local_test_class IMPLEMENTATION.
       ( 'REPORT y_example. ' )
 
       ( ' CLASS y_example_class DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
       ( '   PROTECTED SECTION. ' )
       ( '     METHODS test. ' )
       ( ' ENDCLASS. ' )
@@ -36,7 +35,6 @@ CLASS local_test_class IMPLEMENTATION.
       ( 'REPORT y_example. ' )
 
       ( ' CLASS y_example_class DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
       ( '   PROTECTED SECTION. ' )
       ( '     METHODS test. ' )
       ( ' ENDCLASS. ' )
@@ -52,6 +50,24 @@ CLASS local_test_class IMPLEMENTATION.
 
   METHOD get_code_with_exemption.
     result = VALUE #( ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_generated_include DEFINITION INHERITING FROM ltc_asterisk FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_generated_include IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( '*&---------------------------------------------------------------------* ' )
+      ( '*& Include          y_example                                            ' )
+      ( '*&---------------------------------------------------------------------* ' )
+    ).
   ENDMETHOD.
 
 ENDCLASS.

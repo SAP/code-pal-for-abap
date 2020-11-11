@@ -74,10 +74,8 @@ CLASS y_check_comment_position IMPLEMENTATION.
 
     " Empty Branch
     IF next_token-str CP 'END*'.
-      IF current_token-row = next_token-row - 1
-      AND current_token-col <> next_token-col + 2.
-        result = abap_true.
-      ENDIF.
+      result = COND #( WHEN next_token-str = 'ENDTRY' THEN xsdbool( current_token-row = next_token-row - 1 AND current_token-col <> next_token-col + 4 )
+                                                      ELSE xsdbool( current_token-row = next_token-row - 1 AND current_token-col <> next_token-col + 2 ) ).
       RETURN.
     ENDIF.
 
