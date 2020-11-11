@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The “CX_ROOT Usage" Check searches for merely "CX_ROOT" exceptions being directly raised in your code. 
+The “CX_ROOT Usage" Check searches for merely "CX_ROOT" exceptions being directly used in your code (e.g.: In a TRY-CATCH block). 
 
 ### How does the check work?
 
