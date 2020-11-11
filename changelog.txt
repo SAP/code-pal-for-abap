@@ -10,6 +10,7 @@ Legend
 
 2020-XX-XX v1.07.0
 ------------------
+! self reference check validates instance method only
 * buffer deadlock
 ! Y_CHECK_RETURNING_NAME is Warning by default
 * Minor clean code refactoring
