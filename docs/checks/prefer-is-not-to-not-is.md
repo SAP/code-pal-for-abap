@@ -10,7 +10,7 @@ Prefer `IS ... NOT` to `NOT ... IS` because it requires a "mental turnaround" th
 
 ### How to solve the issue?
 
-Use a positive condition or change the `IS ... NOT` to `NOT ... IS`.
+Preferably, use a positive condition; but if the negative condition is easier to understand, change the `NOT ... IS` to `IS ... NOT`.
 
 ### What to do in case of exception?
 
