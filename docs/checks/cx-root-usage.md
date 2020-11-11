@@ -25,12 +25,6 @@ Implicitly:
 ```abap
 CLASS cx_my_exception DEFINITION INHERITING FROM cx_root.
 ENDCLASS.
-
-TRY.
-  cls=>meth( ).
-CATCH cx_my_exception.
-  cl_demo_output=>display( 'Catching exception' ).
-ENDTRY.
 ```
 
 ### Which attributes can be maintained?
