@@ -6,7 +6,8 @@
 
 ### What is the Intent of the Check?
 
-You should always prefer [enumeration](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-enumeration-classes-to-constants-interfaces) classes to constants interfaces.
+To avoid the creation and usage of an interface object for merely definying contants.
+You should always prefer [enumeration classes](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-enumeration-classes-to-constants-interfaces) to constants interfaces.
 
 ```abap
 CLASS /clean/message_severity DEFINITION PUBLIC ABSTRACT FINAL.
