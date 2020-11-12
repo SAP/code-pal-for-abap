@@ -172,7 +172,7 @@ CLASS y_check_base IMPLEMENTATION.
 
     description = get_class_description(  ).
     category = 'Y_CATEGORY_CODE_PAL'.
-    position = '000'.
+    position = y_code_pal_sorter=>get_position( myname ).
     version = '0000'.
     has_documentation = abap_true.
 

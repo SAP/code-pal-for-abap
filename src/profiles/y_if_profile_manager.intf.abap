@@ -43,6 +43,9 @@ INTERFACE y_if_profile_manager
   CLASS-METHODS create
     RETURNING
       VALUE(result) TYPE REF TO y_if_profile_manager.
+  CLASS-METHODS get_checks_from_db
+    RETURNING value(result) TYPE tt_tadir.
+
   METHODS select_profiles
     IMPORTING
       !username     TYPE syst_uname
@@ -152,4 +155,5 @@ INTERFACE y_if_profile_manager
       name TYPE ytab_profiles-profile
     RETURNING
       VALUE(result) TYPE abap_bool.
+
 ENDINTERFACE.

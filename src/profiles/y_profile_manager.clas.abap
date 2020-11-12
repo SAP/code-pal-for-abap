@@ -2,6 +2,7 @@ CLASS y_profile_manager DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     INTERFACES y_if_profile_manager.
     ALIASES create FOR y_if_profile_manager~create.
+    ALIASES get_checks_from_db for y_if_profile_manager~get_checks_from_db.
   PROTECTED SECTION.
     METHODS has_time_collision
       IMPORTING timeline_one_start TYPE dats
@@ -21,10 +22,8 @@ CLASS y_profile_manager DEFINITION PUBLIC CREATE PUBLIC .
                delegates_type TYPE tabname VALUE 'YTAB_DELEGATES',
                profiles_type  TYPE tabname VALUE 'YTAB_PROFILES'.
     CONSTANTS standardprofile TYPE ytab_profiles-profile VALUE 'SYSTEM-WIDE STANDARD'.
-    METHODS get_checks_package RETURNING value(result) TYPE devclass.
-    METHODS get_checks_from_db IMPORTING package TYPE devclass
-                               RETURNING value(result) TYPE tt_tadir.
-    METHODS get_check_base_package RETURNING value(result) TYPE devclass.
+    CLASS-METHODS get_check_base_package RETURNING value(result) TYPE devclass.
+    CLASS-METHODS get_checks_package RETURNING value(result) TYPE devclass.
 ENDCLASS.
 
 
@@ -297,8 +296,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~select_existing_checks.
-    DATA(package) = get_checks_package( ).
-    DATA(checks) = get_checks_from_db( package ).
+    DATA(checks) = get_checks_from_db( ).
 
     IF checks IS INITIAL.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
@@ -398,6 +396,8 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD get_checks_from_db.
+    DATA(package) = get_checks_package( ).
+
     SELECT *
     FROM tadir
     WHERE devclass = @package
