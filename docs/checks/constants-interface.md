@@ -32,7 +32,7 @@ ENDCLASS.
 
 ### How does the check work?
 
-The check searches for interfaces containing only constants.
+The "Constant Interface" check searches for interfaces containing only constants.
 
 ### Which attributes can be maintained?
 
