@@ -10,6 +10,7 @@ Legend
 
 2020-11-XX v1.08.0
 ------------------
+* prefer is not exempts line_exists( )
 * check order in sci
 
 2020-11-11 v1.07.0
