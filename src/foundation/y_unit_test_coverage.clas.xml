@@ -10,6 +10,7 @@
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
+    <CLSSHAREDMEMORY>X</CLSSHAREDMEMORY>
    </VSEOCLASS>
   </asx:values>
  </asx:abap>
