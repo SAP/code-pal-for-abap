@@ -2,6 +2,7 @@ CLASS y_check_prefer_is_not DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
   PUBLIC SECTION.
     METHODS constructor.
   PROTECTED SECTION.
+    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -23,27 +24,61 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD inspect_tokens.
+  METHOD execute_check.
+    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
+    WHERE stmnt_type = scan_struc_stmnt_type-if.
 
-    CHECK get_token_abs( statement-from ) = 'IF'.
+      is_testcode = test_code_detector->is_testcode( <structure> ).
+
+      TRY.
+          DATA(check_configuration) = check_configurations[ apply_on_testcode = abap_true ].
+        CATCH cx_sy_itab_line_not_found.
+          IF is_testcode EQ abap_true.
+            CONTINUE.
+          ENDIF.
+      ENDTRY.
+
+      DATA(index) = <structure>-stmnt_from.
+
+      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+      FROM <structure>-stmnt_from TO <structure>-stmnt_to.
+        inspect_tokens( index = index
+                        structure = <structure>
+                        statement = <statement> ).
+        index = index + 1.
+      ENDLOOP.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD inspect_tokens.
 
     DATA(tokens) = ref_scan_manager->get_tokens( ).
 
     LOOP AT tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE str = 'IF'
+    OR str = 'ELSEIF'
     OR str = 'AND'
     OR str = 'OR'.
 
+      DATA(position) = sy-tabix.
+
       TRY.
-          DATA(next_token) = tokens[ sy-tabix + 1 ].
+          IF tokens[ position + 1 ]-str <> 'NOT'.
+            CONTINUE.
+          ENDIF.
         CATCH cx_sy_itab_line_not_found.
           CONTINUE.
       ENDTRY.
 
-      IF next_token-str <> 'NOT'.
-        CONTINUE.
-      ENDIF.
+      TRY.
+          IF tokens[ position + 2 ]-str = 'LINE_EXISTS('.
+            CONTINUE.
+          ENDIF.
+        CATCH cx_sy_itab_line_not_found.
+          CONTINUE.
+      ENDTRY.
 
       DATA(configuration) = detect_check_configuration( statement ).
 
@@ -55,9 +90,6 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
                    statement_index     = index
                    statement_from      = statement-from
                    error_priority      = configuration-prio ).
-
-      " Report the issue only once
-      RETURN.
 
     ENDLOOP.
 
