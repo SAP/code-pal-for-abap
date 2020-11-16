@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Number Methods Check](number-methods.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Number of Methods Check](number-methods.md)
 
-## Number Methods Check
+## Number of Methods Check
 
 ### What is the Intent of the Check?
 
-The Number Methods check counts the number of methods up to a maximum. If there are too many methods in a class, it is probable that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
+The "Number of Methods" Check counts the number of methods up to a maximum. If there are too many methods in a class, it is probable that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
 
 ### How does the check work?
 
