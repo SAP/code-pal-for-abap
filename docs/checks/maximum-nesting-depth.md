@@ -29,7 +29,18 @@ The pseudo comment must be placed right after the `ENDMETHOD` statement.
 
 ```abap
 METHOD method_name.
-  " Method content
+...
+  IF any_condition.
+    IF any_condition.
+      IF any_condition.
+        IF any_condition.
+          IF any_condition.
+            any_condition = abap_true.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDIF.
 ENDMETHOD. "#EC CI_NESTING
 ```
 
