@@ -24,7 +24,7 @@
 - [Equals Sign Chaining](checks/equals-sign-chaining.md)
 - [External Call in Unit Test](checks/external-call-in-ut.md)
 - [FORM Routine Usage](checks/form-routine.md)
-- [FUNCTION Routine Usage](checks/function-routine.md)
+- [FUNCTION Module Usage](checks/function-routine.md)
 - [Missing Interface](checks/interface-in-class.md)
 - [Magic Number Usage](checks/magic-number.md)
 - [Maximum Nesting Depth](checks/maximum-nesting-depth.md)
