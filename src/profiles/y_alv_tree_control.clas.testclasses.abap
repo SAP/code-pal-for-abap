@@ -32,10 +32,10 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
     APPEND VALUE lvc_s_fcat( fieldname = 'NAME' no_out = abap_true ) TO mock_fieldcats.
 
-    cl_aunit_assert=>assert_equals( exp  = mock_fieldcats
-                                    act  = cut->fieldcats
-                                    msg  = 'set_field_visibility to false is incorrect!'
-                                    quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
+                                        act  = cut->fieldcats
+                                        msg  = 'set_field_visibility to false is incorrect!'
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD set_field_visibility_true.
@@ -48,10 +48,10 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
     APPEND VALUE lvc_s_fcat( fieldname = 'NAME' no_out = abap_false ) TO mock_fieldcats.
 
-    cl_aunit_assert=>assert_equals( exp  = mock_fieldcats
-                                    act  = cut->fieldcats
-                                    msg  = 'set_field_visibility to true is incorrect!'
-                                    quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
+                                        act  = cut->fieldcats
+                                        msg  = 'set_field_visibility to true is incorrect!'
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD set_field_header_text.
@@ -64,10 +64,10 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
     APPEND VALUE lvc_s_fcat( fieldname = 'NAME' coltext = 'text' ) TO mock_fieldcats.
 
-    cl_aunit_assert=>assert_equals( exp  = mock_fieldcats
-                                    act  = cut->fieldcats
-                                    msg  = 'set_field_header_text is incorrect!'
-                                    quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
+                                        act  = cut->fieldcats
+                                        msg  = 'set_field_header_text is incorrect!'
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD get_selected_line.
@@ -77,9 +77,9 @@ CLASS lcl_unit_test IMPLEMENTATION.
       CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
-    cl_aunit_assert=>assert_initial( act  = sl
-                                     msg  = 'get selected line is not initial!'
-                                     quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_initial( act  = sl
+                                         msg  = 'get selected line is not initial!'
+                                         quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD get_selected_index.
@@ -89,9 +89,9 @@ CLASS lcl_unit_test IMPLEMENTATION.
       CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
-    cl_aunit_assert=>assert_initial( act  = si
-                                     msg  = 'get selected index is not initial!'
-                                     quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_initial( act  = si
+                                         msg  = 'get selected index is not initial!'
+                                         quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD init_profiles.
@@ -109,10 +109,10 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
     APPEND VALUE lvc_s_fcat( no_out = abap_true ) TO mock_fieldcats.
 
-    cl_aunit_assert=>assert_equals( exp  = mock_fieldcats
-                                    act  = cut->fieldcats
-                                    msg  = 'fieldcats are not invisible!'
-                                    quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
+                                        act  = cut->fieldcats
+                                        msg  = 'fieldcats are not invisible!'
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD autosize_all_fields_if.
@@ -124,10 +124,10 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
     APPEND VALUE lvc_s_fcat( dd_outlen = 10 outputlen = 17 coltext = 'text' ) TO mock_fieldcats.
 
-    cl_aunit_assert=>assert_equals( exp  = mock_fieldcats
-                                    act  = cut->fieldcats
-                                    msg  = 'fieldcats autosize, if branch is incorrect!'
-                                    quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
+                                        act  = cut->fieldcats
+                                        msg  = 'fieldcats autosize, if branch is incorrect!'
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD autosize_all_fields_else.
@@ -139,10 +139,10 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
     APPEND VALUE lvc_s_fcat( dd_outlen = 2 outputlen = 11 coltext = 'text' ) TO mock_fieldcats.
 
-    cl_aunit_assert=>assert_equals( exp  = mock_fieldcats
-                                    act  = cut->fieldcats
-                                    msg  = 'fieldcats autosize, else branch is incorrect!'
-                                    quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
+                                        act  = cut->fieldcats
+                                        msg  = 'fieldcats autosize, else branch is incorrect!'
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD get_excluded_toolbars.
@@ -152,10 +152,10 @@ CLASS lcl_unit_test IMPLEMENTATION.
     APPEND cl_gui_alv_tree_simple=>mc_fc_current_variant TO exp.
     APPEND cl_gui_alv_tree_simple=>mc_fc_change_hierarchy TO exp.
 
-    cl_aunit_assert=>assert_equals( exp  = exp
-                                    act  = cut->get_excluded_toolbars( )
-                                    msg  = 'The returning parameter of get_excluding_toolbars is incorrect!'
-                                    quit = if_aunit_constants=>quit-no ).
+    cl_abap_unit_assert=>assert_equals( exp  = exp
+                                        act  = cut->get_excluded_toolbars( )
+                                        msg  = 'The returning parameter of get_excluding_toolbars is incorrect!'
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD setup.
@@ -173,8 +173,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                       ).
       CATCH cx_sy_create_data_error
             cx_failed.
-        cl_aunit_assert=>abort( msg    = 'cut cannot be initialized!'
-                                quit   = cl_aunit_assert=>class ).
+        cl_abap_unit_assert=>abort( 'cut cannot be initialized!' ).
     ENDTRY.
   ENDMETHOD.
 ENDCLASS.
