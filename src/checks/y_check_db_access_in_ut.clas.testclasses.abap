@@ -546,7 +546,7 @@ CLASS ltc_osql_framework IMPLEMENTATION.
       ( '   ENDMETHOD. ' )
 
       ( '   METHOD then_has_entry. ' )
-      ( '     cl_aunit_assert=>assert_not_initial( cut ). ' )
+      ( '     cl_abap_unit_assert=>assert_not_initial( cut ). ' )
       ( '   ENDMETHOD. ' )
 
       ( '   METHOD scenario. ' )
