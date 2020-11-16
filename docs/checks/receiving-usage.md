@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [RECEIVING Usage Check](receiving-usage.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [RECEIVING Statement Usage Check](receiving-usage.md)
 
-## RECEIVING Usage Check
+## RECEIVING Statement Usage Check
 
 ### What is the Intent of the Check?
 
-The “Receiving Usage” Check is part of the Clean Code Check Repository.
+The “Receiving Statement Usage” Check is part of the Clean Code Check Repository.
 
 ### How does the check work?
 
@@ -38,4 +38,4 @@ aggregate_values(
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#omit-receiving)
+* [ABAP Styleguides on Clean Code - Omit RECEIVING Statement](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#omit-receiving)
