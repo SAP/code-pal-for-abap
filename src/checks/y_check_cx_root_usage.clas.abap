@@ -16,7 +16,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_CX_ROOT_USAGE IMPLEMENTATION.
+CLASS y_check_cx_root_usage IMPLEMENTATION.
 
 
   METHOD constructor.
