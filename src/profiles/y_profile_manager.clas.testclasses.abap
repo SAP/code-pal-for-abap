@@ -25,7 +25,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                       time_end   = '20011231'
                                                                       point      = '20010101' )
                                         msg  = 'result of "is_point_in_time_true_2001" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
 
     cl_abap_unit_assert=>assert_equals( exp  = abap_true
@@ -33,7 +33,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                       time_end   = '20021231'
                                                                       point      = '20020505' )
                                         msg  = 'result of "is_point_in_time_true_2002" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
 
     cl_abap_unit_assert=>assert_equals( exp  = abap_true
@@ -41,7 +41,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                       time_end   = '20031231'
                                                                       point      = '20031231' )
                                         msg  = 'result of "is_point_in_time_true_2003" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
   ENDMETHOD.
 
@@ -51,7 +51,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                       time_end   = '20041231'
                                                                       point      = '20031231' )
                                         msg  = 'result of "is_point_in_time_false_2004" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
 
     cl_abap_unit_assert=>assert_equals( exp  = abap_false
@@ -59,7 +59,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                       time_end   = '20051231'
                                                                       point      = '20060101' )
                                         msg  = 'result of "is_point_in_time_false_2005" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
   ENDMETHOD.
 
@@ -71,7 +71,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                         timeline_two_end   = '20050606'
                                                                         )
                                         msg  = 'result of "has_time_collided_true" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
 
     cl_abap_unit_assert=>assert_equals( exp  = abap_true
@@ -81,7 +81,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                         timeline_two_end   = '20120101'
                                                                         )
                                         msg  = 'result of "has_time_collided_true" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
 
     cl_abap_unit_assert=>assert_equals( exp  = abap_true
@@ -91,7 +91,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                         timeline_two_end   = '20120101'
                                                                         )
                                         msg  = 'result of "has_time_collided_true" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
 
     cl_abap_unit_assert=>assert_equals( exp  = abap_true
@@ -101,7 +101,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                         timeline_two_end   = '20090101'
                                                                         )
                                         msg  = 'result of "has_time_collided_true" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
   ENDMETHOD.
 
@@ -113,7 +113,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                         timeline_two_end   = '20001231'
                                                                         )
                                         msg  = 'result of "has_time_collided_false" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
 
     cl_abap_unit_assert=>assert_equals( exp  = abap_false
@@ -123,7 +123,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                         timeline_two_end   = '20111231'
                                                                         )
                                         msg  = 'result of "has_time_collided_false" is incorrect!'
-                                        quit = if_aunit_constants=>quit-no
+                                        quit = if_abap_unit_constant=>quit-no
                                         ).
   ENDMETHOD.
 

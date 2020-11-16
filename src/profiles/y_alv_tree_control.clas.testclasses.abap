@@ -35,7 +35,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
                                         act  = cut->fieldcats
                                         msg  = 'set_field_visibility to false is incorrect!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD set_field_visibility_true.
@@ -51,7 +51,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
                                         act  = cut->fieldcats
                                         msg  = 'set_field_visibility to true is incorrect!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD set_field_header_text.
@@ -67,7 +67,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
                                         act  = cut->fieldcats
                                         msg  = 'set_field_header_text is incorrect!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD get_selected_line.
@@ -79,7 +79,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     ENDTRY.
     cl_abap_unit_assert=>assert_initial( act  = sl
                                          msg  = 'get selected line is not initial!'
-                                         quit = if_aunit_constants=>quit-no ).
+                                         quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD get_selected_index.
@@ -91,7 +91,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     ENDTRY.
     cl_abap_unit_assert=>assert_initial( act  = si
                                          msg  = 'get selected index is not initial!'
-                                         quit = if_aunit_constants=>quit-no ).
+                                         quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD init_profiles.
@@ -112,7 +112,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
                                         act  = cut->fieldcats
                                         msg  = 'fieldcats are not invisible!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD autosize_all_fields_if.
@@ -127,7 +127,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
                                         act  = cut->fieldcats
                                         msg  = 'fieldcats autosize, if branch is incorrect!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD autosize_all_fields_else.
@@ -142,7 +142,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = mock_fieldcats
                                         act  = cut->fieldcats
                                         msg  = 'fieldcats autosize, else branch is incorrect!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD get_excluded_toolbars.
@@ -155,7 +155,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = exp
                                         act  = cut->get_excluded_toolbars( )
                                         msg  = 'The returning parameter of get_excluding_toolbars is incorrect!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD setup.

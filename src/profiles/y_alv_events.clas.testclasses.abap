@@ -21,7 +21,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                                       appl_event = abap_true ) )
                                         act  = cut->get_events( y_if_alv_events=>mode_double_click )
                                         msg  = 'Get_Events: Node Double Klick Error! Tables are not equal!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD get_events_selection_changed.
@@ -29,7 +29,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
                                                                                        appl_event = abap_true ) )
                                         act  = cut->get_events( y_if_alv_events=>mode_selection_changed )
                                         msg  = 'Error in get_events: Node Selection Changed Error! Tables are not equal!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD register_handler_to_alv_tree.
@@ -41,13 +41,13 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = 0
                                         act  = sy-subrc
                                         msg  = 'Failed to register a handler to the alv tree: handler for double click, not found!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
 
     SET HANDLER cut->handle_selection_changed FOR alv_tree ACTIVATION space.
     cl_abap_unit_assert=>assert_equals( exp  = 0
                                         act  = sy-subrc
                                         msg  = 'Failed to register a handler to the alv tree: handler for selection changed, not found!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
   METHOD register_handler_to_toolbar.
@@ -60,7 +60,7 @@ CLASS lcl_unit_test IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp  = 0
                                         act  = sy-subrc
                                         msg  = 'Failed to register a handler to the toolbar: handler for function selected, not found!'
-                                        quit = if_aunit_constants=>quit-no ).
+                                        quit = if_abap_unit_constant=>quit-no ).
   ENDMETHOD.
 
 ENDCLASS.
