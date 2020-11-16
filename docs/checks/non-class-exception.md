@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Non-Class Exception Check](non-class-exception.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Non-Class Exception Usage Check](non-class-exception.md)
 
-## Non-Class Exception Check
+## Non-Class Exception Check Usage
 
 ### What is the Intent of the Check?
 
-The “Non-Class Exception” Check searches for non-class based execeptions raised in your code. 
+The “Non-Class Exception Usage” Check searches for non-class based execeptions raised in your code. 
 
 ### How does the check work?
 
@@ -43,4 +43,4 @@ MESSAGE msg_name RAISING ex_name. "#EC NON_CL_EXCEPT
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-class-based-exceptions)
+* [ABAP Styleguides on Clean Code - Use class based exceptions](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-class-based-exceptions)
