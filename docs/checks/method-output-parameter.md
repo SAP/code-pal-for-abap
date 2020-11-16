@@ -25,9 +25,9 @@ The pseudo comment must be placed right after the method definition header.
 CLASS class_name DEFINITION.
   PUBLIC SECTION.
     METHOD method_name
-    EXPORTING param1 TYPE c
-    CHANGING param2  TYPE c
-    RETURNING VALUE(result) TYPE c. "#EC PARAMETER_OUT
+      EXPORTING param1 TYPE c
+      CHANGING param2  TYPE c
+      RETURNING VALUE(result) TYPE c. "#EC PARAMETER_OUT
 ENDCLASS.
 ```
 
