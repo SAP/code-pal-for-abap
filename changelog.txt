@@ -10,8 +10,11 @@ Legend
 
 2020-11-16 v1.08.0
 ------------------
-
-
+! deprecated classes/interfaces (aunit)
+* short dump in unit test fixed 
+! unit test using buffer with shared memory
+* prefer is not exempts line_exists( )
+* check order in sci
 
 2020-11-11 v1.07.0
 ------------------

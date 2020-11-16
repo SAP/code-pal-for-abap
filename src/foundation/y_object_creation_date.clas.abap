@@ -217,8 +217,6 @@ CLASS y_object_creation_date IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-
-
   METHOD try_new_created_on.
 
     DATA created_on_dates TYPE created_on_dates.

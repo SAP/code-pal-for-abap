@@ -28,11 +28,13 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
 
   METHOD execute_check.
 
-    DATA(unit_test_coverage) = y_unit_test_coverage=>get_instance( ).
-
-    unit_test_coverage->execute( me ).
-
-    DATA(coverage) = unit_test_coverage->get_procedure_coverage( ).
+    TRY.
+        DATA(coverage) = y_unit_test_coverage=>get( program_name = program_name
+                                                    object = VALUE #( object = object_type obj_name = object_name )
+                                                    coverage_type = ce_scv_coverage_type=>procedure ).
+      CATCH cx_scv_execution_error.
+        RETURN.
+    ENDTRY.
 
     DATA(check_configuration) = detect_check_configuration( error_count = CONV #( coverage )
                                                             statement = VALUE #( level = 1 ) ).
