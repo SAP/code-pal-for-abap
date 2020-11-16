@@ -30,12 +30,12 @@ The pseudo comment must be placed right after the `ENDMETHOD` statement.
 ```abap
 METHOD method_name.
 ...
-  IF any_condition.
-    IF any_condition.
-      IF any_condition.
-        IF any_condition.
-          IF any_condition.
-            any_condition = abap_true.
+  IF any_condition1.
+    IF any_condition2.
+      IF any_condition3.
+        IF any_condition4.
+          IF any_condition5.
+            any_variable = abap_true.
           ENDIF.
         ENDIF.
       ENDIF.
@@ -46,4 +46,4 @@ ENDMETHOD. "#EC CI_NESTING
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#keep-the-nesting-depth-low)
+* [ABAP Styleguides on Clean Code - keep the Nesting Depth low](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#keep-the-nesting-depth-low)
