@@ -6,7 +6,7 @@
 
 ### What is the Intent of the Check?
 
-The "Unit Test Coverages (Statement, Branch and Procedure)" Check executes the ABAP Unit-Test framework and verifies if the coverage is under the defined threshold.
+The "Unit Test Coverages (Statement, Branch and Procedure)" Check executes the ABAP Unit-Test framework and verifies if the coverage is under the defined threshold(s).
 
 > :WARNING: Use it to check a few objects only (it may cause performance issues).
 
