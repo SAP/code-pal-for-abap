@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Subsequent Memory Assign Read Table Check](sub-assign-read-table.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [READ TABLE with Subsequent Memory Assignment Check](sub-assign-read-table.md)
 
-## Subsequent Memory Assign Read Table Check
+## READ TABLE with Subsequent Memory Assignment Check
 
 ### What is the Intent of the Check?
 
-The Subsequent Memory Assignment in Read Table check aims to prevent undesired changes to internal tables using field symbols in context of the `READ TABLE` statement with `INTO` instead of `ASSIGNING`.
+The "READ TABLE with Subsequent Memory Assignment" Check aims to prevent undesired changes to internal tables using field symbols in context of the `READ TABLE` statement with `INTO` instead of `ASSIGNING`.
 
 ### How does the check work?
 

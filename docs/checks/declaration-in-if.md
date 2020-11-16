@@ -27,7 +27,7 @@ The pseudo comment must be placed right after the declaration.
 
 ```abap
 IF example = ''.
-  TYPE type_declaration TYPE string. "#EC DECL_IN_IF
+  TYPES type_declaration TYPE string. "#EC DECL_IN_IF
   FIELD-SYMBOLS: <field_declaration> TYPE any. "#EC DECL_IN_IF
   DATA data_declaration TYPE string. "#EC DECL_IN_IF
 ENDIF.

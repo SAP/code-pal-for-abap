@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Number Events Check](number-events.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Number of Events Check](number-events.md)
 
-## Number Events Check
+## Number of Events Check
 
 ### What is the Intent of the Check?
 
-The Number Events check counts the number of events up to a maximum. If there are too many events in a class, it is probable that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
+The "Number of Events" Check counts the number of events up to a maximum. When a class hsa too many events, it is probable an indicator that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
 
 ### How does the check work?
 

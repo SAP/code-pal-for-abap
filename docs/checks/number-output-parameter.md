@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Number Output Parameter Check](number-output-parameter.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Number of Output Parameters Check](number-output-parameter.md)
 
-## Number Output Parameter Check
+## Number of Output Parameters Check
 
 ### What is the Intent of the Check?
 
-The "Number Output Parameter Check" searches for methods where more than one parameter in one of the output types (`EXPORTING`, `CHANGING` or `RETURNING`) is used.
+The "Number of Output Parameters Check" searches for methods where more than one parameter in one of the output types (`EXPORTING`, `CHANGING` or `RETURNING`) is used.
 
 ### Which attributes can be maintained?
 

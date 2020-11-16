@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Maximum Nesting Depth Check](maximum-nesting-depth.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Nesting Depth Check](maximum-nesting-depth.md)
 
 ## Nesting Depth Check
 
 ### What is the Intent of the Check?
 
-The "Nesting Depth" check counts the nesting depth level of a method, function-module, form-routine or module. A high value of nesting depth is an indicator that the source code is not readable anymore in a way that maintaining and extending the code can be done efficiently. In addition, the risk of introducing bugs is increased with a high nesting depth value.
+The "Nesting Depth" Check counts the nesting depth level of a method, function-module, form-routine or module. A high value of nesting depth is an indicator that the source code is not readable anymore in a way that maintaining and extending the code can be done efficiently. In addition, the risk of introducing bugs is increased with a high nesting depth value.
 
 ### How does the check work?
 
@@ -29,10 +29,21 @@ The pseudo comment must be placed right after the `ENDMETHOD` statement.
 
 ```abap
 METHOD method_name.
-  " Method content
+...
+  IF any_condition1.
+    IF any_condition2.
+      IF any_condition3.
+        IF any_condition4.
+          IF any_condition5.
+            any_variable = abap_true.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDIF.
 ENDMETHOD. "#EC CI_NESTING
 ```
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#keep-the-nesting-depth-low)
+* [ABAP Styleguides on Clean Code - keep the Nesting Depth low](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#keep-the-nesting-depth-low)

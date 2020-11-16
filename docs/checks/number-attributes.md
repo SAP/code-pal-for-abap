@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Number Attributes Check](number-attributes.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Number of Attributes Check](number-attributes.md)
 
-## Number Attributes Check
+## Number of Attributes Check
 
 ### What is the Intent of the Check?
 
-The Number Attributes Check counts the number of attributes up to a maximum. If there are too many attributes in a class, it is probable that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
+The "Number of Attributes" Check counts the number of attributes up to a maximum. When a class has has too many attributes, this is probably an indicator that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
 
 ### How does the check work?
 

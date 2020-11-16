@@ -1,12 +1,13 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Test Seam Usage Check](test-seam-usage.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [TEST-SEAM Statement Usage Check](test-seam-usage.md)
 
-## Test Seam Usage Check
+## TEST-SEAM Statement Usage Check
 
 ### What is the Intent of the Check?
 
-The “Test Seam Usage” Check is part of the Clean Code Check Repository. Test seams are invasive and tend to get entangled in private dependencies, such that they are hard to keep alive and stable in the long run.
+The “TEST-SEAM Statement Usage” Check searches for the usage of the ABAP statement: TEST-SEAM. 
+Test seams are invasive and tend to get entangled in private dependencies, such that they are hard to keep alive and stable in the long run.
 
 ### How does the check work?
 
@@ -33,4 +34,4 @@ TEST-SEAM seam_name.    "#EC TEST_SEAM_USAGE
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-test-seams-as-temporary-workaround)
+* [ABAP Styleguides on Clean Code - Avoid Usage of TEST-SEAM](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-test-seams-as-temporary-workaround)

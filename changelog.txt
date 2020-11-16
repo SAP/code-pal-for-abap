@@ -8,7 +8,7 @@ Legend
 + : added
 - : removed
 
-2020-11-XX v1.08.0
+2020-11-16 v1.08.0
 ------------------
 * short dump in unit test fixed 
 ! unit test using buffer with shared memory
