@@ -42,7 +42,7 @@
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
 - [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
 - [Optional Parameters](checks/optional-parameters.md)
-- [RECEIVING Usage](checks/receiving-usage.md)
+- [RECEIVING Statement Usage](checks/receiving-usage.md)
 - [Returning Name](checks/returning-name.md)
 - [Self-Reference](checks/self-reference.md)
 - [Subsequent Memory Assign Read Table](checks/sub-assign-read-table.md)
