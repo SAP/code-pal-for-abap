@@ -1,12 +1,12 @@
 # code pal for ABAP
 
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Maximum Nesting Depth Check](maximum-nesting-depth.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Nesting Depth Check](maximum-nesting-depth.md)
 
 ## Nesting Depth Check
 
 ### What is the Intent of the Check?
 
-The "Nesting Depth" check counts the nesting depth level of a method, function-module, form-routine or module. A high value of nesting depth is an indicator that the source code is not readable anymore in a way that maintaining and extending the code can be done efficiently. In addition, the risk of introducing bugs is increased with a high nesting depth value.
+The "Nesting Depth" Check counts the nesting depth level of a method, function-module, form-routine or module. A high value of nesting depth is an indicator that the source code is not readable anymore in a way that maintaining and extending the code can be done efficiently. In addition, the risk of introducing bugs is increased with a high nesting depth value.
 
 ### How does the check work?
 
