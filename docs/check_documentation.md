@@ -46,5 +46,5 @@
 - [RECEIVING Statement Usage](checks/receiving-usage.md)
 - [Returning Name](checks/returning-name.md)
 - [Self-Reference](checks/self-reference.md)
-- [Test Seam Usage](checks/test-seam-usage.md)
+- [TEST-SEAM Statement Usage](checks/test-seam-usage.md)
 - [Unit Test Coverages](checks/unit-test-coverages.md)
