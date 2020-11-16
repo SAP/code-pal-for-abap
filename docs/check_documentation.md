@@ -29,7 +29,7 @@
 - [Magic Number](checks/magic-number.md)
 - [Maximum Nesting Depth](checks/maximum-nesting-depth.md)
 - [Method Return Bool](checks/method-return-bool.md)
-- [Non-Class Exception](checks/non-class-exception.md)
+- [Non-Class Exception Usage](checks/non-class-exception.md)
 - [Number Attributes](checks/number-attributes.md)
 - [Number Events](checks/number-events.md)
 - [Number of Executable Statements](checks/number-executable-statements.md)
