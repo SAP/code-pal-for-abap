@@ -34,16 +34,16 @@ CLASS lcl_list_ut IMPLEMENTATION.
     TRY.
         cut = NEW y_list( '01928374655647382910' ).
         cl_abap_unit_assert=>fail( msg   = 'Unit Test Aborted: - Type Creation Error!'
-                                   level = if_abap_unit_constant=>severity-high
-                                   quit  = if_abap_unit_constant=>quit-test ).
+                                   level = if_aunit_constants=>severity-high
+                                   quit  = if_aunit_constants=>quit-test ).
       CATCH cx_sy_create_data_error.
 
         TRY.
             cut = NEW y_list( 'c' ).
           CATCH cx_sy_create_data_error.
             cl_abap_unit_assert=>fail( msg   = 'Unit Test Aborted: - Type Creation Error!'
-                                       level = if_abap_unit_constant=>severity-high
-                                       quit  = if_abap_unit_constant=>quit-test ).
+                                       level = if_aunit_constants=>severity-high
+                                       quit  = if_aunit_constants=>quit-test ).
         ENDTRY.
 
     ENDTRY.
@@ -77,7 +77,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 'c'
                                         act = cut->get_type_name( )
                                         msg = 'typename error!'
-                                        quit = if_abap_unit_constant=>quit-test ).
+                                        quit = if_aunit_constants=>quit-test ).
   ENDMETHOD.
 
   METHOD append.
@@ -88,22 +88,22 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 3
                                         act = cut->lines( )
                                         msg = 'component are not append!'
-                                        quit = if_abap_unit_constant=>quit-no ).
+                                        quit = if_aunit_constants=>quit-no ).
 
     cl_abap_unit_assert=>assert_equals( exp = 'A'
                                         act = get_char_at( 1 )
                                         msg = 'component are not append!'
-                                        quit = if_abap_unit_constant=>quit-no ).
+                                        quit = if_aunit_constants=>quit-no ).
 
     cl_abap_unit_assert=>assert_equals( exp = 'B'
                                         act = get_char_at( 2 )
                                         msg = 'component are not append!'
-                                        quit = if_abap_unit_constant=>quit-no ).
+                                        quit = if_aunit_constants=>quit-no ).
 
     cl_abap_unit_assert=>assert_equals( exp = 'c'
                                         act = get_char_at( 3 )
                                         msg = 'component are not append!'
-                                        quit = if_abap_unit_constant=>quit-no ).
+                                        quit = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD insert_at.
@@ -113,12 +113,12 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 4
                                         act = cut->lines( )
                                         msg = 'component are not insert!'
-                                        quit = if_abap_unit_constant=>quit-no ).
+                                        quit = if_aunit_constants=>quit-no ).
 
     cl_abap_unit_assert=>assert_equals( exp = 'd'
                                         act = get_char_at( 4 )
                                         msg = 'component are not insert!'
-                                        quit = if_abap_unit_constant=>quit-no ).
+                                        quit = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD modify_at.
@@ -128,12 +128,12 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 4
                                         act = cut->lines( )
                                         msg = 'component are not modified!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
 
     cl_abap_unit_assert=>assert_equals( exp = abap_true
                                         act = cut->is_contained( 'E' )
                                         msg = 'component are not modified!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD delete_at.
@@ -142,12 +142,12 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 3
                                         act = cut->lines( )
                                         msg = 'component are not deleted!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
 
     cl_abap_unit_assert=>assert_equals( exp = abap_false
                                         act = cut->is_contained( 'd' )
                                         msg = 'component are not deleted!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD delete_all.
@@ -156,7 +156,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 0
                                         act = cut->lines( )
                                         msg = 'table is not deleted!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD append_after_delete.
@@ -165,12 +165,12 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 'a'
                                         act = get_char_at( 1 )
                                         msg = 'component are not append!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
 
     cl_abap_unit_assert=>assert_differs( exp = 'abc'
                                          act = get_char_at( 1 )
                                          msg = 'component are not one char!'
-                                         quit  = if_abap_unit_constant=>quit-no ).
+                                         quit  = if_aunit_constants=>quit-no ).
 
     cut->append( 123 ).
   ENDMETHOD.
@@ -179,14 +179,14 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = abap_false
                                         act = cut->is_contained( 'b' )
                                         msg = 'component are exist!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD is_contained_true.
     cl_abap_unit_assert=>assert_equals( exp = abap_true
                                         act = cut->is_contained( 'a' )
                                         msg = 'component are not exist!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD set_table.
@@ -202,7 +202,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 5
                                         act = cut->lines( )
                                         msg = 'cannot set the table!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD get_table.
@@ -214,7 +214,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = lines( <table> )
                                         act = cut->lines( )
                                         msg = 'cannot get the table!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
     UNASSIGN <table>.
   ENDMETHOD.
 
@@ -222,7 +222,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( exp = 3
                                         act = cut->get_line_index( 'c' )
                                         msg = 'cannot get line index!'
-                                        quit  = if_abap_unit_constant=>quit-no ).
+                                        quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
 ENDCLASS.
