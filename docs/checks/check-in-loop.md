@@ -13,6 +13,12 @@ Prefer using an `IF` statement in combination with `CONTINUE` instead, since `CO
 ### What to do in case of exception?
 In special cases you can suppress this finding by using the pseudo comment `"#EC CHECK_IN_LOOP`.
 
+```abap
+LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).
+  CHECK <tadir>-delflag = abap_true. "#EC CHECK_IN_LOOP
+ENDLOOP.
+```
+
 ### Example
 Before the check:
 ```abap
