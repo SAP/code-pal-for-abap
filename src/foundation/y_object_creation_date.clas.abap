@@ -185,7 +185,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
 
 
   METHOD y_if_object_creation_date~get_class_create_date.
-    result = get_created_on( object_type = 'FUGR'
+    result = get_created_on( object_type = 'CLAS'
                              object_name = name ).
   ENDMETHOD.
 
