@@ -10,7 +10,7 @@ Legend
 
 2020-xx-xx v1.09.0
 ------------------
-! object creation date for classes
+* object creation date for classes
 + service to execute regression test
 
 2020-11-16 v1.08.0
