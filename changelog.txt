@@ -8,6 +8,10 @@ Legend
 + : added
 - : removed
 
+2020-xx-xx v1.09.0
+------------------
++ service to execute regression test
+
 2020-11-16 v1.08.0
 ------------------
 ! deprecated classes/interfaces (aunit)
