@@ -1,23 +1,17 @@
-CLASS y_check_check_stmnt_position DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_check_stmnt_position DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor .
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
     METHODS execute_check REDEFINITION.
 
   PRIVATE SECTION.
-
     DATA statement_index TYPE i VALUE 0 ##NO_TEXT.
 
-    METHODS is_token_excluded
-      IMPORTING
-        !token_str    TYPE stokesx-str
-      RETURNING
-        VALUE(result) TYPE abap_bool .
+    METHODS is_token_excluded IMPORTING token_str    TYPE stokesx-str
+                              RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -33,7 +27,7 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }check-statement-position.md|.
 
-    set_check_message( '"CHECK" statement should be the very first statement!' ).
+    set_check_message( 'Do not use CHECK outside of the initialization section!' ).
   ENDMETHOD.
 
 
@@ -85,7 +79,8 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
 
     statement_index = statement_index + 1.
 
-    IF statement_index GT 1 AND get_token_abs( statement-from ) EQ 'CHECK'.
+    IF statement_index GT 1
+    AND get_token_abs( statement-from ) = 'CHECK'.
 
       DATA(check_configuration) = detect_check_configuration( statement ). "#EC DECL_IN_IF
 
@@ -109,6 +104,9 @@ CLASS Y_CHECK_CHECK_STMNT_POSITION IMPLEMENTATION.
                       token_str EQ 'DATA' OR
                       token_str EQ 'TYPES' OR
                       token_str CP 'DATA(*)' OR
+                      token_str CP 'LOOP' OR
                       ( token_str EQ 'CHECK' AND statement_index EQ 0 ) ).
   ENDMETHOD.
+
+
 ENDCLASS.
