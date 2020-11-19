@@ -14,8 +14,8 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    settings-prio = c_warning.
-    settings-threshold = 100.
+    settings-prio = c_info.
+    settings-threshold = 30.
     settings-is_threshold_reversed = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
     settings-disable_on_testcode_selection = abap_true.
