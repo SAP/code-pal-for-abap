@@ -2,7 +2,7 @@
 
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [CHECK in LOOP](check-in-loop.md)
 
-## CHECK Statement Position Check
+## CHECK in LOOP
 
 ### What is the Intent of the Check?
 It verifies whether the `CHECK` statement is in a `LOOP` statement because it ends the current iteration and proceeds with the next one, and people might accidentally expect it to end the method or exit the loop.
