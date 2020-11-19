@@ -4,29 +4,38 @@
 
 ## How to Configure
 
-**The default customizing is not an SAP delivered standard value.**  
+**The default customizing (initial values) is not an SAP delivered standard value.**  
 
-You can:
+The tool is 100% compatible with the SAP CI Framework (Code Inspector). That is, SAP Transactions: SCI and SCII. By means of these transactions, it is possible to create/run/save an inspection using our delivered CHECKS (the checks can be found under the "CODE PAL FOR ABAP" category). 
+It is also possible to create a CI-Variant and run the selected CHECKS using this variant at any time. This CI-Variant can be also used in SUT, ATC or even using SAP-Workbench ABAP Editors (e.g.: SE80) or ADT (e.g.: Eclipse) with ATC/CI Integration directly (the CI-Variant will be asked).
+
+In summary, it is possible to use our tool directly in SCI/SCII, via ATC Integration, Via API Call, via CI-Variant or via Profile(s).
+But keep in mind, one has to choose betweeen using CI-Variants or Using Profile(s). Both features cannot be used in paralell in the same system for the same user. 
+
+Every CHECK can be configurable independenlty.
+
+Check configuration: You can,
 
 * Define check's validity period;
 * Restrict to objects created since a specific date;
 * Define check's severity;
-* Define check's threshold;
-* Define if it is applicable in productive codes;
-* Define if it is applicable in test codes.
+* Define check's threshold (if applicable);
+* Define if it is applicable in productive code (if applicable);
+* Define if it is applicable in test code (if applicable).
 
-Check behaviors:
+Check behavior:
 
-* If a profile is assigned to your user, it will execute the checks assigned to it only;
-* If multiple profiles are assigned to your user, it will execute the checks assigned to them only;
-* If have no profile assigned to your user, it will execute all the checks assigned to the variant.
+* If using a CI-Variant, just one variant can be executed per time. 
+* If using a profile, first, at least one profile should be assigned to your user. Then, all checks assigned to this profle will be executed. But if so, the usage of a CI-variant is no longer possible. The profile overrules a CI-variant! In order to use again a CI-variant, one has to unassign the profile(s) of his/her user;
+* If multiple profiles are assigned to your user, all checks assigned to all profiles will be executed and the "strongest" or "sharpest" thresholds will be taken;
+* If have no profile assigned to your user, the execution of the checks have to be made live in SCI/SCII or by means of a CI-Variant.
 
-Profile behaviors:
+Profile behavior:
 
 * If you unassign a profile from your user, it will not delete it from the database. It means, you can reassign it to your user, and all the checks with respective customization will return;
 * If you assign the `Y_CHECK_PROFILE_MESSAGE` check to the profile, you will receive an info message every time you execute the global check variant. It means, not all the checks from the variant were executed, but so the ones related to the active profile.
 
-Threshold behaviors:
+Threshold behavior:
 
 * If you have multiple profiles, and the same check assigned to two or more profiles, it will use the check with the strongest threshold.
   
