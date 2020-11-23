@@ -16,7 +16,7 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
 
     version = '0001'.
 
-    settings-prio = c_info.
+    settings-prio = c_note.
     settings-threshold = 30.
     settings-is_threshold_reversed = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
