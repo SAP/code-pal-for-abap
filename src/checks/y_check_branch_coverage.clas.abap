@@ -14,7 +14,7 @@ CLASS y_check_branch_coverage IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    version = '001'.
+    version = '0001'.
 
     settings-prio = c_info.
     settings-threshold = 70.
