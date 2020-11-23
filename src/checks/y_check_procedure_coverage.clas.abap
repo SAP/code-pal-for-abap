@@ -14,6 +14,8 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
+    version = '001'.
+
     settings-prio = c_info.
     settings-threshold = 30.
     settings-is_threshold_reversed = abap_true.

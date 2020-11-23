@@ -14,6 +14,8 @@ CLASS y_check_branch_coverage IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
+    version = '001'.
+
     settings-prio = c_info.
     settings-threshold = 70.
     settings-is_threshold_reversed = abap_true.
