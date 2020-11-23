@@ -97,6 +97,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
                                      RETURNING VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
     METHODS prefer_is_not_to_not_is.
     METHODS prefer_case_to_elseif.
+    METHODS deprecated_classes.
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
     DATA attribute_8 TYPE string.
@@ -426,5 +427,10 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
   METHOD external_call_in_prod_code_ok.
     SUBMIT demo_program_submit_rep AND RETURN.
+  ENDMETHOD.
+
+
+  METHOD deprecated_classes.
+    DATA aunit TYPE REF TO cl_aunit_assert.
   ENDMETHOD.
 ENDCLASS.

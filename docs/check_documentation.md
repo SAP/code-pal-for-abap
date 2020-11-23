@@ -18,6 +18,7 @@
 - [CX_ROOT Usage](checks/cx-root-usage.md)
 - [Database Access in Unit-Test](checks/db-access-in-ut.md)
 - [Declaration in IF](checks/declaration-in-if.md)
+- [Deprecated Classes](checks/deprecated-classes.md)
 - [Deprecated Key Word](checks/deprecated-key-word.md)
 - [Empty Catch](checks/empty_catch.md)
 - [Empty IF Branches](checks/empty-if-branches.md)
