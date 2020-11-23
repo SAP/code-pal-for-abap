@@ -10,6 +10,8 @@ Legend
 
 2020-xx-xx v1.09.0
 ------------------
+! 'check statement position' won't validate check in loop anymore
++ new check: 'check in loop'
 * object creation date for classes
 + service to execute regression test
 
