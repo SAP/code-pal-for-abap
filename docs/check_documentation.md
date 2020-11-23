@@ -8,7 +8,6 @@
 - [CALL Method Usage](checks/call-method-usage.md)
 - [Chain Declaration Usage](checks/chain-declaration-usage.md)
 - [CHECK Statement Position](checks/check-statement-position.md)
-- [CHECK in LOOP](checks/check-in-loop.md)
 - [Combination of Output Parameters](checks/method-output-parameter.md)
 - [Comment Position](checks/comment-position.md)
 - [Comment Type](checks/comment-type.md)
