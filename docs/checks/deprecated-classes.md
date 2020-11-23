@@ -16,9 +16,6 @@ This check searches for the usage of deprecated classes. For instance:
 ```abap
 DATA aunit TYPE REF TO cl_aunit_assert.
 ```
-### Which attributes can be maintained?
-
-![Attributes](./imgs/deprecated_key_words.png)
 
 ### How to solve the issue?
 
@@ -26,6 +23,9 @@ Reference non deprecated newer objects instead. For the above example, a correct
 ```abap
 DATA aunit TYPE REF TO cl_abap_unit_assert.
 ```
+### Which attributes can be maintained?
+
+![Attributes](./imgs/deprecated_key_words.png)
 
 ### What to do in case of exception?
 
