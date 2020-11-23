@@ -61,12 +61,14 @@ CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
                                                   kind  = cl_abap_objectdescr=>exporting
                                                   value = REF #( abap_true ) ) ).
 
-    TRY.
-        CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
-      CATCH cx_sy_create_object_error.
-        DELETE parameters WHERE name = 'P_NO_CLASSIFICATION'.
-        CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
-    ENDTRY.
+    CATCH SYSTEM-EXCEPTIONS dyn_call_meth_param_not_found = 1.
+      CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
+    ENDCATCH.
+
+    IF sy-subrc = 1.
+      DELETE parameters WHERE name = 'P_NO_CLASSIFICATION'.
+      CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
+    ENDIF.
   ENDMETHOD.
 
 ENDCLASS.
