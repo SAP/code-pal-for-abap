@@ -28,6 +28,7 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
     settings-prio = c_warning.
+    settings-apply_on_test_code = abap_false.
     settings-documentation = |{ c_docs_path-checks }interface-in-class.md|.
 
     set_check_message( '&1 public methods without interface!' ).
@@ -92,17 +93,21 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
     ADD 1 TO public_method_counter.
   ENDMETHOD.
 
+
   METHOD get_last_token.
     result = get_token_abs( statement-to ).
   ENDMETHOD.
+
 
   METHOD get_third_token.
     result = get_token_abs( statement-from + 2 ).
   ENDMETHOD.
 
+
   METHOD get_second_token.
     result = get_token_abs( statement-from + 1 ).
   ENDMETHOD.
+
 
   METHOD get_first_token.
     result = get_token_abs( statement-from ).
