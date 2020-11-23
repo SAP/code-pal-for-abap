@@ -60,7 +60,6 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS call_method_usage.
     METHODS chain_declaration_usage.
     METHODS check_statement_position.
-    METHODS check_in_loop.
     METHODS function.
     METHODS comment_position.
     METHODS comment_type.
@@ -371,14 +370,6 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   METHOD check_statement_position.
     attribute_1 = 'DSAG'.
     CHECK attribute_3 = 'WALLDORF 2020'.
-  ENDMETHOD.
-
-
-  METHOD check_in_loop.
-    DATA tadir TYPE TABLE OF tadir.
-    LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).
-      CHECK <tadir>-author = sy-uname.
-    ENDLOOP.
   ENDMETHOD.
 
 
