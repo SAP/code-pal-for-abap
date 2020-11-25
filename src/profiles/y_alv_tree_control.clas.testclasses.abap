@@ -160,17 +160,11 @@ CLASS lcl_unit_test IMPLEMENTATION.
 
   METHOD setup.
     TRY.
-        cut = NEW y_alv_tree_control( alv_header_text = 'Unit Test'
-                                      dynpro_nr       = '0000'
-                                      sy_repid        = 'TEST'
-                                      docking_side    = cl_gui_docking_container=>align_at_left
-                                      ratio           = 16
-                                      type_name       = 'YTAB_PROFILES'
-                                      sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'USERNAME' up = abap_true )
-                                                                          ( spos = 2 fieldname = 'PROFILE' up = abap_true ) )
-                                      events          = NEW y_alv_events( )
-                                      event_mode      = y_if_alv_events=>mode_double_click
-                                      ).
+        cut = NEW y_alv_tree_control( type_name   = 'YTAB_PROFILES'
+                                      sort_table  = VALUE #( )
+                                      events      = NEW y_alv_events( )
+                                      alv_tree    = NEW #( )
+                                      alv_header  = VALUE #( ) ).
       CATCH cx_sy_create_data_error
             cx_failed.
         cl_abap_unit_assert=>abort( 'cut cannot be initialized!' ).
