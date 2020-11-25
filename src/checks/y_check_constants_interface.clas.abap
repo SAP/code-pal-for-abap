@@ -1,19 +1,17 @@
-CLASS y_check_constants_interface DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_constants_interface DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-
     METHODS constructor .
+
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
     DATA has_something_else TYPE abap_bool VALUE abap_false.
     DATA statement_for_message TYPE sstmnt.
-    METHODS checkif_error
-      IMPORTING index TYPE i.
+    METHODS checkif_error IMPORTING index TYPE i.
+    METHODS is_structure_empty IMPORTING structure TYPE sstruc RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -53,6 +51,10 @@ CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
     LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
           WHERE stmnt_type EQ scan_struc_stmnt_type-interface.
 
+      IF is_structure_empty( <structure> ) = abap_true.
+        CONTINUE.
+      ENDIF.
+
       is_testcode = test_code_detector->is_testcode( <structure> ).
 
       TRY.
@@ -88,5 +90,10 @@ CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
        token NE 'OF'.
       has_something_else = abap_true.
     ENDIF.
+  ENDMETHOD.
+
+
+  METHOD is_structure_empty.
+    result = xsdbool( structure-stmnt_from = structure-stmnt_to - 1 ).
   ENDMETHOD.
 ENDCLASS.
