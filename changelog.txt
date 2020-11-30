@@ -10,6 +10,7 @@ Legend
 
 2020-12-XX v1.10.0
 ------------------
+* Missing space between string or character literal and parentheses (#253)
 * Broken UTs (#251)
 * Constants in Interface (#244)
 
