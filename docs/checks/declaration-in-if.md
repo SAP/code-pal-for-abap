@@ -35,4 +35,4 @@ ENDIF.
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code - Do not declare inline in optional branches](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#dont-declare-inline-in-optional-branches)
+* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#dont-declare-inline-in-optional-branches)
