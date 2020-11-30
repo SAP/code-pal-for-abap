@@ -171,8 +171,6 @@ CLASS y_code_pal_service IMPLEMENTATION.
       response->set_cdata( write_non_executed_checks( non_executed_checks ) ).
       RETURN.
     ENDIF.
-
-    response->set_cdata( 'OK' ).
   ENDMETHOD.
 
 
@@ -247,8 +245,6 @@ CLASS y_code_pal_service IMPLEMENTATION.
       response->set_cdata( write_abapgit_messages( log->get_messages( ) ) ).
       RETURN.
     ENDIF.
-
-    response->set_cdata( 'OK' ).
   ENDMETHOD.
 
 
@@ -283,8 +279,6 @@ CLASS y_code_pal_service IMPLEMENTATION.
     ENDTRY.
 
     COMMIT WORK.
-
-    response->set_cdata( 'OK' ).
   ENDMETHOD.
 
 
