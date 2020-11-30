@@ -17,6 +17,7 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
     METHODS execute_get_versions.
     METHODS execute_regression_test.
     METHODS execute_unit_test.
+    METHODS execute_upgrade.
 
     METHODS get_basis_version RETURNING VALUE(result) TYPE string.
 
@@ -29,11 +30,16 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
                                      RETURNING VALUE(result) TYPE y_if_profile_manager=>check_descriptions.
 
     METHODS write_non_executed_checks IMPORTING non_executed_checks TYPE y_if_profile_manager=>check_descriptions
-                                      RETURNING value(result)       TYPE string.
+                                      RETURNING VALUE(result)       TYPE string.
 
   PRIVATE SECTION.
     DATA request TYPE REF TO if_http_request.
     DATA response TYPE REF TO if_http_response.
+    METHODS write_abapgit_messages
+      IMPORTING
+        messages      TYPE zif_abapgit_log=>ty_log_outs
+      RETURNING
+        value(result) TYPE string.
 
 ENDCLASS.
 
@@ -53,6 +59,8 @@ CLASS y_code_pal_service IMPLEMENTATION.
         execute_regression_test( ).
       WHEN 'unit_test'.
         execute_unit_test( ).
+      WHEN 'upgrade'.
+        execute_upgrade( ).
       WHEN OTHERS.
         raise_bad_request( ).
         RETURN.
@@ -126,7 +134,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
 
   METHOD raise_internal_server_error.
     response->set_status( code   = '500'
-                          reason = 'Internal Server Error' ).
+                          reason = 'Internal Code Pal Error' ).
   ENDMETHOD.
 
   METHOD convert_json_to_profile.
@@ -234,6 +242,84 @@ CLASS y_code_pal_service IMPLEMENTATION.
   METHOD execute_unit_test.
     raise_internal_server_error( ).
     RETURN.
+  ENDMETHOD.
+
+  METHOD execute_upgrade.
+    DATA exception TYPE REF TO zcx_abapgit_exception.
+
+    IF request->get_method( ) <> 'GET'.
+      raise_method_not_allowed( ).
+      RETURN.
+    ENDIF.
+
+    TRY.
+        LOOP AT zcl_abapgit_repo_srv=>get_instance( )->list( ) ASSIGNING FIELD-SYMBOL(<list>).
+          IF <list>->get_package( ) = '$CODE_PAL_FOR_ABAP'.
+            DATA(repo) = CAST zcl_abapgit_repo_online( zcl_abapgit_repo_srv=>get_instance( )->get( <list>->get_key( ) ) ).
+            EXIT.
+          ENDIF.
+        ENDLOOP.
+      CATCH zcx_abapgit_exception INTO exception.
+        raise_internal_server_error( ).
+        response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
+        RETURN.
+    ENDTRY.
+
+    TRY.
+        repo->select_branch( 'refs/heads/master' ).
+      CATCH zcx_abapgit_exception.
+        raise_internal_server_error( ).
+        response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
+        RETURN.
+    ENDTRY.
+
+    TRY.
+        DATA(checks) = repo->deserialize_checks( ).
+      CATCH zcx_abapgit_exception.
+        raise_internal_server_error( ).
+        response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
+        RETURN.
+    ENDTRY.
+
+    LOOP AT checks-overwrite ASSIGNING FIELD-SYMBOL(<ls_overwrite>).
+      <ls_overwrite>-decision = 'Y'.
+    ENDLOOP.
+
+    LOOP AT checks-warning_package ASSIGNING FIELD-SYMBOL(<ls_warning_package>).
+      <ls_warning_package>-decision = 'Y'.
+    ENDLOOP.
+
+    IF checks-requirements-met = 'N'.
+      checks-requirements-decision = 'Y'.
+    ENDIF.
+
+    DATA(log) = repo->create_new_log( 'code pal service').
+
+    TRY.
+        repo->deserialize( is_checks = checks
+                           ii_log = log ).
+      CATCH zcx_abapgit_exception.
+        raise_internal_server_error( ).
+        response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
+        RETURN.
+    ENDTRY.
+
+    IF log->get_status( ) = 'S'.
+      response->set_cdata( 'OK' ).
+    ELSE.
+      raise_internal_server_error( ).
+      response->set_cdata( write_abapgit_messages( log->get_messages( ) ) ).
+      RETURN.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD write_abapgit_messages.
+    LOOP AT messages ASSIGNING FIELD-SYMBOL(<message>)
+    WHERE type = 'W' OR type = 'E'.
+      result = COND #( WHEN result IS NOT INITIAL THEN |{ result }<br>| ).
+      result = |{ result }```{ <message>-obj_type } { <message>-obj_name }: { <message>-text }```|.
+    ENDLOOP.
   ENDMETHOD.
 
 ENDCLASS.
