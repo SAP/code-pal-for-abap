@@ -4,7 +4,7 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
     TYPES: BEGIN OF versions,
              code_pal_for_abap TYPE string,
              sap_basis         TYPE string,
-             abapGit           TYPE string,
+             abapgit           TYPE string,
            END OF versions.
 
   PROTECTED SECTION.
@@ -18,6 +18,7 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
     METHODS execute_regression_test.
     METHODS execute_unit_test.
     METHODS execute_upgrade.
+    METHODS execute_activate_checks.
 
     METHODS get_basis_version RETURNING VALUE(result) TYPE string.
 
@@ -33,7 +34,7 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
                                       RETURNING VALUE(result)       TYPE string.
 
     METHODS write_abapgit_messages IMPORTING messages      TYPE zif_abapgit_log=>ty_log_outs
-                                   RETURNING value(result) TYPE string.
+                                   RETURNING VALUE(result) TYPE string.
 
   PRIVATE SECTION.
     DATA request TYPE REF TO if_http_request.
@@ -42,28 +43,36 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
 ENDCLASS.
 
 
+
 CLASS y_code_pal_service IMPLEMENTATION.
 
-  METHOD if_http_extension~handle_request.
-    request = server->request.
-    response = server->response.
 
-    CASE request->get_header_field( 'action' ).
-      WHEN 'import_profile'.
-        execute_import_profile( ).
-      WHEN 'get_versions'.
-        execute_get_versions( ).
-      WHEN 'regression_test'.
-        execute_regression_test( ).
-      WHEN 'unit_test'.
-        execute_unit_test( ).
-      WHEN 'upgrade'.
-        execute_upgrade( ).
-      WHEN OTHERS.
-        raise_bad_request( ).
-        RETURN.
-    ENDCASE.
+  METHOD convert_json_to_profile.
+    /ui2/cl_json=>deserialize( EXPORTING json = json
+                               CHANGING data = result ).
+
+    IF result IS INITIAL.
+      RAISE EXCEPTION TYPE cx_abap_invalid_value.
+    ENDIF.
   ENDMETHOD.
+
+
+  METHOD execute_get_versions.
+    IF request->get_method( ) <> 'GET'.
+      raise_method_not_allowed( ).
+      RETURN.
+    ENDIF.
+
+    DATA(structure) = VALUE versions( code_pal_for_abap = y_code_pal_version=>abap
+                                      sap_basis = get_basis_version( )
+                                      abapgit = zif_abapgit_version=>gc_abap_version ).
+
+    DATA(json) = /ui2/cl_json=>serialize( structure ).
+
+    response->set_content_type( 'application/json' ).
+    response->set_cdata( json ).
+  ENDMETHOD.
+
 
   METHOD execute_import_profile.
     IF request->get_method( ) <> 'POST'.
@@ -99,55 +108,6 @@ CLASS y_code_pal_service IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-  METHOD execute_get_versions.
-    IF request->get_method( ) <> 'GET'.
-      raise_method_not_allowed( ).
-      RETURN.
-    ENDIF.
-
-    DATA(structure) = VALUE versions( code_pal_for_abap = y_code_pal_version=>abap
-                                      sap_basis = get_basis_version( )
-                                      abapGit = zif_abapgit_version=>gc_abap_version ).
-
-    DATA(json) = /ui2/cl_json=>serialize( structure ).
-
-    response->set_content_type( 'application/json' ).
-    response->set_cdata( json ).
-  ENDMETHOD.
-
-  METHOD raise_bad_request.
-    response->set_status( code   = '400'
-                          reason = 'Bad Request' ).
-  ENDMETHOD.
-
-  METHOD raise_method_not_allowed.
-    response->set_status( code   = '405'
-                          reason = 'Method Not Allowed' ).
-  ENDMETHOD.
-
-  METHOD raise_forbidden.
-    response->set_status( code   = '403'
-                          reason = 'Forbidden' ).
-  ENDMETHOD.
-
-  METHOD raise_internal_code_pal_error.
-    response->set_status( code   = '500'
-                          reason = 'Internal Code Pal Error' ).
-  ENDMETHOD.
-
-  METHOD convert_json_to_profile.
-    /ui2/cl_json=>deserialize( EXPORTING json = json
-                               CHANGING data = result ).
-
-    IF result IS INITIAL.
-      RAISE EXCEPTION TYPE cx_abap_invalid_value.
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD get_basis_version.
-    SELECT SINGLE * FROM cvers INTO @DATA(cver) WHERE component = 'SAP_BASIS'.
-    result = |{ cver-release }-{ cver-extrelease }|.
-  ENDMETHOD.
 
   METHOD execute_regression_test.
     IF request->get_method( ) <> 'GET'.
@@ -209,38 +169,18 @@ CLASS y_code_pal_service IMPLEMENTATION.
 
     IF non_executed_checks IS NOT INITIAL.
       response->set_cdata( write_non_executed_checks( non_executed_checks ) ).
-    ELSE.
-      response->set_cdata( 'OK' ).
-    ENDIF.
-
-  ENDMETHOD.
-
-  METHOD list_non_executed_checks.
-    result = checks.
-    LOOP AT findings ASSIGNING FIELD-SYMBOL(<finding>).
-      DELETE result WHERE checkid = <finding>-test.
-    ENDLOOP.
-    " not supported
-    DELETE result WHERE checkid = 'Y_CHECK_PROFILE_MESSAGE'
-                     OR checkid = 'Y_CHECK_TEST_SEAM_USAGE'
-                     OR checkid = 'Y_CHECK_FUNCTION'.
-  ENDMETHOD.
-
-  METHOD write_non_executed_checks.
-    LOOP AT non_executed_checks ASSIGNING FIELD-SYMBOL(<non_executed_check>).
-      result = COND #( WHEN result IS NOT INITIAL THEN |{ result }<br>| ).
-      result = |{ result }```{ sy-tabix }. { <non_executed_check>-checkid }: { <non_executed_check>-description }```|.
-    ENDLOOP.
-    IF result IS INITIAL.
       RETURN.
     ENDIF.
-    result = |Failed:<br>{ result }|.
+
+    response->set_cdata( 'OK' ).
   ENDMETHOD.
+
 
   METHOD execute_unit_test.
     raise_internal_code_pal_error( ).
     RETURN.
   ENDMETHOD.
+
 
   METHOD execute_upgrade.
     DATA exception TYPE REF TO zcx_abapgit_exception.
@@ -265,7 +205,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
 
     TRY.
         repo->select_branch( 'refs/heads/master' ).
-      CATCH zcx_abapgit_exception.
+      CATCH zcx_abapgit_exception INTO exception.
         raise_internal_code_pal_error( ).
         response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
         RETURN.
@@ -273,7 +213,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
 
     TRY.
         DATA(checks) = repo->deserialize_checks( ).
-      CATCH zcx_abapgit_exception.
+      CATCH zcx_abapgit_exception INTO exception.
         raise_internal_code_pal_error( ).
         response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
         RETURN.
@@ -308,11 +248,111 @@ CLASS y_code_pal_service IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    SUBMIT y_ci_check_registration AND RETURN.
+    response->set_cdata( 'OK' ).
+  ENDMETHOD.
+
+
+  METHOD execute_activate_checks.
+    IF request->get_method( ) <> 'GET'.
+      raise_method_not_allowed( ).
+      RETURN.
+    ENDIF.
+
+    TRY.
+        y_code_pal_register=>deactivate_all_checks( ).
+        IF y_code_pal_register=>failures > 0.
+          response->set_cdata( |{ y_code_pal_register=>failures } 'Entry(s) failed to deactivate' | ).
+          RAISE EXCEPTION TYPE cx_failed.
+        ENDIF.
+      CATCH cx_failed.
+        raise_internal_code_pal_error( ).
+        ROLLBACK WORK.
+        RETURN.
+    ENDTRY.
+
+    TRY.
+        y_code_pal_register=>activate_all_checks( ).
+        IF y_code_pal_register=>failures > 0.
+          response->set_cdata( |{ y_code_pal_register=>failures } 'Entry(s) failed to activate' | ).
+          RAISE EXCEPTION TYPE cx_failed.
+        ENDIF.
+      CATCH cx_failed.
+        raise_internal_code_pal_error( ).
+        ROLLBACK WORK.
+        RETURN.
+    ENDTRY.
+
+    COMMIT WORK.
 
     response->set_cdata( 'OK' ).
-
   ENDMETHOD.
+
+
+  METHOD get_basis_version.
+    SELECT SINGLE * FROM cvers INTO @DATA(cver) WHERE component = 'SAP_BASIS'.
+    result = |{ cver-release }-{ cver-extrelease }|.
+  ENDMETHOD.
+
+
+  METHOD if_http_extension~handle_request.
+    request = server->request.
+    response = server->response.
+
+    CASE request->get_header_field( 'action' ).
+      WHEN 'import_profile'.
+        execute_import_profile( ).
+      WHEN 'get_versions'.
+        execute_get_versions( ).
+      WHEN 'regression_test'.
+        execute_regression_test( ).
+      WHEN 'unit_test'.
+        execute_unit_test( ).
+      WHEN 'upgrade'.
+        execute_upgrade( ).
+      WHEN 'activate_checks'.
+        execute_activate_checks( ).
+      WHEN OTHERS.
+        raise_bad_request( ).
+        RETURN.
+    ENDCASE.
+  ENDMETHOD.
+
+
+  METHOD list_non_executed_checks.
+    result = checks.
+    LOOP AT findings ASSIGNING FIELD-SYMBOL(<finding>).
+      DELETE result WHERE checkid = <finding>-test.
+    ENDLOOP.
+    " not supported
+    DELETE result WHERE checkid = 'Y_CHECK_PROFILE_MESSAGE'
+                     OR checkid = 'Y_CHECK_TEST_SEAM_USAGE'
+                     OR checkid = 'Y_CHECK_FUNCTION'.
+  ENDMETHOD.
+
+
+  METHOD raise_bad_request.
+    response->set_status( code   = '400'
+                          reason = 'Bad Request' ).
+  ENDMETHOD.
+
+
+  METHOD raise_forbidden.
+    response->set_status( code   = '403'
+                          reason = 'Forbidden' ).
+  ENDMETHOD.
+
+
+  METHOD raise_internal_code_pal_error.
+    response->set_status( code   = '500'
+                          reason = 'Internal Code Pal Error' ).
+  ENDMETHOD.
+
+
+  METHOD raise_method_not_allowed.
+    response->set_status( code   = '405'
+                          reason = 'Method Not Allowed' ).
+  ENDMETHOD.
+
 
   METHOD write_abapgit_messages.
     LOOP AT messages ASSIGNING FIELD-SYMBOL(<message>)
@@ -322,4 +362,15 @@ CLASS y_code_pal_service IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
+  METHOD write_non_executed_checks.
+    LOOP AT non_executed_checks ASSIGNING FIELD-SYMBOL(<non_executed_check>).
+      result = COND #( WHEN result IS NOT INITIAL THEN |{ result }<br>| ).
+      result = |{ result }```{ sy-tabix }. { <non_executed_check>-checkid }: { <non_executed_check>-description }```|.
+    ENDLOOP.
+    IF result IS INITIAL.
+      RETURN.
+    ENDIF.
+    result = |Failed:<br>{ result }|.
+  ENDMETHOD.
 ENDCLASS.
