@@ -65,30 +65,17 @@ CLASS y_code_pal_register IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD select_object_list.
-    SELECT SINGLE devclass FROM tadir
-    WHERE obj_name = 'Y_CHECK_BASE'
-    AND object = 'CLAS'
-    AND delflag = @abap_false
-    INTO @DATA(packagename).
-
-    IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE cx_failed.
-    ENDIF.
-
-    REPLACE 'FOUNDATION' IN packagename WITH 'CHECKS'.
-
-    SELECT obj_name FROM tadir
-    WHERE devclass = @packagename
-    AND object = 'CLAS'
-    AND delflag = @abap_false
-    INTO TABLE @result.
-
-    IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE cx_failed.
-    ENDIF.
-
     APPEND get_category_name( ) TO result.
+
+    LOOP AT y_profile_manager=>create( )->get_checks_from_db( ) ASSIGNING FIELD-SYMBOL(<check>).
+      APPEND <check>-obj_name TO result.
+    ENDLOOP.
+
     SORT result ASCENDING AS TEXT.
+
+    IF result IS INITIAL.
+      RAISE EXCEPTION TYPE cx_failed.
+    ENDIF.
   ENDMETHOD.
 
   METHOD activate_check.
