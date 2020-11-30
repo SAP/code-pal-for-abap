@@ -236,7 +236,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
     IF result IS INITIAL.
       RETURN.
     ENDIF.
-    result = |Non-Executed Checks:<br>{ result }|.
+    result = |Failed:<br>{ result }|.
   ENDMETHOD.
 
   METHOD execute_unit_test.
