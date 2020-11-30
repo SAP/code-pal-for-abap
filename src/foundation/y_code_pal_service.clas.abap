@@ -10,7 +10,7 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
   PROTECTED SECTION.
     METHODS raise_bad_request.
     METHODS raise_method_not_allowed.
-    METHODS raise_internal_server_error.
+    METHODS raise_internal_code_pal_error.
     METHODS raise_forbidden.
 
     METHODS execute_import_profile.
@@ -32,14 +32,12 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
     METHODS write_non_executed_checks IMPORTING non_executed_checks TYPE y_if_profile_manager=>check_descriptions
                                       RETURNING VALUE(result)       TYPE string.
 
+    METHODS write_abapgit_messages IMPORTING messages      TYPE zif_abapgit_log=>ty_log_outs
+                                   RETURNING value(result) TYPE string.
+
   PRIVATE SECTION.
     DATA request TYPE REF TO if_http_request.
     DATA response TYPE REF TO if_http_response.
-    METHODS write_abapgit_messages
-      IMPORTING
-        messages      TYPE zif_abapgit_log=>ty_log_outs
-      RETURNING
-        value(result) TYPE string.
 
 ENDCLASS.
 
@@ -93,7 +91,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
         profile_manager->import_profile( profile ).
       CATCH ycx_failed_to_add_a_line
             ycx_time_overlap.
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         RETURN.
       CATCH ycx_no_delegation_rights.
         raise_forbidden( ).
@@ -132,7 +130,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
                           reason = 'Forbidden' ).
   ENDMETHOD.
 
-  METHOD raise_internal_server_error.
+  METHOD raise_internal_code_pal_error.
     response->set_status( code   = '500'
                           reason = 'Internal Code Pal Error' ).
   ENDMETHOD.
@@ -164,7 +162,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
                                                                                         ( obj_type = 'PROG' obj_name = 'Y_DEMO_FAILURES' ) ) ).
       CATCH cx_satc_empty_object_set.
         " Object set contains no checkable objects
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         RETURN.
     ENDTRY.
 
@@ -172,7 +170,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
         DATA(variant) = atc->get_repository( )->load_ci_check_variant( i_name = 'Y_CODE_PAL' ).
       CATCH cx_satc_not_found.
         " Specified Code Inspector variant was not found
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         RETURN.
     ENDTRY.
 
@@ -186,7 +184,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
         controller->run( IMPORTING e_result_access = DATA(result_access) ).
       CATCH cx_satc_failure.
         " ATC check run failed (no authorization, etc.)
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         RETURN.
     ENDTRY.
 
@@ -195,14 +193,14 @@ CLASS y_code_pal_service IMPLEMENTATION.
                                                e_findings_extension = DATA(findings_extension) ).
       CATCH cx_satc_failure.
         " Result access failed (no authorization, etc.)
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         RETURN.
     ENDTRY.
 
     TRY.
         DATA(checks) = y_profile_manager=>create( )->select_existing_checks( ).
       CATCH ycx_entry_not_found.
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         RETURN.
     ENDTRY.
 
@@ -240,7 +238,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD execute_unit_test.
-    raise_internal_server_error( ).
+    raise_internal_code_pal_error( ).
     RETURN.
   ENDMETHOD.
 
@@ -260,7 +258,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
           ENDIF.
         ENDLOOP.
       CATCH zcx_abapgit_exception INTO exception.
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
         RETURN.
     ENDTRY.
@@ -268,7 +266,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
     TRY.
         repo->select_branch( 'refs/heads/master' ).
       CATCH zcx_abapgit_exception.
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
         RETURN.
     ENDTRY.
@@ -276,7 +274,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
     TRY.
         DATA(checks) = repo->deserialize_checks( ).
       CATCH zcx_abapgit_exception.
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
         RETURN.
     ENDTRY.
@@ -293,24 +291,26 @@ CLASS y_code_pal_service IMPLEMENTATION.
       checks-requirements-decision = 'Y'.
     ENDIF.
 
-    DATA(log) = repo->create_new_log( 'code pal service').
+    DATA(log) = repo->create_new_log( 'code pal service' ).
 
     TRY.
         repo->deserialize( is_checks = checks
                            ii_log = log ).
       CATCH zcx_abapgit_exception.
-        raise_internal_server_error( ).
+        raise_internal_code_pal_error( ).
         response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
         RETURN.
     ENDTRY.
 
-    IF log->get_status( ) = 'S'.
-      response->set_cdata( 'OK' ).
-    ELSE.
-      raise_internal_server_error( ).
+    IF log->get_status( ) <> 'S'.
+      raise_internal_code_pal_error( ).
       response->set_cdata( write_abapgit_messages( log->get_messages( ) ) ).
       RETURN.
     ENDIF.
+
+    SUBMIT y_ci_check_registration AND RETURN.
+
+    response->set_cdata( 'OK' ).
 
   ENDMETHOD.
 
