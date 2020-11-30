@@ -15,7 +15,7 @@ CLASS ltc_data IMPLEMENTATION.
   METHOD get_code_with_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   DATA aunit TYPE REF TO cl_aunit_assert.' )
     ).
   ENDMETHOD.
@@ -23,7 +23,7 @@ CLASS ltc_data IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   DATA aunit TYPE REF TO cl_abap_unit_assert.' )
     ).
   ENDMETHOD.
@@ -31,7 +31,7 @@ CLASS ltc_data IMPLEMENTATION.
   METHOD get_code_with_exemption.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   DATA aunit TYPE REF TO cl_aunit_assert. "#EC DEPRECATED_CLAS' )
     ).
   ENDMETHOD.
@@ -56,7 +56,7 @@ CLASS ltc_field_symbol IMPLEMENTATION.
   METHOD get_code_with_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   FIELD-SYMBOLS <aunit> TYPE REF TO cl_aunit_assert.' )
     ).
   ENDMETHOD.
@@ -64,7 +64,7 @@ CLASS ltc_field_symbol IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   FIELD-SYMBOLS <aunit> TYPE REF TO cl_abap_unit_assert.' )
     ).
   ENDMETHOD.
@@ -72,7 +72,7 @@ CLASS ltc_field_symbol IMPLEMENTATION.
   METHOD get_code_with_exemption.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   FIELD-SYMBOLS <aunit> TYPE REF TO cl_aunit_assert. "#EC DEPRECATED_CLAS' )
     ).
   ENDMETHOD.
@@ -97,7 +97,7 @@ CLASS ltc_types IMPLEMENTATION.
   METHOD get_code_with_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   TYPES: BEGIN OF type,' )
       ( '            aunit TYPE REF TO cl_aunit_assert,' )
       ( '          END OF type.' )
@@ -107,7 +107,7 @@ CLASS ltc_types IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   TYPES: BEGIN OF type,' )
       ( '            aunit TYPE REF TO cl_abap_unit_assert,' )
       ( '          END OF type.' )
@@ -117,7 +117,7 @@ CLASS ltc_types IMPLEMENTATION.
   METHOD get_code_with_exemption.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   TYPES: BEGIN OF type,' )
       ( '            aunit TYPE REF TO cl_aunit_assert, "#EC DEPRECATED_CLAS' )
       ( '          END OF type.' )
@@ -145,9 +145,9 @@ CLASS ltc_static_attribute IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' INTERFACE example. ')
+      ( ' INTERFACE example.' )
       ( '   CLASS-DATA aunit TYPE REF TO cl_aunit_assert.' )
-      ( ' ENDINTERFACE.')
+      ( ' ENDINTERFACE.' )
     ).
   ENDMETHOD.
 
@@ -155,9 +155,9 @@ CLASS ltc_static_attribute IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' INTERFACE example. ')
+      ( ' INTERFACE example.' )
       ( '   CLASS-DATA aunit TYPE REF TO cl_abap_unit_assert.' )
-      ( ' ENDINTERFACE.')
+      ( ' ENDINTERFACE.' )
     ).
   ENDMETHOD.
 
@@ -165,9 +165,9 @@ CLASS ltc_static_attribute IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' INTERFACE example. ')
+      ( ' INTERFACE example.' )
       ( '   CLASS-DATA aunit TYPE REF TO cl_aunit_assert. "#EC DEPRECATED_CLAS' )
-      ( ' ENDINTERFACE.')
+      ( ' ENDINTERFACE.' )
     ).
   ENDMETHOD.
 
@@ -192,13 +192,13 @@ CLASS ltc_instance_attribute IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' CLASS example DEFINITION. ')
-      ( '   PROTECTED SECTION. ')
+      ( ' CLASS example DEFINITION.' )
+      ( '   PROTECTED SECTION.' )
       ( '     DATA aunit TYPE REF TO cl_aunit_assert.' )
-      ( ' ENDCLASS.')
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS example IMPLEMENTATION. ')
-      ( ' ENDCLASS.')
+      ( ' CLASS example IMPLEMENTATION.' )
+      ( ' ENDCLASS.' )
     ).
   ENDMETHOD.
 
@@ -206,13 +206,13 @@ CLASS ltc_instance_attribute IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' CLASS example DEFINITION. ')
-      ( '   PROTECTED SECTION. ')
+      ( ' CLASS example DEFINITION.' )
+      ( '   PROTECTED SECTION.' )
       ( '     DATA aunit TYPE REF TO cl_abap_unit_assert.' )
-      ( ' ENDCLASS.')
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS example IMPLEMENTATION. ')
-      ( ' ENDCLASS.')
+      ( ' CLASS example IMPLEMENTATION.' )
+      ( ' ENDCLASS.' )
     ).
   ENDMETHOD.
 
@@ -220,13 +220,13 @@ CLASS ltc_instance_attribute IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' CLASS example DEFINITION. ')
-      ( '   PROTECTED SECTION. ')
+      ( ' CLASS example DEFINITION.' )
+      ( '   PROTECTED SECTION.' )
       ( '     DATA aunit TYPE REF TO cl_aunit_assert. "#EC DEPRECATED_CLAS' )
-      ( ' ENDCLASS.')
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS example IMPLEMENTATION. ')
-      ( ' ENDCLASS.')
+      ( ' CLASS example IMPLEMENTATION.' )
+      ( ' ENDCLASS.' )
     ).
   ENDMETHOD.
 
@@ -251,15 +251,15 @@ CLASS ltc_parameter IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' CLASS example DEFINITION. ')
-      ( '   PROTECTED SECTION. ')
+      ( ' CLASS example DEFINITION.' )
+      ( '   PROTECTED SECTION.' )
       ( '     METHODS example IMPORTING aunit TYPE REF TO cl_aunit_assert.' )
-      ( ' ENDCLASS.')
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS example IMPLEMENTATION. ')
-      ( '   METHOD example.')
-      ( '   ENDMETHOD.')
-      ( ' ENDCLASS.')
+      ( ' CLASS example IMPLEMENTATION.' )
+      ( '   METHOD example.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS.' )
     ).
   ENDMETHOD.
 
@@ -267,15 +267,15 @@ CLASS ltc_parameter IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' CLASS example DEFINITION. ')
-      ( '   PROTECTED SECTION. ')
+      ( ' CLASS example DEFINITION.' )
+      ( '   PROTECTED SECTION.' )
       ( '     METHODS example IMPORTING aunit TYPE REF TO cl_abap_unit_assert.' )
-      ( ' ENDCLASS.')
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS example IMPLEMENTATION. ')
-      ( '   METHOD example.')
-      ( '   ENDMETHOD.')
-      ( ' ENDCLASS.')
+      ( ' CLASS example IMPLEMENTATION.' )
+      ( '   METHOD example.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS.' )
     ).
   ENDMETHOD.
 
@@ -283,15 +283,15 @@ CLASS ltc_parameter IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT test.' )
 
-      ( ' CLASS example DEFINITION. ')
-      ( '   PROTECTED SECTION. ')
+      ( ' CLASS example DEFINITION.' )
+      ( '   PROTECTED SECTION.' )
       ( '     METHODS example IMPORTING aunit TYPE REF TO cl_aunit_assert. "#EC DEPRECATED_CLAS' )
-      ( ' ENDCLASS.')
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS example IMPLEMENTATION. ')
-      ( '   METHOD example.')
-      ( '   ENDMETHOD.')
-      ( ' ENDCLASS.')
+      ( ' CLASS example IMPLEMENTATION.' )
+      ( '   METHOD example.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS.' )
     ).
   ENDMETHOD.
 
@@ -308,7 +308,7 @@ CLASS ltc_variable IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   DATA cl_aunit_assert TYPE REF TO cl_abap_unit_assert.' )
     ).
 
@@ -339,7 +339,7 @@ CLASS ltc_multiple_times IMPLEMENTATION.
   METHOD get_code_with_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   DATA aunit TYPE REF TO cl_aunit_assert.' )
       ( '   DATA const TYPE REF TO if_aunit_constants.' )
     ).
@@ -348,7 +348,7 @@ CLASS ltc_multiple_times IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   DATA aunit TYPE REF TO cl_abap_unit_assert.' )
       ( '   DATA const TYPE REF TO if_abap_unit_constant.' )
     ).
@@ -357,7 +357,7 @@ CLASS ltc_multiple_times IMPLEMENTATION.
   METHOD get_code_with_exemption.
     result = VALUE #(
       ( ' REPORT test.' )
-      ( ' START-OF-SELECTION. ' )
+      ( ' START-OF-SELECTION.' )
       ( '   DATA aunit TYPE REF TO cl_aunit_assert. "#EC DEPRECATED_CLAS' )
       ( '   DATA const TYPE REF TO if_aunit_constants. "#EC DEPRECATED_CLAS' )
     ).
