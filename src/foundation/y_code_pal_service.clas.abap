@@ -202,7 +202,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
     ENDTRY.
 
     TRY.
-        repo->select_branch( 'refs/heads/master' ).
+        repo->select_branch( 'refs/heads/upgrade-api' ).
       CATCH zcx_abapgit_exception INTO exception.
         raise_internal_code_pal_error( ).
         response->set_cdata( |{ exception->get_text( ) }<br>{ exception->get_longtext( ) }| ).
