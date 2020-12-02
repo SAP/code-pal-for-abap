@@ -1,26 +1,36 @@
 CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
     TYPES: BEGIN OF counter,
              if_structure TYPE sstruc,
-             if_statement type sstmnt,
+             if_statement TYPE sstmnt,
              condition    TYPE string,
              count        TYPE i,
            END OF counter.
     TYPES counters TYPE TABLE OF counter.
+    TYPES: helper_type TYPE sstmnt.
+    METHODS has_multiple_conditions
+      IMPORTING
+        statement     TYPE helper_type
+      RETURNING
+        value(result) TYPE abap_bool.
 
-    METHODS should_skip_test_code IMPORTING structure TYPE sstruc
-                 RETURNING VALUE(result) TYPE abap_bool.
+    METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
+                                  RETURNING VALUE(result) TYPE abap_bool.
+
     METHODS handle_result IMPORTING counters TYPE counters.
+
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_PREFER_CASE_TO_ELSEIF IMPLEMENTATION.
+CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -35,12 +45,10 @@ CLASS Y_CHECK_PREFER_CASE_TO_ELSEIF IMPLEMENTATION.
 
 
   METHOD execute_check.
-
     DATA counters TYPE counters.
 
     DATA(structures) = ref_scan_manager->get_structures( ).
     DATA(statements) = ref_scan_manager->get_statements( ).
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
 
     LOOP AT structures ASSIGNING FIELD-SYMBOL(<structure>)
     WHERE type = scan_struc_type-condition
@@ -51,26 +59,31 @@ CLASS Y_CHECK_PREFER_CASE_TO_ELSEIF IMPLEMENTATION.
       ENDIF.
 
       DATA(statement) = statements[ <structure>-stmnt_from ].
-      DATA(token) = tokens[ statement-from ].
 
-      DATA(if_structure) = COND #( WHEN token-str = 'IF' THEN <structure>
-                                   WHEN token-str = 'ELSEIF' THEN structures[ <structure>-back ] ).
+      IF has_multiple_conditions( statement ) = abap_true.
+        CONTINUE.
+      ENDIF.
+
+      DATA(token) = get_token_abs( statement-from ).
+
+      DATA(if_structure) = COND #( WHEN token = 'IF' THEN <structure>
+                                   WHEN token = 'ELSEIF' THEN structures[ <structure>-back ] ).
 
       IF if_structure IS INITIAL.
         CONTINUE.
       ENDIF.
 
-      DATA(condition) = tokens[ statement-from + 1 ].
+      DATA(condition) = get_token_abs( statement-from + 1 ).
 
       TRY.
           counters[ if_structure = if_structure
-                    condition = condition-str ]-count = counters[ if_structure = if_structure
-                                                                  condition = condition-str ]-count + 1.
+                    condition = condition ]-count = counters[ if_structure = if_structure
+                                                              condition = condition ]-count + 1.
         CATCH cx_sy_itab_line_not_found.
           counters = VALUE #( BASE counters
                             ( if_structure = if_structure
                               if_statement = statements[ if_structure-stmnt_from ]
-                              condition = condition-str
+                              condition = condition
                               count = 1 ) ).
       ENDTRY.
 
@@ -109,4 +122,14 @@ CLASS Y_CHECK_PREFER_CASE_TO_ELSEIF IMPLEMENTATION.
                    error_priority      = configuration-prio ).
     ENDLOOP.
   ENDMETHOD.
+
+  METHOD has_multiple_conditions.
+    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to
+    WHERE str = 'AND' OR str = 'OR'.
+      result = abap_true.
+      RETURN.
+    ENDLOOP.
+  ENDMETHOD.
+
 ENDCLASS.
