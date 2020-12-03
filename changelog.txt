@@ -10,6 +10,7 @@ Legend
 
 2020-12-XX v1.10.0
 ------------------
+! Chain Declaration check is now warning by default
 + abapLint app integration in github
 + API regression reports 'maintain attributes..." message
 + API improvements
