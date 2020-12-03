@@ -180,7 +180,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
 
     TRY.
         controller->run( IMPORTING e_result_access = DATA(result_access) ).
-      CATCH cx_satc_failure..
+      CATCH cx_satc_failure.
         raise_internal_server_error( ).
         response->set_cdata( 'ATC check run failed (no authorization, etc.)' ).
         RETURN.
