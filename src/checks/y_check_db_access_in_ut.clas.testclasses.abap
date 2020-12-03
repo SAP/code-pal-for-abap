@@ -1,482 +1,3 @@
-CLASS ltc_select DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_select IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_db_access_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA tadir TYPE tadir. ' )
-      ( '     SELECT SINGLE * FROM tadir INTO tadir. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '    DATA(tadir) = VALUE tt_tadir( ).' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA tadir TYPE tadir. ' )
-      ( '     SELECT SINGLE * FROM tadir INTO tadir. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_delete DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_delete IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_db_access_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( |     DATA(line) = VALUE tadir( obj_name = 'xyz' ). | )
-      ( '     DELETE tadir FROM line. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( |     DATA(line) = VALUE tadir( obj_name = 'xyz' ). | )
-      ( '     DELETE tadir FROM line. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_modify DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_modify IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_db_access_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     MODIFY tadir FROM line. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     MODIFY tadir FROM line. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_update DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_update IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_db_access_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     UPDATE tadir FROM line. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     UPDATE tadir FROM line. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_insert DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_insert IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_db_access_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     INSERT tadir FROM line. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     DATA(line) = VALUE tadir( ). ' )
-      ( '     INSERT tadir FROM line. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_rollback DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_rollback IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_db_access_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     ROLLBACK WORK. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     ROLLBACK WORK. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_commit DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_cut REDEFINITION.
-    METHODS get_code_with_issue REDEFINITION.
-    METHODS get_code_without_issue REDEFINITION.
-    METHODS get_code_with_exemption REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_commit IMPLEMENTATION.
-
-  METHOD get_cut.
-    result ?= NEW y_check_db_access_in_ut( ).
-  ENDMETHOD.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     COMMIT WORK. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_without_issue.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     "No db use ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-  METHOD get_code_with_exemption.
-    result = VALUE #(
-      ( ' REPORT ut_test. ' )
-
-      ( ' CLASS lcl_classname DEFINITION FOR TESTING. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS.' )
-
-      ( ' CLASS lcl_classname IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( '     COMMIT WORK AND WAIT. "#EC DB_ACCESS_UT ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
 CLASS ltc_osql_framework DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
@@ -575,6 +96,263 @@ CLASS ltc_osql_framework IMPLEMENTATION.
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_risk_harmless DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_expected_count REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_risk_harmless IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_db_access_in_ut( ).
+  ENDMETHOD.
+
+  METHOD get_expected_count.
+    result = 8.
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DATA profile TYPE ytab_profiles. ' )
+
+      ( '     SELECT SINGLE * FROM ytab_profiles INTO profile. ' )
+
+      ( '     INSERT INTO ytab_profiles VALUES profile. ' )
+      ( '     MODIFY ytab_profiles FROM profile. ' )
+      ( '     UPDATE ytab_profiles FROM profile. ' )
+      ( '     DELETE ytab_profiles FROM profile. ' )
+
+      ( '     COMMIT WORK. ' )
+      ( '     COMMIT WORK AND WAIT. ' )
+
+      ( '     ROLLBACK WORK. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DATA profiles TYPE TABLE OF ytab_profiles. ' )
+
+      ( '     DATA(profile) = VALUE ytab_profiles( profile = sy-uname username = sy-uname ). ' )
+
+      ( '     INSERT profile INTO TABLE profiles. ' )
+      ( '     MODIFY profiles FROM profile INDEX 1. ' )
+      ( '     DELETE profiles FROM profile. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DATA profile TYPE ytab_profiles. ' )
+
+      ( '     SELECT SINGLE * FROM ytab_profiles INTO profile. "#EC DB_ACCESS_UT ' )
+
+      ( '     INSERT INTO ytab_profiles VALUES profile. "#EC DB_ACCESS_UT ' )
+      ( '     MODIFY ytab_profiles FROM profile. "#EC DB_ACCESS_UT ' )
+      ( '     UPDATE ytab_profiles FROM profile. "#EC DB_ACCESS_UT ' )
+      ( '     DELETE ytab_profiles FROM profile. "#EC DB_ACCESS_UT ' )
+
+      ( '     COMMIT WORK. "#EC DB_ACCESS_UT ' )
+      ( '     COMMIT WORK AND WAIT. "#EC DB_ACCESS_UT ' )
+
+      ( '     ROLLBACK WORK. "#EC DB_ACCESS_UT ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_risk_critical DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_risk_critical IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_db_access_in_ut( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL CRITICAL DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DELETE FROM ytab_profiles WHERE username = sy-uname. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL CRITICAL DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DATA profile TYPE ytab_profiles. ' )
+
+      ( '     SELECT SINGLE * FROM ytab_profiles INTO profile. ' )
+
+      ( '     INSERT INTO ytab_profiles VALUES profile. ' )
+      ( '     MODIFY ytab_profiles FROM profile. ' )
+      ( '     UPDATE ytab_profiles FROM profile. ' )
+
+      ( '     COMMIT WORK. ' )
+      ( '     COMMIT WORK AND WAIT. ' )
+
+      ( '     ROLLBACK WORK. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL CRITICAL DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DELETE FROM ytab_profiles WHERE username = sy-uname. "#EC DB_ACCESS_UT ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_risk_dangerous DEFINITION INHERITING FROM ltc_risk_critical FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+  PRIVATE SECTION.
+    METHODS convert_critical_to_dangerous IMPORTING code          TYPE y_char255_tab
+                                          RETURNING VALUE(result) TYPE y_char255_tab.
+ENDCLASS.
+
+CLASS ltc_risk_dangerous IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_db_access_in_ut( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = convert_critical_to_dangerous( super->get_code_with_issue( ) ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = convert_critical_to_dangerous( super->get_code_without_issue( ) ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = convert_critical_to_dangerous( super->get_code_with_exemption( ) ).
+  ENDMETHOD.
+
+  METHOD convert_critical_to_dangerous.
+    TRY.
+        DATA(index) = line_index( code[ table_line = ' CLASS example DEFINITION FOR TESTING RISK LEVEL CRITICAL DURATION SHORT. ' ] ).
+        result = code.
+        result[ index ] = ' CLASS example DEFINITION FOR TESTING RISK LEVEL DANGEROUS DURATION SHORT. '.
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_risk_not_set DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+  PRIVATE SECTION.
+    METHODS convert_harmless_to_not_set IMPORTING code          TYPE y_char255_tab
+                                        RETURNING VALUE(result) TYPE y_char255_tab.
+ENDCLASS.
+
+CLASS ltc_risk_not_set IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = convert_harmless_to_not_set( super->get_code_with_issue( ) ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = convert_harmless_to_not_set( super->get_code_without_issue( ) ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = convert_harmless_to_not_set( super->get_code_with_exemption( ) ).
+  ENDMETHOD.
+
+  METHOD convert_harmless_to_not_set.
+    TRY.
+        DATA(index) = line_index( code[ table_line = ' CLASS example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' ] ).
+        result = code.
+        result[ index ] = ' CLASS example DEFINITION FOR TESTING. '.
+    CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.
