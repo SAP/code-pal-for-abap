@@ -205,6 +205,7 @@ ENDCLASS.
 CLASS ltc_risk_critical DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
+    METHODS get_expected_count REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
     METHODS get_code_without_issue REDEFINITION.
     METHODS get_code_with_exemption REDEFINITION.
@@ -214,6 +215,10 @@ CLASS ltc_risk_critical IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_db_access_in_ut( ).
+  ENDMETHOD.
+
+  METHOD get_expected_count.
+    result = 3.
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -227,6 +232,9 @@ CLASS ltc_risk_critical IMPLEMENTATION.
 
       ( ' CLASS example IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
+      ( '     DATA profile TYPE ytab_profiles. ' )
+      ( '     MODIFY ytab_profiles FROM profile. ' )
+      ( '     UPDATE ytab_profiles FROM profile. ' )
       ( '     DELETE FROM ytab_profiles WHERE username = sy-uname. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
@@ -249,8 +257,6 @@ CLASS ltc_risk_critical IMPLEMENTATION.
       ( '     SELECT SINGLE * FROM ytab_profiles INTO profile. ' )
 
       ( '     INSERT INTO ytab_profiles VALUES profile. ' )
-      ( '     MODIFY ytab_profiles FROM profile. ' )
-      ( '     UPDATE ytab_profiles FROM profile. ' )
 
       ( '     COMMIT WORK. ' )
       ( '     COMMIT WORK AND WAIT. ' )
@@ -272,6 +278,9 @@ CLASS ltc_risk_critical IMPLEMENTATION.
 
       ( ' CLASS example IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
+      ( '     DATA profile TYPE ytab_profiles. ' )
+      ( '     MODIFY ytab_profiles FROM profile. "#EC DB_ACCESS_UT ' )
+      ( '     UPDATE ytab_profiles FROM profile. "#EC DB_ACCESS_UT ' )
       ( '     DELETE FROM ytab_profiles WHERE username = sy-uname. "#EC DB_ACCESS_UT ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
@@ -353,6 +362,76 @@ CLASS ltc_risk_not_set IMPLEMENTATION.
     CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_exec_sql DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_exec_sql IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_db_access_in_ut( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL CRITICAL DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     EXEC SQL. ' )
+      ( '       DELETE FROM ytab_profiles WHERE username = sy-uname; ' )
+      ( '     ENDEXEC. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL CRITICAL DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '      ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL CRITICAL DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DELETE FROM ytab_profiles WHERE username = sy-uname. "#EC DB_ACCESS_UT ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
   ENDMETHOD.
 
 ENDCLASS.
