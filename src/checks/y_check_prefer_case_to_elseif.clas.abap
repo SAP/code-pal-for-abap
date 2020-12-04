@@ -14,12 +14,9 @@ CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_ba
              count        TYPE i,
            END OF counter.
     TYPES counters TYPE TABLE OF counter.
-    TYPES: helper_type TYPE sstmnt.
-    METHODS has_multiple_conditions
-      IMPORTING
-        statement     TYPE helper_type
-      RETURNING
-        value(result) TYPE abap_bool.
+
+    METHODS has_multiple_conditions IMPORTING statement     TYPE sstmnt
+                                    RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
                                   RETURNING VALUE(result) TYPE abap_bool.
