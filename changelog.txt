@@ -10,8 +10,9 @@ Legend
 
 2020-12-XX v1.10.0
 ------------------
+! Prefer Case to ElseIf is now reporting single conditions only (#262)
 ! Chain Declaration check is now warning by default (#266)
-+ abapLint app integration in github (#264)
++ abapLint app integration in GitHub (#264)
 + API regression reports 'maintain attributes..." message (#259)
 + API improvements (#259)
 * Missing space between string or character literal and parentheses (#253)
