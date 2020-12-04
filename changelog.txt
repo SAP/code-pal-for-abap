@@ -10,9 +10,10 @@ Legend
 
 2020-12-XX v1.10.0
 ------------------
-+ abapLint app integration in github
-+ API regression reports 'maintain attributes..." message
-+ API improvements
+! Chain Declaration check is now warning by default (#266)
++ abapLint app integration in github (#264)
++ API regression reports 'maintain attributes..." message (#259)
++ API improvements (#259)
 * Missing space between string or character literal and parentheses (#253)
 * Broken UTs (#251)
 * Constants in Interface (#244)
