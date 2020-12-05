@@ -1,0 +1,100 @@
+code-pal-for-abap changelog
+=================
+
+Legend
+------
+* : fixed
+! : changed
++ : added
+- : removed
+
+2020-11-23 v1.09.0
+------------------
++ deprecated classes/interfaces check
+! coverage checks threshold
+! 'check statement position' won't validate check in loop anymore
++ new check: 'check in loop'
+* object creation date for classes
++ service to execute regression test
+
+2020-11-16 v1.08.0
+------------------
+! deprecated classes/interfaces (aunit)
+* short dump in unit test fixed 
+! unit test using buffer with shared memory
+* prefer is not exempts line_exists( )
+* check order in sci
+
+2020-11-11 v1.07.0
+------------------
+* comment type exempt generated include
+* comment position for empty catches
+! self reference check validates instance method only
+* buffer deadlock
+! Y_CHECK_RETURNING_NAME is warning by default
+* minor clean code refactoring
++ automatic exemption for function modules with prefix TABLEFRAME* and TABLEPROC*
+* sort dump in the comment position check
+* omit optional exporting with exceptions
+
+2020-10-27 v1.06.0
+------------------
+* subsequent memory assignment check
+* 7.40 compatibility issue
+! abapLint support
+* performance
+* 'object creation date' in the include level
+
+2020-10-10 v1.05.0
+------------------
+* profile message check runs only once
+! check messages
+- db access in ut when OSQL/CDS framework is being used
+! category description
++ report to activate or deactivate the SCI entries
++ add/remove all check in profiles
+
+2020-10-05 v1.04.1
+------------------
+* magic number to support numeric strings (#142)
++ enabling table log for exemptions
+* prefer case to else if (#156)
+
+2020-09-22 v1.04.0
+------------------
++ API to read version
+! minor clean code refactoring
+! minor documentation fixes
+
+2020-09-22 v1.03.1
+------------------
+* if_apack_manifest does not exist
+
+2020-09-22 v1.03.0
+------------------
++ statement coverage check
++ branch coverage check
++ procedure coverage check
++ API to import profile
+
+2020-09-17 v1.02.1
+------------------
+* unit test of external call in ut
+! description of the profile management tool
+
+2020-09-17 v1.02.0
+------------------
++ new check y_check_external_call_in_ut
++ new check y_check_statement_coverage
++ threshold support to 'less equal' and 'greater than'
+! folder logic to prefix logic
+! name to code pal for ABAP
+! project documentation 
+
+2020-09-15 v1.01.0
+------------------
++ profile feature
+
+2020-09-14 v1.00.0
+------------------
++ changelog
