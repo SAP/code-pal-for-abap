@@ -1,19 +1,47 @@
 CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS has_osql_or_cds_framework RETURNING VALUE(result) TYPE abap_bool.
+
   PRIVATE SECTION.
-    METHODS is_persistent_object IMPORTING obj_name TYPE string
+    CONSTANTS risk_level_harmless TYPE string VALUE 'HARMLESS'.
+    CONSTANTS risk_level_dangerous TYPE string VALUE 'DANGEROUS'.
+    CONSTANTS risk_level_critical TYPE string VALUE 'CRITICAL'.
+    CONSTANTS risk_level_not_set TYPE string VALUE 'NOT_SET'.
+
+    DATA tokens_not_allowed TYPE y_char255_tab.
+
+    METHODS has_osql_or_cds_framework IMPORTING method        TYPE sstruc
+                                      RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_persistent_object IMPORTING obj_name      TYPE string
                                  RETURNING VALUE(result) TYPE abap_bool.
-    METHODS check_if_error IMPORTING index     TYPE i
-                                     statement TYPE sstmnt.
+
+    METHODS consolidade_tokens IMPORTING statement     TYPE sstmnt
+                               RETURNING VALUE(result) TYPE string.
+
+    METHODS get_class_definition IMPORTING method        TYPE sstruc
+                                 RETURNING VALUE(result) TYPE sstruc
+                                 RAISING   cx_sy_itab_line_not_found.
+
+    METHODS get_test_risk_level IMPORTING method        TYPE sstruc
+                                RETURNING VALUE(result) TYPE string.
+
+    METHODS determine_tokens_not_allowed IMPORTING method TYPE sstruc.
+
+    METHODS has_ddic_itab_same_syntax IMPORTING token         TYPE char255
+                                      RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_internal_table IMPORTING statement     TYPE sstmnt
+                              RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
-CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
+CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -33,116 +61,152 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD execute_check.
-
-    CHECK has_osql_or_cds_framework( ) = abap_false.
-
     LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-      WHERE stmnt_type EQ scan_struc_stmnt_type-method.
+    WHERE stmnt_type EQ scan_struc_stmnt_type-method.
 
       is_testcode = test_code_detector->is_testcode( <structure> ).
-      IF is_testcode EQ abap_false.
+
+      IF is_testcode = abap_false.
         CONTINUE.
       ENDIF.
+
+      IF has_osql_or_cds_framework( <structure> ) = abap_true.
+        CONTINUE.
+      ENDIF.
+
+      determine_tokens_not_allowed( <structure> ).
 
       DATA(index) = <structure>-stmnt_from.
 
       LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-        FROM <structure>-stmnt_from TO <structure>-stmnt_to.
+      FROM <structure>-stmnt_from TO <structure>-stmnt_to.
 
         inspect_tokens( index = index
                         statement = <statement> ).
 
         index = index + 1.
+
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    DATA(token1) = get_token_abs( statement-from ).
-    DATA(token2) = get_token_abs( statement-from + 1 ).
-    DATA(token3) = get_token_abs( statement-from + 2 ).
+    DATA(tokens) = consolidade_tokens( statement ).
 
-    DATA(has_db_keyword) = xsdbool( token1 = 'COMMIT'
-                                 OR token1 = 'ROLLBACK'
-                                 OR token1 = 'SELECT'
-                                 OR token1 = 'EXEC'
-                                 OR token1 = 'ALTER' ).
+    LOOP AT tokens_not_allowed ASSIGNING FIELD-SYMBOL(<token_not_allowed>).
+      IF tokens NP <token_not_allowed>.
+        CONTINUE.
+      ENDIF.
 
-    DATA(is_name_in_token3) = xsdbool( ( token1 = 'INSERT' AND token2 = 'INTO' )
-                                    OR ( token1 = 'DELETE' AND token2 = 'FROM' ) ).
+      IF has_ddic_itab_same_syntax( <token_not_allowed> ) = abap_true
+      AND is_internal_table( statement ) = abap_true.
+        CONTINUE.
+      ENDIF.
 
-    DATA(is_name_in_token2) = xsdbool( ( token1 = 'INSERT'
-                                      OR token1 = 'UPDATE'
-                                      OR token1 = 'MODIFY'
-                                      OR token1 = 'DELETE' ) AND token3 = 'FROM' ).
+      DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF has_db_keyword = abap_true
-     OR ( is_name_in_token3 = abap_true AND is_persistent_object( to_upper( token3 ) ) = abap_true )
-     OR ( is_name_in_token2 = abap_true AND is_persistent_object( to_upper( token2 ) ) = abap_true ).
+      IF check_configuration IS INITIAL.
+        RETURN.
+      ENDIF.
 
-      check_if_error( index = index
-                      statement = statement ).
-    ENDIF.
+      raise_error( statement_level     = statement-level
+                   statement_index     = index
+                   statement_from      = statement-from
+                   error_priority      = check_configuration-prio ).
+    ENDLOOP.
   ENDMETHOD.
 
 
   METHOD is_persistent_object.
-
-    TRY.
-        SELECT SINGLE devclass FROM tadir INTO @DATA(package)
-          WHERE pgmid = 'R3TR' AND
-                object = 'TABL' AND
-                obj_name = @obj_name.
-        IF sy-subrc NE 0.
-          result = abap_false.
-          RETURN.
-        ENDIF.
-
-        DATA(checked_object) = cl_abap_dyn_prg=>check_table_name_str(
-             val             = obj_name
-             packages        = package ).
-
-        DATA dynamic_line TYPE REF TO data.
-        FIELD-SYMBOLS <table_structure> TYPE any.
-
-        CREATE DATA dynamic_line TYPE (checked_object).
-        ASSIGN dynamic_line->* TO <table_structure>.
-
-        SELECT SINGLE * FROM (checked_object) INTO <table_structure>.
-        result = abap_true.
-
-      CATCH cx_root. "#EC NEED_CX_ROOT
-        result = abap_false.
-    ENDTRY.
+    cl_abap_structdescr=>describe_by_name( EXPORTING p_name = obj_name
+                                           EXCEPTIONS OTHERS = 1 ).
+    result = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
 
-
-  METHOD check_if_error.
-    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
-    DATA(key_word) = get_token_abs( statement-from ).
-
-    check_configuration = detect_check_configuration( statement ).
-
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ key_word }| ).
-
-  ENDMETHOD.
 
   METHOD has_osql_or_cds_framework.
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    TRY.
+        DATA(class_definition) = get_class_definition( method ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
 
-    IF line_exists( tokens[ str = 'IF_OSQL_TEST_ENVIRONMENT' ] )
-    OR line_exists( tokens[ str = 'IF_CDS_TEST_ENVIRONMENT' ] ).
-      result = abap_true.
-    ENDIF.
+    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    FROM class_definition-stmnt_from TO class_definition-stmnt_to.
+      LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+      FROM <statement>-from TO <statement>-to
+      WHERE str = 'IF_OSQL_TEST_ENVIRONMENT'
+      OR str = 'CL_OSQL_TEST_ENVIRONMENT'
+      OR str = 'IF_CDS_TEST_ENVIRONMENT'
+      OR str = 'CL_CDS_TEST_ENVIRONMENT'.
+        result = abap_true.
+        RETURN.
+      ENDLOOP.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD consolidade_tokens.
+    LOOP AT ref_scan_manager->get_tokens( ) INTO DATA(token)
+    FROM statement-from TO statement-to.
+      token-str = condense( token-str ).
+      result = COND #( WHEN result IS INITIAL THEN token-str
+                                              ELSE |{ result } { token-str }| ).
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD get_class_definition.
+    DATA(structures) = ref_scan_manager->get_structures( ).
+    DATA(class_implementation) = structures[ method-back ].
+    result = structures[ class_implementation-back ].
+  ENDMETHOD.
+
+
+  METHOD get_test_risk_level.
+    TRY.
+        DATA(class_definition) = get_class_definition( method ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+
+    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    FROM class_definition-stmnt_from TO class_definition-stmnt_to.
+      DATA(tokens) = consolidade_tokens( <statement> ).
+      result = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS' THEN risk_level_harmless
+                       WHEN tokens CS 'RISK LEVEL DANGEROUS' THEN risk_level_dangerous
+                       WHEN tokens CS 'RISK LEVEL CRITICAL' THEN risk_level_critical ).
+      IF result IS NOT INITIAL.
+        RETURN.
+      ENDIF.
+    ENDLOOP.
+
+    result = risk_level_not_set.
+  ENDMETHOD.
+
+
+  METHOD determine_tokens_not_allowed.
+    DATA(test_risk_level) = get_test_risk_level( method ).
+
+    tokens_not_allowed = COND #( WHEN test_risk_level = risk_level_harmless  THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ( 'INSERT INTO *' ) ( 'SELECT *' )  ( 'COMMIT*' ) ( 'ROLLBACK*' ) )
+                                 WHEN test_risk_level = risk_level_not_set   THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ( 'INSERT INTO *' ) ( 'SELECT *' )  ( 'COMMIT*' ) ( 'ROLLBACK*' ) )
+                                 WHEN test_risk_level = risk_level_dangerous THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) )
+                                 WHEN test_risk_level = risk_level_critical  THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ) ).
+  ENDMETHOD.
+
+
+  METHOD has_ddic_itab_same_syntax.
+    result = xsdbool(    token CS 'MODIFY'
+                      OR token CS 'UPDATE'
+                      OR token CS 'DELETE' ).
+  ENDMETHOD.
+
+
+  METHOD is_internal_table.
+    " Might have 'FROM'
+    result = xsdbool(     is_persistent_object( get_token_abs( statement-from + 1 ) ) = abap_false
+                      AND is_persistent_object( get_token_abs( statement-from + 2 ) ) = abap_false ).
   ENDMETHOD.
 
 ENDCLASS.
