@@ -92,10 +92,10 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA(source_code) = consolidade_tokens( statement ).
+    DATA(tokens) = consolidade_tokens( statement ).
 
     LOOP AT tokens_not_allowed ASSIGNING FIELD-SYMBOL(<token_not_allowed>).
-      IF source_code NP <token_not_allowed>.
+      IF tokens NP <token_not_allowed>.
         CONTINUE.
       ENDIF.
 
