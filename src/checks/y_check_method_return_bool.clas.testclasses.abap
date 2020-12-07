@@ -14,7 +14,7 @@ CLASS local_test_class IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_expected_count.
-    result = 11.
+    result = 12.
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -31,6 +31,7 @@ CLASS local_test_class IMPLEMENTATION.
       ( '     METHODS file RETURNING VALUE(result) TYPE abap_bool. ' )
       ( '     METHODS validate RETURNING VALUE(result) TYPE abap_bool. ' )
       ( '     METHODS vowel RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS calculated RETURNING VALUE(result) TYPE abap_bool. ' )
       ( '   PRIVATE SECTION. ' )
       ( '     METHODS dot RETURNING VALUE(result) TYPE abap_bool. ' )
       ( '     METHODS concatenate RETURNING VALUE(result) TYPE abap_bool. ' )
@@ -66,6 +67,8 @@ CLASS local_test_class IMPLEMENTATION.
       ( '   ENDMETHOD. ' )
       ( '   METHOD increment_one. ' )
       ( '   ENDMETHOD. ' )
+      ( '   METHOD calculated. ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
   ENDMETHOD.
@@ -84,6 +87,7 @@ CLASS local_test_class IMPLEMENTATION.
       ( '     METHODS have_file RETURNING VALUE(result) TYPE abap_bool. ' )
       ( '     METHODS must_validate RETURNING VALUE(result) TYPE abap_bool. ' )
       ( '     METHODS starts_vowel RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( '     METHODS was_calculated_before RETURNING VALUE(result) TYPE abap_bool. ' )
       ( '   PRIVATE SECTION. ' )
       ( '     METHODS ends_dot RETURNING VALUE(result) TYPE abap_bool. ' )
       ( '     METHODS should_concatenate RETURNING VALUE(result) TYPE abap_bool. ' )
@@ -122,6 +126,8 @@ CLASS local_test_class IMPLEMENTATION.
       ( '   ENDMETHOD. ' )
       ( '   METHOD increment_one. ' )
       ( '   ENDMETHOD. ' )
+      ( '   METHOD was_calculated_before. ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
   ENDMETHOD.
@@ -140,6 +146,7 @@ CLASS local_test_class IMPLEMENTATION.
       ( '     METHODS file RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
       ( '     METHODS validate RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
       ( '     METHODS vowel RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
+      ( '     METHODS calculated RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
       ( '   PRIVATE SECTION. ' )
       ( '     METHODS dot RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
       ( '     METHODS concatenate RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL' )
@@ -174,6 +181,8 @@ CLASS local_test_class IMPLEMENTATION.
       ( '   METHOD sum. ' )
       ( '   ENDMETHOD. ' )
       ( '   METHOD increment_one. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD calculated. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
