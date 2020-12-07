@@ -7,20 +7,12 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    TYPES: BEGIN OF tokens_not_allowed_type,
-             for_harmless  TYPE y_char255_tab,
-             for_dangerous TYPE y_char255_tab,
-             for_critical  TYPE y_char255_tab,
-             for_not_set   TYPE y_char255_tab,
-           END OF tokens_not_allowed_type.
-
     CONSTANTS risk_level_harmless TYPE string VALUE 'HARMLESS'.
     CONSTANTS risk_level_dangerous TYPE string VALUE 'DANGEROUS'.
     CONSTANTS risk_level_critical TYPE string VALUE 'CRITICAL'.
     CONSTANTS risk_level_not_set TYPE string VALUE 'NOT_SET'.
 
-    DATA tokens_not_allowed TYPE tokens_not_allowed_type.
-    DATA test_risk_level TYPE string.
+    DATA tokens_not_allowed TYPE y_char255_tab.
 
     METHODS has_osql_or_cds_framework IMPORTING method        TYPE sstruc
                                       RETURNING VALUE(result) TYPE abap_bool.
@@ -37,6 +29,14 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
 
     METHODS get_test_risk_level IMPORTING method        TYPE sstruc
                                 RETURNING VALUE(result) TYPE string.
+
+    METHODS determine_tokens_not_allowed IMPORTING method TYPE sstruc.
+
+    METHODS has_ddic_itab_same_syntax IMPORTING token         TYPE char255
+                                      RETURNING value(result) TYPE abap_bool.
+
+    METHODS is_internal_table IMPORTING statement     TYPE sstmnt
+                              RETURNING value(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -57,13 +57,6 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
     settings-documentation = |{ c_docs_path-checks }db-access-in-ut.md|.
 
     set_check_message( 'Database access(es) within a Unit-Test should be removed!' ).
-
-    tokens_not_allowed = VALUE #( for_harmless = VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ( 'INSERT INTO *' ) ( 'SELECT *' )  ( 'COMMIT*' ) ( 'ROLLBACK*' ) )
-                                  for_critical = VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ) ).
-
-    tokens_not_allowed-for_not_set   = tokens_not_allowed-for_harmless.
-    tokens_not_allowed-for_dangerous = tokens_not_allowed-for_critical.
-
   ENDMETHOD.                    "CONSTRUCTOR
 
 
@@ -81,7 +74,7 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      test_risk_level = get_test_risk_level( <structure> ).
+      determine_tokens_not_allowed( <structure> ).
 
       DATA(index) = <structure>-stmnt_from.
 
@@ -99,28 +92,16 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-
     DATA(source_code) = consolidade_tokens( statement ).
 
-    DATA(tokens) = COND #( WHEN test_risk_level = risk_level_harmless THEN tokens_not_allowed-for_harmless
-                           WHEN test_risk_level = risk_level_dangerous THEN tokens_not_allowed-for_dangerous
-                           WHEN test_risk_level = risk_level_critical THEN tokens_not_allowed-for_critical
-                           WHEN test_risk_level = risk_level_not_set THEN tokens_not_allowed-for_not_set ).
-
-    LOOP AT tokens ASSIGNING FIELD-SYMBOL(<not_allowed_token>).
-      IF source_code NP <not_allowed_token>.
+    LOOP AT tokens_not_allowed ASSIGNING FIELD-SYMBOL(<token_not_allowed>).
+      IF source_code NP <token_not_allowed>.
         CONTINUE.
       ENDIF.
 
-      " Same syntax (DDIC/ITAB)
-      IF <not_allowed_token> CS 'MODIFY'
-      OR <not_allowed_token> CS 'UPDATE'
-      OR <not_allowed_token> CS 'DELETE'.
-        " Might have 'FROM'
-        IF is_persistent_object( get_token_abs( statement-from + 1 ) ) = abap_false
-        AND is_persistent_object( get_token_abs( statement-from + 2 ) ) = abap_false.
-          CONTINUE.
-        ENDIF.
+      IF has_ddic_itab_same_syntax( <token_not_allowed> ) = abap_true
+      AND is_internal_table( statement ) = abap_true.
+        CONTINUE.
       ENDIF.
 
       DATA(check_configuration) = detect_check_configuration( statement ).
@@ -204,5 +185,28 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
     result = risk_level_not_set.
   ENDMETHOD.
 
+
+  METHOD determine_tokens_not_allowed.
+    DATA(test_risk_level) = get_test_risk_level( method ).
+
+    tokens_not_allowed = COND #( WHEN test_risk_level = risk_level_harmless  THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ( 'INSERT INTO *' ) ( 'SELECT *' )  ( 'COMMIT*' ) ( 'ROLLBACK*' ) )
+                                 WHEN test_risk_level = risk_level_not_set   THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ( 'INSERT INTO *' ) ( 'SELECT *' )  ( 'COMMIT*' ) ( 'ROLLBACK*' ) )
+                                 WHEN test_risk_level = risk_level_dangerous THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) )
+                                 WHEN test_risk_level = risk_level_critical  THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ) ).
+  ENDMETHOD.
+
+
+  METHOD has_ddic_itab_same_syntax.
+    result = xsdbool(    token CS 'MODIFY'
+                      OR token CS 'UPDATE'
+                      OR token CS 'DELETE' ).
+  ENDMETHOD.
+
+
+  METHOD is_internal_table.
+    " Might have 'FROM'
+    result = xsdbool(     is_persistent_object( get_token_abs( statement-from + 1 ) ) = abap_false
+                      AND is_persistent_object( get_token_abs( statement-from + 2 ) ) = abap_false ).
+  ENDMETHOD.
 
 ENDCLASS.
