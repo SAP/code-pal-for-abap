@@ -33,10 +33,10 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS determine_tokens_not_allowed IMPORTING method TYPE sstruc.
 
     METHODS has_ddic_itab_same_syntax IMPORTING token         TYPE char255
-                                      RETURNING value(result) TYPE abap_bool.
+                                      RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_internal_table IMPORTING statement     TYPE sstmnt
-                              RETURNING value(result) TYPE abap_bool.
+                              RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
