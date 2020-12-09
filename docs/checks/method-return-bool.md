@@ -22,6 +22,8 @@ The check searches for methods with a boolean returning value and then verifies 
 * `ends_`
 * `must_`
 * `should_`
+* `was_`
+* `were_`
 
 or if the name contains one of the following words:
 
