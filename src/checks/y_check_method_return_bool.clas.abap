@@ -41,6 +41,8 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     APPEND 'STARTS_' TO good_method_names_beginning.
     APPEND 'ENDS_'   TO good_method_names_beginning.
     APPEND 'SHOULD_' TO good_method_names_beginning.
+    APPEND 'WAS_'    TO good_method_names_beginning.
+    APPEND 'WERE_'   TO good_method_names_beginning.
 
     APPEND 'EXIST'   TO good_method_names_containing.
     APPEND 'EQUAL'   TO good_method_names_containing.
