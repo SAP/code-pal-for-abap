@@ -9,7 +9,7 @@ ENDCLASS.
 CLASS ltc_if IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_declaration_in_if( ).
+    result ?= NEW y_check_scope_of_variable( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -54,7 +54,7 @@ CLASS ltc_if IMPLEMENTATION.
       ( '     DATA(var2) = abap_true. ' )
       ( '   ENDIF. ' )
 
-      ( '   var2 = abap_false. "#EC DECL_IN_IF ' )
+      ( '   var2 = abap_false. "#EC SCOPE_OF_VAR ' )
     ).
   ENDMETHOD.
 
@@ -72,7 +72,7 @@ ENDCLASS.
 CLASS ltc_elseif IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_declaration_in_if( ).
+    result ?= NEW y_check_scope_of_variable( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -115,7 +115,7 @@ CLASS ltc_elseif IMPLEMENTATION.
       ( '   IF sy-mandt = 100. ' )
       ( '     DATA(var2) = abap_true. ' )
       ( '   ELSEIF sy-mandt = 200. ' )
-      ( '     var2 = abap_false. "#EC DECL_IN_IF ' )
+      ( '     var2 = abap_false. "#EC SCOPE_OF_VAR ' )
       ( '   ENDIF. ' )
     ).
   ENDMETHOD.
@@ -134,7 +134,7 @@ ENDCLASS.
 CLASS ltc_else IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_declaration_in_if( ).
+    result ?= NEW y_check_scope_of_variable( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -182,7 +182,7 @@ CLASS ltc_else IMPLEMENTATION.
       ( '     DATA(var2) = abap_false. ' )
       ( '   ENDIF. ' )
 
-      ( '   var1 = var2. "#EC DECL_IN_IF' )
+      ( '   var1 = var2. "#EC SCOPE_OF_VAR' )
     ).
   ENDMETHOD.
 
@@ -200,7 +200,7 @@ ENDCLASS.
 CLASS ltc_case IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_declaration_in_if( ).
+    result ?= NEW y_check_scope_of_variable( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -242,7 +242,7 @@ CLASS ltc_case IMPLEMENTATION.
       ( '     WHEN 100. ' )
       ( '       DATA(var) = 10. ' )
       ( '     WHEN 200. ' )
-      ( '       var = 12. "#EC DECL_IN_IF' )
+      ( '       var = 12. "#EC SCOPE_OF_VAR' )
       ( '   ENDCASE. ' )
     ).
   ENDMETHOD.
@@ -261,7 +261,7 @@ ENDCLASS.
 CLASS ltc_loop IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_declaration_in_if( ).
+    result ?= NEW y_check_scope_of_variable( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -308,7 +308,7 @@ CLASS ltc_loop IMPLEMENTATION.
       ( '     DATA(object) = <tadir>-object. ' )
       ( '   ENDLOOP. ' )
 
-      ( '   IF object IS INITIAL. "#EC DECL_IN_IF' )
+      ( '   IF object IS INITIAL. "#EC SCOPE_OF_VAR' )
       ( '   ENDIF. ' )
     ).
   ENDMETHOD.
@@ -327,7 +327,7 @@ ENDCLASS.
 CLASS ltc_do IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_declaration_in_if( ).
+    result ?= NEW y_check_scope_of_variable( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -374,7 +374,7 @@ CLASS ltc_do IMPLEMENTATION.
       ( '     DATA(tabix) = sy-tabix. ' )
       ( '   ENDDO. ' )
 
-      ( '   IF tabix = 10. "#EC DECL_IN_IF' )
+      ( '   IF tabix = 10. "#EC SCOPE_OF_VAR' )
       ( '   ENDIF. ' )
     ).
   ENDMETHOD.
@@ -393,7 +393,7 @@ ENDCLASS.
 CLASS ltc_while IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_declaration_in_if( ).
+    result ?= NEW y_check_scope_of_variable( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -443,7 +443,7 @@ CLASS ltc_while IMPLEMENTATION.
       ( '     count = count - 1. ' )
       ( '   ENDWHILE. ' )
 
-      ( '   IF tabix = 10. "#EC DECL_IN_IF' )
+      ( '   IF tabix = 10. "#EC SCOPE_OF_VAR' )
       ( '   ENDIF. ' )
     ).
   ENDMETHOD.
