@@ -1,23 +1,17 @@
-CLASS y_check_declaration_in_if DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_declaration_in_if DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-
     METHODS constructor .
+
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    DATA branch_counter TYPE i VALUE 0 ##NO_TEXT.
-    CONSTANTS first_if TYPE i VALUE 1 ##NO_TEXT.
+    METHODS is_scope_dependent IMPORTING structure     TYPE sstruc
+                               RETURNING value(result) TYPE abap_bool.
 
-    METHODS check_if_error
-      IMPORTING index     TYPE i
-                keyword   TYPE string
-                statement TYPE sstmnt.
+    METHODS extract_variable_name IMPORTING token         TYPE string
+                                  RETURNING value(result) TYPE string.
+
 ENDCLASS.
 
 
@@ -38,62 +32,31 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-      WHERE stmnt_type EQ scan_struc_stmnt_type-if.
-
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-
-      TRY.
-          DATA(check_configuration) = check_configurations[ apply_on_testcode = abap_true ].
-        CATCH cx_sy_itab_line_not_found.
-          IF is_testcode EQ abap_true.
-            CONTINUE.
-          ENDIF.
-      ENDTRY.
-
-      DATA(index) = <structure>-stmnt_from.
-
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-        FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-
-        inspect_tokens( index     = index
-                        statement = <statement> ).
-
-        index = index + 1.
-      ENDLOOP.
-    ENDLOOP.
-  ENDMETHOD.
-
-
   METHOD inspect_tokens.
-    DATA(keyword) = get_token_abs( statement-from ).
+    DATA(token) = get_token_abs( statement-from ).
 
-    CASE keyword.
-      WHEN 'IF'.
-        branch_counter = branch_counter + 1.
-
-      WHEN 'ENDIF'.
-        branch_counter = branch_counter - 1.
-
-      WHEN 'DATA' OR 'FIELD-SYMBOLS' OR 'TYPES'.
-        check_if_error( index = index
-                        keyword = keyword
-                        statement = statement ).
-    ENDCASE.
-
-    IF keyword CP 'DATA(*)'.
-      check_if_error( index = index
-                      keyword = keyword
-                      statement = statement ).
+    IF token NP 'DATA(*)'
+    OR token NP 'FIELD-SYMBOLS(*)'.
+      RETURN.
     ENDIF.
-  ENDMETHOD.
 
+    DATA(variable_name) = extract_variable_name( token ).
 
-  METHOD check_if_error.
-    IF branch_counter = first_if.
+    DATA(structures) = ref_scan_manager->get_structures( ).
+    DATA(strucutre_of_statement) = structures[ statement-struc ].
 
-      DATA(check_configuration) = detect_check_configuration( statement ). "#EC DECL_IN_IF
+    IF is_scope_dependent( strucutre_of_statement ) = abap_false.
+      RETURN.
+    ENDIF.
+
+    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    FROM structure-stmnt_from TO structure-stmnt_to
+    WHERE number > statement-number.
+      IF get_token_abs( <statement>-from ) <> variable_name.
+        CONTINUE.
+      ENDIF.
+
+      DATA(check_configuration) = detect_check_configuration( statement ).
 
       IF check_configuration IS INITIAL.
         RETURN.
@@ -102,8 +65,27 @@ CLASS Y_CHECK_DECLARATION_IN_IF IMPLEMENTATION.
       raise_error( statement_level     = statement-level
                    statement_index     = index
                    statement_from      = statement-from
-                   error_priority      = check_configuration-prio
-                   parameter_01        = |{ keyword }| ).
-    ENDIF.
+                   error_priority      = check_configuration-prio ).
+    ENDLOOP.
   ENDMETHOD.
+
+
+  METHOD is_scope_dependent.
+    result = xsdbool(    structure-stmnt_type = scan_struc_stmnt_type-if
+                      OR structure-stmnt_type = scan_struc_stmnt_type-elseif
+                      OR structure-stmnt_type = scan_struc_stmnt_type-else
+                      OR structure-stmnt_type = scan_struc_stmnt_type-do
+                      OR structure-stmnt_type = scan_struc_stmnt_type-case
+                      OR structure-stmnt_type = scan_struc_stmnt_type-loop
+                      OR structure-stmnt_type = scan_struc_stmnt_type-while ).
+  ENDMETHOD.
+
+
+  METHOD extract_variable_name.
+    result = token.
+    REPLACE ALL OCCURRENCES OF 'DATA(' IN result WITH ''.
+    REPLACE ALL OCCURRENCES OF 'FIELD-SYMBOLS(' IN result WITH ''.
+    REPLACE ALL OCCURRENCES OF ')' IN result WITH ''.
+  ENDMETHOD.
+
 ENDCLASS.
