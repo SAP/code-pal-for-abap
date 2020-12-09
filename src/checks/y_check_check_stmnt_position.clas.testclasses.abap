@@ -1,4 +1,4 @@
-CLASS ltc_not_in_first_position DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_after_loop DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -6,7 +6,7 @@ CLASS ltc_not_in_first_position DEFINITION INHERITING FROM y_unit_test_base FOR 
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_not_in_first_position IMPLEMENTATION.
+CLASS ltc_after_loop IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_check_stmnt_position( ).
@@ -23,10 +23,13 @@ CLASS ltc_not_in_first_position IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD example.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     name = name2.' )
-      ( '     CHECK name = name2.' )
+      ( '     DATA tadir TYPE TABLE OF tadir.' )
+      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
+      ( '       IF <tadir>-delflag = abap_true.' )
+      ( '         CONTINUE.' )
+      ( '       ENDIF.' )
+      ( '     ENDLOOP.' )
+      ( '     CHECK sy-mandt = 100.' )
       ( '   ENDMETHOD.' )
       ( ' ENDCLASS. ' )
     ).
@@ -43,9 +46,15 @@ CLASS ltc_not_in_first_position IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD example.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     CHECK name2 = name.' )
+      ( '     DATA tadir TYPE TABLE OF tadir.' )
+      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
+      ( '       IF <tadir>-delflag = abap_true.' )
+      ( '         CONTINUE.' )
+      ( '       ENDIF.' )
+      ( '     ENDLOOP.' )
+      ( '     IF sy-mandt = 100.' )
+      ( '       RETURN.' )
+      ( '     ENDIF.' )
       ( '   ENDMETHOD.' )
       ( ' ENDCLASS. ' )
     ).
@@ -62,10 +71,13 @@ CLASS ltc_not_in_first_position IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD example.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     name = name2.' )
-      ( '     CHECK name = name2. "#EC CHECK_POSITION ' )
+      ( '     DATA tadir TYPE TABLE OF tadir.' )
+      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
+      ( '       IF <tadir>-delflag = abap_true.' )
+      ( '         CONTINUE.' )
+      ( '       ENDIF.' )
+      ( '     ENDLOOP.' )
+      ( '     CHECK sy-mandt = 100. "#EC CHECK_POSITION' )
       ( '   ENDMETHOD.' )
       ( ' ENDCLASS. ' )
     ).
@@ -74,7 +86,95 @@ CLASS ltc_not_in_first_position IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltc_in_loop DEFINITION INHERITING FROM ltc_not_in_first_position FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_before_loop DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_before_loop IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_check_stmnt_position( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example.' )
+      ( '     DATA tadir TYPE TABLE OF tadir.' )
+      ( '     DATA(client) = sy-mandt.' )
+      ( '     CHECK client = 100.' )
+      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
+      ( '       IF <tadir>-delflag = abap_true.' )
+      ( '         CONTINUE.' )
+      ( '       ENDIF.' )
+      ( '     ENDLOOP.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example.' )
+      ( '     DATA tadir TYPE TABLE OF tadir.' )
+      ( '     CHECK sy-mandt = 100.' )
+      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
+      ( '       IF <tadir>-delflag = abap_true.' )
+      ( '         CONTINUE.' )
+      ( '       ENDIF.' )
+      ( '     ENDLOOP.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example.' )
+      ( '     DATA tadir TYPE TABLE OF tadir.' )
+      ( '     DATA(client) = sy-mandt.' )
+      ( '     CHECK client = 100. "#EC CHECK_POSITION' )
+      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
+      ( '       IF <tadir>-delflag = abap_true.' )
+      ( '         CONTINUE.' )
+      ( '       ENDIF.' )
+      ( '     ENDLOOP.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_in_loop DEFINITION INHERITING FROM ltc_before_loop FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
@@ -104,7 +204,7 @@ CLASS ltc_in_loop IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltc_after_loop DEFINITION INHERITING FROM ltc_not_in_first_position FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_inline_data_declaration DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -112,7 +212,7 @@ CLASS ltc_after_loop DEFINITION INHERITING FROM ltc_not_in_first_position FOR TE
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_after_loop IMPLEMENTATION.
+CLASS ltc_inline_data_declaration IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_check_stmnt_position( ).
@@ -128,18 +228,10 @@ CLASS ltc_after_loop IMPLEMENTATION.
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD example.' )
-      ( '     DATA tadir TYPE TABLE OF tadir.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     name = name2.' )
-      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
-      ( '       IF <tadir>-delflag = abap_true.' )
-      ( '         CONTINUE.' )
-      ( '       ENDIF.' )
-      ( '     ENDLOOP.' )
-      ( '     CHECK name = name2.' )
-      ( '   ENDMETHOD.' )
+      ( '   METHOD example. ' )
+      ( '     DATA(age) = 28. ' )
+      ( '     CHECK sy-mandt = 100. ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
   ENDMETHOD.
@@ -154,20 +246,11 @@ CLASS ltc_after_loop IMPLEMENTATION.
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD example.' )
-      ( '     DATA tadir TYPE TABLE OF tadir.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     name = name2.' )
-      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
-      ( '       IF <tadir>-delflag = abap_true.' )
-      ( '         CONTINUE.' )
-      ( '       ENDIF.' )
-      ( '     ENDLOOP.' )
-      ( '     IF name <> name2.' )
-      ( '       RETURN.' )
-      ( '     ENDIF.' )
-      ( '   ENDMETHOD.' )
+      ( '   METHOD example. ' )
+      ( '     DATA age TYPE i. ' )
+      ( '     CHECK sy-mandt = 100. ' )
+      ( '     age = 28. ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
   ENDMETHOD.
@@ -182,18 +265,10 @@ CLASS ltc_after_loop IMPLEMENTATION.
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD example.' )
-      ( '     DATA tadir TYPE TABLE OF tadir.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     name = name2.' )
-      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
-      ( '       IF <tadir>-delflag = abap_true.' )
-      ( '         CONTINUE.' )
-      ( '       ENDIF.' )
-      ( '     ENDLOOP.' )
-      ( '     CHECK name = name2.  "#EC CHECK_POSITION' )
-      ( '   ENDMETHOD.' )
+      ( '   METHOD example. ' )
+      ( '     DATA(age) = 28. ' )
+      ( '     CHECK sy-mandt = 100. "#EC CHECK_POSITION ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
   ENDMETHOD.
@@ -201,7 +276,7 @@ CLASS ltc_after_loop IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltc_before_loop DEFINITION INHERITING FROM ltc_not_in_first_position FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_field_symbol DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -209,7 +284,7 @@ CLASS ltc_before_loop DEFINITION INHERITING FROM ltc_not_in_first_position FOR T
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_before_loop IMPLEMENTATION.
+CLASS ltc_field_symbol IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_check_stmnt_position( ).
@@ -225,18 +300,11 @@ CLASS ltc_before_loop IMPLEMENTATION.
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD example.' )
-      ( '     DATA tadir TYPE TABLE OF tadir.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     name = name2.' )
-      ( '     CHECK name = name2.' )
-      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
-      ( '       IF <tadir>-delflag = abap_true.' )
-      ( '         CONTINUE.' )
-      ( '       ENDIF.' )
-      ( '     ENDLOOP.' )
-      ( '   ENDMETHOD.' )
+      ( '   METHOD example. ' )
+      ( '     FIELD-SYMBOLS <fs> LIKE sy-mandt. ' )
+      ( '     <fs> = sy-mandt. ' )
+      ( '     CHECK <fs> = 100. ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
   ENDMETHOD.
@@ -251,20 +319,11 @@ CLASS ltc_before_loop IMPLEMENTATION.
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD example.' )
-      ( '     DATA tadir TYPE TABLE OF tadir.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     name = name2.' )
-      ( '     IF name <> name2.' )
-      ( '       RETURN.' )
-      ( '     ENDIF.' )
-      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
-      ( '       IF <tadir>-delflag = abap_true.' )
-      ( '         CONTINUE.' )
-      ( '       ENDIF.' )
-      ( '     ENDLOOP.' )
-      ( '   ENDMETHOD.' )
+      ( '   METHOD example. ' )
+      ( '     FIELD-SYMBOLS <fs> LIKE sy-mandt. ' )
+      ( '     CHECK sy-mandt = 100. ' )
+      ( '     <fs> = sy-mandt. ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
   ENDMETHOD.
@@ -279,19 +338,99 @@ CLASS ltc_before_loop IMPLEMENTATION.
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-      ( '   METHOD example.' )
-      ( '     DATA tadir TYPE TABLE OF tadir.' )
-      ( '     DATA name type string.' )
-      ( '     DATA(name2) = name.' )
-      ( '     name = name2.' )
-      ( '     CHECK name = name2.  "#EC CHECK_POSITION' )
-      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
-      ( '       IF <tadir>-delflag = abap_true.' )
-      ( '         CONTINUE.' )
-      ( '       ENDIF.' )
-      ( '     ENDLOOP.' )
-      ( '   ENDMETHOD.' )
+      ( '   METHOD example. ' )
+      ( '     FIELD-SYMBOLS <fs> LIKE sy-mandt. ' )
+      ( '     <fs> = sy-mandt. ' )
+      ( '     CHECK <fs> = 100. "#EC CHECK_POSITION ' )
+      ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_types DEFINITION INHERITING FROM ltc_inline_data_declaration FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_types IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     TYPES: BEGIN OF line, ' )
+      ( '        col1 TYPE string, ' )
+      ( '        col2 TYPE string, ' )
+      ( '      END OF line. ' )
+      ( '     CHECK sy-mandt = 100. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_form DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_form IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_check_stmnt_position( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' PERFORM test. ' )
+
+      ( ' FORM test. ' )
+      ( '   DATA(age) = 28. ' )
+      ( '   CHECK sy-mandt = 100. ' )
+      ( ' ENDFORM. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' PERFORM test. ' )
+
+      ( ' FORM test. ' )
+      ( '   CHECK sy-mandt = 100. ' )
+      ( '   DATA(age) = 28. ' )
+      ( ' ENDFORM. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' PERFORM test. ' )
+
+      ( ' FORM test. ' )
+      ( '   DATA(age) = 28. ' )
+      ( '   CHECK sy-mandt = 100. "#EC CHECK_POSITION ' )
+      ( ' ENDFORM. ' )
     ).
   ENDMETHOD.
 
