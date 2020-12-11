@@ -10,6 +10,7 @@ Legend
 
 2020-12-XX v1.10.0
 ------------------
+* Comment position when code has pseudo comments (#282)
 * Y_CHECK_STATEMENT_POSITION: before DATA declarations (#272)
 + 'was' and 'were' as a method which returns boolean (#275)
 ! DB Access in UT has distinct behavior depending on test risk level (#267)
