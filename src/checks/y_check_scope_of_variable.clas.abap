@@ -31,7 +31,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }scope-of-variable.md|.
 
-    set_check_message( 'Declarations in IF-Blocks should be removed!' ).
+    set_check_message( 'Variable in use out of its scope!' ).
   ENDMETHOD.
 
 
