@@ -424,7 +424,7 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
    METHOD scope_of_variable.
-    IF sy-mandt = 100.
+    IF sy-subrc = 0.
       DATA(value) = 1.
     ELSE.
       value = 2.
