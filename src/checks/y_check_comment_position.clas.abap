@@ -1,21 +1,36 @@
 CLASS y_check_comment_position DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
     METHODS has_wrong_position IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
+
     METHODS get_first_character IMPORTING token TYPE stokesx
                                 RETURNING VALUE(result) TYPE char1.
+
     METHODS is_pseudo_comment IMPORTING token TYPE stokesx
                               RETURNING VALUE(result) TYPE abap_bool.
+
     METHODS is_type_asterisk IMPORTING token TYPE stokesx
                              RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS is_pragma IMPORTING token TYPE stokesx
+                      RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS get_next_token IMPORTING current_position TYPE i
+                           RETURNING VALUE(result) TYPE stokesx
+                           RAISING cx_sy_itab_line_not_found.
+
 ENDCLASS.
 
-CLASS y_check_comment_position IMPLEMENTATION.
+
+
+CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
@@ -26,6 +41,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
 
     set_check_message( 'Quote comments indent along with the statements they comment!' ).
   ENDMETHOD.
+
 
   METHOD inspect_tokens.
 
@@ -44,6 +60,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
                  error_priority  = configuration-prio ).
 
   ENDMETHOD.
+
 
   METHOD has_wrong_position.
     DATA(tokens) = ref_scan_manager->get_tokens( ).
@@ -67,7 +84,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
     ENDIF.
 
     TRY.
-        DATA(next_token) = tokens[ statement-to + 1 ].
+        DATA(next_token) = get_next_token( statement-to ).
       CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.
@@ -86,6 +103,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD get_first_character.
     TRY.
         result = token-str(1).
@@ -93,6 +111,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
         CLEAR result.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD is_pseudo_comment.
     TRY.
@@ -102,6 +121,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD is_type_asterisk.
     TRY.
         result = xsdbool( token-str(1) = '*' ).
@@ -110,4 +130,22 @@ CLASS y_check_comment_position IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
+  METHOD get_next_token.
+    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    DATA(next_position) = current_position + 1.
+    result = tokens[ next_position ].
+    IF is_pragma( result ) = abap_true.
+      result = get_next_token( next_position ).
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD is_pragma.
+    TRY.
+        result = xsdbool( token-str(2) = '##' ).
+      CATCH cx_sy_range_out_of_bounds.
+        result = abap_false.
+    ENDTRY.
+  ENDMETHOD.
 ENDCLASS.
