@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>Y_CHECK_DECLARATION_IN_IF</CLSNAME>
+    <CLSNAME>Y_CHECK_SCOPE_OF_VARIABLE</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Declaration in IF</DESCRIPT>
+    <DESCRIPT>Scope of Variable</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

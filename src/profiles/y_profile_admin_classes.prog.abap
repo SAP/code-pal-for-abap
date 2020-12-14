@@ -416,16 +416,16 @@ ENDCLASS.
 CLASS lcl_util IMPLEMENTATION.
   METHOD init_profiles.
     TRY.
-        profiles_tree = NEW y_alv_tree_control( alv_header_text = 'Profiles'(002)
-                                                dynpro_nr       = '0100'
-                                                docking_side    = cl_gui_docking_container=>align_at_left
-                                                ratio           = 16
-                                                type_name       = profile_manager->get_profiles_type_name( )
-                                                sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'USERNAME' up = abap_true )
-                                                                                    ( spos = 2 fieldname = 'PROFILE' up = abap_true ) )
-                                                sy_repid        = sy_repid
-                                                events          = NEW lcl_profile_events( )
-                                                event_mode      = y_if_alv_events=>mode_selection_changed ).
+        profiles_tree = y_alv_tree_control=>create( alv_header_text = 'Profiles'(002)
+                                                    dynpro_nr       = '0100'
+                                                    docking_side    = cl_gui_docking_container=>align_at_left
+                                                    ratio           = 16
+                                                    type_name       = profile_manager->get_profiles_type_name( )
+                                                    sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'USERNAME' up = abap_true )
+                                                                                        ( spos = 2 fieldname = 'PROFILE' up = abap_true ) )
+                                                    sy_repid        = sy_repid
+                                                    events          = NEW lcl_profile_events( )
+                                                    event_mode      = y_if_alv_events=>mode_selection_changed ).
 
         profiles_tree->toolbar_control( )->add_button( fcode     = 'BTN_ASSIGN'
                                                        icon      = '@04@'
@@ -470,16 +470,15 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD init_checks.
     TRY.
-        checks_tree = NEW y_alv_tree_control( alv_header_text = 'Checks'(013)
-                                              dynpro_nr       = '0100'
-                                              docking_side    = cl_gui_docking_container=>align_at_right
-                                              ratio           = 60
-                                              type_name       = profile_manager->get_checks_type_name( )
-                                              sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'PROFILE' up = abap_true )
-                                                                                  ( spos = 2 fieldname = 'CHECKID' up = abap_true ) )
-                                              sy_repid        = sy_repid
-                                              events          = NEW lcl_check_events( ) ).
-
+        checks_tree = y_alv_tree_control=>create( alv_header_text = 'Checks'(013)
+                                                  dynpro_nr       = '0100'
+                                                  docking_side    = cl_gui_docking_container=>align_at_right
+                                                  ratio           = 60
+                                                  type_name       = profile_manager->get_checks_type_name( )
+                                                  sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'PROFILE' up = abap_true )
+                                                                                      ( spos = 2 fieldname = 'CHECKID' up = abap_true ) )
+                                                  sy_repid        = sy_repid
+                                                  events          = NEW lcl_check_events( ) ).
 
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_ADD'
                                                      icon      = '@04@'
@@ -554,15 +553,15 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD init_delegates.
     TRY.
-        delegates_tree = NEW y_alv_tree_control( alv_header_text = 'Delegates'(029)
-                                                 dynpro_nr       = '0100'
-                                                 docking_side    = cl_gui_docking_container=>align_at_right
-                                                 ratio           = 40
-                                                 type_name       = profile_manager->get_delegates_type_name( )
-                                                 sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'PROFILE' up = abap_true )
-                                                                                     ( spos = 2 fieldname = 'DELEGATE' up = abap_true ) )
-                                                 sy_repid        = sy_repid
-                                                 events          = NEW lcl_delegator_events( ) ).
+        delegates_tree = y_alv_tree_control=>create( alv_header_text = 'Delegates'(029)
+                                                     dynpro_nr       = '0100'
+                                                     docking_side    = cl_gui_docking_container=>align_at_right
+                                                     ratio           = 40
+                                                     type_name       = profile_manager->get_delegates_type_name( )
+                                                     sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'PROFILE' up = abap_true )
+                                                                                         ( spos = 2 fieldname = 'DELEGATE' up = abap_true ) )
+                                                     sy_repid        = sy_repid
+                                                     events          = NEW lcl_delegator_events( ) ).
 
         delegates_tree->toolbar_control( )->add_button( fcode     = 'BTN_ADD'
                                                         icon      = '@04@'

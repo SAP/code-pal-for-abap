@@ -17,6 +17,7 @@ CLASS y_code_pal_service DEFINITION PUBLIC CREATE PUBLIC.
     METHODS execute_get_versions.
     METHODS execute_regression_test.
     METHODS execute_unit_test.
+    METHODS execute_ping.
 
     METHODS get_basis_version RETURNING VALUE(result) TYPE string.
 
@@ -53,6 +54,8 @@ CLASS y_code_pal_service IMPLEMENTATION.
         execute_regression_test( ).
       WHEN 'unit_test'.
         execute_unit_test( ).
+      WHEN 'ping'.
+        execute_ping( ).
       WHEN OTHERS.
         raise_bad_request( ).
         RETURN.
@@ -74,8 +77,9 @@ CLASS y_code_pal_service IMPLEMENTATION.
 
     TRY.
         DATA(profile) = convert_json_to_profile( json ).
-      CATCH cx_abap_invalid_value.
+      CATCH cx_abap_invalid_value INTO DATA(profile_exception).
         raise_bad_request( ).
+        response->set_cdata( |{ profile_exception->get_text( ) }: { profile_exception->get_longtext( ) }| ).
         RETURN.
     ENDTRY.
 
@@ -83,9 +87,9 @@ CLASS y_code_pal_service IMPLEMENTATION.
 
     TRY.
         profile_manager->import_profile( profile ).
-      CATCH ycx_failed_to_add_a_line
-            ycx_time_overlap.
+      CATCH ycx_failed_to_add_a_line ycx_time_overlap INTO DATA(manager_exception).
         raise_internal_server_error( ).
+        response->set_cdata( |{ manager_exception->get_text( ) }: { manager_exception->get_longtext( ) }| ).
         RETURN.
       CATCH ycx_no_delegation_rights.
         raise_forbidden( ).
@@ -155,16 +159,16 @@ CLASS y_code_pal_service IMPLEMENTATION.
         DATA(object_set) = cl_satc_object_set_factory=>create_for_object_keys( VALUE #( ( obj_type = 'CLAS' obj_name = 'Y_DEMO_FAILURES' )
                                                                                         ( obj_type = 'PROG' obj_name = 'Y_DEMO_FAILURES' ) ) ).
       CATCH cx_satc_empty_object_set.
-        " Object set contains no checkable objects
         raise_internal_server_error( ).
+        response->set_cdata( 'Object set contains no checkable objects' ).
         RETURN.
     ENDTRY.
 
     TRY.
         DATA(variant) = atc->get_repository( )->load_ci_check_variant( i_name = 'Y_CODE_PAL' ).
       CATCH cx_satc_not_found.
-        " Specified Code Inspector variant was not found
         raise_internal_server_error( ).
+        response->set_cdata( 'Specified Code Inspector variant was not found' ).
         RETURN.
     ENDTRY.
 
@@ -177,8 +181,8 @@ CLASS y_code_pal_service IMPLEMENTATION.
     TRY.
         controller->run( IMPORTING e_result_access = DATA(result_access) ).
       CATCH cx_satc_failure.
-        " ATC check run failed (no authorization, etc.)
         raise_internal_server_error( ).
+        response->set_cdata( 'ATC check run failed (no authorization, etc.)' ).
         RETURN.
     ENDTRY.
 
@@ -186,15 +190,16 @@ CLASS y_code_pal_service IMPLEMENTATION.
         result_access->get_findings( IMPORTING e_findings           = DATA(findings)
                                                e_findings_extension = DATA(findings_extension) ).
       CATCH cx_satc_failure.
-        " Result access failed (no authorization, etc.)
         raise_internal_server_error( ).
+        response->set_cdata( 'Result access failed (no authorization, etc.)' ).
         RETURN.
     ENDTRY.
 
     TRY.
         DATA(checks) = y_profile_manager=>create( )->select_existing_checks( ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_entry_not_found INTO DATA(check_exception).
         raise_internal_server_error( ).
+        response->set_cdata( |{ check_exception->get_text( ) }: { check_exception->get_longtext( ) }| ).
         RETURN.
     ENDTRY.
 
@@ -210,10 +215,14 @@ CLASS y_code_pal_service IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD list_non_executed_checks.
+    CONSTANTS maintain_attributes TYPE sci_errc VALUE 106.
+
     result = checks.
-    LOOP AT findings ASSIGNING FIELD-SYMBOL(<finding>).
+
+    LOOP AT findings ASSIGNING FIELD-SYMBOL(<finding>) WHERE code <> maintain_attributes.
       DELETE result WHERE checkid = <finding>-test.
     ENDLOOP.
+
     " not supported
     DELETE result WHERE checkid = 'Y_CHECK_PROFILE_MESSAGE'
                      OR checkid = 'Y_CHECK_TEST_SEAM_USAGE'
@@ -233,6 +242,10 @@ CLASS y_code_pal_service IMPLEMENTATION.
 
   METHOD execute_unit_test.
     raise_internal_server_error( ).
+    RETURN.
+  ENDMETHOD.
+
+  METHOD execute_ping.
     RETURN.
   ENDMETHOD.
 

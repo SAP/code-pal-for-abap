@@ -6,38 +6,47 @@ CLASS y_alv_tree_control DEFINITION
 
     INTERFACES y_if_alv_tree_control .
 
-    METHODS constructor
+    CLASS-METHODS create
       IMPORTING
-        !alv_header_text TYPE slis_entry
-        !dynpro_nr       TYPE sydynnr
-        !sy_repid        TYPE syrepid
-        !docking_side    TYPE i DEFAULT cl_gui_docking_container=>align_at_left
-        !ratio           TYPE i
-        !type_name       TYPE string
-        !sort_table      TYPE lvc_t_sort
-        !events          TYPE REF TO y_if_alv_events
-        !event_mode      TYPE i DEFAULT y_if_alv_events=>mode_double_click
+        alv_header_text TYPE slis_entry
+        dynpro_nr       TYPE sydynnr
+        sy_repid        TYPE syrepid
+        docking_side    TYPE i DEFAULT cl_gui_docking_container=>align_at_left
+        ratio           TYPE i
+        type_name       TYPE string
+        sort_table      TYPE lvc_t_sort
+        events          TYPE REF TO y_if_alv_events
+        event_mode      TYPE i DEFAULT y_if_alv_events=>mode_double_click
+      RETURNING
+        VALUE(result) TYPE REF TO y_if_alv_tree_control
       RAISING
         cx_sy_create_data_error
         cx_failed.
+
+    METHODS constructor
+      IMPORTING
+        type_name       TYPE string
+        sort_table      TYPE lvc_t_sort
+        events          TYPE REF TO y_if_alv_events
+        alv_tree        TYPE REF TO cl_gui_alv_tree_simple
+        alv_header      TYPE slis_t_listheader
+      RAISING
+        cx_sy_create_data_error
+        cx_failed.
+
   PROTECTED SECTION.
     METHODS set_all_fields_invisible.
-
     METHODS autosize_all_fields.
-
-    METHODS call_fieldcatalog_merge.
-
-    METHODS get_excluded_toolbars
-      RETURNING VALUE(result) TYPE ui_functions.
+    METHODS call_fieldcatalog_merge IMPORTING structure_name TYPE tabname.
+    METHODS get_excluded_toolbars RETURNING VALUE(result) TYPE ui_functions.
 
   PRIVATE SECTION.
     DATA list TYPE REF TO y_if_list.
-    DATA: alv_header        TYPE slis_t_listheader,
-          sort              TYPE lvc_t_sort,
-          fieldcats         TYPE lvc_t_fcat,
-          structure_name    TYPE tabname,
-          docking_container TYPE REF TO cl_gui_docking_container,
-          alv_tree          TYPE REF TO cl_gui_alv_tree_simple.
+    DATA alv_header TYPE slis_t_listheader.
+    DATA sort TYPE lvc_t_sort.
+    DATA fieldcats TYPE lvc_t_fcat.
+    DATA alv_tree TYPE REF TO cl_gui_alv_tree_simple.
+
 ENDCLASS.
 
 
@@ -67,28 +76,38 @@ CLASS y_alv_tree_control IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD constructor.
-    list = NEW y_list( type_name ).
+  METHOD create.
+    DATA(docking_container) = NEW cl_gui_docking_container( repid     = sy_repid
+                                                            dynnr     = dynpro_nr
+                                                            side      = docking_side
+                                                            ratio     = ratio ).
 
-    docking_container = NEW cl_gui_docking_container( repid     = sy_repid
-                                                      dynnr     = dynpro_nr
-                                                      side      = docking_side
-                                                      ratio     = ratio ).
+    DATA(alv_tree) = NEW cl_gui_alv_tree_simple( i_parent         = docking_container
+                                                 i_item_selection = '' ).
 
-    alv_tree = NEW cl_gui_alv_tree_simple( i_parent         = docking_container
-                                           i_item_selection = '' ).
+    alv_tree->get_toolbar_object( IMPORTING er_toolbar = DATA(alv_toolbar) ).
 
     events->register_handler_to_alv_tree( alv_tree ).
+    events->register_handler_to_toolbar( alv_toolbar ).
+
     alv_tree->set_registered_events( events->get_events( event_mode ) ).
 
-    alv_header = VALUE slis_t_listheader( ( typ = 'H' info = alv_header_text ) ).
+    DATA(alv_header) = VALUE slis_t_listheader( ( typ = 'H' info = alv_header_text ) ).
 
+    result = NEW y_alv_tree_control( type_name = type_name
+                                     sort_table = sort_table
+                                     events = events
+                                     alv_tree = alv_tree
+                                     alv_header = alv_header ).
+  ENDMETHOD.
+
+
+  METHOD constructor.
+    list = NEW y_list( type_name ).
+    me->alv_tree = alv_tree.
+    me->alv_header = alv_header.
     sort = sort_table.
-    structure_name = CONV tabname( type_name ).
-
-    events->register_handler_to_toolbar( y_if_alv_tree_control~toolbar_control( ) ).
-
-    call_fieldcatalog_merge( ).
+    call_fieldcatalog_merge( CONV #( type_name ) ).
     set_all_fields_invisible( ).
   ENDMETHOD.
 

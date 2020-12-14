@@ -50,54 +50,73 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     EVENTS event_four.
     EVENTS event_five.
 
-  PROTECTED SECTION.
-    DATA attribute_2 TYPE string.
-    DATA attribute_3 TYPE string.
-    DATA attribute_4 TYPE string.
-    DATA attribute_5 TYPE string.
-    DATA attribute_6 TYPE string.
+protected section.
 
-    METHODS call_method_usage.
-    METHODS chain_declaration_usage.
-    METHODS check_statement_position.
-    METHODS check_in_loop.
-    METHODS function.
-    METHODS comment_position.
-    METHODS comment_type.
-    METHODS cx_root_usage.
-    METHODS cyclomatic_complexity.
-    METHODS declaration_in_if.
-    METHODS sub_assign_read_table.
-    METHODS deprecated_key_words.
-    METHODS empty_catches.
-    METHODS empty_if_branch.
-    METHODS empty_procedure.
-    METHODS equals_sign_chaining.
-    METHODS magic_number.
-    METHODS method_output_parameter EXPORTING error         TYPE char1
-                                    RETURNING VALUE(result) TYPE string_table. "#EC NUM_OUTPUT_PARA
-    METHODS method_return_bool RETURNING VALUE(result) TYPE abap_bool. "#EC NUM_OUTPUT_PARA
-    METHODS max_nesting_depth.
-    METHODS non_class_based_exception EXCEPTIONS no_class_based.
-    METHODS number_executable_statements.
-    METHODS number_output_parameters EXPORTING output_1 TYPE string
-                                               output_2 TYPE string.
-    METHODS pseudo_comment_usage.
-    METHODS receiving_usage.
-    METHODS external_call_in_prod_code_ok.
-    METHODS boolean_input_parameter IMPORTING do_save TYPE abap_bool.
-    METHODS omit_optional_exporting.
-    METHODS optional_parameters IMPORTING name TYPE string OPTIONAL.
-    METHODS returning_name RETURNING VALUE(name) TYPE string. "#EC NUM_OUTPUT_PARA
-    METHODS self_reference.
-    METHODS test_seam_usage.
-    METHODS multiple_pseudo_comments IMPORTING name       TYPE string
-                                               surname    TYPE string OPTIONAL
-                                               active     TYPE abap_bool OPTIONAL
-                                     RETURNING VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
-    METHODS prefer_is_not_to_not_is.
-    METHODS prefer_case_to_elseif.
-    METHODS deprecated_classes.
+  data ATTRIBUTE_2 type STRING .
+  data ATTRIBUTE_3 type STRING .
+  data ATTRIBUTE_4 type STRING .
+  data ATTRIBUTE_5 type STRING .
+  data ATTRIBUTE_6 type STRING .
+
+  methods CALL_METHOD_USAGE .
+  methods CHAIN_DECLARATION_USAGE .
+  methods CHECK_STATEMENT_POSITION .
+  methods CHECK_IN_LOOP .
+  methods FUNCTION .
+  methods COMMENT_POSITION .
+  methods COMMENT_TYPE .
+  methods CX_ROOT_USAGE .
+  methods CYCLOMATIC_COMPLEXITY .
+  methods SUB_ASSIGN_READ_TABLE .
+  methods DEPRECATED_KEY_WORDS .
+  methods EMPTY_CATCHES .
+  methods EMPTY_IF_BRANCH .
+  methods EMPTY_PROCEDURE .
+  methods EQUALS_SIGN_CHAINING .
+  methods MAGIC_NUMBER .
+  methods METHOD_OUTPUT_PARAMETER
+    exporting
+      !ERROR type CHAR1
+    returning
+      value(RESULT) type STRING_TABLE .                                        "#EC NUM_OUTPUT_PARA
+  methods METHOD_RETURN_BOOL                                           "#EC NUM_OUTPUT_PARA
+    returning
+      value(RESULT) type ABAP_BOOL .
+  methods MAX_NESTING_DEPTH .
+  methods NON_CLASS_BASED_EXCEPTION
+    exceptions
+      NO_CLASS_BASED .
+  methods NUMBER_EXECUTABLE_STATEMENTS .
+  methods NUMBER_OUTPUT_PARAMETERS
+    exporting
+      !OUTPUT_1 type STRING
+      !OUTPUT_2 type STRING .
+  methods PSEUDO_COMMENT_USAGE .
+  methods RECEIVING_USAGE .
+  methods EXTERNAL_CALL_IN_PROD_CODE_OK .
+  methods BOOLEAN_INPUT_PARAMETER
+    importing
+      !DO_SAVE type ABAP_BOOL .
+  methods OMIT_OPTIONAL_EXPORTING .
+  methods OPTIONAL_PARAMETERS
+    importing
+      !NAME type STRING optional .
+  methods RETURNING_NAME                                      "#EC NUM_OUTPUT_PARA
+    returning
+      value(NAME) type STRING .
+  methods SELF_REFERENCE .
+  methods TEST_SEAM_USAGE .
+  methods MULTIPLE_PSEUDO_COMMENTS
+    importing
+      !NAME type STRING
+      !SURNAME type STRING optional
+      !ACTIVE type ABAP_BOOL optional
+    returning
+      value(AGE) type I .                                         "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
+  methods PREFER_IS_NOT_TO_NOT_IS .
+  methods PREFER_CASE_TO_ELSEIF .
+  methods DEPRECATED_CLASSES .
+  methods SCOPE_OF_VARIABLE .
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
     DATA attribute_8 TYPE string.
@@ -112,57 +131,179 @@ ENDCLASS.
 CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
-  METHOD test_seam_usage.
-    " SAP_BASIS >= 7.50
-    " TEST-SEAM read_report_name.
-    "   DATA(report_name) = sy-repid.
-    " END-TEST-SEAM.
-  ENDMETHOD. "#EC EMPTY_PROCEDURE
-
-
-  METHOD sub_assign_read_table.
-    DATA attributes TYPE string_table.
-
-    READ TABLE attributes ASSIGNING FIELD-SYMBOL(<attribute>) WITH KEY table_line = '1'.
-    " Do something with <attribute>
-
-    READ TABLE attributes INTO <attribute> WITH KEY table_line = '2'.
-    " Do something with <attribute>
-  ENDMETHOD.
-
-
-  METHOD self_reference.
-    me->comment_type( ).
-  ENDMETHOD.
-
-
-  METHOD returning_name.
+  METHOD boolean_input_parameter.
   ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
 
 
-  METHOD receiving_usage.
-    method_output_parameter(
-      IMPORTING error = DATA(error)
-      RECEIVING result = DATA(sum) ).
+  METHOD call_method_usage.
+    CALL METHOD is_interface_in_class.
   ENDMETHOD.
 
 
-  METHOD pseudo_comment_usage.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
-
-
-  METHOD optional_parameters.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
-
-
-  METHOD omit_optional_exporting.
-    boolean_input_parameter( EXPORTING do_save = abap_true ).
+  METHOD chain_declaration_usage.
+    DATA:
+      car_model   TYPE string,
+      system_name TYPE string,
+      has_saved   TYPE abap_bool.
   ENDMETHOD.
 
 
-  METHOD number_output_parameters.
-    output_1 = attribute_1.
-    output_2 = attribute_2.
+  METHOD check_in_loop.
+    DATA tadir TYPE TABLE OF tadir.
+    LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).
+      CHECK <tadir>-author = sy-uname.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD check_statement_position.
+    attribute_1 = 'DSAG'.
+    CHECK attribute_3 = 'WALLDORF 2020'.
+  ENDMETHOD.
+
+
+  METHOD comment_position.
+  " Temporary code
+    DATA(active) = abap_true.
+  ENDMETHOD.
+
+
+  METHOD comment_type.
+*   Temporary code
+    DATA(active) = abap_true.
+  ENDMETHOD.
+
+
+  METHOD cx_root_usage.
+    TRY.
+        RAISE EXCEPTION TYPE ycx_entry_not_found.
+      CATCH cx_root. "#EC EMPTY_CATCH
+    ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD cyclomatic_complexity.
+    DATA(complex) = abap_false.
+    IF complex = abap_false.
+      IF complex = abap_false.
+        complex = abap_false.
+      ENDIF.
+    ENDIF.
+    IF complex = abap_false.
+      IF complex = abap_false.
+        complex = abap_false.
+      ENDIF.
+    ENDIF.
+    IF complex = abap_false.
+      IF complex = abap_false.
+        complex = abap_false.
+      ENDIF.
+    ENDIF.
+    IF complex = abap_false.
+      IF complex = abap_false.
+        complex = abap_false.
+      ENDIF.
+    ENDIF.
+    IF complex = abap_false.
+      IF complex = abap_false.
+        complex = abap_true.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD deprecated_classes.
+    DATA aunit TYPE REF TO cl_aunit_assert.
+  ENDMETHOD.
+
+
+  METHOD deprecated_key_words.
+    MOVE attribute_1 TO attribute_2.
+  ENDMETHOD.
+
+
+  METHOD empty_catches.
+    TRY.
+        DATA(string) = 1.
+      CATCH ycx_entry_not_found.
+    ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD empty_if_branch.
+    IF attribute_3 = ` `.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD empty_procedure.
+  ENDMETHOD.
+
+
+  METHOD equals_sign_chaining.
+    DATA val1 TYPE c.
+    DATA val2 TYPE c.
+    DATA val3 TYPE c.
+    val1 = val2 = val3.
+  ENDMETHOD.
+
+
+  METHOD external_call_in_prod_code_ok.
+    SUBMIT demo_program_submit_rep AND RETURN.
+  ENDMETHOD.
+
+
+  METHOD function.
+    CALL FUNCTION 'ZSH_CC_CYCLOMATIC_COMPLEXITY'.
+  ENDMETHOD.
+
+
+  METHOD is_interface_in_class.
+    attribute_1 = `DKOM`.
+  ENDMETHOD.
+
+
+  METHOD magic_number.
+    DO 5 TIMES.
+      RETURN.
+    ENDDO.
+  ENDMETHOD.
+
+
+  METHOD max_nesting_depth.
+    DATA(times) = 1.
+    IF times = times.
+      IF times = times.
+        IF times = times.
+          IF times = times.
+            IF times = times.
+              times = times.
+            ENDIF.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD method_output_parameter.
+    attribute_1 = `DSAG`.
+  ENDMETHOD.
+
+
+  METHOD method_return_bool.
+    attribute_1 = `DKOM`.
+  ENDMETHOD.
+
+
+  METHOD multiple_pseudo_comments.
+  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+
+
+  METHOD non_class_based_exception.
+    IF attribute_1 = `DKOM`.
+      RAISE no_class_based.
+    ENDIF.
   ENDMETHOD.
 
 
@@ -226,184 +367,19 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD non_class_based_exception.
-    IF attribute_1 = `DKOM`.
-      RAISE no_class_based.
-    ENDIF.
+  METHOD number_output_parameters.
+    output_1 = attribute_1.
+    output_2 = attribute_2.
   ENDMETHOD.
 
 
-  METHOD multiple_pseudo_comments.
+  METHOD omit_optional_exporting.
+    boolean_input_parameter( EXPORTING do_save = abap_true ).
+  ENDMETHOD.
+
+
+  METHOD optional_parameters.
   ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
-
-
-  METHOD method_return_bool.
-    attribute_1 = `DKOM`.
-  ENDMETHOD.
-
-
-  METHOD method_output_parameter.
-    attribute_1 = `DSAG`.
-  ENDMETHOD.
-
-
-  METHOD max_nesting_depth.
-    DATA(times) = 1.
-    IF times = times.
-      IF times = times.
-        IF times = times.
-          IF times = times.
-            IF times = times.
-              times = times.
-            ENDIF.
-          ENDIF.
-        ENDIF.
-      ENDIF.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD magic_number.
-    DO 5 TIMES.
-      RETURN.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD is_interface_in_class.
-    attribute_1 = `DKOM`.
-  ENDMETHOD.
-
-
-  METHOD function.
-    CALL FUNCTION 'ZSH_CC_CYCLOMATIC_COMPLEXITY'.
-  ENDMETHOD.
-
-
-  METHOD equals_sign_chaining.
-    DATA val1 TYPE c.
-    DATA val2 TYPE c.
-    DATA val3 TYPE c.
-    val1 = val2 = val3.
-  ENDMETHOD.
-
-
-  METHOD empty_procedure.
-  ENDMETHOD.
-
-
-  METHOD empty_if_branch.
-    IF attribute_3 = ` `.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD empty_catches.
-    TRY.
-        DATA(string) = 1.
-      CATCH ycx_entry_not_found.
-    ENDTRY.
-  ENDMETHOD.
-
-
-  METHOD deprecated_key_words.
-    MOVE attribute_1 TO attribute_2.
-  ENDMETHOD.
-
-
-  METHOD declaration_in_if.
-    IF attribute_1 = `DKOM`.
-      DATA declaration_in_if TYPE string.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD cyclomatic_complexity.
-    DATA(complex) = abap_false.
-    IF complex = abap_false.
-      IF complex = abap_false.
-        complex = abap_false.
-      ENDIF.
-    ENDIF.
-    IF complex = abap_false.
-      IF complex = abap_false.
-        complex = abap_false.
-      ENDIF.
-    ENDIF.
-    IF complex = abap_false.
-      IF complex = abap_false.
-        complex = abap_false.
-      ENDIF.
-    ENDIF.
-    IF complex = abap_false.
-      IF complex = abap_false.
-        complex = abap_false.
-      ENDIF.
-    ENDIF.
-    IF complex = abap_false.
-      IF complex = abap_false.
-        complex = abap_true.
-      ENDIF.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD cx_root_usage.
-    TRY.
-        RAISE EXCEPTION TYPE ycx_entry_not_found.
-      CATCH cx_root. "#EC EMPTY_CATCH
-    ENDTRY.
-  ENDMETHOD.
-
-
-  METHOD comment_type.
-*   Temporary code
-    DATA(active) = abap_true.
-  ENDMETHOD.
-
-
-  METHOD comment_position.
-  " Temporary code
-    DATA(active) = abap_true.
-  ENDMETHOD.
-
-
-  METHOD check_statement_position.
-    attribute_1 = 'DSAG'.
-    CHECK attribute_3 = 'WALLDORF 2020'.
-  ENDMETHOD.
-
-
-  METHOD check_in_loop.
-    DATA tadir TYPE TABLE OF tadir.
-    LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).
-      CHECK <tadir>-author = sy-uname.
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD chain_declaration_usage.
-    DATA:
-      car_model   TYPE string,
-      system_name TYPE string,
-      has_saved   TYPE abap_bool.
-  ENDMETHOD.
-
-
-  METHOD call_method_usage.
-    CALL METHOD is_interface_in_class.
-  ENDMETHOD.
-
-
-  METHOD boolean_input_parameter.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
-
-
-  METHOD prefer_is_not_to_not_is.
-    IF NOT attribute_1 IS INITIAL.
-      attribute_1 = attribute_2.
-    ENDIF.
-  ENDMETHOD.
 
 
   METHOD prefer_case_to_elseif.
@@ -425,12 +401,57 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD external_call_in_prod_code_ok.
-    SUBMIT demo_program_submit_rep AND RETURN.
+  METHOD prefer_is_not_to_not_is.
+    IF NOT attribute_1 IS INITIAL.
+      attribute_1 = attribute_2.
+    ENDIF.
   ENDMETHOD.
 
 
-  METHOD deprecated_classes.
-    DATA aunit TYPE REF TO cl_aunit_assert.
+  METHOD pseudo_comment_usage.
+  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+
+
+  METHOD receiving_usage.
+    method_output_parameter(
+      IMPORTING error = DATA(error)
+      RECEIVING result = DATA(sum) ).
   ENDMETHOD.
+
+
+  METHOD returning_name.
+  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+
+
+   METHOD scope_of_variable.
+    IF sy-subrc = 0.
+      DATA(value) = 1.
+    ELSE.
+      value = 2.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD self_reference.
+    me->comment_type( ).
+  ENDMETHOD.
+
+
+  METHOD sub_assign_read_table.
+    DATA attributes TYPE string_table.
+
+    READ TABLE attributes ASSIGNING FIELD-SYMBOL(<attribute>) WITH KEY table_line = '1'.
+    " Do something with <attribute>
+
+    READ TABLE attributes INTO <attribute> WITH KEY table_line = '2'.
+    " Do something with <attribute>
+  ENDMETHOD.
+
+
+  METHOD test_seam_usage.
+    " SAP_BASIS >= 7.50
+    " TEST-SEAM read_report_name.
+    "   DATA(report_name) = sy-repid.
+    " END-TEST-SEAM.
+  ENDMETHOD. "#EC EMPTY_PROCEDURE
 ENDCLASS.

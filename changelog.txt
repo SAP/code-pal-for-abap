@@ -8,6 +8,26 @@ Legend
 + : added
 - : removed
 
+Upgrade Note
+------------------
+Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective code inspector variant (SCI transaction)
+
+2020-12-XX v1.10.0
+------------------
++ New Check: Scope of the Variable (#276)
+* Comment position when code has pseudo comments (#282)
+* Y_CHECK_STATEMENT_POSITION: before DATA declarations (#272)
++ 'was' and 'were' as a method which returns boolean (#275)
+! DB Access in UT has distinct behavior depending on test risk level (#267)
+! Prefer Case to ElseIf is now reporting single conditions only (#262)
+! Chain Declaration check is now warning by default (#266)
++ abapLint app integration in GitHub (#264)
++ API regression reports 'maintain attributes..." message (#259)
++ API improvements (#259)
+* Missing space between string or character literal and parentheses (#253)
+* Broken UTs (#251)
+* Constants in Interface (#244) 
+
 2020-11-23 v1.09.0
 ------------------
 + deprecated classes/interfaces check
