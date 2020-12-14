@@ -22,7 +22,7 @@ Legend
 + API improvements (#259)
 * Missing space between string or character literal and parentheses (#253)
 * Broken UTs (#251)
-* Constants in Interface (#244)
+* Constants in Interface (#244) 
 
 2020-11-23 v1.09.0
 ------------------
