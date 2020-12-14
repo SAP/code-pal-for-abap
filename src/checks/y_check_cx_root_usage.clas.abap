@@ -25,7 +25,7 @@ CLASS y_check_cx_root_usage IMPLEMENTATION.
     settings-pseudo_comment = '"#EC NEED_CX_ROOT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }cx_root_usage.md|.
+    settings-documentation = |{ c_docs_path-checks }cx-root-usage.md|.
 
     set_check_message( 'CX_ROOT should not be used!' ).
   ENDMETHOD.
