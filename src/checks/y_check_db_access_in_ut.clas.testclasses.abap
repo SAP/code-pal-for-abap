@@ -166,6 +166,7 @@ CLASS ltc_risk_harmless IMPLEMENTATION.
       ( '     INSERT profile INTO TABLE profiles. ' )
       ( '     MODIFY profiles FROM profile INDEX 1. ' )
       ( '     DELETE profiles FROM profile. ' )
+      ( '     DELETE profiles INDEX lines( profiles ). ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).

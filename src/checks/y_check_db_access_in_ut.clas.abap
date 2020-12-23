@@ -204,9 +204,13 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD is_internal_table.
-    " Might have 'FROM'
-    result = xsdbool(     is_persistent_object( get_token_abs( statement-from + 1 ) ) = abap_false
-                      AND is_persistent_object( get_token_abs( statement-from + 2 ) ) = abap_false ).
+    DATA(second_token) = get_token_abs( statement-from + 1 ).
+    DATA(tirth_token) = get_token_abs( statement-from + 2 ).
+
+    DATA(table) = COND #( WHEN second_token = 'FROM' THEN tirth_token
+                                                     ELSE second_token ).
+
+    result = xsdbool( is_persistent_object( table ) = abap_false ).
   ENDMETHOD.
 
 ENDCLASS.
