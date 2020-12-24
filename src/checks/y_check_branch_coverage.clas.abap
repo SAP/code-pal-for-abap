@@ -34,11 +34,14 @@ CLASS y_check_branch_coverage IMPLEMENTATION.
         DATA(coverage) = y_unit_test_coverage=>get( program_name = program_name
                                                     object = VALUE #( object = object_type obj_name = object_name )
                                                     coverage_type = ce_scv_coverage_type=>branch ).
+
+       DATA(branch) = round( val = coverage->get_percentage( )
+                             dec = 2 ).
       CATCH cx_scv_execution_error.
         RETURN.
     ENDTRY.
 
-    DATA(check_configuration) = detect_check_configuration( error_count = CONV #( coverage )
+    DATA(check_configuration) = detect_check_configuration( error_count = CONV #( branch )
                                                             statement = VALUE #( level = 1 ) ).
 
     IF check_configuration IS INITIAL.
@@ -49,8 +52,10 @@ CLASS y_check_branch_coverage IMPLEMENTATION.
                  statement_index     = 1
                  statement_from      = 1
                  error_priority      = check_configuration-prio
-                 parameter_01        = |{ coverage }|
-                 parameter_02        = |{ check_configuration-threshold }| ).
+                 parameter_01        = |{ branch }|
+                 parameter_02        = |{ check_configuration-threshold }|
+                 parameter_03        = |{ coverage->get_total( ) }|
+                 parameter_04        = |{ coverage->get_executed( ) }| ).
 
   ENDMETHOD.
 
