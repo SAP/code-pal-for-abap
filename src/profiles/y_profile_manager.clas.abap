@@ -151,6 +151,18 @@ CLASS y_profile_manager IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD y_if_profile_manager~delete_profiles.
+    TRY.
+        DATA(profiles) = y_if_profile_manager~select_profiles( sy-uname ).
+      CATCH ycx_entry_not_found.
+        RETURN.
+    ENDTRY.
+
+    LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
+      y_if_profile_manager~delete_profile( <profile> ).
+    ENDLOOP.
+  ENDMETHOD.
+
   METHOD y_if_profile_manager~get_checks_type_name.
     result = checks_type.
   ENDMETHOD.
