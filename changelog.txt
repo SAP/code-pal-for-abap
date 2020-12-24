@@ -14,6 +14,7 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 
 2020-12-XX v1.11.0
 ------------------
++ Enhancing coverage to run for multiple objects (#294)
 ! Disabling profiles when the API executes the regression (#293)
 * DELETE from internal table gives a "Database access" prio 1 error (#290)
 
