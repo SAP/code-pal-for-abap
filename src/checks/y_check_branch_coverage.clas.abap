@@ -35,8 +35,8 @@ CLASS y_check_branch_coverage IMPLEMENTATION.
                                                     object = VALUE #( object = object_type obj_name = object_name )
                                                     coverage_type = ce_scv_coverage_type=>branch ).
 
-       DATA(branch) = round( val = coverage->get_percentage( )
-                             dec = 2 ).
+        DATA(branch) = round( val = coverage->get_percentage( )
+                              dec = 2 ).
       CATCH cx_scv_execution_error.
         RETURN.
     ENDTRY.
