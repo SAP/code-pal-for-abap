@@ -82,6 +82,9 @@ INTERFACE y_if_profile_manager
       !profile TYPE ytab_profiles
     RAISING
       ycx_failed_to_remove_a_line .
+  METHODS delete_profiles
+    RAISING
+      ycx_failed_to_remove_a_line .
   METHODS delete_check
     IMPORTING
       !check TYPE ytab_checks
