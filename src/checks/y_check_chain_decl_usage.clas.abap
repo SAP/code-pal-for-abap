@@ -1,11 +1,15 @@
-CLASS y_check_chain_decl_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_chain_decl_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
     DATA rows_with_colon TYPE STANDARD TABLE OF stmnt_crow.
+
     METHODS has_error_not_raised_yet IMPORTING statement TYPE sstmnt RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 

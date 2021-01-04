@@ -3,7 +3,6 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
@@ -56,42 +55,18 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-checks }db-access-in-ut.md|.
 
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-method ) ).
+    relevant_structure_types = VALUE #( ).
+
     set_check_message( 'Database access(es) within a Unit-Test should be removed!' ).
-  ENDMETHOD.                    "CONSTRUCTOR
-
-
-  METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-    WHERE stmnt_type EQ scan_struc_stmnt_type-method.
-
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-
-      IF is_testcode = abap_false.
-        CONTINUE.
-      ENDIF.
-
-      IF has_osql_or_cds_framework( <structure> ) = abap_true.
-        CONTINUE.
-      ENDIF.
-
-      determine_tokens_not_allowed( <structure> ).
-
-      DATA(index) = <structure>-stmnt_from.
-
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-      FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-
-        inspect_tokens( index = index
-                        statement = <statement> ).
-
-        index = index + 1.
-
-      ENDLOOP.
-    ENDLOOP.
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
+    CHECK has_osql_or_cds_framework( structure ) = abap_false.
+
+    determine_tokens_not_allowed( structure ).
+
     DATA(tokens) = consolidade_tokens( statement ).
 
     LOOP AT tokens_not_allowed ASSIGNING FIELD-SYMBOL(<token_not_allowed>).
@@ -132,9 +107,9 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
         RETURN.
     ENDTRY.
 
-    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM class_definition-stmnt_from TO class_definition-stmnt_to.
-      LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM <statement>-from TO <statement>-to
       WHERE str = 'IF_OSQL_TEST_ENVIRONMENT'
       OR str = 'CL_OSQL_TEST_ENVIRONMENT'
@@ -148,7 +123,7 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD consolidade_tokens.
-    LOOP AT ref_scan_manager->get_tokens( ) INTO DATA(token)
+    LOOP AT ref_scan_manager->tokens INTO DATA(token)
     FROM statement-from TO statement-to.
       token-str = condense( token-str ).
       result = COND #( WHEN result IS INITIAL THEN token-str
@@ -158,9 +133,8 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD get_class_definition.
-    DATA(structures) = ref_scan_manager->get_structures( ).
-    DATA(class_implementation) = structures[ method-back ].
-    result = structures[ class_implementation-back ].
+    DATA(class_implementation) = ref_scan_manager->structures[ method-back ].
+    result = ref_scan_manager->structures[ class_implementation-back ].
   ENDMETHOD.
 
 
@@ -171,7 +145,7 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
         RETURN.
     ENDTRY.
 
-    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM class_definition-stmnt_from TO class_definition-stmnt_to.
       DATA(tokens) = consolidade_tokens( <statement> ).
       result = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS' THEN risk_level_harmless

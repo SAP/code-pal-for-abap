@@ -93,7 +93,6 @@ CLASS y_check_profile_message IMPLEMENTATION.
       CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
-
   ENDMETHOD.
 
 

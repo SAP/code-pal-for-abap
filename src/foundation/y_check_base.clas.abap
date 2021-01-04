@@ -5,149 +5,139 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                  y_unit_test_coverage.
 
   PUBLIC SECTION.
+    CONSTANTS: BEGIN OF c_code,
+                 error        TYPE sci_errc VALUE '100',
+                 warning      TYPE sci_errc VALUE '101',
+                 notification TYPE sci_errc VALUE '102',
+               END OF c_code.
 
-    CONSTANTS:
-      BEGIN OF c_code,
-        error        TYPE sci_errc VALUE '100',
-        warning      TYPE sci_errc VALUE '101',
-        notification TYPE sci_errc VALUE '102',
-      END OF c_code .
     CONSTANTS c_code_not_maintained TYPE sci_errc VALUE '106' ##NO_TEXT.
-    CONSTANTS:
-      BEGIN OF c_docs_path,
-        main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
-        checks TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/checks/' ##NO_TEXT,
-      END OF c_docs_path .
-    DATA:
-      BEGIN OF settings READ-ONLY,
-        pseudo_comment                TYPE sci_pcom,
-        disable_on_prodcode_selection TYPE abap_bool,
-        disable_on_testcode_selection TYPE abap_bool,
-        disable_threshold_selection   TYPE abap_bool,
-        object_created_on             TYPE creationdt,
-        threshold                     TYPE ycicc_threshold,
-        prio                          TYPE ycicc_message_kind,
-        apply_on_productive_code      TYPE ycicc_productive_code,
-        apply_on_test_code            TYPE ycicc_testcode,
-        documentation                 TYPE c LENGTH 1000,
-        is_threshold_reversed         TYPE abap_bool,
-      END OF settings .
 
-    METHODS constructor .
+    CONSTANTS: BEGIN OF c_docs_path,
+                 main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
+                 checks TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/checks/' ##NO_TEXT,
+               END OF c_docs_path.
 
-    METHODS get_attributes
-        REDEFINITION .
-    METHODS if_ci_test~display_documentation
-        REDEFINITION .
-    METHODS if_ci_test~query_attributes
-        REDEFINITION .
-    METHODS put_attributes
-        REDEFINITION .
-    METHODS run
-        REDEFINITION .
+    DATA: BEGIN OF settings READ-ONLY,
+            pseudo_comment                TYPE sci_pcom,
+            disable_on_prodcode_selection TYPE abap_bool,
+            disable_on_testcode_selection TYPE abap_bool,
+            disable_threshold_selection   TYPE abap_bool,
+            object_created_on             TYPE creationdt,
+            threshold                     TYPE ycicc_threshold,
+            prio                          TYPE ycicc_message_kind,
+            apply_on_productive_code      TYPE ycicc_productive_code,
+            apply_on_test_code            TYPE ycicc_testcode,
+            documentation                 TYPE c LENGTH 1000,
+            is_threshold_reversed         TYPE abap_bool,
+          END OF settings.
+
+    METHODS constructor.
+
+    METHODS get_attributes REDEFINITION.
+    METHODS if_ci_test~display_documentation  REDEFINITION.
+    METHODS if_ci_test~query_attributes REDEFINITION.
+    METHODS put_attributes  REDEFINITION.
+    METHODS run REDEFINITION.
+
   PROTECTED SECTION.
-
     CONSTANTS initial_date TYPE datum VALUE '19000101'.
 
-    DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations .
-    DATA check_name TYPE seoclsname .
-    DATA clean_code_exemption_handler TYPE REF TO y_if_exemption .
-    DATA clean_code_manager TYPE REF TO y_if_clean_code_manager .
-    DATA is_testcode TYPE abap_bool .
-    DATA ref_scan_manager TYPE REF TO y_if_scan_manager .
-    DATA statistics TYPE REF TO y_if_scan_statistics .
-    DATA test_code_detector TYPE REF TO y_if_testcode_detector .
+    DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
+    DATA check_name TYPE seoclsname.
+    DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
+    DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
+    DATA is_testcode TYPE abap_bool.
+    DATA ref_scan_manager TYPE REF TO y_if_scan_manager.
+    DATA statistics TYPE REF TO y_if_scan_statistics.
+    DATA test_code_detector TYPE REF TO y_if_testcode_detector.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
-    DATA attributes_maintained TYPE abap_bool .
+    DATA attributes_maintained TYPE abap_bool.
 
-    METHODS check_start_conditions
-      RAISING
-        ycx_object_not_processed
-        ycx_object_is_exempted .
+    DATA relevant_statement_types TYPE TABLE OF sstruc-stmnt_type.
+    DATA relevant_structure_types TYPE TABLE OF sstruc-type.
+
+    METHODS check_start_conditions RAISING ycx_object_not_processed
+                                           ycx_object_is_exempted.
+
     "! Method to validate the check customizing
     "! @parameter statement | Received in the inspect_tokens method.
     "! @parameter error_count | Number of issues found to compare against the threshold.
     "! @parameter result | Configuration structure if the check must be raised
-    METHODS detect_check_configuration
-      IMPORTING
-        statement     TYPE sstmnt
-        error_count   TYPE int4 DEFAULT 1
-      RETURNING
-        VALUE(result) TYPE y_if_clean_code_manager=>check_configuration.
-    METHODS execute_check .
-    METHODS get_code
-      IMPORTING
-        !message_prio TYPE sychar01
-      RETURNING
-        VALUE(result) TYPE sci_errc .
-    METHODS inspect_tokens
-      ABSTRACT
-      IMPORTING
-        !structure TYPE sstruc OPTIONAL
-        !index     TYPE i OPTIONAL
-        !statement TYPE sstmnt OPTIONAL . "#EC OPTL_PARAM
-    METHODS raise_error
-      IMPORTING
-        !object_type            TYPE trobjtype DEFAULT c_type_include
-        !statement_level        TYPE stmnt_levl
-        !statement_index        TYPE int4
-        !statement_from         TYPE int4
-        !error_counter          TYPE sci_errcnt OPTIONAL
-        !error_priority         TYPE sychar01
-        !parameter_01           TYPE csequence OPTIONAL
-        !parameter_02           TYPE csequence OPTIONAL
-        !parameter_03           TYPE csequence OPTIONAL
-        !parameter_04           TYPE csequence OPTIONAL
-        !is_include_specific    TYPE sci_inclspec DEFAULT ' '
-        !additional_information TYPE xstring OPTIONAL
-        !checksum               TYPE int4 OPTIONAL
-        !pseudo_comments        TYPE t_comments OPTIONAL . "#EC OPTL_PARAM
+    METHODS detect_check_configuration IMPORTING statement     TYPE sstmnt
+                                                 error_count   TYPE int4 DEFAULT 1
+                                       RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configuration.
 
-    METHODS get_column_abs
-        REDEFINITION .
-    METHODS get_column_rel
-        REDEFINITION .
-    METHODS get_include
-        REDEFINITION .
-    METHODS get_line_abs
-        REDEFINITION .
-    METHODS get_line_column_abs
-        REDEFINITION .
-    METHODS get_line_column_rel
-        REDEFINITION .
-    METHODS get_line_rel
-        REDEFINITION .
-    METHODS get_token_abs
-        REDEFINITION .
-    METHODS get_token_rel
-        REDEFINITION .
-    METHODS keyword
-        REDEFINITION .
-    METHODS set_check_message
-      IMPORTING message TYPE itex132.
-    METHODS get_class_description
-      RETURNING VALUE(result) TYPE string.
+    METHODS execute_check.
+
+    METHODS get_code IMPORTING message_prio  TYPE sychar01
+                     RETURNING VALUE(result) TYPE sci_errc.
+
+    METHODS inspect_tokens  ABSTRACT IMPORTING structure TYPE sstruc OPTIONAL
+                                               index     TYPE i OPTIONAL
+                                               statement TYPE sstmnt OPTIONAL. "#EC OPTL_PARAM
+
+    METHODS raise_error IMPORTING object_type            TYPE trobjtype DEFAULT c_type_include
+                                  statement_level        TYPE stmnt_levl
+                                  statement_index        TYPE int4
+                                  statement_from         TYPE int4
+                                  error_counter          TYPE sci_errcnt OPTIONAL
+                                  error_priority         TYPE sychar01
+                                  parameter_01           TYPE csequence OPTIONAL
+                                  parameter_02           TYPE csequence OPTIONAL
+                                  parameter_03           TYPE csequence OPTIONAL
+                                  parameter_04           TYPE csequence OPTIONAL
+                                  is_include_specific    TYPE sci_inclspec DEFAULT ' '
+                                  additional_information TYPE xstring OPTIONAL
+                                  checksum               TYPE int4 OPTIONAL
+                                  pseudo_comments        TYPE t_comments OPTIONAL. "#EC OPTL_PARAM
+
+    METHODS get_column_abs  REDEFINITION.
+    METHODS get_column_rel REDEFINITION.
+    METHODS get_include  REDEFINITION.
+    METHODS get_line_abs REDEFINITION.
+    METHODS get_line_column_abs REDEFINITION.
+    METHODS get_line_column_rel  REDEFINITION.
+    METHODS get_line_rel REDEFINITION.
+    METHODS get_token_abs REDEFINITION.
+    METHODS get_token_rel REDEFINITION.
+    METHODS keyword REDEFINITION.
+    METHODS set_check_message IMPORTING message TYPE itex132.
+    METHODS get_class_description  RETURNING VALUE(result) TYPE string.
+
   PRIVATE SECTION.
-    METHODS do_attributes_exist
-      RETURNING
-        VALUE(result) TYPE abap_bool .
+    METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
+
     METHODS instantiate_objects.
     METHODS enable_rfc.
 
-    METHODS is_skipped
-      IMPORTING config        TYPE y_if_clean_code_manager=>check_configuration
-                error_count   TYPE int4
-      RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_skipped IMPORTING config        TYPE y_if_clean_code_manager=>check_configuration
+                                 error_count   TYPE int4
+                       RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_treshold_config_valid
-      IMPORTING previous_threshold TYPE int4
-                config_threshold   TYPE int4
-      RETURNING VALUE(result)      TYPE abap_bool.
+    METHODS is_treshold_config_valid IMPORTING previous_threshold TYPE int4
+                                               config_threshold   TYPE int4
+                                     RETURNING VALUE(result)      TYPE abap_bool.
 
-    METHODS is_config_setup_valid
-      IMPORTING previous_config TYPE y_if_clean_code_manager=>check_configuration
-                config          TYPE y_if_clean_code_manager=>check_configuration
-      RETURNING VALUE(result)   TYPE abap_bool.
+    METHODS is_config_setup_valid IMPORTING previous_config TYPE y_if_clean_code_manager=>check_configuration
+                                            config          TYPE y_if_clean_code_manager=>check_configuration
+                                  RETURNING VALUE(result)   TYPE abap_bool.
+
+    METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
+                                  RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_statement_type_relevant IMPORTING structure     TYPE sstruc
+                                       RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
+                                       RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_in_scope IMPORTING statement     TYPE sstmnt
+                        RETURNING value(result) TYPE abap_bool.
+
+    METHODS get_application_component IMPORTING level         TYPE slevel
+                                      RETURNING VALUE(result) TYPE df14l-ps_posid.
+
 ENDCLASS.
 
 
@@ -185,6 +175,13 @@ CLASS y_check_base IMPLEMENTATION.
 
     has_attributes = do_attributes_exist( ).
 
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-form )
+                                        ( scan_struc_stmnt_type-method )
+                                        ( scan_struc_stmnt_type-function )
+                                        ( scan_struc_stmnt_type-module ) ).
+
+    relevant_structure_types = VALUE #( ( scan_struc_type-event ) ).
+
     INSERT VALUE #( test = myname
                     code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
@@ -193,6 +190,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
+
     DATA(include) = get_include( p_level = statement-level ).
     DATA(creation_date) =  NEW y_object_creation_date( )->y_if_object_creation_date~get_program_create_date( include ).
 
@@ -225,32 +223,31 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-       WHERE stmnt_type EQ scan_struc_stmnt_type-form
-          OR stmnt_type EQ scan_struc_stmnt_type-method
-          OR stmnt_type EQ scan_struc_stmnt_type-function
-          OR stmnt_type EQ scan_struc_stmnt_type-module
-          OR type EQ scan_struc_type-event.
+    LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
+      IF is_statement_type_relevant( <structure> ) = abap_false
+      AND is_structure_type_relevant( <structure> ) = abap_false.
+        CONTINUE.
+      ENDIF.
 
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-
-      TRY.
-          DATA(check_configuration) = check_configurations[ apply_on_testcode = abap_true ].
-        CATCH cx_sy_itab_line_not_found.
-          IF is_testcode EQ abap_true.
-            CONTINUE.
-          ENDIF.
-      ENDTRY.
+      IF should_skip_test_code( <structure> ) = abap_true.
+        CONTINUE.
+      ENDIF.
 
       DATA(index) = <structure>-stmnt_from.
 
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-        FROM <structure>-stmnt_from TO <structure>-stmnt_to.
+      LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+      FROM <structure>-stmnt_from
+      TO <structure>-stmnt_to.
+        IF is_in_scope( <statement> ) = abap_false.
+          CONTINUE.
+        ENDIF.
 
         inspect_tokens( index = index
                         structure = <structure>
                         statement = <statement> ).
+
         index = index + 1.
+
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
@@ -293,7 +290,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_column_abs.
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    DATA(tokens) = ref_scan_manager->tokens.
     IF lines( tokens ) = 0.
       RETURN.
     ENDIF.
@@ -313,7 +310,7 @@ CLASS y_check_base IMPLEMENTATION.
     DATA(index) = statement_wa-from + p_n - 1.
     CHECK index <= statement_wa-to.
 
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    DATA(tokens) = ref_scan_manager->tokens.
     IF lines( tokens ) = 0.
       RETURN.
     ENDIF.
@@ -339,7 +336,7 @@ CLASS y_check_base IMPLEMENTATION.
       l_level = statement_wa-level.
     ENDIF.
     DO.
-      READ TABLE ref_scan_manager->get_levels( ) INDEX l_level INTO l_levels_wa.
+      READ TABLE ref_scan_manager->levels INDEX l_level INTO l_levels_wa.
       IF sy-subrc NE 0.
         RETURN.
       ENDIF.
@@ -353,7 +350,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_line_abs.
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    DATA(tokens) = ref_scan_manager->tokens.
     IF lines( tokens ) = 0.
       RETURN.
     ENDIF.
@@ -370,7 +367,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_line_column_abs.
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    DATA(tokens) = ref_scan_manager->tokens.
     IF lines( tokens ) = 0.
       RETURN.
     ENDIF.
@@ -388,7 +385,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_line_column_rel.
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    DATA(tokens) = ref_scan_manager->tokens.
     IF lines( tokens ) = 0.
       RETURN.
     ENDIF.
@@ -411,7 +408,7 @@ CLASS y_check_base IMPLEMENTATION.
     DATA(index) = statement_wa-from + p_n - 1.
     CHECK index <= statement_wa-to.
 
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    DATA(tokens) = ref_scan_manager->tokens.
     IF lines( tokens ) = 0.
       RETURN.
     ENDIF.
@@ -428,7 +425,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_token_abs.
-    READ TABLE ref_scan_manager->get_tokens( ) INDEX p_n INTO token_wa.
+    READ TABLE ref_scan_manager->tokens INDEX p_n INTO token_wa.
     IF sy-subrc EQ 0.
       p_result = token_wa-str.
     ENDIF.
@@ -442,7 +439,7 @@ CLASS y_check_base IMPLEMENTATION.
     IF l_index > statement_wa-to.
       RETURN.
     ENDIF.
-    READ TABLE ref_scan_manager->get_tokens( ) INDEX l_index INTO token_wa.
+    READ TABLE ref_scan_manager->tokens INDEX l_index INTO token_wa.
     p_result = token_wa-str.
   ENDMETHOD.
 
@@ -589,7 +586,7 @@ CLASS y_check_base IMPLEMENTATION.
       p_result = 'COMPUTE'.
       RETURN.
     ENDIF.
-    READ TABLE ref_scan_manager->get_tokens( ) INDEX statement_wa-from INTO token_wa.
+    READ TABLE ref_scan_manager->tokens INDEX statement_wa-from INTO token_wa.
     p_result = token_wa-str.
   ENDMETHOD.
 
@@ -739,4 +736,55 @@ CLASS y_check_base IMPLEMENTATION.
     result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false ) OR
                       ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
   ENDMETHOD.
+
+
+  METHOD should_skip_test_code.
+    " From Code Inspector (required)
+    is_testcode = test_code_detector->is_testcode( structure ).
+
+    DATA(has_customizing_for_prod_only) = xsdbool( NOT line_exists( check_configurations[ apply_on_testcode = abap_true ] ) ).
+
+    result = xsdbool(     has_customizing_for_prod_only = abap_true
+                      AND is_testcode = abap_true ).
+  ENDMETHOD.
+
+
+  METHOD is_statement_type_relevant.
+    result = xsdbool( line_exists( relevant_statement_types[ table_line = structure-stmnt_type ] ) ).
+  ENDMETHOD.
+
+
+  METHOD is_structure_type_relevant.
+    result = xsdbool( line_exists( relevant_structure_types[ table_line = structure-type ] ) ).
+  ENDMETHOD.
+
+
+  METHOD is_in_scope.
+    TRY.
+        DATA(main_level) = ref_scan_manager->levels[ level = 0 ].
+        DATA(main_application_component) = get_application_component( main_level ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+
+    TRY.
+        DATA(current_level) = ref_scan_manager->levels[ statement-level ].
+        DATA(current_application_component) = get_application_component( current_level ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+
+    result = xsdbool( current_application_component = main_application_component ).
+  ENDMETHOD.
+
+
+  METHOD get_application_component.
+    TRY.
+        result = y_code_pal_app_comp=>get( level-name ).
+      CATCH ycx_entry_not_found.
+        RETURN.
+    ENDTRY.
+  ENDMETHOD.
+
+
 ENDCLASS.

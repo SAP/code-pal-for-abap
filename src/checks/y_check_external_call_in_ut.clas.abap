@@ -3,20 +3,17 @@ CLASS y_check_external_call_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base
     METHODS constructor .
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS check_if_error
-      IMPORTING
-        !index     TYPE i
-        !statement TYPE sstmnt .
+    METHODS check_if_error IMPORTING index     TYPE i
+                                     statement TYPE sstmnt .
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
+CLASS y_check_external_call_in_ut IMPLEMENTATION.
 
 
   METHOD check_if_error.
@@ -34,7 +31,6 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
                  statement_from      = statement-from
                  error_priority      = check_configuration-prio
                  parameter_01        = |{ key_word }| ).
-
   ENDMETHOD.
 
 
@@ -49,30 +45,11 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
     settings-apply_on_productive_code = abap_false.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-checks }external-call-in-ut.md|.
+
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-method ) ).
+    relevant_structure_types = VALUE #( ).
+
     set_check_message( 'External Call from an Unit-Test should be removed!' ).
-
-  ENDMETHOD.                    "CONSTRUCTOR
-
-
-  METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-      WHERE stmnt_type EQ scan_struc_stmnt_type-method.
-
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-      IF is_testcode EQ abap_false.
-        CONTINUE.
-      ENDIF.
-
-      DATA(index) = <structure>-stmnt_from.
-
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-        FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-        inspect_tokens( index = index
-                        statement = <statement> ).
-
-        index = index + 1.
-      ENDLOOP.
-    ENDLOOP.
   ENDMETHOD.
 
 
@@ -101,9 +78,9 @@ CLASS Y_CHECK_EXTERNAL_CALL_IN_UT IMPLEMENTATION.
           has_redirection = abap_true.
         ENDIF.
       WHEN OTHERS.
-        LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
-          FROM statement-from TO statement-to
-          WHERE type = 'I'.
+        LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+        FROM statement-from TO statement-to
+        WHERE type = 'I'.
           IF ( <token>-str CS 'CL_GUI_' ).
             has_redirection = abap_true.
           ENDIF.

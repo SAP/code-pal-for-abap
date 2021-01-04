@@ -71,9 +71,7 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
 
 
   METHOD has_wrong_position.
-    DATA(statements) = ref_scan_manager->get_statements( ).
-
-    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from TO structure-stmnt_to.
       IF <statement>-number = check-number.
         RETURN.
@@ -87,7 +85,7 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
 
 
   METHOD is_check_in_loop.
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM structure-stmnt_from TO check-from
     WHERE str = 'LOOP'
     OR str = 'ENDLOOP'.

@@ -1,15 +1,20 @@
-CLASS y_check_non_class_exception DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_non_class_exception DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
-    METHODS constructor .
+    METHODS constructor.
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+
     METHODS inspect_message IMPORTING statement TYPE sstmnt
                                       index     TYPE i.
+
     METHODS inspect_raise IMPORTING statement TYPE sstmnt
                                     index     TYPE i.
+
   PRIVATE SECTION.
     METHODS checkif_error IMPORTING index     TYPE i
                                     statement TYPE sstmnt.
+
 ENDCLASS.
 
 
@@ -18,6 +23,7 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
 
   METHOD checkif_error.
     DATA(check_configuration) = detect_check_configuration( statement ).
+
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
@@ -26,7 +32,6 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
                  statement_index     = index
                  statement_from      = statement-from
                  error_priority      = check_configuration-prio ).
-
   ENDMETHOD.
 
 
@@ -54,10 +59,9 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
   METHOD inspect_message.
     CHECK get_token_abs( statement-from ) = 'MESSAGE'.
 
-    LOOP AT ref_scan_manager->get_tokens( ) TRANSPORTING NO FIELDS
+    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'RAISING' AND type EQ 'I'.
-
       checkif_error( index = index
                      statement = statement ).
 

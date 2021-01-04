@@ -50,9 +50,9 @@ CLASS local_test_class IMPLEMENTATION.
       ( ' START-OF-SELECTION. ' )
       ( '   PERFORM example. ' )
 
-      ( ' FORM example. ' )
+      ( ' FORM example. "#EC CI_FORM ' )
       ( '   DATA class TYPE REF TO cl_oo_class.' )
-      ( ' ENDFORM. "#EC CI_FORM' )
+      ( ' ENDFORM. ' )
     ).
   ENDMETHOD.
 

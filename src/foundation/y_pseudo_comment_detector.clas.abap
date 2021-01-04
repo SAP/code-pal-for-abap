@@ -62,12 +62,12 @@ CLASS y_pseudo_comment_detector IMPLEMENTATION.
     DATA(l_position) = position + 1.
 
     DO.
-      READ TABLE ref_scan_manager->get_statements( ) INTO DATA(l_statement_wa) INDEX l_position.
+      READ TABLE ref_scan_manager->statements INTO DATA(l_statement_wa) INDEX l_position.
       IF sy-subrc <> 0 OR l_statement_wa-type <> 'P'.
         EXIT.
       ENDIF.
 
-      LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<l_token_wa>)
+      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<l_token_wa>)
         FROM l_statement_wa-from TO l_statement_wa-to.
 
         IF <l_token_wa>-str CS y_if_pseudo_comment_detector=>ec_comment AND (
@@ -92,13 +92,13 @@ CLASS y_pseudo_comment_detector IMPLEMENTATION.
     DATA(l_position) = position - 1.
 
     DO.
-      READ TABLE ref_scan_manager->get_statements( ) INTO DATA(l_statement_wa) INDEX l_position.
+      READ TABLE ref_scan_manager->statements INTO DATA(l_statement_wa) INDEX l_position.
       IF sy-subrc <> 0 OR ( l_statement_wa-type <> 'S' AND l_statement_wa-type <> 'G' ).
         EXIT.
       ENDIF.
 
       IF l_statement_wa-type = 'S'.
-        LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<l_token_wa>)
+        LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<l_token_wa>)
           FROM l_statement_wa-from TO l_statement_wa-to.
 
           IF <l_token_wa>-str CS y_if_pseudo_comment_detector=>ec_comment AND (
