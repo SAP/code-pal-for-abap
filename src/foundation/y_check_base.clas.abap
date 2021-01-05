@@ -226,11 +226,10 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD execute_check.
     LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF are_relevant_types_set( ) = abap_true.
-        IF is_statement_type_relevant( <structure> ) = abap_false
-        AND is_structure_type_relevant( <structure> ) = abap_false.
+      IF are_relevant_types_set( ) = abap_true
+      AND is_statement_type_relevant( <structure> ) = abap_false
+      AND is_structure_type_relevant( <structure> ) = abap_false.
           CONTINUE.
-        ENDIF.
       ENDIF.
 
       IF should_skip_test_code( <structure> ) = abap_true.
