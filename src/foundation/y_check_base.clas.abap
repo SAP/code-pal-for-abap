@@ -133,10 +133,12 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                        RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_in_scope IMPORTING statement     TYPE sstmnt
-                        RETURNING value(result) TYPE abap_bool.
+                        RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS get_application_component IMPORTING level         TYPE slevel
                                       RETURNING VALUE(result) TYPE df14l-ps_posid.
+
+    METHODS are_relevant_types_set RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -224,9 +226,11 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD execute_check.
     LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF is_statement_type_relevant( <structure> ) = abap_false
-      AND is_structure_type_relevant( <structure> ) = abap_false.
-        CONTINUE.
+      IF are_relevant_types_set( ) = abap_true.
+        IF is_statement_type_relevant( <structure> ) = abap_false
+        AND is_structure_type_relevant( <structure> ) = abap_false.
+          CONTINUE.
+        ENDIF.
       ENDIF.
 
       IF should_skip_test_code( <structure> ) = abap_true.
@@ -247,7 +251,6 @@ CLASS y_check_base IMPLEMENTATION.
                         statement = <statement> ).
 
         index = index + 1.
-
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
@@ -784,6 +787,12 @@ CLASS y_check_base IMPLEMENTATION.
       CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD are_relevant_types_set.
+    result = xsdbool(    relevant_statement_types IS NOT INITIAL
+                      OR relevant_structure_types IS NOT INITIAL ).
   ENDMETHOD.
 
 

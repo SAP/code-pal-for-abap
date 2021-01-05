@@ -1,41 +1,34 @@
-CLASS y_check_pseudo_comment_usage DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
+    METHODS constructor.
 
-    METHODS constructor .
   PROTECTED SECTION.
-    CONSTANTS check_base_name TYPE tadir-obj_name VALUE 'Y_CHECK_BASE'.
-    DATA name_tab TYPE STANDARD TABLE OF tadir-obj_name.
-
-    METHODS select_object_list
-      RETURNING VALUE(result) LIKE name_tab
-      RAISING   cx_failed.
-
-    METHODS call_get_pseudo_comment
-      IMPORTING obj_name      TYPE stokesx-str
-      RETURNING VALUE(result) TYPE stokesx-str
-      RAISING   cx_sy_create_object_error.
-
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
+    CONSTANTS check_base_name TYPE tadir-obj_name VALUE 'Y_CHECK_BASE'.
+
+    DATA name_tab TYPE STANDARD TABLE OF tadir-obj_name.
     DATA pseudo_comment_counter TYPE i VALUE 0 ##NO_TEXT.
     DATA class_names TYPE string_table.
 
-    METHODS count_cc_pseudo_comments
-      IMPORTING token       TYPE stokesx
-                class_names TYPE string_table.
+    METHODS count_cc_pseudo_comments IMPORTING token       TYPE stokesx.
 
     METHODS raise_error_wrapper.
+
+    METHODS select_object_list RETURNING VALUE(result) LIKE name_tab
+                               RAISING   cx_failed.
+
+    METHODS call_get_pseudo_comment IMPORTING obj_name      TYPE stokesx-str
+                                    RETURNING VALUE(result) TYPE stokesx-str
+                                    RAISING   cx_sy_create_object_error.
+
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
+CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
 
 
   METHOD call_get_pseudo_comment.
@@ -61,7 +54,17 @@ CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-prio = c_note.
 
+    relevant_statement_types = VALUE #( ).
+    relevant_structure_types = VALUE #( ).
+
     set_check_message( '&1 pseudo comments!' ).
+
+    TRY.
+        class_names = select_object_list( ).
+      CATCH cx_failed.
+        APPEND INITIAL LINE TO class_names.
+    ENDTRY.
+
   ENDMETHOD.
 
 
@@ -79,26 +82,18 @@ CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
 
 
   METHOD execute_check.
-    TRY.
-        class_names = select_object_list( ).
-      CATCH cx_failed.
-        APPEND INITIAL LINE TO class_names.
-    ENDTRY.
-
-    pseudo_comment_counter = 0.
-    is_testcode = abap_false.
-
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
-      WHERE type EQ 'C' OR type EQ 'P'.
-      count_cc_pseudo_comments( token = <token> class_names = class_names ).
-    ENDLOOP.
-
+    super->execute_check( ).
     raise_error_wrapper( ).
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    RETURN.
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to
+    WHERE type EQ 'C'
+    OR type EQ 'P'.
+      count_cc_pseudo_comments( <token> ).
+    ENDLOOP.
   ENDMETHOD.
 
 
@@ -134,4 +129,6 @@ CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
   ENDMETHOD.
+
+
 ENDCLASS.

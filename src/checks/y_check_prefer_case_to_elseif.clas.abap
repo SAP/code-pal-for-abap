@@ -7,21 +7,21 @@ CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_ba
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    TYPES: BEGIN OF counter,
+    TYPES: BEGIN OF ty_counter,
              if_structure TYPE sstruc,
              if_statement TYPE sstmnt,
              condition    TYPE string,
              count        TYPE i,
-           END OF counter.
-    TYPES counters TYPE TABLE OF counter.
+           END OF ty_counter.
+
+    TYPES ty_counters TYPE TABLE OF ty_counter.
+
+    DATA counters TYPE ty_counters.
 
     METHODS has_multiple_conditions IMPORTING statement     TYPE sstmnt
                                     RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
-                                  RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS handle_result IMPORTING counters TYPE counters.
+    METHODS handle_result.
 
 ENDCLASS.
 
@@ -37,69 +37,54 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
     settings-threshold = 5.
     settings-documentation = |{ c_docs_path-checks }prefer-case-to-elseif.md|.
 
+    relevant_statement_types = VALUE #( ).
+
+    relevant_structure_types = VALUE #( ( scan_struc_type-condition )
+                                        ( scan_struc_type-alternation ) ).
+
     set_check_message( 'Prefer CASE to ELSE IF for multiple alternative conditions!' ).
   ENDMETHOD.
 
 
   METHOD execute_check.
-    DATA counters TYPE counters.
-
-    DATA(structures) = ref_scan_manager->get_structures( ).
-    DATA(statements) = ref_scan_manager->get_statements( ).
-
-    LOOP AT structures ASSIGNING FIELD-SYMBOL(<structure>)
-    WHERE type = scan_struc_type-condition
-    OR type = scan_struc_type-alternation.
-
-      IF should_skip_test_code( <structure> ) = abap_true.
-        CONTINUE.
-      ENDIF.
-
-      DATA(statement) = statements[ <structure>-stmnt_from ].
-
-      IF has_multiple_conditions( statement ) = abap_true.
-        CONTINUE.
-      ENDIF.
-
-      DATA(token) = get_token_abs( statement-from ).
-
-      DATA(if_structure) = COND #( WHEN token = 'IF' THEN <structure>
-                                   WHEN token = 'ELSEIF' THEN structures[ <structure>-back ] ).
-
-      IF if_structure IS INITIAL.
-        CONTINUE.
-      ENDIF.
-
-      DATA(condition) = get_token_abs( statement-from + 1 ).
-
-      TRY.
-          counters[ if_structure = if_structure
-                    condition = condition ]-count = counters[ if_structure = if_structure
-                                                              condition = condition ]-count + 1.
-        CATCH cx_sy_itab_line_not_found.
-          counters = VALUE #( BASE counters
-                            ( if_structure = if_structure
-                              if_statement = statements[ if_structure-stmnt_from ]
-                              condition = condition
-                              count = 1 ) ).
-      ENDTRY.
-
-    ENDLOOP.
-
-    handle_result( counters ).
-
+    super->execute_check( ).
+    handle_result( ).
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    RETURN.
-  ENDMETHOD.
 
+    " Only the first statement is relevant
+    CHECK structure-stmnt_from = index.
 
-  METHOD should_skip_test_code.
-    CHECK test_code_detector->is_testcode( structure ) = abap_true.
-    CHECK line_exists( check_configurations[ apply_on_testcode = abap_false ] ).
-    result = abap_true.
+    DATA(if_statement) = ref_scan_manager->statements[ structure-stmnt_from ].
+
+    IF has_multiple_conditions( if_statement ) = abap_true.
+      RETURN.
+    ENDIF.
+
+    DATA(if_token) = get_token_abs( if_statement-from ).
+
+    DATA(if_structure) = COND #( WHEN if_token = 'IF' THEN structure
+                                 WHEN if_token = 'ELSEIF' THEN ref_scan_manager->structures[ structure-back ] ).
+
+    IF if_structure IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    DATA(condition) = get_token_abs( if_statement-from + 1 ).
+
+    TRY.
+        counters[ if_structure = if_structure
+                  condition = condition ]-count = counters[ if_structure = if_structure
+                                                            condition = condition ]-count + 1.
+      CATCH cx_sy_itab_line_not_found.
+        counters = VALUE #( BASE counters
+                          ( if_structure = if_structure
+                            if_statement = if_statement
+                            condition = condition
+                            count = 1 ) ).
+    ENDTRY.
   ENDMETHOD.
 
 
@@ -120,13 +105,15 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD has_multiple_conditions.
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE str = 'AND' OR str = 'OR'.
       result = abap_true.
       RETURN.
     ENDLOOP.
   ENDMETHOD.
+
 
 ENDCLASS.
