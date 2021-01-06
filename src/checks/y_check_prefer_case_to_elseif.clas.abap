@@ -48,7 +48,10 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
 
 
   METHOD inspect_structures.
+    CLEAR counters.
+
     super->inspect_structures( ).
+
     check_result( ).
   ENDMETHOD.
 
