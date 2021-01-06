@@ -51,72 +51,72 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     EVENTS event_five.
 
   PROTECTED SECTION.
+    DATA attribute_2 TYPE string.
+    DATA attribute_3 TYPE string.
+    DATA attribute_4 TYPE string.
+    DATA attribute_5 TYPE string.
+    DATA attribute_6 TYPE string.
 
-    DATA attribute_2 TYPE string .
-    DATA attribute_3 TYPE string .
-    DATA attribute_4 TYPE string .
-    DATA attribute_5 TYPE string .
-    DATA attribute_6 TYPE string .
-
-    METHODS call_method_usage .
-    METHODS chain_declaration_usage .
-    METHODS check_statement_position .
-    METHODS check_in_loop .
-    METHODS function .
-    METHODS comment_position .
-    METHODS comment_type .
-    METHODS cx_root_usage .
-    METHODS cyclomatic_complexity .
-    METHODS sub_assign_read_table .
-    METHODS deprecated_key_words .
-    METHODS empty_catches .
-    METHODS empty_if_branch .
-    METHODS empty_procedure .
-    METHODS equals_sign_chaining .
-    METHODS magic_number .
+    METHODS call_method_usage.
+    METHODS chain_declaration_usage.
+    METHODS check_statement_position.
+    METHODS check_in_loop.
+    METHODS function.
+    METHODS comment_position.
+    METHODS comment_type.
+    METHODS cx_root_usage.
+    METHODS cyclomatic_complexity.
+    METHODS sub_assign_read_table.
+    METHODS deprecated_key_words.
+    METHODS empty_catches.
+    METHODS empty_if_branch.
+    METHODS empty_procedure.
+    METHODS equals_sign_chaining.
+    METHODS magic_number.
     METHODS method_output_parameter
       EXPORTING
         !error        TYPE char1
       RETURNING
-        VALUE(result) TYPE string_table .          "#EC NUM_OUTPUT_PARA
+        VALUE(result) TYPE string_table.          "#EC NUM_OUTPUT_PARA
     METHODS method_return_bool                     "#EC NUM_OUTPUT_PARA
       RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS max_nesting_depth .
+        VALUE(result) TYPE abap_bool.
+    METHODS max_nesting_depth.
     METHODS non_class_based_exception
       EXCEPTIONS
-        no_class_based .
-    METHODS number_executable_statements .
+        no_class_based.
+    METHODS number_executable_statements.
     METHODS number_output_parameters
       EXPORTING
         !output_1 TYPE string
-        !output_2 TYPE string .
-    METHODS pseudo_comment_usage .
-    METHODS receiving_usage .
-    METHODS external_call_in_prod_code_ok .
+        !output_2 TYPE string.
+    METHODS pseudo_comment_usage.
+    METHODS receiving_usage.
+    METHODS external_call_in_prod_code_ok.
     METHODS boolean_input_parameter
       IMPORTING
-        !do_save TYPE abap_bool .
-    METHODS omit_optional_exporting .
+        !do_save TYPE abap_bool.
+    METHODS omit_optional_exporting.
     METHODS optional_parameters
       IMPORTING
-        !name TYPE string OPTIONAL .
+        !name TYPE string OPTIONAL.
     METHODS returning_name                         "#EC NUM_OUTPUT_PARA
       RETURNING
-        VALUE(name) TYPE string .
-    METHODS self_reference .
-    METHODS test_seam_usage .
+        VALUE(name) TYPE string.
+    METHODS self_reference.
+    METHODS test_seam_usage.
     METHODS multiple_pseudo_comments
       IMPORTING
         !name      TYPE string
         !surname   TYPE string OPTIONAL
         !active    TYPE abap_bool OPTIONAL
       RETURNING
-        VALUE(age) TYPE i . "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
-    METHODS prefer_is_not_to_not_is .
-    METHODS prefer_case_to_elseif .
-    METHODS deprecated_classes .
-    METHODS scope_of_variable .
+        VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
+    METHODS prefer_is_not_to_not_is.
+    METHODS prefer_case_to_elseif.
+    METHODS deprecated_classes.
+    METHODS scope_of_variable.
+
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
     DATA attribute_8 TYPE string.
@@ -124,6 +124,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     DATA attribute_10 TYPE string.
     DATA attribute_11 TYPE string.
     DATA attribute_12 TYPE string.
+
 ENDCLASS.
 
 
