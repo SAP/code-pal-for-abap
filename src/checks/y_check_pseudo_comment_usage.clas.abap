@@ -81,7 +81,10 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
 
 
   METHOD inspect_structures.
+    pseudo_comment_counter = 0.
+
     super->inspect_structures( ).
+
     check_result( ).
   ENDMETHOD.
 
