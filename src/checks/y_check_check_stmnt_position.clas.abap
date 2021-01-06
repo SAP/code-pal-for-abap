@@ -66,7 +66,8 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
                       OR token EQ 'DATA'
                       OR token EQ 'TYPES'
                       OR token EQ 'CHECK'
-                      OR token EQ 'FIELD-SYMBOLS' ).
+                      OR token EQ 'FIELD-SYMBOLS'
+                      OR token EQ 'CONSTANTS' ).
   ENDMETHOD.
 
 
