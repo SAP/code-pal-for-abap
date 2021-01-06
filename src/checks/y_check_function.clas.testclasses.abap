@@ -11,7 +11,6 @@ ENDCLASS.
 
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
   METHOD y_if_scan_manager~set_ref_scan.
-    "Empty for test case
     RETURN.
   ENDMETHOD.
 
