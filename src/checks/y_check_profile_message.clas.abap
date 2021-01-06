@@ -1,13 +1,12 @@
-CLASS y_check_profile_message DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
+CLASS y_check_profile_message DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
-    METHODS constructor .
+    METHODS constructor.
+
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
     METHODS inform REDEFINITION.
+
   PRIVATE SECTION.
     CLASS-DATA ran TYPE abap_bool.
     METHODS get_profiles RETURNING VALUE(result) TYPE y_if_profile_manager=>profile_assignments.
@@ -36,7 +35,6 @@ CLASS y_check_profile_message IMPLEMENTATION.
 
 
   METHOD execute_check.
-
     CHECK ran = abap_false.
     CHECK has_attributes = abap_false.
 
@@ -56,7 +54,6 @@ CLASS y_check_profile_message IMPLEMENTATION.
                  parameter_02        = |{ list_profiles( profiles ) }| ).
 
     ran = abap_true.
-
   ENDMETHOD.
 
 

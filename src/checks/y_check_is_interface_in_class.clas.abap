@@ -3,11 +3,10 @@ CLASS y_check_is_interface_in_class DEFINITION PUBLIC INHERITING FROM y_check_ba
     METHODS constructor.
 
   PROTECTED SECTION.
+    METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS execute_check REDEFINITION.
 
   PRIVATE SECTION.
-    DATA leading_structure TYPE sstruc.
     DATA public_method_counter TYPE i VALUE 0.
 
     METHODS get_first_token IMPORTING statement TYPE sstmnt
@@ -22,9 +21,7 @@ CLASS y_check_is_interface_in_class DEFINITION PUBLIC INHERITING FROM y_check_ba
     METHODS get_last_token IMPORTING statement TYPE sstmnt
                            RETURNING value(result) TYPE string.
 
-    METHODS set_leading_structure IMPORTING structure TYPE sstruc.
-
-    METHODS check_leading_structure.
+    METHODS check_result IMPORTING structure TYPE sstruc.
 
 ENDCLASS.
 
@@ -50,9 +47,12 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    super->execute_check( ).
-    check_leading_structure( ).
+  METHOD inspect_statements.
+    public_method_counter = 0.
+
+    super->inspect_statements( structure ).
+
+    check_result( structure ).
   ENDMETHOD.
 
 
@@ -65,11 +65,6 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
     CHECK get_first_token( statement ) = 'METHODS'
       AND get_second_token( statement ) <> 'FOR'
       AND get_third_token( statement ) <> 'TESTING'.
-
-    IF leading_structure <> structure.
-      set_leading_structure( structure ).
-      check_leading_structure( ).
-    ENDIF.
 
     ADD 1 TO public_method_counter.
   ENDMETHOD.
@@ -95,16 +90,8 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD set_leading_structure.
-    leading_structure = structure.
-    public_method_counter = 0.
-  ENDMETHOD.
-
-
-  METHOD check_leading_structure.
-    CHECK leading_structure IS NOT INITIAL.
-
-    DATA(statement_for_message) = ref_scan_manager->statements[ leading_structure-stmnt_from ].
+  METHOD check_result.
+    DATA(statement_for_message) = ref_scan_manager->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = public_method_counter
                                                             statement = statement_for_message ).
@@ -114,7 +101,7 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
     ENDIF.
 
     raise_error( statement_level     = statement_for_message-level
-                 statement_index     = leading_structure-stmnt_from
+                 statement_index     = structure-stmnt_from
                  statement_from      = statement_for_message-from
                  error_priority      = check_configuration-prio
                  parameter_01        = |{ public_method_counter }| ).

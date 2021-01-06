@@ -3,15 +3,14 @@ CLASS y_check_num_public_attributes DEFINITION PUBLIC INHERITING FROM y_check_ba
     METHODS constructor .
 
   PROTECTED SECTION.
+    METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS execute_check REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS structure_depth_threshold TYPE i VALUE 0.
 
     DATA public_attribute_counter TYPE i VALUE 0.
     DATA structure_depth TYPE i VALUE 0.
-    DATA leading_structure TYPE sstruc.
 
     METHODS checkif_attribute_in_structure IMPORTING second_token TYPE string
                                                      third_token  TYPE string.
@@ -19,9 +18,7 @@ CLASS y_check_num_public_attributes DEFINITION PUBLIC INHERITING FROM y_check_ba
     METHODS checkif_public_attribute_found IMPORTING first_token TYPE string
                                                      last_token  TYPE string.
 
-    METHODS set_leading_structure IMPORTING structure TYPE sstruc.
-
-    METHODS check_leading_structure.
+    METHODS check_result IMPORTING structure TYPE sstruc.
 
 ENDCLASS.
 
@@ -46,18 +43,16 @@ CLASS y_check_num_public_attributes IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    super->execute_check( ).
-    check_leading_structure( ).
+  METHOD inspect_statements.
+    public_attribute_counter = 0.
+
+    super->inspect_statements( structure ).
+
+    check_result( structure ).
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    IF leading_structure <> structure.
-      check_leading_structure( ).
-      set_leading_structure( structure ).
-    ENDIF.
-
     checkif_public_attribute_found( first_token = get_token_abs( statement-from )
                                      last_token = get_token_abs( statement-to ) ).
 
@@ -75,26 +70,6 @@ CLASS y_check_num_public_attributes IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD check_leading_structure.
-    CHECK leading_structure IS NOT INITIAL.
-
-    DATA(statement) = ref_scan_manager->statements[ leading_structure-stmnt_from ].
-
-    DATA(check_configuration) = detect_check_configuration( statement = statement
-                                                            error_count = public_attribute_counter ).
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = leading_structure-stmnt_from
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ public_attribute_counter }|
-                 parameter_02        = |{ check_configuration-threshold }| ).
-  ENDMETHOD.
-
-
   METHOD checkif_public_attribute_found.
     CHECK first_token = 'DATA'
        OR first_token = 'CLASS-DATA'.
@@ -107,9 +82,21 @@ CLASS y_check_num_public_attributes IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD set_leading_structure.
-    leading_structure = structure.
-    public_attribute_counter = 0.
+  METHOD check_result.
+    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
+
+    DATA(check_configuration) = detect_check_configuration( statement = statement
+                                                            error_count = public_attribute_counter ).
+    IF check_configuration IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    raise_error( statement_level     = statement-level
+                 statement_index     = structure-stmnt_from
+                 statement_from      = statement-from
+                 error_priority      = check_configuration-prio
+                 parameter_01        = |{ public_attribute_counter }|
+                 parameter_02        = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 

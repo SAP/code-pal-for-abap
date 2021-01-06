@@ -3,7 +3,8 @@ CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_ba
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
+    METHODS inspect_structures REDEFINITION.
+    METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
@@ -21,7 +22,7 @@ CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_ba
     METHODS has_multiple_conditions IMPORTING statement     TYPE sstmnt
                                     RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS handle_result.
+    METHODS check_result.
 
 ENDCLASS.
 
@@ -37,36 +38,30 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
     settings-threshold = 5.
     settings-documentation = |{ c_docs_path-checks }prefer-case-to-elseif.md|.
 
-    relevant_statement_types = VALUE #( ).
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-if )
+                                        ( scan_struc_stmnt_type-elseif ) ).
 
-    relevant_structure_types = VALUE #( ( scan_struc_type-condition )
-                                        ( scan_struc_type-alternation ) ).
+    relevant_structure_types = VALUE #( ).
 
     set_check_message( 'Prefer CASE to ELSE IF for multiple alternative conditions!' ).
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    super->execute_check( ).
-    handle_result( ).
+  METHOD inspect_structures.
+    super->inspect_structures( ).
+    check_result( ).
   ENDMETHOD.
 
 
-  METHOD inspect_tokens.
-
-    " Only the first statement is relevant
-    CHECK structure-stmnt_from = index.
-
+  METHOD inspect_statements.
     DATA(if_statement) = ref_scan_manager->statements[ structure-stmnt_from ].
 
     IF has_multiple_conditions( if_statement ) = abap_true.
       RETURN.
     ENDIF.
 
-    DATA(if_token) = get_token_abs( if_statement-from ).
-
-    DATA(if_structure) = COND #( WHEN if_token = 'IF' THEN structure
-                                 WHEN if_token = 'ELSEIF' THEN ref_scan_manager->structures[ structure-back ] ).
+    DATA(if_structure) = COND #( WHEN structure-stmnt_type = scan_struc_stmnt_type-if THEN structure
+                                 WHEN structure-stmnt_type = scan_struc_stmnt_type-elseif THEN ref_scan_manager->structures[ structure-back ] ).
 
     IF if_structure IS INITIAL.
       RETURN.
@@ -88,9 +83,13 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD handle_result.
-    LOOP AT counters ASSIGNING FIELD-SYMBOL(<counter>).
+  METHOD inspect_tokens.
+    RETURN.
+  ENDMETHOD.
 
+
+  METHOD check_result.
+    LOOP AT counters ASSIGNING FIELD-SYMBOL(<counter>).
       DATA(configuration) = detect_check_configuration( error_count = <counter>-count
                                                         statement = <counter>-if_statement ).
 
@@ -98,10 +97,10 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      raise_error( statement_level     = <counter>-if_statement-level
-                   statement_index     = <counter>-if_structure-stmnt_from
-                   statement_from      = <counter>-if_statement-from
-                   error_priority      = configuration-prio ).
+      raise_error( statement_level = <counter>-if_statement-level
+                   statement_index = <counter>-if_structure-stmnt_from
+                   statement_from = <counter>-if_statement-from
+                   error_priority = configuration-prio ).
     ENDLOOP.
   ENDMETHOD.
 

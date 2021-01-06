@@ -3,15 +3,14 @@ CLASS y_check_number_methods DEFINITION PUBLIC INHERITING FROM y_check_base CREA
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
+    METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+
 
   PRIVATE SECTION.
     DATA method_counter TYPE i VALUE 0.
-    DATA leading_structure TYPE sstruc.
 
-    METHODS set_leading_structure IMPORTING structure TYPE sstruc.
-    METHODS check_leading_structure.
+    METHODS check_result IMPORTING structure TYPE sstruc.
 
 ENDCLASS.
 
@@ -36,18 +35,16 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    super->execute_check( ).
-    check_leading_structure( ).
+  METHOD inspect_statements.
+    method_counter = 0.
+
+    super->inspect_statements( structure ).
+
+    check_result( structure ).
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    IF leading_structure <> structure.
-      check_leading_structure( ).
-      set_leading_structure( structure ).
-    ENDIF.
-
     CASE get_token_abs( statement-from ).
       WHEN 'METHODS' OR 'CLASS-METHODS'.
         ADD 1 TO method_counter.
@@ -55,10 +52,8 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD check_leading_structure.
-    CHECK leading_structure IS NOT INITIAL.
-
-    DATA(statement) = ref_scan_manager->statements[ leading_structure-stmnt_from ].
+  METHOD check_result.
+    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = method_counter
                                                             statement = statement ).
@@ -67,18 +62,12 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
     ENDIF.
 
     raise_error( statement_level     = statement-level
-                 statement_index     = leading_structure-stmnt_from
+                 statement_index     = structure-stmnt_from
                  statement_from      = statement-from
                  error_priority      = check_configuration-prio
                  parameter_01        = |{ method_counter }|
                  parameter_02        = |{ check_configuration-threshold }| ).
 
-  ENDMETHOD.
-
-
-  METHOD set_leading_structure.
-    leading_structure = structure.
-    method_counter = 0.
   ENDMETHOD.
 
 

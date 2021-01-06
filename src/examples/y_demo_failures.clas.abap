@@ -50,73 +50,73 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     EVENTS event_four.
     EVENTS event_five.
 
-protected section.
+  PROTECTED SECTION.
 
-  data ATTRIBUTE_2 type STRING .
-  data ATTRIBUTE_3 type STRING .
-  data ATTRIBUTE_4 type STRING .
-  data ATTRIBUTE_5 type STRING .
-  data ATTRIBUTE_6 type STRING .
+    DATA attribute_2 TYPE string .
+    DATA attribute_3 TYPE string .
+    DATA attribute_4 TYPE string .
+    DATA attribute_5 TYPE string .
+    DATA attribute_6 TYPE string .
 
-  methods CALL_METHOD_USAGE .
-  methods CHAIN_DECLARATION_USAGE .
-  methods CHECK_STATEMENT_POSITION .
-  methods CHECK_IN_LOOP .
-  methods FUNCTION .
-  methods COMMENT_POSITION .
-  methods COMMENT_TYPE .
-  methods CX_ROOT_USAGE .
-  methods CYCLOMATIC_COMPLEXITY .
-  methods SUB_ASSIGN_READ_TABLE .
-  methods DEPRECATED_KEY_WORDS .
-  methods EMPTY_CATCHES .
-  methods EMPTY_IF_BRANCH .
-  methods EMPTY_PROCEDURE .
-  methods EQUALS_SIGN_CHAINING .
-  methods MAGIC_NUMBER .
-  methods METHOD_OUTPUT_PARAMETER
-    exporting
-      !ERROR type CHAR1
-    returning
-      value(RESULT) type STRING_TABLE .                                        "#EC NUM_OUTPUT_PARA
-  methods METHOD_RETURN_BOOL                                           "#EC NUM_OUTPUT_PARA
-    returning
-      value(RESULT) type ABAP_BOOL .
-  methods MAX_NESTING_DEPTH .
-  methods NON_CLASS_BASED_EXCEPTION
-    exceptions
-      NO_CLASS_BASED .
-  methods NUMBER_EXECUTABLE_STATEMENTS .
-  methods NUMBER_OUTPUT_PARAMETERS
-    exporting
-      !OUTPUT_1 type STRING
-      !OUTPUT_2 type STRING .
-  methods PSEUDO_COMMENT_USAGE .
-  methods RECEIVING_USAGE .
-  methods EXTERNAL_CALL_IN_PROD_CODE_OK .
-  methods BOOLEAN_INPUT_PARAMETER
-    importing
-      !DO_SAVE type ABAP_BOOL .
-  methods OMIT_OPTIONAL_EXPORTING .
-  methods OPTIONAL_PARAMETERS
-    importing
-      !NAME type STRING optional .
-  methods RETURNING_NAME                                      "#EC NUM_OUTPUT_PARA
-    returning
-      value(NAME) type STRING .
-  methods SELF_REFERENCE .
-  methods TEST_SEAM_USAGE .
-  methods MULTIPLE_PSEUDO_COMMENTS
-    importing
-      !NAME type STRING
-      !SURNAME type STRING optional
-      !ACTIVE type ABAP_BOOL optional
-    returning
-      value(AGE) type I .                                         "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
-  methods PREFER_IS_NOT_TO_NOT_IS .
-  methods PREFER_CASE_TO_ELSEIF .
-  methods DEPRECATED_CLASSES .
-  methods SCOPE_OF_VARIABLE .
+    METHODS call_method_usage .
+    METHODS chain_declaration_usage .
+    METHODS check_statement_position .
+    METHODS check_in_loop .
+    METHODS function .
+    METHODS comment_position .
+    METHODS comment_type .
+    METHODS cx_root_usage .
+    METHODS cyclomatic_complexity .
+    METHODS sub_assign_read_table .
+    METHODS deprecated_key_words .
+    METHODS empty_catches .
+    METHODS empty_if_branch .
+    METHODS empty_procedure .
+    METHODS equals_sign_chaining .
+    METHODS magic_number .
+    METHODS method_output_parameter
+      EXPORTING
+        !error        TYPE char1
+      RETURNING
+        VALUE(result) TYPE string_table .          "#EC NUM_OUTPUT_PARA
+    METHODS method_return_bool                     "#EC NUM_OUTPUT_PARA
+      RETURNING
+        VALUE(result) TYPE abap_bool .
+    METHODS max_nesting_depth .
+    METHODS non_class_based_exception
+      EXCEPTIONS
+        no_class_based .
+    METHODS number_executable_statements .
+    METHODS number_output_parameters
+      EXPORTING
+        !output_1 TYPE string
+        !output_2 TYPE string .
+    METHODS pseudo_comment_usage .
+    METHODS receiving_usage .
+    METHODS external_call_in_prod_code_ok .
+    METHODS boolean_input_parameter
+      IMPORTING
+        !do_save TYPE abap_bool .
+    METHODS omit_optional_exporting .
+    METHODS optional_parameters
+      IMPORTING
+        !name TYPE string OPTIONAL .
+    METHODS returning_name                         "#EC NUM_OUTPUT_PARA
+      RETURNING
+        VALUE(name) TYPE string .
+    METHODS self_reference .
+    METHODS test_seam_usage .
+    METHODS multiple_pseudo_comments
+      IMPORTING
+        !name      TYPE string
+        !surname   TYPE string OPTIONAL
+        !active    TYPE abap_bool OPTIONAL
+      RETURNING
+        VALUE(age) TYPE i . "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
+    METHODS prefer_is_not_to_not_is .
+    METHODS prefer_case_to_elseif .
+    METHODS deprecated_classes .
+    METHODS scope_of_variable .
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
     DATA attribute_8 TYPE string.
@@ -177,7 +177,7 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   METHOD cx_root_usage.
     TRY.
         RAISE EXCEPTION TYPE ycx_entry_not_found.
-      CATCH cx_root. "#EC EMPTY_CATCH
+      CATCH cx_root.                                   "#EC EMPTY_CATCH
     ENDTRY.
   ENDMETHOD.
 
@@ -385,17 +385,17 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   METHOD prefer_case_to_elseif.
     DATA(value) = 0.
 
-    IF sy-mandt = 000. "#EC CI_MAGIC
+    IF sy-mandt = 000.                                    "#EC CI_MAGIC
       value = 0.
-    ELSEIF sy-mandt = 100. "#EC CI_MAGIC
+    ELSEIF sy-mandt = 100.                                "#EC CI_MAGIC
       value = 1.
-    ELSEIF sy-mandt = 200. "#EC CI_MAGIC
+    ELSEIF sy-mandt = 200.                                "#EC CI_MAGIC
       value = 2.
-    ELSEIF sy-mandt = 300. "#EC CI_MAGIC
+    ELSEIF sy-mandt = 300.                                "#EC CI_MAGIC
       value = 3.
-    ELSEIF sy-mandt = 400. "#EC CI_MAGIC
+    ELSEIF sy-mandt = 400.                                "#EC CI_MAGIC
       value = 4.
-    ELSEIF sy-mandt = 500. "#EC CI_MAGIC
+    ELSEIF sy-mandt = 500.                                "#EC CI_MAGIC
       value = 5.
     ENDIF.
   ENDMETHOD.
@@ -423,7 +423,7 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
 
 
-   METHOD scope_of_variable.
+  METHOD scope_of_variable.
     IF sy-subrc = 0.
       DATA(value) = 1.
     ELSE.
@@ -453,5 +453,5 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
     " TEST-SEAM read_report_name.
     "   DATA(report_name) = sy-repid.
     " END-TEST-SEAM.
-  ENDMETHOD. "#EC EMPTY_PROCEDURE
+  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
 ENDCLASS.

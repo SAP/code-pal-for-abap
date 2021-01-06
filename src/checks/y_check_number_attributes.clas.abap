@@ -3,7 +3,7 @@ CLASS y_check_number_attributes DEFINITION PUBLIC INHERITING FROM y_check_base C
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
+    METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
@@ -11,15 +11,13 @@ CLASS y_check_number_attributes DEFINITION PUBLIC INHERITING FROM y_check_base C
 
     DATA attribute_counter TYPE i VALUE 0.
     DATA structure_depth TYPE i VALUE 0.
-    DATA leading_structure TYPE sstruc.
 
     METHODS checkif_attribute_in_structure IMPORTING second_token TYPE string
                                                      third_token  TYPE string.
 
     METHODS checkif_attribute_found IMPORTING first_token TYPE string.
 
-    METHODS set_leading_structure IMPORTING structure TYPE sstruc.
-    METHODS check_leading_structure.
+    METHODS check_result IMPORTING structure TYPE sstruc.
 
 ENDCLASS.
 
@@ -44,18 +42,16 @@ CLASS y_check_number_attributes IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    super->execute_check( ).
-    check_leading_structure( ).
+  METHOD inspect_statements.
+    attribute_counter = 0.
+
+    super->inspect_statements( structure ).
+
+    check_result( structure ).
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    IF leading_structure <> structure.
-      check_leading_structure( ).
-      set_leading_structure( structure ).
-    ENDIF.
-
     checkif_attribute_found( first_token = get_token_abs( statement-from ) ).
 
     checkif_attribute_in_structure( second_token = get_token_abs( statement-from + 1 )
@@ -82,10 +78,8 @@ CLASS y_check_number_attributes IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD check_leading_structure.
-    CHECK leading_structure IS NOT INITIAL.
-
-    DATA(statement) = ref_scan_manager->statements[ leading_structure-stmnt_from ].
+  METHOD check_result.
+    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = attribute_counter
                                                             statement = statement ).
@@ -94,17 +88,11 @@ CLASS y_check_number_attributes IMPLEMENTATION.
     ENDIF.
 
     raise_error( statement_level     = statement-level
-                 statement_index     = leading_structure-stmnt_from
+                 statement_index     = structure-stmnt_from
                  statement_from      = statement-from
                  error_priority      = check_configuration-prio
                  parameter_01        = |{ attribute_counter }|
                  parameter_02        = |{ check_configuration-threshold }| ).
-  ENDMETHOD.
-
-
-  METHOD set_leading_structure.
-    leading_structure = structure.
-    attribute_counter = 0.
   ENDMETHOD.
 
 

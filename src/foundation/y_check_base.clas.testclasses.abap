@@ -1,41 +1,3 @@
-CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double FOR TESTING. "#EC INTF_IN_CLASS
-  PUBLIC SECTION.
-    METHODS constructor.
-ENDCLASS.
-
-CLASS ltd_ref_scan_manager IMPLEMENTATION.
-
-  METHOD constructor.
-    super->constructor( ).
-
-    inject_code( VALUE #(
-      ( 'REPORT y_example. ' )
-      ( ' "Something ' )
-    ) ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_check_base_double DEFINITION FOR TESTING INHERITING FROM y_check_base.
-  PUBLIC SECTION.
-    METHODS constructor.
-  PROTECTED SECTION.
-    METHODS inspect_tokens REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_check_base_double IMPLEMENTATION.
-
-  METHOD constructor.
-    super->constructor( ).
-    ref_scan_manager = NEW ltd_ref_scan_manager( ).
-  ENDMETHOD.
-
-  METHOD inspect_tokens.
-    RETURN.
-  ENDMETHOD.
-
-ENDCLASS.
-
 CLASS ltc_check_configuration_base DEFINITION ABSTRACT FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     DATA cut TYPE REF TO y_check_base.
@@ -131,7 +93,7 @@ ENDCLASS.
 CLASS ltc_check_configuration_bound IMPLEMENTATION.
 
   METHOD setup.
-    cut = NEW ltc_check_base_double( ).
+    cut = NEW ltd_check_base( ).
   ENDMETHOD.
 
   METHOD is_bound.
@@ -151,7 +113,7 @@ ENDCLASS.
 CLASS ltc_check_configuration_error IMPLEMENTATION.
 
   METHOD setup.
-    cut = NEW ltc_check_base_double( ).
+    cut = NEW ltd_check_base( ).
   ENDMETHOD.
 
   METHOD error_vs_error.
@@ -288,6 +250,7 @@ CLASS ltc_check_configuration_error IMPLEMENTATION.
 
 ENDCLASS.
 
+
 CLASS ltc_check_configuration_warn DEFINITION FOR TESTING INHERITING FROM ltc_check_configuration_base RISK LEVEL HARMLESS DURATION SHORT.
   PRIVATE SECTION.
     METHODS setup.
@@ -296,10 +259,11 @@ CLASS ltc_check_configuration_warn DEFINITION FOR TESTING INHERITING FROM ltc_ch
     METHODS warning_vs_note FOR TESTING.
 ENDCLASS.
 
+
 CLASS ltc_check_configuration_warn IMPLEMENTATION.
 
   METHOD setup.
-    cut = NEW ltc_check_base_double( ).
+    cut = NEW ltd_check_base( ).
   ENDMETHOD.
 
   METHOD warning_vs_error.
@@ -436,6 +400,7 @@ CLASS ltc_check_configuration_warn IMPLEMENTATION.
 
 ENDCLASS.
 
+
 CLASS ltc_check_configuration_note DEFINITION FOR TESTING INHERITING FROM ltc_check_configuration_base RISK LEVEL HARMLESS DURATION SHORT.
   PRIVATE SECTION.
     METHODS setup.
@@ -444,10 +409,11 @@ CLASS ltc_check_configuration_note DEFINITION FOR TESTING INHERITING FROM ltc_ch
     METHODS note_vs_note FOR TESTING.
 ENDCLASS.
 
+
 CLASS ltc_check_configuration_note IMPLEMENTATION.
 
   METHOD setup.
-    cut = NEW ltc_check_base_double( ).
+    cut = NEW ltd_check_base( ).
   ENDMETHOD.
 
   METHOD note_vs_error.

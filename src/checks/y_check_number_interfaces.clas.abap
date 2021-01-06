@@ -3,22 +3,19 @@ CLASS y_check_number_interfaces DEFINITION PUBLIC INHERITING FROM y_check_base C
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
+    METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
     DATA interface_counter TYPE i VALUE 0.
-    DATA leading_structure TYPE sstruc.
 
-    METHODS set_leading_structure IMPORTING structure TYPE sstruc.
-
-    METHODS check_leading_structure.
+    METHODS check_result IMPORTING structure TYPE sstruc.
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
+CLASS y_check_number_interfaces IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -37,28 +34,24 @@ CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    super->execute_check( ).
-    check_leading_structure( ).
+  METHOD inspect_statements.
+    interface_counter = 0.
+
+    super->inspect_statements( structure ).
+
+    check_result( structure ).
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    IF leading_structure <> structure.
-      check_leading_structure( ).
-      set_leading_structure( structure ).
-    ENDIF.
-
     IF get_token_abs( statement-from ) = 'INTERFACES'.
       ADD 1 TO interface_counter.
     ENDIF.
   ENDMETHOD.
 
 
-  METHOD check_leading_structure.
-    CHECK leading_structure IS NOT INITIAL.
-
-    DATA(statement) = ref_scan_manager->statements[ leading_structure-stmnt_from ].
+  METHOD check_result.
+    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = interface_counter
                                                             statement = statement ).
@@ -67,17 +60,11 @@ CLASS Y_CHECK_NUMBER_INTERFACES IMPLEMENTATION.
     ENDIF.
 
     raise_error( statement_level      = statement-level
-                 statement_index      = leading_structure-stmnt_from
+                 statement_index      = structure-stmnt_from
                  statement_from       = statement-from
                  error_priority       = check_configuration-prio
                  parameter_01         = |{ interface_counter }|
                  parameter_02         = |{ check_configuration-threshold }| ).
-  ENDMETHOD.
-
-
-  METHOD set_leading_structure.
-    leading_structure = structure.
-    interface_counter = 0.
   ENDMETHOD.
 
 

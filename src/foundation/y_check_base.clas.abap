@@ -57,25 +57,36 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA relevant_statement_types TYPE TABLE OF sstruc-stmnt_type.
     DATA relevant_structure_types TYPE TABLE OF sstruc-type.
 
+    METHODS execute_check.
+
     METHODS check_start_conditions RAISING ycx_object_not_processed
                                            ycx_object_is_exempted.
 
-    "! Method to validate the check customizing
-    "! @parameter statement | Received in the inspect_tokens method.
-    "! @parameter error_count | Number of issues found to compare against the threshold.
+    "! <p class="shorttext synchronized" lang="en">Validates the Customizing</p>
+    "! @parameter statement | Received from inspect_tokens method.
+    "! @parameter error_count | Number of findings found to compare against the threshold.
     "! @parameter result | Configuration structure if the check must be raised
     METHODS detect_check_configuration IMPORTING statement     TYPE sstmnt
                                                  error_count   TYPE int4 DEFAULT 1
                                        RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configuration.
 
-    METHODS execute_check.
-
     METHODS get_code IMPORTING message_prio  TYPE sychar01
                      RETURNING VALUE(result) TYPE sci_errc.
 
-    METHODS inspect_tokens  ABSTRACT IMPORTING structure TYPE sstruc OPTIONAL
-                                               index     TYPE i OPTIONAL
-                                               statement TYPE sstmnt OPTIONAL. "#EC OPTL_PARAM
+    "! <p class="shorttext synchronized" lang="en">Inspect All Structures</p>
+    METHODS inspect_structures.
+
+    "! <p class="shorttext synchronized" lang="en">Inspect Statements of a Structure</p>
+    "! @parameter structure | Leading Structure
+    METHODS inspect_statements IMPORTING structure TYPE sstruc.
+
+    "! <p class="shorttext synchronized" lang="en">Inspect Tokens of a Statement</p>
+    "! @parameter structure | Leading Structure
+    "! @parameter index | Leading Index
+    "! @parameter statement | Leading Statement
+    METHODS inspect_tokens ABSTRACT IMPORTING structure TYPE sstruc
+                                              index     TYPE i
+                                              statement TYPE sstmnt.
 
     METHODS raise_error IMPORTING object_type            TYPE trobjtype DEFAULT c_type_include
                                   statement_level        TYPE stmnt_levl
@@ -125,6 +136,9 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
                                   RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS should_skip_type IMPORTING structure TYPE sstruc
+                             RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_statement_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
@@ -225,32 +239,37 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD execute_check.
-    LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF are_relevant_types_set( ) = abap_true
-      AND is_statement_type_relevant( <structure> ) = abap_false
-      AND is_structure_type_relevant( <structure> ) = abap_false.
-          CONTINUE.
-      ENDIF.
+    inspect_structures( ).
+  ENDMETHOD.
 
-      IF should_skip_test_code( <structure> ) = abap_true.
+
+  METHOD inspect_structures.
+    LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
+      IF should_skip_test_code( <structure> ) = abap_true
+      OR should_skip_type( <structure> ) = abap_true.
         CONTINUE.
       ENDIF.
 
-      DATA(index) = <structure>-stmnt_from.
+      inspect_statements( <structure> ).
+    ENDLOOP.
+  ENDMETHOD.
 
-      LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
-      FROM <structure>-stmnt_from
-      TO <structure>-stmnt_to.
-        IF is_in_scope( <statement> ) = abap_false.
-          CONTINUE.
-        ENDIF.
 
-        inspect_tokens( index = index
-                        structure = <structure>
-                        statement = <statement> ).
+  METHOD inspect_statements.
+    DATA(index) = structure-stmnt_from.
 
-        index = index + 1.
-      ENDLOOP.
+    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    FROM structure-stmnt_from
+    TO structure-stmnt_to.
+      IF is_in_scope( <statement> ) = abap_false.
+        CONTINUE.
+      ENDIF.
+
+      inspect_tokens( index = index
+                      structure = structure
+                      statement = <statement> ).
+
+      index = index + 1.
     ENDLOOP.
   ENDMETHOD.
 
@@ -748,6 +767,14 @@ CLASS y_check_base IMPLEMENTATION.
 
     result = xsdbool(     has_customizing_for_prod_only = abap_true
                       AND is_testcode = abap_true ).
+  ENDMETHOD.
+
+
+  METHOD should_skip_type.
+    CHECK are_relevant_types_set( ) = abap_true.
+
+    result = xsdbool(     is_statement_type_relevant( structure ) = abap_false
+                      AND is_structure_type_relevant( structure ) = abap_false ).
   ENDMETHOD.
 
 

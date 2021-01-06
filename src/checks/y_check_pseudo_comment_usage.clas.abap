@@ -3,7 +3,7 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
+    METHODS inspect_structures REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
@@ -13,9 +13,9 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
     DATA pseudo_comment_counter TYPE i VALUE 0 ##NO_TEXT.
     DATA class_names TYPE string_table.
 
-    METHODS count_cc_pseudo_comments IMPORTING token       TYPE stokesx.
+    METHODS count_cc_pseudo_comments IMPORTING token TYPE stokesx.
 
-    METHODS raise_error_wrapper.
+    METHODS check_result.
 
     METHODS select_object_list RETURNING VALUE(result) LIKE name_tab
                                RAISING   cx_failed.
@@ -64,7 +64,6 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
       CATCH cx_failed.
         APPEND INITIAL LINE TO class_names.
     ENDTRY.
-
   ENDMETHOD.
 
 
@@ -81,9 +80,9 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    super->execute_check( ).
-    raise_error_wrapper( ).
+  METHOD inspect_structures.
+    super->inspect_structures( ).
+    check_result( ).
   ENDMETHOD.
 
 
@@ -97,19 +96,20 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD raise_error_wrapper.
-    IF pseudo_comment_counter GT 0.
-      DATA(check_configuration) = detect_check_configuration( VALUE #( level = 1 ) ). "#EC DECL_IN_IF
-      IF check_configuration IS INITIAL.
-        RETURN.
-      ENDIF.
+  METHOD check_result.
+    CHECK pseudo_comment_counter > 0.
 
-      raise_error( statement_level     = 1
-                   statement_index     = 1
-                   statement_from      = 1
-                   error_priority      = check_configuration-prio
-                   parameter_01        = |{ pseudo_comment_counter }| ).
+    DATA(check_configuration) = detect_check_configuration( VALUE #( level = 1 ) ).
+
+    IF check_configuration IS INITIAL.
+      RETURN.
     ENDIF.
+
+    raise_error( statement_level = 1
+                 statement_index = 1
+                 statement_from  = 1
+                 error_priority  = check_configuration-prio
+                 parameter_01    = |{ pseudo_comment_counter }| ).
   ENDMETHOD.
 
 
