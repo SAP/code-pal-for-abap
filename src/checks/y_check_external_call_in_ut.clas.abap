@@ -81,7 +81,8 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
         LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
         FROM statement-from TO statement-to
         WHERE type = 'I'.
-          IF ( <token>-str CS 'CL_GUI_' ).
+          IF <token>-str CS 'CL_GUI_'
+          AND <token>-str NS '=>'.
             has_redirection = abap_true.
           ENDIF.
         ENDLOOP.
