@@ -40,7 +40,7 @@ CLASS ltc_report IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_code_with_exemption.
-    result = VALUE #( ).
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.
@@ -103,7 +103,7 @@ CLASS ltc_class IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_code_with_exemption.
-    result = VALUE #( ).
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.
