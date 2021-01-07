@@ -54,8 +54,9 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-prio = c_note.
 
-    relevant_statement_types = VALUE #( ).
-    relevant_structure_types = VALUE #( ).
+    relevant_statement_types = VALUE #( BASE relevant_statement_types
+                                      ( scan_struc_stmnt_type-class_definition )
+                                      ( scan_struc_stmnt_type-interface ) ).
 
     set_check_message( '&1 pseudo comments!' ).
 

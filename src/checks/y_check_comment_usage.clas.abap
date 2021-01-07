@@ -33,9 +33,11 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
 
-    relevant_statement_types = VALUE #( BASE relevant_statement_types
-                                      ( scan_struc_stmnt_type-class_definition )
-                                      ( scan_struc_stmnt_type-interface ) ).
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_pool )
+                                        ( scan_struc_stmnt_type-report )
+                                        ( scan_struc_stmnt_type-program )
+                                        ( scan_struc_stmnt_type-function_pool )
+                                        ( scan_struc_stmnt_type-interface_pool ) ).
 
     set_check_message( 'Percentage of comments must be lower than &3% of the productive code! (&2%>=&3%) (&1 lines found)' ).
   ENDMETHOD.

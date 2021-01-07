@@ -54,7 +54,12 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
     DATA attributes_maintained TYPE abap_bool.
 
+    "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
+    "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
     DATA relevant_statement_types TYPE TABLE OF sstruc-stmnt_type.
+
+    "! <p class="shorttext synchronized" lang="en">Relevant Structure Types for Inspection</p>
+    "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_type' structure to enhance or change it.
     DATA relevant_structure_types TYPE TABLE OF sstruc-type.
 
     METHODS execute_check.
@@ -73,7 +78,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS get_code IMPORTING message_prio  TYPE sychar01
                      RETURNING VALUE(result) TYPE sci_errc.
 
-    "! <p class="shorttext synchronized" lang="en">Inspect All Structures</p>
+    "! <p class="shorttext synchronized" lang="en">Inspect Structures</p>
     METHODS inspect_structures.
 
     "! <p class="shorttext synchronized" lang="en">Inspect Statements of a Structure</p>
@@ -151,8 +156,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS get_application_component IMPORTING level         TYPE slevel
                                       RETURNING VALUE(result) TYPE df14l-ps_posid.
-
-    METHODS are_relevant_types_set RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -771,8 +774,6 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD should_skip_type.
-    CHECK are_relevant_types_set( ) = abap_true.
-
     result = xsdbool(     is_statement_type_relevant( structure ) = abap_false
                       AND is_structure_type_relevant( structure ) = abap_false ).
   ENDMETHOD.
@@ -813,12 +814,6 @@ CLASS y_check_base IMPLEMENTATION.
       CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
-  ENDMETHOD.
-
-
-  METHOD are_relevant_types_set.
-    result = xsdbool(    relevant_statement_types IS NOT INITIAL
-                      OR relevant_structure_types IS NOT INITIAL ).
   ENDMETHOD.
 
 
