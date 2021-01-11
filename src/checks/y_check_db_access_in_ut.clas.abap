@@ -3,6 +3,7 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS constructor.
 
   PROTECTED SECTION.
+    METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
@@ -12,24 +13,15 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     CONSTANTS risk_level_not_set TYPE string VALUE 'NOT_SET'.
 
     DATA tokens_not_allowed TYPE y_char255_tab.
+    DATA has_framework TYPE abap_bool.
 
-    METHODS has_osql_or_cds_framework IMPORTING method        TYPE sstruc
-                                      RETURNING VALUE(result) TYPE abap_bool.
+    METHODS inspect_class_definition IMPORTING method TYPE sstruc.
 
     METHODS is_persistent_object IMPORTING obj_name      TYPE string
                                  RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS consolidade_tokens IMPORTING statement     TYPE sstmnt
+    METHODS consolidade_tokens IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE string.
-
-    METHODS get_class_definition IMPORTING method        TYPE sstruc
-                                 RETURNING VALUE(result) TYPE sstruc
-                                 RAISING   cx_sy_itab_line_not_found.
-
-    METHODS get_test_risk_level IMPORTING method        TYPE sstruc
-                                RETURNING VALUE(result) TYPE string.
-
-    METHODS determine_tokens_not_allowed IMPORTING method TYPE sstruc.
 
     METHODS has_ddic_itab_same_syntax IMPORTING token         TYPE char255
                                       RETURNING VALUE(result) TYPE abap_bool.
@@ -62,11 +54,18 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD inspect_statements.
+    inspect_class_definition( structure ).
+
+    IF has_framework = abap_true.
+      RETURN.
+    ENDIF.
+
+    super->inspect_statements( structure ).
+  ENDMETHOD.
+
+
   METHOD inspect_tokens.
-    CHECK has_osql_or_cds_framework( structure ) = abap_false.
-
-    determine_tokens_not_allowed( structure ).
-
     DATA(tokens) = consolidade_tokens( statement ).
 
     LOOP AT tokens_not_allowed ASSIGNING FIELD-SYMBOL(<token_not_allowed>).
@@ -100,73 +99,54 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD has_osql_or_cds_framework.
+  METHOD inspect_class_definition.
+    DATA test_risk_level TYPE string.
+
+    CLEAR has_framework.
+
     TRY.
-        DATA(class_definition) = get_class_definition( method ).
+        DATA(class_implementation) = ref_scan_manager->structures[ method-back ].
+        DATA(class_definition) = ref_scan_manager->structures[ class_implementation-back ].
       CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.
 
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM class_definition-stmnt_from TO class_definition-stmnt_to.
-      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-      FROM <statement>-from TO <statement>-to
-      WHERE str = 'IF_OSQL_TEST_ENVIRONMENT'
-      OR str = 'CL_OSQL_TEST_ENVIRONMENT'
-      OR str = 'IF_CDS_TEST_ENVIRONMENT'
-      OR str = 'CL_CDS_TEST_ENVIRONMENT'.
-        result = abap_true.
-        RETURN.
-      ENDLOOP.
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD consolidade_tokens.
-    LOOP AT ref_scan_manager->tokens INTO DATA(token)
-    FROM statement-from TO statement-to.
-      token-str = condense( token-str ).
-      result = COND #( WHEN result IS INITIAL THEN token-str
-                                              ELSE |{ result } { token-str }| ).
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD get_class_definition.
-    DATA(class_implementation) = ref_scan_manager->structures[ method-back ].
-    result = ref_scan_manager->structures[ class_implementation-back ].
-  ENDMETHOD.
-
-
-  METHOD get_test_risk_level.
-    TRY.
-        DATA(class_definition) = get_class_definition( method ).
-      CATCH cx_sy_itab_line_not_found.
-        RETURN.
-    ENDTRY.
-
-    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
-    FROM class_definition-stmnt_from TO class_definition-stmnt_to.
-      DATA(tokens) = consolidade_tokens( <statement> ).
-      result = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS' THEN risk_level_harmless
-                       WHEN tokens CS 'RISK LEVEL DANGEROUS' THEN risk_level_dangerous
-                       WHEN tokens CS 'RISK LEVEL CRITICAL' THEN risk_level_critical ).
-      IF result IS NOT INITIAL.
-        RETURN.
+      IF is_in_scope( <statement> ) = abap_false.
+        CONTINUE.
       ENDIF.
+
+      DATA(tokens) = consolidade_tokens( <statement> ).
+
+      test_risk_level = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS' THEN risk_level_harmless
+                                WHEN tokens CS 'RISK LEVEL DANGEROUS' THEN risk_level_dangerous
+                                WHEN tokens CS 'RISK LEVEL CRITICAL' THEN risk_level_critical
+                                ELSE test_risk_level ).
+
+      has_framework = COND #( WHEN tokens CS 'IF_OSQL_TEST_ENVIRONMENT' THEN abap_true
+                              WHEN tokens CS 'CL_OSQL_TEST_ENVIRONMENT' THEN abap_true
+                              WHEN tokens CS 'IF_CDS_TEST_ENVIRONMENT' THEN abap_true
+                              WHEN tokens CS 'CL_CDS_TEST_ENVIRONMENT' THEN abap_true
+                              ELSE has_framework ).
     ENDLOOP.
 
-    result = risk_level_not_set.
-  ENDMETHOD.
-
-
-  METHOD determine_tokens_not_allowed.
-    DATA(test_risk_level) = get_test_risk_level( method ).
+    test_risk_level = COND #( WHEN test_risk_level IS INITIAL THEN risk_level_not_set
+                              ELSE test_risk_level ).
 
     tokens_not_allowed = COND #( WHEN test_risk_level = risk_level_harmless  THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ( 'INSERT INTO *' ) ( 'SELECT *' )  ( 'COMMIT*' ) ( 'ROLLBACK*' ) )
                                  WHEN test_risk_level = risk_level_not_set   THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ( 'INSERT INTO *' ) ( 'SELECT *' )  ( 'COMMIT*' ) ( 'ROLLBACK*' ) )
                                  WHEN test_risk_level = risk_level_dangerous THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) )
                                  WHEN test_risk_level = risk_level_critical  THEN VALUE #( ( 'ALTER *' ) ( 'DELETE *' ) ( 'UPDATE *' ) ( 'MODIFY *' ) ) ).
+  ENDMETHOD.
+
+
+  METHOD consolidade_tokens.
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to.
+      result = COND #( WHEN result IS INITIAL THEN condense( <token>-str )
+                                              ELSE |{ result } { condense( <token>-str ) }| ).
+    ENDLOOP.
   ENDMETHOD.
 
 
@@ -182,7 +162,7 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
     DATA(tirth_token) = get_token_abs( statement-from + 2 ).
 
     DATA(table) = COND #( WHEN second_token = 'FROM' THEN tirth_token
-                                                     ELSE second_token ).
+                          ELSE second_token ).
 
     result = xsdbool( is_persistent_object( table ) = abap_false ).
   ENDMETHOD.

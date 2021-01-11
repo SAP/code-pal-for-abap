@@ -120,6 +120,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS keyword REDEFINITION.
     METHODS set_check_message IMPORTING message TYPE itex132.
     METHODS get_class_description  RETURNING VALUE(result) TYPE string.
+    METHODS is_in_scope IMPORTING statement     TYPE sstmnt
+                        RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
@@ -151,8 +153,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_in_scope IMPORTING statement     TYPE sstmnt
-                        RETURNING VALUE(result) TYPE abap_bool.
+
 
     METHODS get_application_component IMPORTING level         TYPE slevel
                                       RETURNING VALUE(result) TYPE df14l-ps_posid.
