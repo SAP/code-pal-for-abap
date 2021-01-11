@@ -346,10 +346,11 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~select_all_profiles.
-    SELECT * FROM ytab_profiles INTO TABLE @result.
-    IF sy-subrc NE 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
-    ENDIF.
+    "Based on Checks because the profile might be inactive
+    SELECT DISTINCT profile FROM ytab_checks INTO TABLE @DATA(profiles).
+    LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
+      APPEND VALUE ytab_profiles( profile = <profile> ) TO result.
+    ENDLOOP.
   ENDMETHOD.
 
 

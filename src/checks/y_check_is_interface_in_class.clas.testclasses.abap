@@ -76,8 +76,8 @@ CLASS ltc_class IMPLEMENTATION.
     result = VALUE #(
       ( 'REPORT ut_repo.' )
 
-      ( 'CLASS lcl_classname DEFINITION. "#EC INTF_IN_CLASS' )
-      ( ' PUBLIC SECTION.' )
+      ( 'CLASS lcl_classname DEFINITION. ' )
+      ( ' PUBLIC SECTION. "#EC INTF_IN_CLASS' )
       ( '  METHODS publ_method.'  )
       ( ' PROTECTED SECTION.' )
       ( ' PRIVATE SECTION.' )

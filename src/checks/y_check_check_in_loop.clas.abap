@@ -3,7 +3,6 @@ CLASS y_check_check_in_loop DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
     METHODS constructor .
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
@@ -25,35 +24,10 @@ CLASS y_check_check_in_loop IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }check-in-loop.md|.
 
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-check ) ).
+    relevant_structure_types = VALUE #( ).
+
     set_check_message( 'Use an IF statement in combination with CONTINUE instead CHECK!' ).
-  ENDMETHOD.
-
-
-  METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-    WHERE stmnt_type EQ scan_struc_stmnt_type-check.
-
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-
-      TRY.
-          DATA(check_configuration) = check_configurations[ apply_on_testcode = abap_true ].
-        CATCH cx_sy_itab_line_not_found.
-          IF is_testcode EQ abap_true.
-            CONTINUE.
-          ENDIF.
-      ENDTRY.
-
-      DATA(index) = <structure>-stmnt_from.
-
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-      FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-
-        inspect_tokens( index = index
-                        structure = <structure>
-                        statement = <statement> ).
-        index = index + 1.
-      ENDLOOP.
-    ENDLOOP.
   ENDMETHOD.
 
 
@@ -75,12 +49,9 @@ CLASS y_check_check_in_loop IMPLEMENTATION.
 
 
   METHOD get_back_statement.
-    DATA(structures) = ref_scan_manager->get_structures( ).
-    DATA(statements) = ref_scan_manager->get_statements( ).
-
     TRY.
-        DATA(back_structure) = structures[ structure-back ].
-        result = statements[ back_structure-stmnt_from ].
+        DATA(back_structure) = ref_scan_manager->structures[ structure-back ].
+        result = ref_scan_manager->statements[ back_structure-stmnt_from ].
       CATCH cx_sy_itab_line_not_found.
         CLEAR result.
     ENDTRY.

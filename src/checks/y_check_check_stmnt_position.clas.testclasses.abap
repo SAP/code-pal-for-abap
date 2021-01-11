@@ -435,3 +435,31 @@ CLASS ltc_form IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+CLASS ltc_constants DEFINITION INHERITING FROM ltc_inline_data_declaration FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_constants IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     CONSTANTS main_company TYPE i VALUE 100. ' )
+      ( '     CHECK sy-mandt = main_company. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.

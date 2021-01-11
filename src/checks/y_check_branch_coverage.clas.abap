@@ -1,9 +1,11 @@
 CLASS y_check_branch_coverage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+
 ENDCLASS.
 
 

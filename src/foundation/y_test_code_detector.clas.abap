@@ -40,7 +40,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
+    LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>)
       WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition.
 
       process_statements( <structure> ).
@@ -53,7 +53,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
     IF l_index > statement_wa-to.
       RETURN.
     ENDIF.
-    READ TABLE ref_scan_manager->get_tokens( ) INDEX l_index INTO DATA(token_wa).
+    READ TABLE ref_scan_manager->tokens INDEX l_index INTO DATA(token_wa).
     result = token_wa-str.
   ENDMETHOD.
 
@@ -74,7 +74,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
       result = 'COMPUTE'.
       RETURN.
     ENDIF.
-    READ TABLE ref_scan_manager->get_tokens( ) INDEX statement_wa-from INTO DATA(token_wa).
+    READ TABLE ref_scan_manager->tokens INDEX statement_wa-from INTO DATA(token_wa).
     result = token_wa-str.
   ENDMETHOD.
 
@@ -82,7 +82,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
   METHOD process_statements.
     CLEAR test_code.
 
-    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
       FROM structure-stmnt_from TO structure-stmnt_to.
 
       statement_wa = <statement>.
@@ -92,7 +92,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
 
 
   METHOD process_tokens.
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
       IF try_testclass( <token> ).
@@ -148,7 +148,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    READ TABLE ref_scan_manager->get_statements( ) INTO statement_wa INDEX structure-stmnt_from.
+    READ TABLE ref_scan_manager->statements INTO statement_wa INDEX structure-stmnt_from.
     IF is_test_class( ).
       result = abap_true.
 
@@ -157,12 +157,12 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
 
       DO.
         DATA(low_level_structure) = high_level_structure. "#EC DECL_IN_IF
-        READ TABLE ref_scan_manager->get_structures( ) INTO high_level_structure INDEX low_level_structure-back.
+        READ TABLE ref_scan_manager->structures INTO high_level_structure INDEX low_level_structure-back.
         IF sy-subrc NE 0.
           EXIT.
         ENDIF.
 
-        READ TABLE ref_scan_manager->get_statements( ) INTO statement_wa INDEX high_level_structure-stmnt_from.
+        READ TABLE ref_scan_manager->statements INTO statement_wa INDEX high_level_structure-stmnt_from.
         IF is_test_class( ).
           result = abap_true.
           EXIT.

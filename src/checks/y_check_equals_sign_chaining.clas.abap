@@ -1,13 +1,17 @@
 CLASS y_check_equals_sign_chaining DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor .
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
     METHODS get_second_token IMPORTING statement     TYPE sstmnt
                              RETURNING VALUE(result) TYPE string.
+
     METHODS get_fourth_token IMPORTING statement     TYPE sstmnt
                              RETURNING VALUE(result) TYPE string.
+
 ENDCLASS.
 
 
