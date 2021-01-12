@@ -33,7 +33,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
+CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -113,27 +113,24 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     has_framework = abap_false.
 
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
-         FROM class_definition-stmnt_from TO class_definition-stmnt_to.
+    FROM class_definition-stmnt_from TO class_definition-stmnt_to.
 
-      IF is_in_scope( <statement> ) = abap_false
-         OR test_risk_level IS NOT INITIAL
-         OR has_framework EQ abap_true.
-
+      IF is_in_scope( <statement> ) = abap_false.
         CONTINUE.
       ENDIF.
 
       DATA(tokens) = consolidade_tokens( <statement> ).
 
-      test_risk_level = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS' THEN risk_level_harmless
+      test_risk_level = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS'  THEN risk_level_harmless
                                 WHEN tokens CS 'RISK LEVEL DANGEROUS' THEN risk_level_dangerous
-                                WHEN tokens CS 'RISK LEVEL CRITICAL' THEN risk_level_critical
-                                ELSE test_risk_level ).
+                                WHEN tokens CS 'RISK LEVEL CRITICAL'  THEN risk_level_critical
+                                                                      ELSE test_risk_level ).
 
       has_framework = COND #( WHEN tokens CS 'IF_OSQL_TEST_ENVIRONMENT' THEN abap_true
                               WHEN tokens CS 'CL_OSQL_TEST_ENVIRONMENT' THEN abap_true
-                              WHEN tokens CS 'IF_CDS_TEST_ENVIRONMENT' THEN abap_true
-                              WHEN tokens CS 'CL_CDS_TEST_ENVIRONMENT' THEN abap_true
-                              ELSE has_framework ).
+                              WHEN tokens CS 'IF_CDS_TEST_ENVIRONMENT'  THEN abap_true
+                              WHEN tokens CS 'CL_CDS_TEST_ENVIRONMENT'  THEN abap_true
+                                                                        ELSE has_framework ).
     ENDLOOP.
 
     test_risk_level = COND #( WHEN test_risk_level IS INITIAL THEN risk_level_not_set
@@ -148,7 +145,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
   METHOD consolidade_tokens.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-       FROM statement-from TO statement-to.
+    FROM statement-from TO statement-to.
       result = COND #( WHEN result IS INITIAL THEN condense( <token>-str )
                                               ELSE |{ result } { condense( <token>-str ) }| ).
     ENDLOOP.
@@ -167,7 +164,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     DATA(third_token) = get_token_abs( statement-from + 2 ).
 
     DATA(table) = COND #( WHEN second_token = 'FROM' THEN third_token
-                          ELSE second_token ).
+                                                     ELSE second_token ).
 
     result = xsdbool( is_persistent_object( table ) = abap_false ).
   ENDMETHOD.
