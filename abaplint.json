@@ -135,7 +135,8 @@
     "indentation": false,
     "inline_data_old_versions": true,
     "keep_single_parameter_on_one_line": false,
-    "keyword_case": false,
+    "
+    ": false,
     "line_break_multiple_parameters": false,
     "line_break_style": true,
     "line_length": false,
@@ -236,6 +237,10 @@
     "use_new": true,
     "when_others_last": true,
     "whitespace_end": true,
-    "xml_consistency": true
+    "xml_consistency": true,
+    "keyword_case": {
+      "ignoreExceptions": false,
+      "ignoreLowerClassImplmentationStatement": false  
+    }
   }
 }
