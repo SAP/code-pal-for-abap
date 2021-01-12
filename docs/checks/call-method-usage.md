@@ -1,5 +1,3 @@
-# code pal for ABAP
-
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [CALL METHOD Usage Check](call-method-usage.md)
 
 ## CALL METHOD Usage Check
@@ -11,10 +9,6 @@ The "CALL METHOD Usage" check verifies the usage of the `CALL METHOD` ABAP state
 ### How does the check work?
 
 It simply checks if the code is using the `CALL METHOD` statement.
-
-### Which attributes can be maintained?
-
-![Attributes](./imgs/call_method_usage.png)
 
 ### How to solve the issue?
 
