@@ -4,12 +4,13 @@
 
 ### What is the Intent of the Check?
 
-Usage of boolean input parameters because they are often an indicator that a method does two things instead of one.  
-Ps: Setter methods using boolean variables are ok.
+This check searches for the usage of boolean input parameters in a method signature since those could be an indicator of bad design where the Single Responsibility Principle is not followed (the method might be doing several things instead of a single thing).   
+
+REMARK: Setter methods using boolean input variables are acceptable.
 
 ### How to solve the issue?
 
-Splitting the method may simplify the methods' code and describe the different intentions better.
+Splitting the method may simplify its code and provide a better description for the consumer.
 
 ### What to do in case of exception?
 
@@ -32,7 +33,7 @@ After the check:
 
 ```abap
   METHODS update_without_saving.
-  METHODS update_and_save.
+  METHODS update_and_commit.
 ```
 
 ### Further Readings & Knowledge
