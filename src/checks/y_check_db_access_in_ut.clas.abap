@@ -15,12 +15,12 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     DATA tokens_not_allowed TYPE y_char255_tab.
     DATA has_framework TYPE abap_bool.
 
-    METHODS inspect_class_definition IMPORTING method TYPE sstruc.
+    METHODS inspect_class_definition IMPORTING class_implementation TYPE sstruc.
 
     METHODS is_persistent_object IMPORTING obj_name      TYPE string
                                  RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS consolidade_tokens IMPORTING statement TYPE sstmnt
+    METHODS consolidade_tokens IMPORTING statement     TYPE sstmnt
                                RETURNING VALUE(result) TYPE string.
 
     METHODS has_ddic_itab_same_syntax IMPORTING token         TYPE char255
@@ -30,6 +30,7 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
                               RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
+
 
 
 CLASS y_check_db_access_in_ut IMPLEMENTATION.
@@ -47,7 +48,7 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-checks }db-access-in-ut.md|.
 
-    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-method ) ).
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_implementation ) ).
     relevant_structure_types = VALUE #( ).
 
     set_check_message( 'Database access(es) within a Unit-Test should be removed!' ).
@@ -85,9 +86,10 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
       ENDIF.
 
       raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio ).
+                    statement_index     = index
+                    statement_from      = statement-from
+                    error_priority      = check_configuration-prio ).
+
     ENDLOOP.
   ENDMETHOD.
 
@@ -102,33 +104,33 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
   METHOD inspect_class_definition.
     DATA test_risk_level TYPE string.
 
-    CLEAR has_framework.
-
     TRY.
-        DATA(class_implementation) = ref_scan_manager->structures[ method-back ].
         DATA(class_definition) = ref_scan_manager->structures[ class_implementation-back ].
       CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.
 
+    has_framework = abap_false.
+
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM class_definition-stmnt_from TO class_definition-stmnt_to.
+
       IF is_in_scope( <statement> ) = abap_false.
         CONTINUE.
       ENDIF.
 
       DATA(tokens) = consolidade_tokens( <statement> ).
 
-      test_risk_level = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS' THEN risk_level_harmless
+      test_risk_level = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS'  THEN risk_level_harmless
                                 WHEN tokens CS 'RISK LEVEL DANGEROUS' THEN risk_level_dangerous
-                                WHEN tokens CS 'RISK LEVEL CRITICAL' THEN risk_level_critical
-                                ELSE test_risk_level ).
+                                WHEN tokens CS 'RISK LEVEL CRITICAL'  THEN risk_level_critical
+                                                                      ELSE test_risk_level ).
 
       has_framework = COND #( WHEN tokens CS 'IF_OSQL_TEST_ENVIRONMENT' THEN abap_true
                               WHEN tokens CS 'CL_OSQL_TEST_ENVIRONMENT' THEN abap_true
-                              WHEN tokens CS 'IF_CDS_TEST_ENVIRONMENT' THEN abap_true
-                              WHEN tokens CS 'CL_CDS_TEST_ENVIRONMENT' THEN abap_true
-                              ELSE has_framework ).
+                              WHEN tokens CS 'IF_CDS_TEST_ENVIRONMENT'  THEN abap_true
+                              WHEN tokens CS 'CL_CDS_TEST_ENVIRONMENT'  THEN abap_true
+                                                                        ELSE has_framework ).
     ENDLOOP.
 
     test_risk_level = COND #( WHEN test_risk_level IS INITIAL THEN risk_level_not_set
@@ -159,12 +161,11 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
   METHOD is_internal_table.
     DATA(second_token) = get_token_abs( statement-from + 1 ).
-    DATA(tirth_token) = get_token_abs( statement-from + 2 ).
+    DATA(third_token) = get_token_abs( statement-from + 2 ).
 
-    DATA(table) = COND #( WHEN second_token = 'FROM' THEN tirth_token
-                          ELSE second_token ).
+    DATA(table) = COND #( WHEN second_token = 'FROM' THEN third_token
+                                                     ELSE second_token ).
 
     result = xsdbool( is_persistent_object( table ) = abap_false ).
   ENDMETHOD.
-
 ENDCLASS.
