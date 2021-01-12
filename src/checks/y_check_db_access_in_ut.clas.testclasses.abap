@@ -167,6 +167,8 @@ CLASS ltc_risk_harmless IMPLEMENTATION.
       ( '     MODIFY profiles FROM profile INDEX 1. ' )
       ( '     DELETE profiles FROM profile. ' )
       ( '     DELETE profiles INDEX lines( profiles ). ' )
+
+      ( '     MODIFY profiles FROM VALUE #( ) TRANSPORTING profile WHERE username = sy-uname. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
