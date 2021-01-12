@@ -74,9 +74,16 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
   METHOD has_wrong_position.
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from TO structure-stmnt_to.
+      IF <statement>-type = scan_stmnt_type-empty
+      OR <statement>-type = scan_stmnt_type-comment
+      OR <statement>-type = scan_stmnt_type-comment_in_stmnt.
+        CONTINUE.
+      ENDIF.
+
       IF <statement>-number = check-number.
         RETURN.
       ENDIF.
+
       IF is_not_relevant_token( get_token_abs( <statement>-from ) ) = abap_false.
         result = abap_true.
         RETURN.

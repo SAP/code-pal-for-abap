@@ -463,3 +463,79 @@ CLASS ltc_constants IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+CLASS ltc_comments DEFINITION INHERITING FROM ltc_inline_data_declaration FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_comments IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     " Comment ' )
+      ( '*    Before ' )
+      ( '     CHECK sy-mandt = 100. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_pseudo_comment DEFINITION INHERITING FROM ltc_inline_data_declaration FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_pseudo_comment IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     me->example( ). "#EC SELF_REF ' )
+      ( '     CHECK sy-mandt = 100. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     CHECK sy-mandt = 100. "#EC CHECK_POSITION ' )
+      ( '     CHECK sy-mandt = 100. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
