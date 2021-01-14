@@ -16,7 +16,7 @@ Change the long method calls using `CALL METHOD` statement to short method calls
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding with the pseudo comment `"#EC CALL_METH_USAGE` which has to be placed after the `CALL METHOD` statement.
+In exceptional cases, you can suppress this finding with the pseudo comment `"#EC CALL_METH_USAGE` which has to be placed after the `CALL METHOD` statement:
 
 ```abap
 CALL METHOD method_name. "#EC CALL_METH_USAGE
