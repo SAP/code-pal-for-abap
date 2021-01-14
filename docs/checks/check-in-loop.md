@@ -10,7 +10,7 @@ Prefer using `CONTINUE` (within an IF-Statement) instead of using the CHECK Stat
 Keep also in mind, that other Keywords like: `EXIT` or `RETURN` are also more explicit than `CHECK`.
 
 ### What to do in case of exception?
-When really needed, you can suppress this finding by using the pseudo comment `"#EC CHECK_IN_LOOP`.
+In exceptional cases, you can suppress this finding with the pseudo comment `"#EC CHECK_IN_LOOP` which should be placed after the `CHECK` Statement itself:
 
 ```abap
 LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).
@@ -36,5 +36,5 @@ ENDLOOP.
 ```
 
 ### Further Readings & Knowledge
-- [Avoid CHECK in other positions (Clean ABAP)](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#avoid-check-in-other-positions)
+- [ABAP Stylegruides on Clean Code: Avoid CHECK in other positions](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#avoid-check-in-other-positions)
 - [Exiting Loops -> Check](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/abapcheck_loop.htm)
