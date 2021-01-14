@@ -14,7 +14,7 @@ Splitting the method may simplify its code and provide a better description for 
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding with the pseudo comment `"#EC BOOL_PARAM` which has to be placed after the method declaration:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC BOOL_PARAM` which has to be placed after the method declaration:
 
 ```abap
   METHODS update IMPORTING do_save TYPE abap_bool. "#EC BOOL_PARAM
