@@ -43,4 +43,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#do-not-chain-up-front-declarations)
+* [ABAP Styleguides on Clean Code: Do not chain up-front declarations](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#do-not-chain-up-front-declarations)
