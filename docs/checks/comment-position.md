@@ -1,16 +1,14 @@
-# code pal for ABAP
-
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Comment Position](comment-position.md)
 
 ## Comment Position
 
 ### What is the Intent of the Check?
 
-Quote comments indent along with the statements they comment.
+This check searches for "Quote comments" which are not indented along with the statements they belong to.
 
 ### How to solve the issue?
 
-Identing the comments along with the statements.
+You should indent the comments along with the statements they are commenting.
 
 ### Example
 
