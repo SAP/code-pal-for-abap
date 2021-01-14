@@ -1,20 +1,14 @@
-# code pal for ABAP
-
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [DB Access in Unit Tests Check](db-access-in-ut.md)
 
 ## Database Access within Unit-Tests Check
 
 ### What is the Intent of the Check?
 
-The “Database Access within Unit-Tests” Check scans test classes and its contents searching for any kind of explicit DB access within the tests. Since every DB access is considered to be a dependency, this should not be allowed in test code.
+This check scans test classes and its contents searching for any kind of explicit DB access within the tests. Since every DB access is considered to be a dependency, this should not be allowed in test code.
 
 ### How does the check work?
 
 Statements like: SELECT, EXEC SQL, COMMIT, COMMIT WORK, ROLLBACK, INSERT, DELETE, ALTER; UPDATE or READ TABLE accessing physical database tables (SAP Dictionary Tables) are detected and presented.
-
-### Which attributes can be maintained?
-
-![Attributes](./imgs/database_access_in_ut.png)
 
 ### How to solve the issue?
 
