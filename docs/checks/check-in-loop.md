@@ -10,7 +10,7 @@ Prefer using `CONTINUE` (within an IF-Statement) instead of using the CHECK Stat
 Keep also in mind, that other Keywords like: `EXIT` or `RETURN` are also more explicit than `CHECK`.
 
 ### What to do in case of exception?
-In exceptional cases, you can suppress this finding with the pseudo comment `"#EC CHECK_IN_LOOP` which should be placed after the `CHECK` Statement itself:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CHECK_IN_LOOP` which should be placed after the `CHECK` Statement itself:
 
 ```abap
 LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).
