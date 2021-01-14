@@ -1,12 +1,10 @@
-# code pal for ABAP
-
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [CX_ROOT Usage Check](cx-root-usage.md)
 
 ## CX_ROOT Usage Check
 
 ### What is the Intent of the Check?
 
-The “CX_ROOT Usage" Check searches for merely "CX_ROOT" exceptions being directly used in the code (e.g.: In a TRY-CATCH block). 
+This check searches for direct "CX_ROOT" exceptions being used in the code (e.g.: In a TRY-CATCH block). 
 
 ### How does the check work?
 
@@ -27,17 +25,13 @@ CLASS cx_my_exception DEFINITION INHERITING FROM cx_root.
 ENDCLASS.
 ```
 
-### Which attributes can be maintained?
-
-![Attributes](./imgs/cx_root_usage.png)
-
 ### How to solve the issue?
 
 The solution is to use well defined and specific class-based exceptions.
 
 ### What to do in case of exception?
 
-In special cases you can suppress this Check’s finding by using the pseudo comment `“#EC NEED_CX_ROOT`.
+In exceptional cases, you can suppress this finding by using the pseudo comment `“#EC NEED_CX_ROOT` which should be placed after the CATCH statement: 
 
 ```abap
 TRY.
