@@ -14,6 +14,12 @@ The `CHECK` statement shall be the first statement of a method. If it is not pos
 ### What to do in case of exception?
 In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CHECK_POSITION` which has to be placed after the `CHECK` statement:
 
+```abap
+METHOD example.
+  some code...
+  CHECK condition = abap_true. "#EC CHECK_POSITION
+```
+
 ### Example
 Before the check:
 ```abap
@@ -34,6 +40,8 @@ METHOD example.
   ...
 ENDMETHOD.
 ```
+OR
+
 ```abap
 METHOD example.
   CHECK sy-mandt = 000.
