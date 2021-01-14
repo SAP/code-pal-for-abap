@@ -38,4 +38,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#split-method-instead-of-boolean-input-parameter)
+* [ABAP Styleguides on Clean Code: Boolean Input Parameter(s)](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#split-method-instead-of-boolean-input-parameter)
