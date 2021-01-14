@@ -12,7 +12,7 @@ Change the chain up-front declarations to inline declarations.
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding using the pseudo comment `"#EC CHAIN_DECL_USAG` which should be placed after the `DATA:` statement.
+In exceptional cases, you can suppress this finding with the pseudo comment `"#EC CHAIN_DECL_USAG` which should be placed after the `DATA:` statement.
 
 ```abap
   DATA: "#EC CHAIN_DECL_USAG
