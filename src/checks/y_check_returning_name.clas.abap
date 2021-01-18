@@ -1,12 +1,14 @@
-CLASS y_check_returning_name DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_returning_name DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
     METHODS has_returning_with_wrong_name IMPORTING statement TYPE sstmnt
                                           RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -21,35 +23,14 @@ CLASS y_check_returning_name IMPLEMENTATION.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }returning-name.md|.
 
+    version = '001'.
+
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_definition ) ).
+    relevant_structure_types = VALUE #(  ).
+
     set_check_message( 'Consider calling the RETURNING parameter RESULT!' ).
   ENDMETHOD.
 
-  METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-       WHERE stmnt_type = scan_struc_stmnt_type-class_definition.
-
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-
-      TRY.
-          DATA(check_configuration) = check_configurations[ apply_on_testcode = abap_true ].
-        CATCH cx_sy_itab_line_not_found.
-          IF is_testcode EQ abap_true.
-            CONTINUE.
-          ENDIF.
-      ENDTRY.
-
-      DATA(index) = <structure>-stmnt_from.
-
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-        FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-
-        inspect_tokens( index = index
-                        structure = <structure>
-                        statement = <statement> ).
-        index = index + 1.
-      ENDLOOP.
-    ENDLOOP.
-  ENDMETHOD.
 
   METHOD inspect_tokens.
 
@@ -69,10 +50,11 @@ CLASS y_check_returning_name IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD has_returning_with_wrong_name.
     DATA(skip) = abap_true.
 
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
 
       IF <token>-str = 'RETURNING'.
@@ -92,5 +74,6 @@ CLASS y_check_returning_name IMPLEMENTATION.
 
     ENDLOOP.
   ENDMETHOD.
+
 
 ENDCLASS.

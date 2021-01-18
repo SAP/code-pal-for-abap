@@ -1,32 +1,25 @@
-CLASS y_check_empty_procedures DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_empty_procedures DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
+    METHODS constructor.
 
-    METHODS constructor .
   PROTECTED SECTION.
+    METHODS inspect_tokens REDEFINITION.
 
-    METHODS inspect_tokens REDEFINITION .
   PRIVATE SECTION.
+    METHODS get_next_token_from_index IMPORTING index         TYPE i
+                                      RETURNING VALUE(result) TYPE stokesx.
 
-    METHODS get_next_token_from_index
-      IMPORTING index         TYPE i
-      RETURNING VALUE(result) TYPE stokesx.
+    METHODS has_found_start_procedure IMPORTING statement     TYPE sstmnt
+                                      RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS has_found_start_procedure
-      IMPORTING statement     TYPE sstmnt
-      RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_next_statement_end_proc IMPORTING statement     TYPE sstmnt
+                                       RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_next_statement_end_proc
-      IMPORTING statement     TYPE sstmnt
-      RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
+CLASS y_check_empty_procedures IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -43,8 +36,8 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
 
 
   METHOD get_next_token_from_index.
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
-      FROM index WHERE type EQ 'I'.
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM index WHERE type EQ 'I'.
       IF result IS INITIAL.
         result = <token>.
         EXIT.
@@ -84,9 +77,9 @@ CLASS Y_CHECK_EMPTY_PROCEDURES IMPLEMENTATION.
   METHOD is_next_statement_end_proc.
     result = abap_false.
     CASE get_next_token_from_index( statement-to + 1 )-str.
-      WHEN 'ENDFORM' OR
-           'ENDMETHOD' OR
-           'ENDMODULE'.
+      WHEN 'ENDFORM'
+      OR 'ENDMETHOD'
+      OR 'ENDMODULE'.
         result = abap_true.
     ENDCASE.
   ENDMETHOD.

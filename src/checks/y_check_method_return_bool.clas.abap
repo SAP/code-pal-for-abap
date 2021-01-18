@@ -1,11 +1,11 @@
 CLASS y_check_method_return_bool DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
     DATA method_name TYPE string.
 
     METHODS inspect_tokens REDEFINITION.
-    METHODS execute_check REDEFINITION.
 
   PRIVATE SECTION.
     DATA good_method_names_beginning TYPE TABLE OF string.
@@ -28,6 +28,11 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     settings-threshold = 0.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }method-return-bool.md|.
+
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_definition )
+                                        ( scan_struc_stmnt_type-interface ) ).
+
+    relevant_structure_types = VALUE #( ).
 
     set_check_message( 'Method &1 has a misleading name for boolean return type!' ).
 
@@ -54,16 +59,16 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     method_name = get_token_abs( stmnt_index + 1 ).
 
     LOOP AT good_method_names_beginning ASSIGNING FIELD-SYMBOL(<good_name_beginning>).
-      IF strlen( method_name ) GE strlen( <good_name_beginning> ) AND
-         substring( val = method_name len = strlen( <good_name_beginning> ) ) EQ <good_name_beginning>.
+      IF strlen( method_name ) GE strlen( <good_name_beginning> )
+      AND substring( val = method_name len = strlen( <good_name_beginning> ) ) EQ <good_name_beginning>.
         result = abap_true.
         RETURN.
       ENDIF.
     ENDLOOP.
 
     LOOP AT good_method_names_containing ASSIGNING FIELD-SYMBOL(<good_name_containing>).
-      IF strlen( method_name ) GE strlen( <good_name_containing> ) AND
-         method_name CS <good_name_containing>.
+      IF strlen( method_name ) GE strlen( <good_name_containing> )
+      AND method_name CS <good_name_containing>.
         result = abap_true.
         RETURN.
       ENDIF.
@@ -71,42 +76,16 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-       WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition
-          OR stmnt_type EQ scan_struc_stmnt_type-interface.
-
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-
-      TRY.
-          DATA(check_configuration) = check_configurations[ apply_on_testcode = abap_true ].
-        CATCH cx_sy_itab_line_not_found.
-          IF is_testcode EQ abap_true.
-            CONTINUE.
-          ENDIF.
-      ENDTRY.
-
-      DATA(index) = <structure>-stmnt_from.
-
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-        FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-
-        inspect_tokens( index = index
-                        statement = <statement> ).
-        index = index + 1.
-      ENDLOOP.
-    ENDLOOP.
-  ENDMETHOD.
-
-
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) EQ 'METHODS'.
+    CHECK get_token_abs( statement-from ) = 'METHODS'.
 
     DATA(has_found_bool) = abap_false.
     DATA(token_index) = statement-from.
 
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>) FROM statement-from TO statement-to.
-      IF <token>-str EQ 'ABAP_BOOL' AND get_token_abs( token_index - 3 ) EQ 'RETURNING'. "#EC CI_MAGIC
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to.
+      IF <token>-str EQ 'ABAP_BOOL'
+      AND get_token_abs( token_index - 3 ) EQ 'RETURNING'. "#EC CI_MAGIC
         has_found_bool = abap_true.
       ENDIF.
       token_index = token_index + 1.

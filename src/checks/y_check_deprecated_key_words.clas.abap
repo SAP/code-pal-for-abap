@@ -1,18 +1,14 @@
-CLASS y_check_deprecated_key_words DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_deprecated_key_words DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-
     METHODS constructor .
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
-    METHODS check_if_error
-      IMPORTING index     TYPE i
-                keyword   TYPE string
-                statement TYPE sstmnt.
+    METHODS check_if_error IMPORTING index     TYPE i
+                                     keyword   TYPE string
+                                     statement TYPE sstmnt.
 ENDCLASS.
 
 

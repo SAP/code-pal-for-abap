@@ -1,13 +1,10 @@
-CLASS y_check_call_method_usage DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_call_method_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor .
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-  PRIVATE SECTION.
+
 ENDCLASS.
 
 
@@ -49,4 +46,6 @@ CLASS y_check_call_method_usage IMPLEMENTATION.
                    error_priority      = check_configuration-prio ).
     ENDIF.
   ENDMETHOD.
+
+
 ENDCLASS.

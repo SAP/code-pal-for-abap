@@ -1,34 +1,23 @@
-CLASS y_check_magic_number DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_magic_number DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
+    METHODS constructor.
+
+  PROTECTED SECTION.
+    METHODS inspect_tokens REDEFINITION.
+
+  PRIVATE SECTION.
     CONSTANTS second_token TYPE i VALUE 2 ##NO_TEXT.
 
-    METHODS constructor .
-  PROTECTED SECTION.
+    DATA magic_number TYPE string.
+    DATA has_case_with_subrc TYPE abap_bool.
 
-    METHODS inspect_tokens
-        REDEFINITION .
-  PRIVATE SECTION.
+    METHODS is_exception IMPORTING token        TYPE string
+                         RETURNING VALUE(result) TYPE abap_bool.
 
-    DATA magic_number TYPE string .
-    DATA has_case_with_subrc TYPE abap_bool .
+    METHODS is_keyword_valid RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_exception
-      IMPORTING
-        !token        TYPE string
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_keyword_valid
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_magic_number
-      IMPORTING
-        !token_string TYPE string
-      RETURNING
-        VALUE(result) TYPE abap_bool .
+    METHODS is_magic_number IMPORTING token_string TYPE string
+                            RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -65,8 +54,8 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
   METHOD inspect_tokens.
     statement_wa = statement.
 
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
-      FROM statement-from TO statement-to.
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to.
 
       IF is_exception( <token>-str ) = abap_true.
         EXIT.
@@ -109,4 +98,6 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
       result = abap_true.
     ENDIF.
   ENDMETHOD.
+
+
 ENDCLASS.

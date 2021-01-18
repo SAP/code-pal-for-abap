@@ -1,15 +1,10 @@
-CLASS y_check_test_seam_usage DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_test_seam_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
+    METHODS constructor.
 
-    METHODS constructor .
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
 
-  PRIVATE SECTION.
 ENDCLASS.
 
 

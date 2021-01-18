@@ -3,7 +3,6 @@ CLASS y_check_deprecated_classes DEFINITION PUBLIC INHERITING FROM y_check_base 
     METHODS constructor .
 
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
@@ -34,49 +33,19 @@ CLASS y_check_deprecated_classes IMPLEMENTATION.
 
     set_check_message( '&1 was deprecated and replaced by &2!' ).
 
+    relevant_statement_types = VALUE #( BASE relevant_statement_types
+                                      ( scan_struc_stmnt_type-class_definition )
+                                      ( scan_struc_stmnt_type-interface ) ).
+
     deprecated_classes = VALUE #( ( original = 'CL_AUNIT_ASSERT' replacement = 'CL_ABAP_UNIT_ASSERT' )
                                   ( original = 'IF_AUNIT_CONSTANTS' replacement = 'IF_ABAP_UNIT_CONSTANT' ) ).
-  ENDMETHOD.
-
-
-  METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-       WHERE stmnt_type EQ scan_struc_stmnt_type-form
-          OR stmnt_type EQ scan_struc_stmnt_type-method
-          OR stmnt_type EQ scan_struc_stmnt_type-function
-          OR stmnt_type EQ scan_struc_stmnt_type-module
-          OR stmnt_type EQ scan_struc_stmnt_type-class_definition
-          OR stmnt_type EQ scan_struc_stmnt_type-interface
-          OR type EQ scan_struc_type-event.
-
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-
-      TRY.
-          DATA(check_configuration) = check_configurations[ apply_on_testcode = abap_true ].
-        CATCH cx_sy_itab_line_not_found.
-          IF is_testcode EQ abap_true.
-            CONTINUE.
-          ENDIF.
-      ENDTRY.
-
-      DATA(index) = <structure>-stmnt_from.
-
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-        FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-
-        inspect_tokens( index = index
-                        structure = <structure>
-                        statement = <statement> ).
-        index = index + 1.
-      ENDLOOP.
-    ENDLOOP.
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
     CONSTANTS skip_ref_to TYPE i VALUE 2.
 
-    LOOP AT ref_scan_manager->get_tokens( ) TRANSPORTING NO FIELDS
+    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'TYPE'.
 
@@ -113,9 +82,8 @@ CLASS y_check_deprecated_classes IMPLEMENTATION.
 
 
   METHOD get_refereced_type.
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
     TRY.
-        result = tokens[ position + 1 ]-str.
+        result = ref_scan_manager->tokens[ position + 1 ]-str.
       CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.

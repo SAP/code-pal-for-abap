@@ -52,8 +52,8 @@ CLASS ltc_instance IMPLEMENTATION.
     result = VALUE #(
       ( 'REPORT y_example. ' )
 
-      ( ' CLASS y_example DEFINITION. "#EC NUM_PUBLIC_ATTR ' )
-      ( '   PUBLIC SECTION. ' )
+      ( ' CLASS y_example DEFINITION.  ' )
+      ( '   PUBLIC SECTION. "#EC NUM_PUBLIC_ATTR ' )
       ( '     DATA: BEGIN OF one, ' )
       ( '             index  TYPE i, ' )
       ( '             spfli_wa TYPE spfli, ' )
@@ -124,8 +124,8 @@ CLASS ltc_static IMPLEMENTATION.
     result = VALUE #(
       ( 'REPORT y_example. ' )
 
-      ( ' CLASS y_example DEFINITION. "#EC NUM_PUBLIC_ATTR ' )
-      ( '   PUBLIC SECTION. ' )
+      ( ' CLASS y_example DEFINITION.  ' )
+      ( '   PUBLIC SECTION. "#EC NUM_PUBLIC_ATTR ' )
       ( '     CLASS-DATA: BEGIN OF one, ' )
       ( '                   index  TYPE i, ' )
       ( '                   spfli_wa TYPE spfli, ' )
@@ -196,8 +196,8 @@ CLASS ltc_mixed IMPLEMENTATION.
     result = VALUE #(
       ( 'REPORT y_example. ' )
 
-      ( ' CLASS y_example DEFINITION. "#EC NUM_PUBLIC_ATTR ' )
-      ( '   PUBLIC SECTION. ' )
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. "#EC NUM_PUBLIC_ATTR ' )
       ( '     CLASS-DATA: BEGIN OF one, ' )
       ( '                   index  TYPE i, ' )
       ( '                   spfli_wa TYPE spfli, ' )

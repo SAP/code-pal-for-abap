@@ -357,8 +357,8 @@ CLASS ltc_cl_gui_usage IMPLEMENTATION.
 
       ( ' CLASS lcl_classname IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     RETURN. ' )
-      ( '     "no instance of CL_GUI_* classes ' )
+      ( '     DATA exp TYPE ui_functions. ' )
+      ( '     APPEND cl_gui_alv_tree_simple=>mc_fc_calculate TO exp.' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
