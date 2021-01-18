@@ -10,10 +10,9 @@ Legend
 
 Upgrade Note
 ------------------
-
 Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective code inspector variant (SCI transaction)
 
-2021-01-XX v1.11.0
+2021-01-19 v1.11.0
 ------------------
 * CHECK position after comments (#301)
 * Modify an Internal Table is no DB Access (#300)
