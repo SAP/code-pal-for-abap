@@ -12,9 +12,9 @@ Statements like: SELECT, EXEC SQL, COMMIT, COMMIT WORK, ROLLBACK, INSERT, DELETE
 	
   · RISK LEVEL HARMLESS or missing RISK LEVEL classification --> These DB Operation will be forbidden/reported: COMMIT, DELETE, INSERT, MODIFY, ROLLBACK, SELECT and UPDATE statements on persistent DDIC tables;
   
-	· RISK LEVEL DANGEROUS/CRITICAL --> UPDATE, MODIFY DELETE, COMMIT, ROLLBACK operation(s) on persistent DDIC tables will be forbidden/reported.
-  
-OBS: For more details on RISK LEVEL classification, please refer to the last section of this page.
+  · RISK LEVEL DANGEROUS/CRITICAL --> UPDATE, MODIFY DELETE, COMMIT, ROLLBACK operation(s) on persistent DDIC tables will be forbidden/reported.
+
+REMARK: For more details on RISK LEVEL classification, please refer to the last two sections of this page.
 
 Besides, test classes having AMDP (this happens only in productive mode) are already excluded from the scope of the check (in other words, exempted) since the Check is only applicable on test-code. Again, data access should be always mocked. For the mocking, one of these alternatives should be used:
 
