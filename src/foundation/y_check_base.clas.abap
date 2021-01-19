@@ -127,7 +127,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS instantiate_objects.
-    METHODS enable_rfc.
 
     METHODS is_skipped IMPORTING config        TYPE y_if_clean_code_manager=>check_configuration
                                  error_count   TYPE int4
@@ -178,7 +177,6 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
-    enable_rfc( ).
 
     description = get_class_description(  ).
     category = 'Y_CATEGORY_CODE_PAL'.
@@ -706,19 +704,6 @@ CLASS y_check_base IMPLEMENTATION.
     execute_check( ).
 
     FREE ref_scan_manager.
-  ENDMETHOD.
-
-
-  METHOD enable_rfc.
-    ASSIGN me->('remote_rfc_enabled') TO FIELD-SYMBOL(<remote_rfc_enabled>).
-    IF sy-subrc = 0.
-      <remote_rfc_enabled> = abap_true.
-    ENDIF.
-    ASSIGN me->('remote_enabled') TO FIELD-SYMBOL(<remote_enabled>).
-    IF sy-subrc = 0.
-      <remote_enabled> = abap_true.
-    ENDIF.
-    UNASSIGN: <remote_rfc_enabled>, <remote_enabled>.
   ENDMETHOD.
 
 
