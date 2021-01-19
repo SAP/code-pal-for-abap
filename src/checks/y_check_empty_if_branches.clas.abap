@@ -4,10 +4,9 @@ CLASS y_check_empty_if_branches DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-
     METHODS constructor .
+
   PROTECTED SECTION.
-    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
@@ -36,7 +35,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
+CLASS y_check_empty_if_branches IMPLEMENTATION.
 
 
   METHOD begin_of_statement.
@@ -85,41 +84,17 @@ CLASS Y_CHECK_EMPTY_IF_BRANCHES IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }empty-if-branches.md|.
 
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-if ) ).
+    relevant_structure_types = VALUE #( (  ) ).
+
     set_check_message( 'Empty IF-Branch should be removed!' ).
   ENDMETHOD.
 
 
-  METHOD execute_check.
-    LOOP AT ref_scan_manager->get_structures( ) ASSIGNING FIELD-SYMBOL(<structure>)
-      WHERE stmnt_type EQ scan_struc_stmnt_type-if.
-
-      is_testcode = test_code_detector->is_testcode( <structure> ).
-
-      TRY.
-          DATA(check_configuration) = check_configurations[ apply_on_testcode = abap_true ].
-        CATCH cx_sy_itab_line_not_found.
-          IF is_testcode EQ abap_true.
-            CONTINUE.
-          ENDIF.
-      ENDTRY.
-
-      DATA(index) = <structure>-stmnt_from.
-
-      LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
-        FROM <structure>-stmnt_from TO <structure>-stmnt_to.
-
-        inspect_tokens( index     = index
-                        statement = <statement> ).
-
-        index = index + 1.
-      ENDLOOP.
-    ENDLOOP.
-  ENDMETHOD.
-
-
   METHOD get_first_token_from_index.
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
-      FROM index WHERE type EQ 'I'.
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM index
+    WHERE type EQ 'I'.
       IF result IS INITIAL.
         result = <token>.
         EXIT.

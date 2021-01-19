@@ -52,7 +52,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
     DATA(scope) = get_scope_structure( statement-struc ).
     DATA(statement_index) = index.
 
-    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM scope-stmnt_from TO scope-stmnt_to
     WHERE number > statement-number.
 
@@ -62,7 +62,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<tokens>)
+      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<tokens>)
       FROM <statement>-from TO <statement>-to
       WHERE str = variable.
 
@@ -83,8 +83,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
 
 
   METHOD is_isolated.
-    DATA(structures) = ref_scan_manager->get_structures( ).
-    DATA(structure) = structures[ strucutre_row ].
+    DATA(structure) = ref_scan_manager->structures[ strucutre_row ].
 
     result = xsdbool(    structure-stmnt_type = scan_struc_stmnt_type-if
                       OR structure-stmnt_type = scan_struc_stmnt_type-then
@@ -107,8 +106,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
 
 
   METHOD get_scope_structure.
-    DATA(structures) = ref_scan_manager->get_structures( ).
-    DATA(structure) = structures[ strucutre_row ].
+    DATA(structure) = ref_scan_manager->structures[ strucutre_row ].
 
     DATA(is_root) = xsdbool(    structure-stmnt_type = scan_struc_stmnt_type-form
                              OR structure-stmnt_type = scan_struc_stmnt_type-method

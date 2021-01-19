@@ -153,6 +153,14 @@ CLASS y_code_pal_service IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    TRY.
+        y_profile_manager=>create( )->delete_profiles( ).
+      CATCH ycx_failed_to_remove_a_line.
+        raise_internal_server_error( ).
+        response->set_cdata( 'Profiles were not disabled' ).
+        RETURN.
+    ENDTRY.
+
     DATA(atc) = NEW cl_satc_api_factory( ).
 
     TRY.

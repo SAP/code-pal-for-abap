@@ -38,7 +38,7 @@ ENDCLASS.
 CLASS y_unit_test_base IMPLEMENTATION.
 
   METHOD bound.
-    cl_abap_unit_assert=>assert_bound(  cut ).
+    cl_abap_unit_assert=>assert_bound( cut ).
   ENDMETHOD.
 
   METHOD with_issue.

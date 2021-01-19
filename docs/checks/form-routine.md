@@ -16,12 +16,12 @@ Use classes and methods instead. Methods are similar to subroutines and can be u
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CI_FORM` which should be placed right after the `ENDFORM`:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CI_FORM` which should be placed right after the `FORM` declaration:
 
 ```abap
-FORM my_form.
+FORM my_form. "#EC CI_FORM
   " Form content
-ENDFORM. "#EC CI_FORM
+ENDFORM.
 ```
 
 ### Further Readings & Knowledge

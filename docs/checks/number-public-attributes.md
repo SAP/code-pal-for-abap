@@ -16,11 +16,11 @@ Make those attributes `PRIVATE` or `PROTECTED`. You can grant the read access wi
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC NUM_PUBLIC_ATTR` which should be placed right after the class definition header:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC NUM_PUBLIC_ATTR` which should be placed right after the `PUBLIC SECTION` statement:
 
 ```abap
-CLASS class_name DEFINITION.   "#EC NUM_PUBLIC_ATTR
-  PUBLIC SECTION.
+CLASS class_name DEFINITION.  
+  PUBLIC SECTION. "#EC NUM_PUBLIC_ATTR
     DATA attribute1 TYPE i.
     DATA attribute2 TYPE i.
 ENDCLASS.

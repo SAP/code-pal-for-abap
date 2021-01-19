@@ -1,32 +1,22 @@
-CLASS y_check_cyclomatic_complexity DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_cyclomatic_complexity DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
-
     CONSTANTS second_token TYPE i VALUE 2.
     CONSTANTS third_token TYPE i VALUE 3.
 
-    METHODS constructor .
+    METHODS constructor.
+
   PROTECTED SECTION.
+    METHODS inspect_tokens REDEFINITION.
 
-    METHODS inspect_tokens
-        REDEFINITION .
   PRIVATE SECTION.
-
-    DATA cyclo_comp TYPE i .
+    DATA cyclo_comp TYPE i.
     DATA statement_for_message TYPE sstmnt.
 
-    METHODS compute_cyclomatic_complexity
-      CHANGING
-        !c_cyclo_comp TYPE i .
-    METHODS determine_position
-      IMPORTING
-        !type         TYPE flag
-        !index        TYPE i
-      RETURNING
-        VALUE(result) TYPE int4 .
+    METHODS compute_cyclomatic_complexity CHANGING c_cyclo_comp TYPE i.
+
+    METHODS determine_position IMPORTING type          TYPE flag
+                                         index         TYPE i
+                               RETURNING VALUE(result) TYPE int4.
 ENDCLASS.
 
 
@@ -45,7 +35,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
           ADD 1 TO c_cyclo_comp.
         ENDIF.
       WHEN 'DO'.
-        READ TABLE ref_scan_manager->get_tokens( ) INDEX statement_wa-to INTO DATA(token).
+        READ TABLE ref_scan_manager->tokens INDEX statement_wa-to INTO DATA(token).
         IF token-str = 'TIMES'.
           ADD 1 TO c_cyclo_comp.
         ENDIF.

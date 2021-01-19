@@ -1,34 +1,26 @@
-CLASS y_check_max_nesting_depth DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_max_nesting_depth DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
+    METHODS constructor.
 
-    METHODS constructor .
   PROTECTED SECTION.
+    METHODS inspect_tokens REDEFINITION.
 
-    METHODS inspect_tokens
-        REDEFINITION .
   PRIVATE SECTION.
     DATA statement_for_message TYPE sstmnt.
-    DATA curr_nesting TYPE i .
-    DATA max_nesting TYPE i .
+    DATA curr_nesting TYPE i.
+    DATA max_nesting TYPE i.
 
-    METHODS compute_nesting_level
-      IMPORTING
-        !token_str TYPE string .
-    METHODS determine_position
-      IMPORTING
-        !type         TYPE flag
-        !index        TYPE i
-      RETURNING
-        VALUE(result) TYPE int4 .
+    METHODS compute_nesting_level IMPORTING token_str TYPE string.
+
+    METHODS determine_position IMPORTING type          TYPE flag
+                                         index         TYPE i
+                               RETURNING VALUE(result) TYPE int4.
+
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
+CLASS y_check_max_nesting_depth IMPLEMENTATION.
 
 
   METHOD compute_nesting_level.
@@ -73,7 +65,7 @@ CLASS Y_CHECK_MAX_NESTING_DEPTH IMPLEMENTATION.
       max_nesting = 0.
     ENDIF.
 
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
       compute_nesting_level( <token>-str ).

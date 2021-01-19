@@ -12,6 +12,16 @@ Upgrade Note
 ------------------
 Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective code inspector variant (SCI transaction)
 
+2021-01-18 v1.11.0
+------------------
+* CHECK position after comments (#301)
+* Modify an Internal Table is no DB Access (#300)
++ Enhancing coverage to run for multiple objects (#294)
+! Disabling profiles when the API executes the regression (#293)
+* DELETE from internal table gives a "Database access" prio 1 error (#290)
+! The pseudo comment position of the Form Routine Check was moved from the 'ENDFORM' to 'FORM' statement
+! The pseudo comment position of the Number of Public Attributes was moved from the 'CLASS DEFINITION.' to 'PUBLIC SECTION' statement
+
 2020-12-14 v1.10.0
 ------------------
 + New Check: Scope of the Variable (#276)
