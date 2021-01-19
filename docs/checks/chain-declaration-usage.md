@@ -40,6 +40,15 @@ After the check:
   DATA client LIKE sy-mandt.
 ```
 
+Or even (which looks neat - but it won't be enforced):
+
+```abap
+DATA var1         TYPE a.
+DATA var2         TYPE string.
+DATA my_var3      TYPE int.
+DATA a            TYPE c.
+```
+
 ### Further Readings & Knowledge
 
 * [ABAP Styleguides on Clean Code: Do not chain up-front declarations](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#do-not-chain-up-front-declarations)
