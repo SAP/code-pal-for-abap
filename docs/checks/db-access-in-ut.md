@@ -41,22 +41,14 @@ The pseudo comment must be placed right after the DB access statement.
 SELECT XXXXX.       "#EC DB_ACCESS_UT
 ```
 ### Risk Level
-Definition: The RISK LEVEL describes the effects that a test can have on the data security of the system:
-
-•	CRITICAL  - such as changes to system settings or Customizing;
-
-•	DANGEROUS - such as changes to persistent data;
-
-•	HARMLESS  - no effects on persistent data or system settings.
-
-
+Definition: The RISK LEVEL describes the effects that a test can have on the data security of the system.
 The RISK LEVEL is assigned by the following extension to the CLASS DEFINITION statement of a test class:
 
-•	RISK LEVEL CRITICAL (default)
+•	RISK LEVEL CRITICAL (default) - such as changes to system settings or Customizing;
 
-•	RISK LEVEL DANGEROUS
+•	RISK LEVEL DANGEROUS          - such as changes to persistent data;
 
-•	RISK LEVEL HARMLESS
+•	RISK LEVEL HARMLESS           - no effects on persistent data or system settings.
 
 
 ### Duration
