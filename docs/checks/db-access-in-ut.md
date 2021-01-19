@@ -27,22 +27,29 @@ SELECT XXXXX.       "#EC DB_ACCESS_UT
 ### Risk Level
 Definition
 The RISK LEVEL describes the effects that a test can have on the data security of the system:
+
 •	CRITICAL - such as changes to system settings or Customizing 
 •	DANGEROUS - such as changes to persistent data 
 •	HARMLESS - no effects on persistent data or system settings 
+
 The RISK LEVEL is assigned by the following extension to the CLASS DEFINITION statement of a test class:
+
 •	RISK LEVEL CRITICAL - default 
 •	RISK LEVEL DANGEROUS 
 •	RISK LEVEL HARMLESS 
 
+
 ### Duration
 Definition
 The DURATION property allows you to define an expected runtime for all methods of a test class.
+
 •	SHORT - within the blink of an eye ( < 10 seconds ) 
 •	MEDIUM - take a sip of tea ( < 2 minutes ) 
 •	LONG - get another cup 
+
 At runtime the cumulated duration of all test methods is measured. If the actual duration exceeds the expectation ABAP Unit will raise an alert.
 Please not the cumulated duration contains also system activities as program compilation. In case of doubts it is recommend to choose the higher category.
+
 Maintenance
 Use on of the following key words in the CLASS DEFINITON statement of a test class to specify the duration category:
 •	DURATION SHORT (default) 
