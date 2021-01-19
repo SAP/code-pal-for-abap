@@ -14,7 +14,7 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 
 2021-01-XX v1.12.0
 ------------------
-- RFC Enabled (#305)
+- RFC Disabled (#305)
 
 2021-01-18 v1.11.0
 ------------------
