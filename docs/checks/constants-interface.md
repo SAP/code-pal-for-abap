@@ -1,12 +1,10 @@
-# code pal for ABAP
-
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Constants Interface Check](constants-interface.md)
 
 ## Constants Interface Check
 
 ### What is the Intent of the Check?
 
-To avoid the creation and usage of an interface object for merely definying contants.
+This check intends to avoid the creation and usage of an interface object for merely definying contants.
 You should always prefer [enumeration classes](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-enumeration-classes-to-constants-interfaces) to constants interfaces.
 
 ```abap
@@ -34,18 +32,13 @@ ENDCLASS.
 
 The "Constant Interface" check searches for interfaces containing only constants.
 
-### Which attributes can be maintained?
-
-![Attributes](./imgs/constants_interface.png)
-
 ### How to solve the issue?
 
 Use enumeration classes instead.
 
 ### What to do in case of exception?
 
-In special cases, it is possible to suppress a finding by using the pseudo comment `"#EC CONS_INTF`.  
-The pseudo comment must be placed right after the class definition header.
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CONS_INTF` which should be placed right after the class definition header:
 
 ### Example
 
