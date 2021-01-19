@@ -1,18 +1,16 @@
-# code pal for ABAP
-
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Unit-Test Coverages (Statement, Branch and Procedure)](unit-test-coverages.md)
 
-## Unit-Test Coverages (Statement, Branch and Procedure)
+## Unit-Test Coverages (Statement, Branch and Procedural Coverage)
 
 ### What is the Intent of the Check?
 
-The "Unit Test Coverages (Statement, Branch and Procedure)" Check executes the ABAP Unit-Test framework and verifies if the coverage is under the defined threshold(s).
+This check executes the ABAP Unit-Test framework and returns the current coverage percentile for the object in question. It verifies if the coverage is under the defined thresholds (customized in the checks).
 
-> :WARNING: Use it to check a few objects only (it may cause performance issues).
+> :WARNING: Use this check with a small set of objects only (due to possible performance issues).
 
 ### How to solve the issue?
 
-Improve the Unit-Test coverage(s).
+Improve the Unit-Test coverage(s) by writing Unit-Tests.
 
 ### What to do in case of exception?
 
