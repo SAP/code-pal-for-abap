@@ -29,8 +29,11 @@ Definition
 The RISK LEVEL describes the effects that a test can have on the data security of the system:
 
 •	CRITICAL - such as changes to system settings or Customizing;
+
 •	DANGEROUS - such as changes to persistent data;
+
 •	HARMLESS - no effects on persistent data or system settings.
+
 
 The RISK LEVEL is assigned by the following extension to the CLASS DEFINITION statement of a test class:
 
