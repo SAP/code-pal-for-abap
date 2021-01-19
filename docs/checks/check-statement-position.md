@@ -8,6 +8,11 @@ This check verifies whether the `CHECK` statement is the very first statement wi
 The [Clean ABAP](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#avoid-check-in-other-positions) says:
 > Do not use `CHECK` outside of the initialization section of a method. The statement behaves differently in different positions and may lead to unclear, unexpected effects.
 
+REMARKS: 
+1. CHECK statement inside of LOOPs will be disregard by check (for that, refer to: CHECK_IN_LOOP). 
+2. The usage of CLEAR statement prior to CHECK statement is considered to be a bad coding practice! This is actually a workaround in bad designed code (against OO scope principles). 
+3. DATA declarations (DATA / FIELD-SYMBOLS when not dynamic declared – inline declarations), might also come before the keyword CHECK.
+
 ### How to solve the issue?
 The `CHECK` statement shall be the first statement of a method. If it is not possible, try to substitute this keyword with an IF-statement instead.
 
