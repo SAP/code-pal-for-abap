@@ -24,6 +24,8 @@ Besides, test classes having AMDP (this happens only in productive mode) are alr
 
   · Test-Double Framework (isolating the database access in classes an mocking them via TDF).
   
+Ideally, there has to be a data access class for every (customizing, master, or transactional) database table. That one shall be tested with one of the mocking frameworks listed above. All backend code layer above this boundary shall be tested with object-oriented test doubles according to the test pyramid strategy. There may be still some non-isolated E2E tests across systems, but these shall not test functionality, rather focus on connectivity, networking and things like that.  
+  
 ### How to solve the issue?
 
 The solution is to mock these DB accesses with a proper dependency isolation technique.
