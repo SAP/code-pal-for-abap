@@ -8,8 +8,22 @@ This check scans test classes and its contents searching for any kind of explici
 
 ### How does the check work?
 
-Statements like: SELECT, EXEC SQL, COMMIT, COMMIT WORK, ROLLBACK, INSERT, DELETE, ALTER; UPDATE or READ TABLE accessing physical database tables (SAP Dictionary Tables) are detected and presented.
+Statements like: SELECT, EXEC SQL, COMMIT, COMMIT WORK, ROLLBACK, INSERT, DELETE, ALTER; UPDATE or READ TABLE accessing physical database tables (SAP Dictionary Tables) are detected and presented. However, the Check acts differently according to the RISK LEVEL classification of the test class under evaluation. So that:
+	
+  · RISK LEVEL HARMLESS or missing RISK LEVEL classification --> These DB Operation will be forbidden/reported: COMMIT, DELETE, INSERT, MODIFY, ROLLBACK, SELECT and UPDATE statements on persistent DDIC tables;
+  
+	· RISK LEVEL DANGEROUS/CRITICAL --> UPDATE, MODIFY DELETE, COMMIT, ROLLBACK operation(s) on persistent DDIC tables will be forbidden/reported.
+  
+OBS: For more details on RISK LEVEL classification, please refer to the last section of this page.
 
+Besides, test classes having AMDP (this happens only in productive mode) are already excluded from the scope of the check (in other words, exempted) since the Check is only applicable on test-code. Again, data access should be always mocked. For the mocking, one of these alternatives should be used:
+
+  · OSQL Test Framework; and/or
+
+  · CDS Test Framework; and/or
+
+  · Test-Double Framework (isolating the database access in classes an mocking them via TDF).
+  
 ### How to solve the issue?
 
 The solution is to mock these DB accesses with a proper dependency isolation technique.
