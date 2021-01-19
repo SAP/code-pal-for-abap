@@ -40,7 +40,7 @@ The pseudo comment must be placed right after the DB access statement.
 ```abap
 SELECT XXXXX.       "#EC DB_ACCESS_UT
 ```
-### Risk Level
+### How to set the "Risk Level"
 Definition: The RISK LEVEL describes the effects that a test can have on the data security of the system.
 The RISK LEVEL is assigned by the following extension to the CLASS DEFINITION statement of a test class:
 
@@ -51,7 +51,7 @@ The RISK LEVEL is assigned by the following extension to the CLASS DEFINITION st
 •	RISK LEVEL HARMLESS           - no effects on persistent data or system settings.
 
 
-### Duration
+### How to set the "Duration"
 Definition: The DURATION property allows you to define an expected runtime for all methods of a test class.
 
 At runtime the cumulated duration of all test methods is measured. If the actual duration exceeds the expectation ABAP Unit will raise an alert.
