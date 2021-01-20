@@ -8,7 +8,17 @@ This check points out old syntax which should be replaced with newer notations i
 
 ### How does the check work?
 
-This check searches for deprecated key words like: `MOVE` and `TRANSLATE` and suggests its replacement.
+This check searches for deprecated key words like: `MOVE` and `TRANSLATE` and suggests its replacement to news notations/functions.
+
+```ABAP
+" MOVE 'A' TO variable.
+DATA(variable) = 'A'.
+
+" TRANSLATE lowercase TO UPPER CASE.
+DATA(uppercase) = to_upper( lowercase ).
+
+```
+
 REMARK: The check will be continuously enhanced with other deprecated ABAP Keywords.
 
 ### How to solve the issue?
