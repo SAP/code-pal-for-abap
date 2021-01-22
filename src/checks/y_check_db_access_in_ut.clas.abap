@@ -29,6 +29,9 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS is_internal_table IMPORTING statement     TYPE sstmnt
                               RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS is_an_attribution IMPORTING statement     TYPE sstmnt
+                              RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -71,6 +74,10 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
     LOOP AT tokens_not_allowed ASSIGNING FIELD-SYMBOL(<token_not_allowed>).
       IF tokens NP <token_not_allowed>.
+        CONTINUE.
+      ENDIF.
+
+      IF is_an_attribution( statement ) = abap_true.
         CONTINUE.
       ENDIF.
 
@@ -168,4 +175,12 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
     result = xsdbool( is_persistent_object( table ) = abap_false ).
   ENDMETHOD.
+
+
+  METHOD is_an_attribution.
+    DATA(second_token) = get_token_abs( statement-from + 1 ).
+    result = xsdbool( second_token = '=' ).
+  ENDMETHOD.
+
+
 ENDCLASS.
