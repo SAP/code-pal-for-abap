@@ -438,3 +438,32 @@ CLASS ltc_exec_sql IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_attribution DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_attribution IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DATA update TYPE abap_bool. ' )
+      ( '     update  = space.  ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.

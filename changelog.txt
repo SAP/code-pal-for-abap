@@ -16,6 +16,10 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 ------------------
 - RFC Disabled (#305)
 
+2021-01-22 v1.11.1
+------------------
+* Dump in DB access in UT (#309)
+
 2021-01-18 v1.11.0
 ------------------
 * CHECK position after comments (#301)
