@@ -4,6 +4,8 @@
   <asx:values>
    <DEVC>
     <CTEXT>code pal for ABAP</CTEXT>
+    <COMP_POSID>TEST2</COMP_POSID>
+    <COMPONENT>0000000001</COMPONENT>
     <SRV_CHECK>X</SRV_CHECK>
    </DEVC>
   </asx:values>

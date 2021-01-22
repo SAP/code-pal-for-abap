@@ -441,12 +441,12 @@ ENDCLASS.
 
 
 
-CLASS ltc_compute_variable DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_attribution DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_compute_variable IMPLEMENTATION.
+CLASS ltc_attribution IMPLEMENTATION.
 
   METHOD get_code_without_issue.
     result = VALUE #(
