@@ -22,11 +22,11 @@ INTERFACE y_if_alv_tree_control
 
   METHODS get_selected_line
     RETURNING VALUE(result) TYPE REF TO data
-    RAISING ycx_entry_not_found.
+    RAISING   ycx_entry_not_found.
 
   METHODS get_selected_index
     RETURNING VALUE(result) TYPE i
-    RAISING ycx_entry_not_found.
+    RAISING   ycx_entry_not_found.
 
   METHODS set_selected_index
     IMPORTING index TYPE i.
@@ -34,4 +34,10 @@ INTERFACE y_if_alv_tree_control
   METHODS toolbar_control
     RETURNING VALUE(result) TYPE REF TO cl_gui_toolbar
     RAISING   cx_failed.
+
+  METHODS activate_toolbar
+    RAISING cx_failed.
+
+  METHODS deactivate_toolbar
+    RAISING cx_failed.
 ENDINTERFACE.
