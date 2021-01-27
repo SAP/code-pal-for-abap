@@ -152,11 +152,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
 
-
-
-    METHODS get_application_component IMPORTING level         TYPE slevel
-                                      RETURNING VALUE(result) TYPE df14l-ps_posid.
-
 ENDCLASS.
 
 
@@ -776,31 +771,10 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD is_in_scope.
-    TRY.
-        DATA(main_level) = ref_scan_manager->levels[ level = 0 ].
-        DATA(main_application_component) = get_application_component( main_level ).
-      CATCH cx_sy_itab_line_not_found.
-        RETURN.
-    ENDTRY.
-
-    TRY.
-        DATA(current_level) = ref_scan_manager->levels[ statement-level ].
-        DATA(current_application_component) = get_application_component( current_level ).
-      CATCH cx_sy_itab_line_not_found.
-        RETURN.
-    ENDTRY.
-
-    result = xsdbool( current_application_component = main_application_component ).
+    DATA(level) = ref_scan_manager->levels[ statement-level ].
+    result = ref_scan_manager->is_level_in_scope( level ).
   ENDMETHOD.
 
-
-  METHOD get_application_component.
-    TRY.
-        result = y_code_pal_app_comp=>get( level-name ).
-      CATCH ycx_entry_not_found.
-        RETURN.
-    ENDTRY.
-  ENDMETHOD.
 
 
 ENDCLASS.
