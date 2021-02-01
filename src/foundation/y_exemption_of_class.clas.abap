@@ -230,11 +230,14 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
 
 
   METHOD is_shma_generate.
-    SELECT SINGLE obj_name FROM tadir INTO @DATA(shma_clas)
-      WHERE pgmid = 'R3TR' AND object = 'SHMA' AND obj_name = @class_header_data-clsname.
-    IF sy-subrc = 0.
-      result = abap_true.
-    ENDIF.
+    TRY.
+        y_code_pal_tadir_da=>get( program_id = 'R3TR'
+                                  object_type = 'SHMA'
+                                  object_name = CONV #( class_header_data-clsname ) ).
+        result = abap_true.
+      CATCH ycx_entry_not_found.
+        result = abap_false.
+    ENDTRY.
   ENDMETHOD.
 
 

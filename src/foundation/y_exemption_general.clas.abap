@@ -2,13 +2,14 @@ CLASS y_exemption_general DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES y_if_exemption.
     ALIASES create FOR y_if_exemption~create.
-  PROTECTED SECTION.
+
   PRIVATE SECTION.
-    METHODS is_tadir_generated IMPORTING object_type   TYPE trobjtype
-                                         object_name   TYPE sobj_name
+    METHODS is_tadir_generated IMPORTING object_type   TYPE tadir-object
+                                         object_name   TYPE tadir-obj_name
                                RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_object_existing IMPORTING object_type   TYPE trobjtype
-                                         object_name   TYPE sobj_name
+
+    METHODS is_object_existing IMPORTING object_type   TYPE tadir-object
+                                         object_name   TYPE tadir-obj_name
                                RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
@@ -53,7 +54,15 @@ CLASS y_exemption_general IMPLEMENTATION.
 
 
   METHOD is_tadir_generated.
-    SELECT SINGLE genflag FROM tadir INTO @result
-      WHERE pgmid = 'R3TR' AND object = @object_type AND obj_name = @object_name.
+    TRY.
+        DATA(entry) = y_code_pal_tadir_da=>get( program_id = 'R3TR'
+                                                object_type = object_type
+                                                object_name = object_name ).
+        result = entry-genflag.
+      CATCH ycx_entry_not_found.
+        CLEAR result.
+    ENDTRY.
   ENDMETHOD.
+
+
 ENDCLASS.

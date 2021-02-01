@@ -38,8 +38,7 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
   METHOD define_in_scope_levels.
     TRY.
         DATA(main_level) = y_if_scan_manager~levels[ level = 0 ].
-        DATA(main_tadir) = get_tadir( main_level ).
-        DATA(main_application_component) = y_code_pal_app_comp=>get( main_tadir ).
+        DATA(main_application_component) = y_code_pal_app_comp=>get( get_tadir( main_level ) ).
       CATCH cx_sy_itab_line_not_found
             ycx_entry_not_found.
         RETURN.
@@ -47,8 +46,7 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
 
     LOOP AT y_if_scan_manager~levels ASSIGNING FIELD-SYMBOL(<level>).
       TRY.
-          DATA(tadir) = get_tadir( main_level ).
-          DATA(application_component) = y_code_pal_app_comp=>get( tadir ).
+          DATA(application_component) = y_code_pal_app_comp=>get( get_tadir( main_level ) ).
           IF main_application_component = application_component.
              APPEND <level> TO in_scope_levels.
           ENDIF.
@@ -65,28 +63,19 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
 
 
   METHOD get_tadir.
-    DATA tadir TYPE tadir.
-
     CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
       EXPORTING
-        iv_trdir_name       = level-name
+        iv_trdir_name = level-name
       IMPORTING
-        es_tadir_keys       = tadir
-      EXCEPTIONS
-        INVALID_NAME_SYNTAX = 1
-        OTHERS              = 2.
+        es_tadir_keys = result.
 
-    SELECT SINGLE devclass
-    FROM tadir
-    INTO @DATA(package)
-    WHERE pgmid = @tadir-pgmid
-    AND object = @tadir-object
-    AND obj_name = @tadir-obj_name.
-
-    result = VALUE #( pgmid = tadir-pgmid
-                      object = tadir-object
-                      obj_name = tadir-obj_name
-                      devclass = package ).
+    TRY.
+        result = y_code_pal_tadir_da=>get( program_id = result-pgmid
+                                           object_type = result-object
+                                           object_name = result-obj_name ).
+      CATCH ycx_entry_not_found.
+        RETURN.
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.

@@ -112,10 +112,14 @@ CLASS y_object_creation_date IMPLEMENTATION.
 
 
   METHOD get_db_tadir_data.
-    SELECT SINGLE created_on FROM tadir INTO @result WHERE
-        pgmid = 'R3TR' AND
-        object = @object_type AND
-        obj_name = @object_name.
+    TRY.
+        DATA(entry) = y_code_pal_tadir_da=>get( program_id = 'R3TR'
+                                                object_type = object_type
+                                                object_name = object_name ).
+        result = entry-created_on.
+      CATCH ycx_entry_not_found.
+        CLEAR result.
+    ENDTRY.
   ENDMETHOD.
 
 
