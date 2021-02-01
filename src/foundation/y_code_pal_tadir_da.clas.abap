@@ -1,4 +1,4 @@
-CLASS y_code_pal_tadir_da DEFINITION SHARED MEMORY ENABLED PUBLIC CREATE PUBLIC.
+CLASS y_code_pal_tadir_da DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     CLASS-METHODS get IMPORTING program_id TYPE tadir-pgmid
                                 object_type TYPE tadir-object
