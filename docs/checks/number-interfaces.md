@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-Thhis check counts the number of interfaces up to a maximum. If there are too many interfaces in a class, it is an indicator that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
+This check counts the number of interfaces up to a maximum. If there are too many interfaces in a class, it is an indicator that the [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated.
 
 ### How does the check work?
 
