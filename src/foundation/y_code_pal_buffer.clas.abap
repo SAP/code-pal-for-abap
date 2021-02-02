@@ -1,4 +1,4 @@
-CLASS y_code_pal_buffer DEFINITION SHARED MEMORY ENABLED PUBLIC CREATE PUBLIC.
+CLASS y_code_pal_buffer DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES y_if_code_pal_buffer.
     ALIASES get FOR y_if_code_pal_buffer~get.
