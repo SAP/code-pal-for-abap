@@ -2,15 +2,13 @@ CLASS y_code_pal_app_comp DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
 
     TYPES: BEGIN OF entry,
-             pgmid TYPE tadir-pgmid,
-             object TYPE tadir-object,
-             obj_name TYPE tadir-obj_name,
-             application_component TYPE df14l-ps_posid,
+             level TYPE slevel,
+             application_component TYPE tdevc-component,
            END OF entry.
 
     TYPES entries TYPE TABLE OF entry.
 
-    CLASS-METHODS get IMPORTING tadir         TYPE tadir
+    CLASS-METHODS get IMPORTING level         TYPE entry-level
                       RETURNING VALUE(result) TYPE entry-application_component
                       RAISING ycx_entry_not_found.
 
@@ -19,13 +17,9 @@ CLASS y_code_pal_app_comp DEFINITION PUBLIC CREATE PUBLIC.
 
     CLASS-DATA buffer TYPE entries.
 
-    CLASS-METHODS get_entry IMPORTING tadir         TYPE tadir
-                            RETURNING VALUE(result) TYPE entry
-                            RAISING ycx_entry_not_found.
-
-    CLASS-METHODS new_entry IMPORTING tadir         TYPE tadir
-                            RETURNING VALUE(result) TYPE entry
-                            RAISING ycx_entry_not_found.
+    CLASS-METHODS new IMPORTING level         TYPE entry-level
+                      RETURNING VALUE(result) TYPE entry
+                      RAISING ycx_entry_not_found.
 
 ENDCLASS.
 
@@ -35,40 +29,40 @@ CLASS y_code_pal_app_comp IMPLEMENTATION.
 
 
   METHOD get.
-    DATA(entry) = get_entry( tadir ).
-    result = entry-application_component.
-  ENDMETHOD.
-
-
-  METHOD get_entry.
     TRY.
-        result = buffer[ pgmid = tadir-pgmid
-                         object = tadir-object
-                         obj_name = tadir-obj_name  ].
+        result = buffer[ level = level ]-application_component.
       CATCH cx_sy_itab_line_not_found.
-        result = new_entry( tadir ).
+        result = new( level )-application_component.
     ENDTRY.
   ENDMETHOD.
 
 
-  METHOD new_entry.
+  METHOD new.
+    DATA tadir TYPE tadir.
+
     IF lines( buffer ) > max_entries.
       DELETE buffer FROM 1 TO max_entries / 2.
     ENDIF.
 
-    SELECT SINGLE df~ps_posid
-    FROM tdevc AS td
-    LEFT JOIN df14l AS df ON td~component = df~fctr_id
+    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
+      EXPORTING
+        iv_trdir_name = level-name
+      IMPORTING
+        es_tadir_keys = tadir.
+
+    SELECT SINGLE td~component
+    FROM tadir AS ta
+    INNER JOIN tdevc AS td ON ta~devclass = td~devclass
     INTO @DATA(application_component)
-    WHERE td~devclass = @tadir-devclass.
+    WHERE pgmid = @tadir-pgmid
+    AND object = @tadir-object
+    AND obj_name = @tadir-obj_name.
 
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
 
-    result = VALUE #( pgmid = tadir-pgmid
-                      object = tadir-object
-                      obj_name = tadir-obj_name
+    result = VALUE #( level = level
                       application_component = application_component ).
 
     APPEND result TO buffer.

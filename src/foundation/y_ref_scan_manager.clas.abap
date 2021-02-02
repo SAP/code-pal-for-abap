@@ -8,9 +8,6 @@ CLASS y_ref_scan_manager DEFINITION PUBLIC CREATE PUBLIC.
 
     METHODS define_in_scope_levels.
 
-    METHODS get_tadir IMPORTING level TYPE slevel
-                      RETURNING VALUE(result) TYPE tadir.
-
 ENDCLASS.
 
 CLASS y_ref_scan_manager IMPLEMENTATION.
@@ -42,7 +39,7 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
   METHOD define_in_scope_levels.
     TRY.
         DATA(main_level) = y_if_scan_manager~levels[ level = 0 ].
-        DATA(main_application_component) = y_code_pal_app_comp=>get( get_tadir( main_level ) ).
+        DATA(main_application_component) = y_code_pal_app_comp=>get( main_level ).
       CATCH cx_sy_itab_line_not_found
             ycx_entry_not_found.
         RETURN.
@@ -50,7 +47,7 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
 
     LOOP AT y_if_scan_manager~levels ASSIGNING FIELD-SYMBOL(<level>).
       TRY.
-          DATA(application_component) = y_code_pal_app_comp=>get( get_tadir( main_level ) ).
+          DATA(application_component) = y_code_pal_app_comp=>get( <level> ).
           IF main_application_component = application_component.
              APPEND <level> TO in_scope_levels.
           ENDIF.
@@ -63,22 +60,6 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
 
   METHOD y_if_scan_manager~is_level_in_scope.
     result = xsdbool( line_exists( in_scope_levels[ table_line = level ] ) ).
-  ENDMETHOD.
-
-
-  METHOD get_tadir.
-    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
-      EXPORTING
-        iv_trdir_name = level-name
-      IMPORTING
-        es_tadir_keys = result.
-
-    SELECT SINGLE *
-    FROM tadir
-    INTO @result
-    WHERE pgmid = @result-pgmid
-    AND object = @result-object
-    AND obj_name = @result-obj_name.
   ENDMETHOD.
 
 
