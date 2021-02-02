@@ -13,6 +13,8 @@ CLASS y_code_pal_app_comp DEFINITION SHARED MEMORY ENABLED PUBLIC CREATE PUBLIC.
                       RAISING ycx_entry_not_found.
 
   PRIVATE SECTION.
+    CONSTANTS max_entries TYPE i VALUE 50.
+
     CLASS-DATA buffer TYPE entries.
 
     CLASS-METHODS get_entry IMPORTING program       TYPE entry-program
@@ -46,6 +48,10 @@ CLASS y_code_pal_app_comp IMPLEMENTATION.
 
 
   METHOD new_entry.
+    IF lines( buffer ) > max_entries.
+      DELETE buffer FROM 1 TO max_entries / 2.
+    ENDIF.
+
     SELECT SINGLE ta~obj_name, df~ps_posid
     FROM tadir AS ta
     LEFT JOIN tdevc AS td ON ta~devclass = td~devclass
@@ -53,7 +59,7 @@ CLASS y_code_pal_app_comp IMPLEMENTATION.
     INTO @result
     WHERE ta~pgmid = 'R3TR'
     AND ta~object = 'PROG'
-    AND  ta~obj_name = @program.
+    AND ta~obj_name = @program.
 
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
