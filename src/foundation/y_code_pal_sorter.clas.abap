@@ -1,4 +1,4 @@
-CLASS y_code_pal_sorter DEFINITION SHARED MEMORY ENABLED PUBLIC CREATE PUBLIC.
+CLASS y_code_pal_sorter DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES y_if_code_pal_sorter.
     ALIASES get_position FOR y_if_code_pal_sorter~get_position.

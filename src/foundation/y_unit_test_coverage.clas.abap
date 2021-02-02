@@ -1,4 +1,4 @@
-CLASS y_unit_test_coverage DEFINITION SHARED MEMORY ENABLED PUBLIC CREATE PUBLIC .
+CLASS y_unit_test_coverage DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     CLASS-METHODS get IMPORTING program_name  TYPE programm
                                 object        TYPE cl_aucv_task=>ty_object_directory_element
