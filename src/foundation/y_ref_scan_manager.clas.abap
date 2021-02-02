@@ -2,7 +2,6 @@ CLASS y_ref_scan_manager DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES y_if_scan_manager.
 
-protected section.
   PRIVATE SECTION.
     DATA ref_scan TYPE REF TO cl_ci_scan.
 
@@ -10,7 +9,7 @@ ENDCLASS.
 
 
 
-CLASS Y_REF_SCAN_MANAGER IMPLEMENTATION.
+CLASS y_ref_scan_manager IMPLEMENTATION.
 
 
   METHOD y_if_scan_manager~is_scan_ok.
