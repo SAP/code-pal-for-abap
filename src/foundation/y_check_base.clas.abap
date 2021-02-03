@@ -141,7 +141,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
                                   RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS should_skip_type IMPORTING structure TYPE sstruc
+    METHODS should_skip_type IMPORTING structure     TYPE sstruc
                              RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_statement_type_relevant IMPORTING structure     TYPE sstruc
@@ -197,9 +197,18 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
+    DATA tadir_keys TYPE tadir.
 
-    DATA(include) = get_include( p_level = statement-level ).
-    DATA(creation_date) =  NEW y_object_creation_date( )->y_if_object_creation_date~get_program_create_date( include ).
+    DATA(level) = ref_scan_manager->levels[ statement-level ].
+
+    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
+      EXPORTING
+        iv_trdir_name = level-name
+      IMPORTING
+        es_tadir_keys = tadir_keys.
+
+    DATA(creation_date) = clean_code_manager->calculate_obj_creation_date( object_type = tadir_keys-object
+                                                                           object_name = tadir_keys-obj_name  ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
     WHERE object_creation_date <= creation_date.
