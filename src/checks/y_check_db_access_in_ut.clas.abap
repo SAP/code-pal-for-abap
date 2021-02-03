@@ -121,11 +121,6 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM class_definition-stmnt_from TO class_definition-stmnt_to.
-
-      IF is_in_scope( <statement> ) = abap_false.
-        CONTINUE.
-      ENDIF.
-
       DATA(tokens) = consolidade_tokens( <statement> ).
 
       test_risk_level = COND #( WHEN tokens CS 'RISK LEVEL HARMLESS'  THEN risk_level_harmless

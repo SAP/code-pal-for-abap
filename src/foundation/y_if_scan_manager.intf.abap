@@ -9,7 +9,4 @@ INTERFACE y_if_scan_manager PUBLIC.
 
   METHODS set_ref_scan IMPORTING io_ref_scan TYPE REF TO cl_ci_scan.
 
-  METHODS is_level_in_scope IMPORTING level TYPE slevel
-                            RETURNING VALUE(result) TYPE abap_bool.
-
 ENDINTERFACE.

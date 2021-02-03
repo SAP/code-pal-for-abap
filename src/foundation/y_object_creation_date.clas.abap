@@ -84,7 +84,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
   METHOD convert_fugr_for_db_access.
     IF name(1) = '/'.
       SEARCH name FOR '/' STARTING AT 2.
-      DATA(l_textcount) = sy-fdpos + 2.                 "#EC DECL_IN_IF
+      DATA(l_textcount) = sy-fdpos + 2.
       result = name(l_textcount) && 'SAPL' && name+l_textcount.
     ELSE.
       result = 'SAPL' && name.
@@ -104,10 +104,20 @@ CLASS y_object_creation_date IMPLEMENTATION.
 
 
   METHOD get_db_reposource_created_on.
-    SELECT SINGLE MIN( cdat ) AS creation_date  FROM reposrc INTO @result WHERE
-        progname LIKE @reposrc_prog_search_string AND
-        r3state = 'A' AND
-        cdat > '00000000'.
+    SELECT cdat
+    FROM reposrc
+    INTO TABLE @DATA(creation_dates)
+    WHERE progname LIKE @reposrc_prog_search_string
+    AND r3state = 'A'
+    ORDER BY cdat DESCENDING.
+
+    DELETE creation_dates WHERE cdat IS INITIAL.
+
+    TRY.
+        result = creation_dates[ 0 ].
+      CATCH cx_sy_itab_line_not_found.
+        CLEAR result.
+    ENDTRY.
   ENDMETHOD.
 
 

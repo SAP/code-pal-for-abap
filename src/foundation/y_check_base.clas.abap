@@ -120,8 +120,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS keyword REDEFINITION.
     METHODS set_check_message IMPORTING message TYPE itex132.
     METHODS get_class_description  RETURNING VALUE(result) TYPE string.
-    METHODS is_in_scope IMPORTING statement     TYPE sstmnt
-                        RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
@@ -162,10 +160,6 @@ CLASS y_check_base IMPLEMENTATION.
   METHOD check_start_conditions.
     IF ref_scan_manager->is_scan_ok( ) = abap_false.
       RAISE EXCEPTION TYPE ycx_object_not_processed.
-    ENDIF.
-
-    IF clean_code_exemption_handler->is_object_exempted( object_name = object_name object_type = object_type ) = abap_true.
-      RAISE EXCEPTION TYPE ycx_object_is_exempted.
     ENDIF.
   ENDMETHOD.
 
@@ -242,8 +236,8 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD inspect_structures.
     LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF should_skip_test_code( <structure> ) = abap_true
-      OR should_skip_type( <structure> ) = abap_true.
+      IF should_skip_type( <structure> ) = abap_true
+      OR should_skip_test_code( <structure> ) = abap_true.
         CONTINUE.
       ENDIF.
 
@@ -258,10 +252,6 @@ CLASS y_check_base IMPLEMENTATION.
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from
     TO structure-stmnt_to.
-      IF is_in_scope( <statement> ) = abap_false.
-        CONTINUE.
-      ENDIF.
-
       inspect_tokens( index = index
                       structure = structure
                       statement = <statement> ).
@@ -629,6 +619,21 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD raise_error.
+    IF clean_code_exemption_handler->is_object_exempted( object_name = object_name object_type = object_type ) = abap_true.
+      RETURN.
+    ENDIF.
+
+    TRY.
+        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level = 0 ] ).
+        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ statement_level ] ).
+
+        IF main_app_comp <> curr_app_comp.
+          RETURN.
+        ENDIF.
+      CATCH cx_sy_itab_line_not_found
+            ycx_entry_not_found.
+    ENDTRY.
+
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                    scimessages      = scimessages
@@ -636,6 +641,7 @@ CLASS y_check_base IMPLEMENTATION.
                                                                                    code             = get_code( error_priority )
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
+
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
@@ -656,7 +662,6 @@ CLASS y_check_base IMPLEMENTATION.
               p_checksum_1 = checksum
               p_comments = pseudo_comments ).
     ENDIF.
-
 
   ENDMETHOD.
 
@@ -767,12 +772,6 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD is_structure_type_relevant.
     result = xsdbool( line_exists( relevant_structure_types[ table_line = structure-type ] ) ).
-  ENDMETHOD.
-
-
-  METHOD is_in_scope.
-    DATA(level) = ref_scan_manager->levels[ statement-level ].
-    result = ref_scan_manager->is_level_in_scope( level ).
   ENDMETHOD.
 
 
