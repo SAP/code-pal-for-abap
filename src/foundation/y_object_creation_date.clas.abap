@@ -109,7 +109,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
     INTO TABLE @DATA(creation_dates)
     WHERE progname LIKE @reposrc_prog_search_string
     AND r3state = 'A'
-    ORDER BY cdat DESCENDING.
+    ORDER BY cdat.
 
     DELETE creation_dates WHERE cdat IS INITIAL.
 
