@@ -578,7 +578,7 @@ CLASS y_check_base IMPLEMENTATION.
     ENDIF.
 
     IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = y_exemption_handler=>create( ).
+      clean_code_exemption_handler = new y_exemption_handler( ).
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.

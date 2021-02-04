@@ -1,24 +1,22 @@
 CLASS y_exemption_general DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES y_if_exemption.
-    ALIASES create FOR y_if_exemption~create.
-  PROTECTED SECTION.
+    ALIASES is_object_exempted FOR y_if_exemption~is_object_exempted.
+
   PRIVATE SECTION.
-    METHODS is_tadir_generated IMPORTING object_type   TYPE trobjtype
-                                         object_name   TYPE sobj_name
-                               RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_object_existing IMPORTING object_type   TYPE trobjtype
-                                         object_name   TYPE sobj_name
-                               RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_tadir_generated IMPORTING object_type   TYPE trobjtype
+                                               object_name   TYPE sobj_name
+                                     RETURNING VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS is_object_existing IMPORTING object_type   TYPE trobjtype
+                                               object_name   TYPE sobj_name
+                                     RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
 
 CLASS y_exemption_general IMPLEMENTATION.
 
-  METHOD y_if_exemption~create.
-    result = NEW y_exemption_general( ).
-  ENDMETHOD.
 
   METHOD y_if_exemption~is_object_exempted.
     result = xsdbool( ( is_object_existing( object_type = object_type object_name = object_name ) = abap_true ) OR
@@ -53,7 +51,13 @@ CLASS y_exemption_general IMPLEMENTATION.
 
 
   METHOD is_tadir_generated.
-    SELECT SINGLE genflag FROM tadir INTO @result
-      WHERE pgmid = 'R3TR' AND object = @object_type AND obj_name = @object_name.
+    SELECT SINGLE genflag
+    FROM tadir
+    INTO @result
+    WHERE pgmid = 'R3TR'
+    AND object = @object_type
+    AND obj_name = @object_name.
   ENDMETHOD.
+
+
 ENDCLASS.

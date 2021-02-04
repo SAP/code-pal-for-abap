@@ -1,32 +1,15 @@
-CLASS y_exemption_of_function_group DEFINITION PUBLIC CREATE PUBLIC .
+CLASS y_exemption_of_function_group DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
-    INTERFACES y_if_exemption_of_objects .
-    ALIASES create FOR y_if_exemption_of_objects~create.
+    INTERFACES y_if_exemption_of_object.
+    ALIASES is_exempted FOR y_if_exemption_of_object~is_exempted.
 
   PRIVATE SECTION.
-    METHODS is_table_maintenance_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
+    CLASS-DATA name TYPE sobj_name.
 
-    METHODS is_configuration_tablegenerate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_table_maintenance_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_configuration_tablegenerate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_rai_generate RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_rai_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
-
-    METHODS is_object_indepenent_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -34,8 +17,12 @@ ENDCLASS.
 CLASS y_exemption_of_function_group IMPLEMENTATION.
 
 
-  METHOD create.
-    result = NEW y_exemption_of_function_group( ).
+  METHOD y_if_exemption_of_object~is_exempted.
+    name = object_name.
+
+    result = xsdbool( is_table_maintenance_generate( ) = abap_true OR
+                      is_configuration_tablegenerate( ) = abap_true OR
+                      is_rai_generate( ) ).
   ENDMETHOD.
 
 
@@ -68,14 +55,6 @@ CLASS y_exemption_of_function_group IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_object_indepenent_generate.
-    DATA l_object TYPE sobj_name.
-    l_object = name.
-    result = y_exemption_general=>create( )->is_object_exempted( object_type = 'FUGR'
-                                                                 object_name = name ).
-  ENDMETHOD.
-
-
   METHOD is_rai_generate.
     CHECK name(4) = '/1RA'.
 
@@ -102,10 +81,4 @@ CLASS y_exemption_of_function_group IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD y_if_exemption_of_objects~is_exempted.
-    result = xsdbool( is_table_maintenance_generate( name ) = abap_true OR
-                      is_configuration_tablegenerate( name ) = abap_true OR
-                      is_object_indepenent_generate(  name ) = abap_true OR
-                      is_rai_generate( name ) ).
-  ENDMETHOD.
 ENDCLASS.
