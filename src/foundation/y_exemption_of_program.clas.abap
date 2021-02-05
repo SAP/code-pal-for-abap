@@ -1,57 +1,32 @@
-CLASS y_exemption_of_program DEFINITION PUBLIC CREATE PUBLIC .
+CLASS y_exemption_of_program DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
-    INTERFACES y_if_exemption_of_objects .
-    ALIASES create FOR y_if_exemption_of_objects~create.
+    INTERFACES y_if_exemption_of_object.
+    ALIASES is_exempted FOR y_if_exemption_of_object~is_exempted.
 
-  PROTECTED SECTION.
   PRIVATE SECTION.
-    METHODS is_enterprise_search_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
+    CLASS-DATA name TYPE sobj_name.
 
-    METHODS is_downport_assist_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_enterprise_search_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_downport_assist_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_fin_infotyp_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_irf_model_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_object_sw01_generate RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_fin_infotyp_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
-
-
-    METHODS is_irf_model_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
-
-
-    METHODS is_object_indepenent_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
-
-
-    METHODS is_object_sw01_generate
-      IMPORTING
-        name          TYPE sobj_name
-      RETURNING
-        VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
+CLASS y_exemption_of_program IMPLEMENTATION.
 
 
-  METHOD create.
-    result = NEW y_exemption_of_program( ).
+  METHOD y_if_exemption_of_object~is_exempted.
+    name = object_name.
+
+    result = xsdbool( is_enterprise_search_generate( ) = abap_true OR
+                      is_downport_assist_generate( ) = abap_true OR
+                      is_fin_infotyp_generate(  ) = abap_true OR
+                      is_irf_model_generate( ) = abap_true OR
+                      is_object_sw01_generate( ) ).
   ENDMETHOD.
 
 
@@ -137,13 +112,6 @@ CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_object_indepenent_generate.
-    DATA: l_object TYPE sobj_name.
-    l_object = name.
-    result = y_exemption_general=>create( )->is_object_exempted( object_type = 'PROG' object_name = name ).
-  ENDMETHOD.
-
-
   METHOD is_object_sw01_generate.
     SELECT SINGLE progname FROM tojtb  INTO @DATA(l_prog)
       WHERE progname = @name.                           "#EC CI_GENBUFF
@@ -153,12 +121,4 @@ CLASS Y_EXEMPTION_OF_PROGRAM IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD y_if_exemption_of_objects~is_exempted.
-    result = xsdbool( is_enterprise_search_generate( name ) = abap_true OR
-                      is_downport_assist_generate( name ) = abap_true OR
-                      is_fin_infotyp_generate(  name ) = abap_true OR
-                      is_irf_model_generate( name ) = abap_true OR
-                      is_object_indepenent_generate(  name ) OR
-                      is_object_sw01_generate( name )  ).
-  ENDMETHOD.
 ENDCLASS.

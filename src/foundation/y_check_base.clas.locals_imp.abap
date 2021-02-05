@@ -35,6 +35,8 @@ CLASS ltd_check_base IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
     ref_scan_manager = NEW ltd_ref_scan_manager( ).
+    ref_scan_manager->set_ref_scan( VALUE #( ) ).
+    clean_code_manager = NEW y_clean_code_manager_double( me ).
   ENDMETHOD.
 
 

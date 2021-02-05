@@ -73,7 +73,9 @@ CLASS y_unit_test_base IMPLEMENTATION.
     cut->object_type = 'CLAS'.
     cut->attributes_maintained = abap_true.
     cut->ref_scan_manager ?= NEW y_ref_scan_manager_double(  ).
+    cut->ref_scan_manager->set_ref_scan( VALUE #(  ) ).
     cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
+    cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption(  ).
   ENDMETHOD.
 
   METHOD given_code_without_issue.

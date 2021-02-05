@@ -120,8 +120,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS keyword REDEFINITION.
     METHODS set_check_message IMPORTING message TYPE itex132.
     METHODS get_class_description  RETURNING VALUE(result) TYPE string.
-    METHODS is_in_scope IMPORTING statement     TYPE sstmnt
-                        RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
@@ -143,7 +141,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
                                   RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS should_skip_type IMPORTING structure TYPE sstruc
+    METHODS should_skip_type IMPORTING structure     TYPE sstruc
                              RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_statement_type_relevant IMPORTING structure     TYPE sstruc
@@ -151,11 +149,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
-
-
-
-    METHODS get_application_component IMPORTING level         TYPE slevel
-                                      RETURNING VALUE(result) TYPE df14l-ps_posid.
 
 ENDCLASS.
 
@@ -167,10 +160,6 @@ CLASS y_check_base IMPLEMENTATION.
   METHOD check_start_conditions.
     IF ref_scan_manager->is_scan_ok( ) = abap_false.
       RAISE EXCEPTION TYPE ycx_object_not_processed.
-    ENDIF.
-
-    IF clean_code_exemption_handler->is_object_exempted( object_name = object_name object_type = object_type ) = abap_true.
-      RAISE EXCEPTION TYPE ycx_object_is_exempted.
     ENDIF.
   ENDMETHOD.
 
@@ -208,9 +197,18 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
+    DATA tadir_keys TYPE tadir.
 
-    DATA(include) = get_include( p_level = statement-level ).
-    DATA(creation_date) =  NEW y_object_creation_date( )->y_if_object_creation_date~get_program_create_date( include ).
+    DATA(level) = ref_scan_manager->levels[ statement-level ].
+
+    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
+      EXPORTING
+        iv_trdir_name = level-name
+      IMPORTING
+        es_tadir_keys = tadir_keys.
+
+    DATA(creation_date) = clean_code_manager->calculate_obj_creation_date( object_type = tadir_keys-object
+                                                                           object_name = tadir_keys-obj_name  ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
     WHERE object_creation_date <= creation_date.
@@ -247,8 +245,8 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD inspect_structures.
     LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF should_skip_test_code( <structure> ) = abap_true
-      OR should_skip_type( <structure> ) = abap_true.
+      IF should_skip_type( <structure> ) = abap_true
+      OR should_skip_test_code( <structure> ) = abap_true.
         CONTINUE.
       ENDIF.
 
@@ -263,10 +261,6 @@ CLASS y_check_base IMPLEMENTATION.
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from
     TO structure-stmnt_to.
-      IF is_in_scope( <statement> ) = abap_false.
-        CONTINUE.
-      ENDIF.
-
       inspect_tokens( index = index
                       structure = structure
                       statement = <statement> ).
@@ -584,7 +578,7 @@ CLASS y_check_base IMPLEMENTATION.
     ENDIF.
 
     IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = y_exemption_handler=>create( ).
+      clean_code_exemption_handler = new y_exemption_handler( ).
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.
@@ -634,6 +628,21 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD raise_error.
+    IF clean_code_exemption_handler->is_object_exempted( object_name = object_name object_type = object_type ) = abap_true.
+      RETURN.
+    ENDIF.
+
+    TRY.
+        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level = 0 ] ).
+        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ statement_level ] ).
+
+        IF main_app_comp <> curr_app_comp.
+          RETURN.
+        ENDIF.
+      CATCH cx_sy_itab_line_not_found
+            ycx_entry_not_found.
+    ENDTRY.
+
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                    scimessages      = scimessages
@@ -641,6 +650,7 @@ CLASS y_check_base IMPLEMENTATION.
                                                                                    code             = get_code( error_priority )
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
+
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
@@ -661,7 +671,6 @@ CLASS y_check_base IMPLEMENTATION.
               p_checksum_1 = checksum
               p_comments = pseudo_comments ).
     ENDIF.
-
 
   ENDMETHOD.
 
@@ -772,34 +781,6 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD is_structure_type_relevant.
     result = xsdbool( line_exists( relevant_structure_types[ table_line = structure-type ] ) ).
-  ENDMETHOD.
-
-
-  METHOD is_in_scope.
-    TRY.
-        DATA(main_level) = ref_scan_manager->levels[ level = 0 ].
-        DATA(main_application_component) = get_application_component( main_level ).
-      CATCH cx_sy_itab_line_not_found.
-        RETURN.
-    ENDTRY.
-
-    TRY.
-        DATA(current_level) = ref_scan_manager->levels[ statement-level ].
-        DATA(current_application_component) = get_application_component( current_level ).
-      CATCH cx_sy_itab_line_not_found.
-        RETURN.
-    ENDTRY.
-
-    result = xsdbool( current_application_component = main_application_component ).
-  ENDMETHOD.
-
-
-  METHOD get_application_component.
-    TRY.
-        result = y_code_pal_app_comp=>get( level-name ).
-      CATCH ycx_entry_not_found.
-        RETURN.
-    ENDTRY.
   ENDMETHOD.
 
 

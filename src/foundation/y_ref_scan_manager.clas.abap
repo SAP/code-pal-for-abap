@@ -7,8 +7,6 @@ CLASS y_ref_scan_manager DEFINITION PUBLIC CREATE PUBLIC.
 
 ENDCLASS.
 
-
-
 CLASS y_ref_scan_manager IMPLEMENTATION.
 
 
@@ -22,11 +20,15 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
   METHOD y_if_scan_manager~set_ref_scan.
     ref_scan = io_ref_scan.
 
-    IF ref_scan IS BOUND.
-      y_if_scan_manager~levels = ref_scan->levels.
-      y_if_scan_manager~structures = ref_scan->structures.
-      y_if_scan_manager~statements = ref_scan->statements.
-      y_if_scan_manager~tokens = ref_scan->tokens.
+    IF ref_scan IS NOT BOUND.
+      RETURN.
     ENDIF.
+
+    y_if_scan_manager~levels = ref_scan->levels.
+    y_if_scan_manager~structures = ref_scan->structures.
+    y_if_scan_manager~statements = ref_scan->statements.
+    y_if_scan_manager~tokens = ref_scan->tokens.
   ENDMETHOD.
+
+
 ENDCLASS.
