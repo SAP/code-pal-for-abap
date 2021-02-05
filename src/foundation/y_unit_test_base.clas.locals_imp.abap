@@ -1,7 +1,7 @@
 *"* use this source file for the definition and implementation of
 *"* local helper classes, interface definitions and type
 *"* declarations
-CLASS ltd_clean_code_exemption DEFINITION FOR TESTING.
+CLASS ltd_clean_code_exemption DEFINITION.
   PUBLIC SECTION.
     INTERFACES y_if_exemption.
 
