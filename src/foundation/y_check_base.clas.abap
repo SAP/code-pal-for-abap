@@ -148,6 +148,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_app_comp_in_scope
+      IMPORTING
+        level         TYPE stmnt_levl
+      RETURNING
+        value(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -631,16 +636,9 @@ CLASS y_check_base IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    TRY.
-        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level = 0 ] ).
-        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ statement_level ] ).
-
-        IF main_app_comp <> curr_app_comp.
-          RETURN.
-        ENDIF.
-      CATCH cx_sy_itab_line_not_found
-            ycx_entry_not_found.
-    ENDTRY.
+    IF is_app_comp_in_scope( statement_level ) = abap_false.
+      RETURN.
+    ENDIF.
 
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
@@ -779,6 +777,18 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD is_structure_type_relevant.
     result = xsdbool( line_exists( relevant_structure_types[ table_line = structure-type ] ) ).
+  ENDMETHOD.
+
+
+  METHOD is_app_comp_in_scope.
+    TRY.
+        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level = 0 ] ).
+        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level ] ).
+        result = xsdbool( main_app_comp = curr_app_comp ).
+      CATCH cx_sy_itab_line_not_found
+            ycx_entry_not_found.
+        result = abap_false.
+    ENDTRY.
   ENDMETHOD.
 
 
