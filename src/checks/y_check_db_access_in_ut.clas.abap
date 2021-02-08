@@ -228,7 +228,6 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
       IF result = abap_true.
         EXIT.
       ENDIF.
-
     ENDLOOP.
   ENDMETHOD.
 
