@@ -64,8 +64,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS execute_check.
 
-    METHODS check_start_conditions RAISING ycx_object_not_processed
-                                           ycx_object_is_exempted.
+    METHODS check_start_conditions RAISING ycx_object_not_processed.
 
     "! <p class="shorttext synchronized" lang="en">Validates the Customizing</p>
     "! @parameter statement | Received from inspect_tokens method.
@@ -699,8 +698,7 @@ CLASS y_check_base IMPLEMENTATION.
         ELSEIF attributes_ok = abap_true.
           profile_configurations = check_configurations.
         ENDIF.
-      CATCH ycx_object_not_processed
-            ycx_object_is_exempted.
+      CATCH ycx_object_not_processed.
         FREE ref_scan_manager.
         RETURN.
 
