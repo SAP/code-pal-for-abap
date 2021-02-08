@@ -51,6 +51,10 @@ CLASS y_exemption_handler IMPLEMENTATION.
 
 
   METHOD try_new_exemption.
+    IF lines( buffer ) > max_entries.
+      DELETE buffer FROM 1 TO max_entries / 2.
+    ENDIF.
+
     result = y_exemption_general=>is_object_exempted( object_type = object_type
                                                       object_name = object_name ).
 
@@ -63,10 +67,6 @@ CLASS y_exemption_handler IMPLEMENTATION.
     APPEND VALUE #( object_type = object_type
                     object_name = object_name
                     is_exempted = result ) TO buffer.
-
-    IF lines( buffer ) > max_entries.
-      DELETE buffer FROM 1 TO max_entries / 2.
-    ENDIF.
   ENDMETHOD.
 
 

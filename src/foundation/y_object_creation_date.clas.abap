@@ -82,6 +82,10 @@ CLASS y_object_creation_date IMPLEMENTATION.
   METHOD try_new_created_on.
     DATA created_on_dates TYPE created_on_dates.
 
+    IF lines( buffer ) > max_entries.
+      DELETE buffer FROM 1 TO max_entries / 2.
+    ENDIF.
+
     APPEND get_db_tadir_data( object_type = object_type object_name = object_name ) TO created_on_dates.
 
     DATA(repo_access) = COND #( WHEN object_type = 'FUGR' THEN convert_fugr_for_db_access( object_name )
@@ -103,10 +107,6 @@ CLASS y_object_creation_date IMPLEMENTATION.
     APPEND VALUE #( object_type = object_type
                     object_name = object_name
                     created_on = result ) TO buffer.
-
-    IF lines( buffer ) > max_entries.
-      DELETE buffer FROM 1 TO max_entries / 2.
-    ENDIF.
   ENDMETHOD.
 
 
