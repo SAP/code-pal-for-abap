@@ -326,7 +326,7 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_TEXT_START_DATE</NAME>
-       <TEXT>*Validity_Period:________________</TEXT>
+       <TEXT>*Validity_Period___________FROM:_</TEXT>
        <LINE>003</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>033</LENGTH>
@@ -358,7 +358,7 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_TEXT_END_DATE</NAME>
-       <TEXT>*TO</TEXT>
+       <TEXT>TO:</TEXT>
        <LINE>003</LINE>
        <COLUMN>046</COLUMN>
        <LENGTH>003</LENGTH>
@@ -444,7 +444,7 @@
        <LENGTH>001</LENGTH>
        <VISLENGTH>010</VISLENGTH>
        <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
+       <FORMAT>CUKY</FORMAT>
        <INPUT_FLD>X</INPUT_FLD>
        <OUTPUT_FLD>X</OUTPUT_FLD>
        <REQU_ENTRY>O</REQU_ENTRY>
@@ -484,7 +484,7 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_ON_PRODCODE</NAME>
-       <TEXT>Apply_on_Productive_Code_________</TEXT>
+       <TEXT>Apply_on_Productive_Code:________</TEXT>
        <LINE>007</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>033</LENGTH>
@@ -513,7 +513,7 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_ON_TESTCODE</NAME>
-       <TEXT>Apply_on_Testcode________________</TEXT>
+       <TEXT>Apply_on_Testcode:_______________</TEXT>
        <LINE>008</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>033</LENGTH>
@@ -836,48 +836,36 @@
       <CODE>ENTR_200</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
-      <TEXT_NAME>ICON_OKAY</TEXT_NAME>
-      <ICON_ID>@0V@</ICON_ID>
       <FUN_TEXT>Ok</FUN_TEXT>
      </RSMPE_FUNT>
      <RSMPE_FUNT>
       <CODE>ENTR_300</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
-      <TEXT_NAME>ICON_OKAY</TEXT_NAME>
-      <ICON_ID>@0V@</ICON_ID>
       <FUN_TEXT>Ok</FUN_TEXT>
      </RSMPE_FUNT>
      <RSMPE_FUNT>
       <CODE>ENTR_400</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
-      <TEXT_NAME>ICON_OKAY</TEXT_NAME>
-      <ICON_ID>@0V@</ICON_ID>
       <FUN_TEXT>Ok</FUN_TEXT>
      </RSMPE_FUNT>
      <RSMPE_FUNT>
       <CODE>ENTR_500</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
-      <TEXT_NAME>ICON_OKAY</TEXT_NAME>
-      <ICON_ID>@0V@</ICON_ID>
       <FUN_TEXT>Ok</FUN_TEXT>
      </RSMPE_FUNT>
      <RSMPE_FUNT>
       <CODE>ENTR_600</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
-      <TEXT_NAME>ICON_OKAY</TEXT_NAME>
-      <ICON_ID>@0V@</ICON_ID>
       <FUN_TEXT>Ok</FUN_TEXT>
      </RSMPE_FUNT>
      <RSMPE_FUNT>
       <CODE>ESC</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
-      <TEXT_NAME>ICON_CANCEL</TEXT_NAME>
-      <ICON_ID>@0W@</ICON_ID>
       <FUN_TEXT>Cancel</FUN_TEXT>
      </RSMPE_FUNT>
      <RSMPE_FUNT>
@@ -890,8 +878,6 @@
       <CODE>PICK</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
-      <TEXT_NAME>ICON_CHANGE</TEXT_NAME>
-      <ICON_ID>@0Z@</ICON_ID>
       <FUN_TEXT>Choose</FUN_TEXT>
       <PATH>S</PATH>
      </RSMPE_FUNT>

@@ -20,6 +20,10 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
   METHOD y_if_scan_manager~set_ref_scan.
     ref_scan = io_ref_scan.
 
+    IF ref_scan IS NOT BOUND.
+      RETURN.
+    ENDIF.
+
     y_if_scan_manager~levels = ref_scan->levels.
     y_if_scan_manager~structures = ref_scan->structures.
     y_if_scan_manager~statements = ref_scan->statements.

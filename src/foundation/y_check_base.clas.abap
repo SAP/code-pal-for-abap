@@ -64,8 +64,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS execute_check.
 
-    METHODS check_start_conditions RAISING ycx_object_not_processed
-                                           ycx_object_is_exempted.
+    METHODS check_start_conditions RAISING ycx_object_not_processed.
 
     "! <p class="shorttext synchronized" lang="en">Validates the Customizing</p>
     "! @parameter statement | Received from inspect_tokens method.
@@ -120,14 +119,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS keyword REDEFINITION.
     METHODS set_check_message IMPORTING message TYPE itex132.
     METHODS get_class_description  RETURNING VALUE(result) TYPE string.
-    METHODS is_in_scope IMPORTING statement     TYPE sstmnt
-                        RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS instantiate_objects.
-    METHODS enable_rfc.
 
     METHODS is_skipped IMPORTING config        TYPE y_if_clean_code_manager=>check_configuration
                                  error_count   TYPE int4
@@ -144,7 +140,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
                                   RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS should_skip_type IMPORTING structure TYPE sstruc
+    METHODS should_skip_type IMPORTING structure     TYPE sstruc
                              RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_statement_type_relevant IMPORTING structure     TYPE sstruc
@@ -153,10 +149,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
 
-
-
-    METHODS get_application_component IMPORTING level         TYPE slevel
-                                      RETURNING VALUE(result) TYPE df14l-ps_posid.
+    METHODS is_app_comp_in_scope IMPORTING level TYPE stmnt_levl
+                                 RETURNING value(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -169,16 +163,11 @@ CLASS y_check_base IMPLEMENTATION.
     IF ref_scan_manager->is_scan_ok( ) = abap_false.
       RAISE EXCEPTION TYPE ycx_object_not_processed.
     ENDIF.
-
-    IF clean_code_exemption_handler->is_object_exempted( object_name = object_name object_type = object_type ) = abap_true.
-      RAISE EXCEPTION TYPE ycx_object_is_exempted.
-    ENDIF.
   ENDMETHOD.
 
 
   METHOD constructor.
     super->constructor( ).
-    enable_rfc( ).
 
     description = get_class_description(  ).
     category = 'Y_CATEGORY_CODE_PAL'.
@@ -210,9 +199,18 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
+    DATA tadir_keys TYPE tadir.
 
-    DATA(include) = get_include( p_level = statement-level ).
-    DATA(creation_date) =  NEW y_object_creation_date( )->y_if_object_creation_date~get_program_create_date( include ).
+    DATA(level) = ref_scan_manager->levels[ statement-level ].
+
+    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
+      EXPORTING
+        iv_trdir_name = level-name
+      IMPORTING
+        es_tadir_keys = tadir_keys.
+
+    DATA(creation_date) = clean_code_manager->calculate_obj_creation_date( object_type = tadir_keys-object
+                                                                           object_name = tadir_keys-obj_name  ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
     WHERE object_creation_date <= creation_date.
@@ -249,8 +247,8 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD inspect_structures.
     LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF should_skip_test_code( <structure> ) = abap_true
-      OR should_skip_type( <structure> ) = abap_true.
+      IF should_skip_type( <structure> ) = abap_true
+      OR should_skip_test_code( <structure> ) = abap_true.
         CONTINUE.
       ENDIF.
 
@@ -265,10 +263,6 @@ CLASS y_check_base IMPLEMENTATION.
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from
     TO structure-stmnt_to.
-      IF is_in_scope( <statement> ) = abap_false.
-        CONTINUE.
-      ENDIF.
-
       inspect_tokens( index = index
                       structure = structure
                       statement = <statement> ).
@@ -586,7 +580,7 @@ CLASS y_check_base IMPLEMENTATION.
     ENDIF.
 
     IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = y_exemption_handler=>create( ).
+      clean_code_exemption_handler = new y_exemption_handler( ).
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.
@@ -636,6 +630,14 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD raise_error.
+    IF clean_code_exemption_handler->is_object_exempted( object_name = object_name object_type = object_type ) = abap_true.
+      RETURN.
+    ENDIF.
+
+    IF is_app_comp_in_scope( statement_level ) = abap_false.
+      RETURN.
+    ENDIF.
+
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                    scimessages      = scimessages
@@ -643,6 +645,7 @@ CLASS y_check_base IMPLEMENTATION.
                                                                                    code             = get_code( error_priority )
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
+
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
@@ -663,7 +666,6 @@ CLASS y_check_base IMPLEMENTATION.
               p_checksum_1 = checksum
               p_comments = pseudo_comments ).
     ENDIF.
-
 
   ENDMETHOD.
 
@@ -692,8 +694,7 @@ CLASS y_check_base IMPLEMENTATION.
         ELSEIF attributes_ok = abap_true.
           profile_configurations = check_configurations.
         ENDIF.
-      CATCH ycx_object_not_processed
-            ycx_object_is_exempted.
+      CATCH ycx_object_not_processed.
         FREE ref_scan_manager.
         RETURN.
 
@@ -706,19 +707,6 @@ CLASS y_check_base IMPLEMENTATION.
     execute_check( ).
 
     FREE ref_scan_manager.
-  ENDMETHOD.
-
-
-  METHOD enable_rfc.
-    ASSIGN me->('remote_rfc_enabled') TO FIELD-SYMBOL(<remote_rfc_enabled>).
-    IF sy-subrc = 0.
-      <remote_rfc_enabled> = abap_true.
-    ENDIF.
-    ASSIGN me->('remote_enabled') TO FIELD-SYMBOL(<remote_enabled>).
-    IF sy-subrc = 0.
-      <remote_enabled> = abap_true.
-    ENDIF.
-    UNASSIGN: <remote_rfc_enabled>, <remote_enabled>.
   ENDMETHOD.
 
 
@@ -790,30 +778,14 @@ CLASS y_check_base IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_in_scope.
+  METHOD is_app_comp_in_scope.
     TRY.
-        DATA(main_level) = ref_scan_manager->levels[ level = 0 ].
-        DATA(main_application_component) = get_application_component( main_level ).
-      CATCH cx_sy_itab_line_not_found.
-        RETURN.
-    ENDTRY.
-
-    TRY.
-        DATA(current_level) = ref_scan_manager->levels[ statement-level ].
-        DATA(current_application_component) = get_application_component( current_level ).
-      CATCH cx_sy_itab_line_not_found.
-        RETURN.
-    ENDTRY.
-
-    result = xsdbool( current_application_component = main_application_component ).
-  ENDMETHOD.
-
-
-  METHOD get_application_component.
-    TRY.
-        result = y_code_pal_app_comp=>get( level-name ).
-      CATCH ycx_entry_not_found.
-        RETURN.
+        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level = 0 ] ).
+        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level ] ).
+        result = xsdbool( main_app_comp = curr_app_comp ).
+      CATCH cx_sy_itab_line_not_found
+            ycx_entry_not_found.
+        result = abap_false.
     ENDTRY.
   ENDMETHOD.
 
