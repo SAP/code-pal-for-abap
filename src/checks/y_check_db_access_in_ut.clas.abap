@@ -14,14 +14,14 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
                END OF risk_level.
 
     CONSTANTS: BEGIN OF check_for,
-                 alter       TYPE char40 VALUE 'ALTER',
-                 delete      TYPE char40 VALUE 'DELETE',
-                 update      TYPE char40 VALUE 'UPDATE',
-                 modify      TYPE char40 VALUE 'MODIFY',
-                 insert_into TYPE char40 VALUE 'INSERT',
-                 select      TYPE char40 VALUE 'SELECT',
-                 commit      TYPE char40 VALUE 'COMMIT',
-                 rollback    TYPE char40 VALUE 'ROLLBACK',
+                 alter    TYPE char40 VALUE 'ALTER',
+                 delete   TYPE char40 VALUE 'DELETE',
+                 update   TYPE char40 VALUE 'UPDATE',
+                 modify   TYPE char40 VALUE 'MODIFY',
+                 insert   TYPE char40 VALUE 'INSERT',
+                 select   TYPE char40 VALUE 'SELECT',
+                 commit   TYPE char40 VALUE 'COMMIT',
+                 rollback TYPE char40 VALUE 'ROLLBACK',
                END OF check_for.
 
     CONSTANTS: BEGIN OF framework,
@@ -63,11 +63,15 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
 
     METHODS get_forbidden_tokens IMPORTING class_name    TYPE string
                                  RETURNING VALUE(result) TYPE y_char255_tab.
+
+    METHODS has_ddic_itab_same_syntax IMPORTING token         TYPE stokesx
+                                      RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
 
-CLASS y_check_db_access_in_ut IMPLEMENTATION.
+CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -91,11 +95,17 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    add_line_to_defined_classes( statement = statement
-                                 structure = structure ).
-    check_class( index = index
-                 statement = statement
-                 structure = structure ).
+    CASE structure-stmnt_type.
+      WHEN scan_struc_stmnt_type-class_definition.
+        add_line_to_defined_classes( statement = statement
+                                     structure = structure ).
+
+      WHEN scan_struc_stmnt_type-class_implementation.
+        check_class( index = index
+                     statement = statement
+                     structure = structure ).
+
+    ENDCASE.
   ENDMETHOD.
 
 
@@ -110,6 +120,10 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
     DATA(second_token) = get_token_abs( statement-from + 1 ).
     DATA(third_token) = get_token_abs( statement-from + 2 ).
 
+    IF second_token = 'INTO'.
+      RETURN.
+    ENDIF.
+
     DATA(table) = COND #( WHEN second_token = 'FROM' THEN third_token
                                                      ELSE second_token ).
 
@@ -118,62 +132,55 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD add_line_to_defined_classes.
-    CHECK structure-stmnt_type = scan_struc_stmnt_type-class_definition.
+    DATA(class_config) = VALUE properties( name = get_class_name( structure ) ).
 
-    DATA class_config TYPE properties.
-    class_config-name = get_class_name( structure ).
-
-    TRY.
-        DATA(return_or_run) = excepted_classes[ name = class_config-name ].
-        return_or_run = defined_classes[ name = class_config-name ].
-        RETURN.
-      CATCH cx_sy_itab_line_not_found.
-    ENDTRY.
+    IF line_exists( excepted_classes[ name = class_config-name ] )
+    OR line_exists( defined_classes[ name = class_config-name ] ).
+      RETURN.
+    ENDIF.
 
     class_config-risk_level = get_risk_level( statement ).
 
-    IF is_part_of_framework( structure ) = abap_false.
-      APPEND class_config TO defined_classes.
-    ELSE.
+    IF is_part_of_framework( structure ) = abap_true.
       APPEND class_config TO excepted_classes.
+    ELSE.
+      APPEND class_config TO defined_classes.
     ENDIF.
   ENDMETHOD.
 
 
   METHOD check_class.
-    CHECK structure-stmnt_type = scan_struc_stmnt_type-class_implementation.
-
     IF NOT line_exists( defined_classes[ name = get_class_name( structure ) ] ).
       RETURN.
     ENDIF.
 
     DATA(forbidden_tokens) = get_forbidden_tokens( get_class_name( structure ) ).
 
-    IF is_internal_table( statement ) = abap_true
-    OR get_token_abs( statement-from + 1 ) = '='.
+    DATA(token) = ref_scan_manager->tokens[ statement-from ].
+
+    IF NOT line_exists( forbidden_tokens[ table_line = token-str ] ).
       RETURN.
     ENDIF.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-from TO statement-from.
+    IF has_ddic_itab_same_syntax( token ) = abap_true
+    AND is_internal_table( statement ) = abap_true.
+      RETURN.
+    ENDIF.
 
-      IF NOT line_exists( forbidden_tokens[ table_line = <token>-str ] ).
-        CONTINUE.
-      ENDIF.
+    IF ref_scan_manager->tokens[ statement-from + 1 ]-str = '='.
+      RETURN.
+    ENDIF.
 
-      DATA(check_configuration) = detect_check_configuration( statement ).
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
-      IF check_configuration IS INITIAL.
-        CONTINUE.
-      ENDIF.
+    IF check_configuration IS INITIAL.
+      RETURN.
+    ENDIF.
 
-      raise_error( statement_level = statement-level
-                   statement_index = index
-                   statement_from  = statement-from
-                   error_priority  = check_configuration-prio ).
-
-    ENDLOOP.
-
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from  = statement-from
+                 error_priority  = check_configuration-prio ).
   ENDMETHOD.
 
 
@@ -196,7 +203,7 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
                           ( check_for-delete )
                           ( check_for-update )
                           ( check_for-modify )
-                          ( check_for-insert_into )
+                          ( check_for-insert )
                           ( check_for-select )
                           ( check_for-commit )
                           ( check_for-rollback ) ).
@@ -205,15 +212,23 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
 
   METHOD is_part_of_framework.
-    DATA(stmnt) = ref_scan_manager->statements[ structure-stmnt_from ].
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-       FROM stmnt-from TO stmnt-to
+    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+      FROM structure-stmnt_from TO structure-stmnt_to.
+
+      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+       FROM <statement>-from TO <statement>-to
        WHERE str = framework-qsql_if OR
              str = framework-qsql_cl OR
              str = framework-cds_if OR
              str = framework-cds_cl.
-      result = abap_true.
-      EXIT.
+        result = abap_true.
+        EXIT.
+      ENDLOOP.
+
+      IF result = abap_true.
+        EXIT.
+      ENDIF.
+
     ENDLOOP.
   ENDMETHOD.
 
@@ -243,5 +258,13 @@ CLASS y_check_db_access_in_ut IMPLEMENTATION.
 
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_implementation ) ).
     super->inspect_structures( ).
+  ENDMETHOD.
+
+
+  METHOD has_ddic_itab_same_syntax.
+    result = xsdbool(  token-str = check_for-modify
+                    OR token-str = check_for-update
+                    OR token-str = check_for-delete
+                    OR token-str = check_for-insert ).
   ENDMETHOD.
 ENDCLASS.
