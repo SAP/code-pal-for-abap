@@ -188,7 +188,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     DATA risk_lvl TYPE properties-risk_level.
     TRY.
         risk_lvl = defined_classes[ name = class_name ]-risk_level.
-      CATCH cx_sy_itab_line_not_found .
+      CATCH cx_sy_itab_line_not_found.
         risk_lvl = space.
     ENDTRY.
 
