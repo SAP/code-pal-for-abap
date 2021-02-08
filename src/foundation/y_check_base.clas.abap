@@ -148,11 +148,9 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_app_comp_in_scope
-      IMPORTING
-        level         TYPE stmnt_levl
-      RETURNING
-        value(result) TYPE abap_bool.
+
+    METHODS is_app_comp_in_scope IMPORTING level TYPE stmnt_levl
+                                 RETURNING value(result) TYPE abap_bool.
 
 ENDCLASS.
 
