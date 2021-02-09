@@ -31,13 +31,19 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
                  cds_cl  TYPE char40 VALUE 'CL_CDS_TEST_ENVIRONMENT',
                END OF framework.
 
+    CONSTANTS: BEGIN OF keys,
+                 from  TYPE char40 VALUE 'FROM',
+                 into  TYPE char40 VALUE 'INTO',
+                 class TYPE char40 VALUE 'CLASS',
+                 table TYPE char4 VALUE 'TABL',
+               END OF keys.
+
     TYPES: BEGIN OF properties,
              name       TYPE string,
              risk_level TYPE string,
            END OF properties.
 
     DATA defined_classes TYPE STANDARD TABLE OF properties.
-    DATA excepted_classes TYPE STANDARD TABLE OF properties.
 
     METHODS get_class_name IMPORTING structure     TYPE sstruc
                            RETURNING VALUE(result) TYPE string
@@ -110,8 +116,13 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD is_persistent_object.
-    cl_abap_structdescr=>describe_by_name( EXPORTING p_name = obj_name
-                                           EXCEPTIONS OTHERS = 1 ).
+    DATA(upper_name) = to_upper( obj_name ).
+    SELECT * FROM tadir
+      WHERE obj_name = @upper_name
+        AND object = @keys-table
+        AND delflag = @space
+      INTO TABLE @DATA(tmp).
+
     result = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
 
@@ -120,41 +131,39 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     DATA(second_token) = get_token_abs( statement-from + 1 ).
     DATA(third_token) = get_token_abs( statement-from + 2 ).
 
-    IF second_token = 'INTO'.
+    IF second_token = keys-into.
       RETURN.
     ENDIF.
 
-    DATA(table) = COND #( WHEN second_token = 'FROM' THEN third_token
-                                                     ELSE second_token ).
+    DATA(table_name) = COND #( WHEN second_token = keys-from THEN third_token
+                                                             ELSE second_token ).
 
-    result = xsdbool( is_persistent_object( table ) = abap_false ).
+    result = xsdbool( is_persistent_object( table_name ) = abap_false ).
   ENDMETHOD.
 
 
   METHOD add_line_to_defined_classes.
     DATA(class_config) = VALUE properties( name = get_class_name( structure ) ).
 
-    IF line_exists( excepted_classes[ name = class_config-name ] )
-    OR line_exists( defined_classes[ name = class_config-name ] ).
+    IF line_exists( defined_classes[ name = class_config-name ] ).
       RETURN.
     ENDIF.
 
     class_config-risk_level = get_risk_level( statement ).
 
-    IF is_part_of_framework( structure ) = abap_true.
-      APPEND class_config TO excepted_classes.
-    ELSE.
+    IF is_part_of_framework( structure ) = abap_false.
       APPEND class_config TO defined_classes.
     ENDIF.
   ENDMETHOD.
 
 
   METHOD check_class.
-    IF NOT line_exists( defined_classes[ name = get_class_name( structure ) ] ).
+    DATA(class_name) = get_class_name( structure ).
+    IF NOT line_exists( defined_classes[ name = class_name ] ).
       RETURN.
     ENDIF.
 
-    DATA(forbidden_tokens) = get_forbidden_tokens( get_class_name( structure ) ).
+    DATA(forbidden_tokens) = get_forbidden_tokens( class_name ).
 
     DATA(token) = ref_scan_manager->tokens[ statement-from ].
 
@@ -163,7 +172,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     ENDIF.
 
     IF has_ddic_itab_same_syntax( token ) = abap_true
-    AND is_internal_table( statement ) = abap_true.
+     AND is_internal_table( statement ) = abap_true.
       RETURN.
     ENDIF.
 
@@ -222,19 +231,16 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
              str = framework-cds_if OR
              str = framework-cds_cl.
         result = abap_true.
-        EXIT.
+        RETURN.
       ENDLOOP.
 
-      IF result = abap_true.
-        EXIT.
-      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
 
   METHOD get_class_name.
     DATA(index) = ref_scan_manager->statements[ structure-stmnt_from ]-from.
-    IF get_token_abs( index ) = 'CLASS'.
+    IF get_token_abs( index ) = keys-class.
       result = get_token_abs( index + 1 ).
     ENDIF.
   ENDMETHOD.
