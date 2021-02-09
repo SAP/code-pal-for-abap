@@ -785,7 +785,7 @@ CLASS y_check_base IMPLEMENTATION.
         result = xsdbool( main_app_comp = curr_app_comp ).
       CATCH cx_sy_itab_line_not_found
             ycx_entry_not_found.
-        result = abap_false.
+        result = abap_true.
     ENDTRY.
   ENDMETHOD.
 
