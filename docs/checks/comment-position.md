@@ -10,6 +10,9 @@ This check searches for "Quote comments" which are not indented along with the s
 
 You should indent the comments along with the statements they are commenting.
 
+### What to do in case of exception?
+There is no exception for this check since it works as an indicator only. Thus, it is also not possible to suppress its findings.
+
 ### Example
 
 Before the check:
