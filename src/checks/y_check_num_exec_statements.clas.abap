@@ -1,41 +1,25 @@
-CLASS y_check_num_exec_statements DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_num_exec_statements DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
+    METHODS constructor.
 
-    METHODS constructor .
   PROTECTED SECTION.
-
-    METHODS inspect_tokens
-        REDEFINITION .
+    METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-
-    DATA no_exec_statements TYPE i .
+    DATA no_exec_statements TYPE i.
     DATA statement_for_message TYPE sstmnt.
 
-    METHODS count_statements
-      CHANGING
-        !no_exec_statements TYPE i .
+    METHODS count_statements  CHANGING no_exec_statements TYPE i.
 
-    METHODS determine_position
-      IMPORTING
-        !type         TYPE flag
-        !index        TYPE i
-      RETURNING
-        VALUE(result) TYPE int4 .
+    METHODS determine_position IMPORTING type         TYPE flag
+                                         index        TYPE i
+                               RETURNING  VALUE(result) TYPE int4.
 
-    METHODS is_keyword_exempt
-      RETURNING
-        VALUE(result) TYPE abap_bool .
+    METHODS is_keyword_exempt RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_statement_exempt
-      IMPORTING
-        !type         TYPE stmnt_type
-      RETURNING
-        VALUE(result) TYPE abap_bool .
+    METHODS is_statement_exempt IMPORTING type         TYPE stmnt_type
+                                RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -85,9 +69,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
       no_exec_statements = 0.
     ENDIF.
 
-    count_statements(
-      CHANGING
-        no_exec_statements = no_exec_statements ).
+    count_statements( CHANGING no_exec_statements = no_exec_statements ).
 
     IF index = structure-stmnt_to.
       DATA(check_configuration) = detect_check_configuration( error_count = no_exec_statements

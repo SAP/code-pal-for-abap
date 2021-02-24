@@ -1,16 +1,16 @@
-class Y_LIST definition
-  public
-  create public .
+CLASS y_list DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces Y_IF_LIST .
+    INTERFACES y_if_list .
 
-  methods CONSTRUCTOR
-    importing
-      !TYPE_NAME type STRING
-    raising
-      CX_SY_CREATE_DATA_ERROR .
+    METHODS constructor
+      IMPORTING
+        !type_name TYPE string
+      RAISING
+        cx_sy_create_data_error .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -125,6 +125,7 @@ CLASS Y_LIST IMPLEMENTATION.
     SORT <table> ASCENDING.
     UNASSIGN <table>.
   ENDMETHOD.
+
 
   METHOD y_if_list~get_line_index.
     FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.

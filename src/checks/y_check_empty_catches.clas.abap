@@ -1,18 +1,13 @@
-CLASS y_check_empty_catches DEFINITION
-  PUBLIC
-  INHERITING FROM y_check_base
-  CREATE PUBLIC .
-
+CLASS y_check_empty_catches DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-
     METHODS constructor .
-  PROTECTED SECTION.
 
+  PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION .
+
   PRIVATE SECTION.
-    METHODS get_next_token_from_index
-      IMPORTING index         TYPE i
-      RETURNING VALUE(result) TYPE stokesx.
+    METHODS get_next_token_from_index IMPORTING index         TYPE i
+                                      RETURNING VALUE(result) TYPE stokesx.
 
 ENDCLASS.
 
@@ -35,7 +30,7 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
 
 
   METHOD get_next_token_from_index.
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM index WHERE type EQ 'I'.
       IF result IS INITIAL.
         result = <token>.

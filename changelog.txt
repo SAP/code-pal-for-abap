@@ -12,6 +12,41 @@ Upgrade Note
 ------------------
 Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective code inspector variant (SCI transaction)
 
+2021-02-24 v1.12.3
+------------------
+* Object Creation Date from TRDIR table
+* Reversal Thresholds Validation
+
+2021-02-09 v1.12.2
+------------------
+* Code Pal Exempts All the Sub-Objects (#326)
+
+2021-02-09 v1.12.1
+------------------
+* Application Component Scan (#325)
+
+2021-02-08 v1.12.0
+------------------
++ Performance Improvements (#318)
+- Shared Memory (#319)
+* Performance Issues (#317)
+* Profile Tool - UX Refinement (#313)
+- RFC Disabled (#305)
+
+2021-01-22 v1.11.1
+------------------
+* Dump in DB access in UT (#309)
+
+2021-01-18 v1.11.0
+------------------
+* CHECK position after comments (#301)
+* Modify an Internal Table is no DB Access (#300)
++ Enhancing coverage to run for multiple objects (#294)
+! Disabling profiles when the API executes the regression (#293)
+* DELETE from internal table gives a "Database access" prio 1 error (#290)
+! The pseudo comment position of the Form Routine Check was moved from the 'ENDFORM' to 'FORM' statement
+! The pseudo comment position of the Number of Public Attributes was moved from the 'CLASS DEFINITION.' to 'PUBLIC SECTION' statement
+
 2020-12-14 v1.10.0
 ------------------
 + New Check: Scope of the Variable (#276)

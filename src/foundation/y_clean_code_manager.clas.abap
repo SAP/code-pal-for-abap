@@ -3,11 +3,11 @@ CLASS y_clean_code_manager DEFINITION PUBLIC CREATE PUBLIC.
     INTERFACES y_if_clean_code_manager.
     ALIASES calculate_obj_creation_date FOR y_if_clean_code_manager~calculate_obj_creation_date.
     ALIASES read_check_customizing FOR y_if_clean_code_manager~read_check_customizing.
-  PROTECTED SECTION.
+
   PRIVATE SECTION.
-    DATA object_creation_date TYPE REF TO y_if_object_creation_date.
     METHODS determine_profiles RETURNING VALUE(result) TYPE string_table
                                RAISING ycx_no_check_customizing.
+
     METHODS determine_checks IMPORTING profile TYPE ycicc_profile
                                        checkid TYPE seoclsname
                              RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configurations
@@ -76,20 +76,8 @@ CLASS y_clean_code_manager IMPLEMENTATION.
 
 
   METHOD calculate_obj_creation_date.
-    IF object_creation_date IS NOT BOUND.
-      object_creation_date = NEW y_object_creation_date( ).
-    ENDIF.
-    CASE object_type.
-      WHEN 'INTF'.
-        result = object_creation_date->get_interface_create_date( object_name ).
-      WHEN 'CLAS'.
-        result = object_creation_date->get_class_create_date( object_name ).
-      WHEN 'FUGR'.
-        result = object_creation_date->get_function_group_create_date( object_name ).
-      WHEN 'PROG'.
-        result = object_creation_date->get_program_create_date( object_name ).
-      WHEN OTHERS.
-    ENDCASE.
+    result = y_object_creation_date=>get_created_on( object_type = object_type
+                                                     object_name = object_name ).
   ENDMETHOD.
 
 

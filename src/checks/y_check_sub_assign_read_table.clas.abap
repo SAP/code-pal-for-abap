@@ -1,16 +1,20 @@
 CLASS y_check_sub_assign_read_table DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-    METHODS constructor .
+    METHODS constructor.
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
     METHODS is_read_table IMPORTING statement     TYPE sstmnt
                           RETURNING VALUE(result) TYPE abap_bool.
+
     METHODS extract_fieldname IMPORTING statement     TYPE sstmnt
                               RETURNING VALUE(result) TYPE string.
+
     METHODS has_subsequent_read IMPORTING statement     TYPE sstmnt
                                           fieldname     TYPE string
-                                RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL
+                                RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -42,7 +46,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
     DATA(position) = index.
 
-    LOOP AT ref_scan_manager->get_statements( ) ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM index TO structure-stmnt_to.
 
       IF is_read_table( <statement> ) = abap_false.
@@ -81,7 +85,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
 
   METHOD extract_fieldname.
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE str CP 'FIELD-SYMBOL(<*>)'.
       result = <token>-str.
@@ -93,7 +97,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
 
   METHOD has_subsequent_read.
-    DATA(tokens) = ref_scan_manager->get_tokens( ).
+    DATA(tokens) = ref_scan_manager->tokens.
     LOOP AT tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF <token>-str <> 'INTO'.

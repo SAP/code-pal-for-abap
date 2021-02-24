@@ -3,23 +3,14 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>YCX_OBJECT_IS_EXEMPTED</CLSNAME>
+    <CLSNAME>Y_CODE_PAL_APP_COMP</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Object is exempted</DESCRIPT>
-    <CATEGORY>40</CATEGORY>
+    <DESCRIPT>Application Component</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CLSNAME>YCX_OBJECT_IS_EXEMPTED</CLSNAME>
-     <CMPNAME>CONSTRUCTOR</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>CONSTRUCTOR</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>

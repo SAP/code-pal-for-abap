@@ -180,6 +180,9 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
         RETURNING VALUE(result) TYPE ytab_checks
         RAISING   ycx_entry_not_found.
 
+    CLASS-METHODS switch_toolbar_activation
+      RAISING cx_failed.
+
     CLASS-METHODS:
       call_f4help
         IMPORTING referenced_field_name TYPE dfies-fieldname
@@ -287,6 +290,10 @@ CLASS lcl_profile_events IMPLEMENTATION.
   METHOD y_if_alv_events~handle_selection_changed.
     lcl_util=>refresh_checks( ).
     lcl_util=>refresh_delegates( ).
+    TRY.
+        lcl_util=>switch_toolbar_activation( ).
+      CATCH cx_failed.
+    ENDTRY.
   ENDMETHOD.
 
   METHOD y_if_alv_events~handle_function_selected.
@@ -419,7 +426,7 @@ CLASS lcl_util IMPLEMENTATION.
         profiles_tree = y_alv_tree_control=>create( alv_header_text = 'Profiles'(002)
                                                     dynpro_nr       = '0100'
                                                     docking_side    = cl_gui_docking_container=>align_at_left
-                                                    ratio           = 16
+                                                    ratio           = 21
                                                     type_name       = profile_manager->get_profiles_type_name( )
                                                     sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'USERNAME' up = abap_true )
                                                                                         ( spos = 2 fieldname = 'PROFILE' up = abap_true ) )
@@ -544,6 +551,8 @@ CLASS lcl_util IMPLEMENTATION.
 
         checks_tree->init_display( ).
 
+        checks_tree->deactivate_toolbar( ).
+
       CATCH cx_failed
             cx_sy_create_data_error.
         LEAVE TO SCREEN 0.
@@ -580,6 +589,8 @@ CLASS lcl_util IMPLEMENTATION.
 
 
         delegates_tree->init_display( ).
+
+        delegates_tree->deactivate_toolbar( ).
 
       CATCH cx_failed
             cx_sy_create_data_error.
@@ -640,6 +651,17 @@ CLASS lcl_util IMPLEMENTATION.
     ENDIF.
     result = <line>.
     UNASSIGN <line>.
+  ENDMETHOD.
+
+  METHOD switch_toolbar_activation.
+    TRY.
+        get_selected_profile( ).
+        checks_tree->activate_toolbar( ).
+        delegates_tree->activate_toolbar( ).
+      CATCH ycx_entry_not_found.
+        checks_tree->deactivate_toolbar( ).
+        delegates_tree->deactivate_toolbar( ).
+    ENDTRY.
   ENDMETHOD.
 
   METHOD refresh_checks.

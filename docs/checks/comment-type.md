@@ -1,16 +1,17 @@
-# code pal for ABAP
-
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Comment Type](comment-type.md)
 
 ## Comment Type
 
 ### What is the Intent of the Check?
 
-Comments with `"`, not with `*`, because asterisked comments tend to indent to weird places.
+This check searches for comments in the code marked up with `"` instead of with `*`. Comments marked up with an asterisk tend to be indented to weird/uncontrolled places.
 
 ### How to solve the issue?
 
-Replacing the comment type from `*` to `"`.
+You should replace the comment sign from `*` to `"`.
+
+### What to do in case of exception?
+There is no exception for this check since it works as an indicator only. Thus, it is also not possible to suppress its findings.
 
 ### Example
 
@@ -38,4 +39,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#comment-with--not-with-)
+* [ABAP Styleguides on Clean Code: Comment sign](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#comment-with--not-with-)

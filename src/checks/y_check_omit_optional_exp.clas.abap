@@ -1,8 +1,10 @@
-CLASS y_check_omit_optional_exp DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_omit_optional_exp DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor.
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+
   PRIVATE SECTION.
     METHODS has_optional_exporting IMPORTING statement TYPE sstmnt
                                    RETURNING VALUE(result) TYPE abap_bool.
@@ -42,7 +44,7 @@ CLASS y_check_omit_optional_exp IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD has_optional_exporting.
-    LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF <token>-str = 'EXPORTING'.
           result = abap_true.

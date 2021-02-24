@@ -166,6 +166,9 @@ CLASS ltc_risk_harmless IMPLEMENTATION.
       ( '     INSERT profile INTO TABLE profiles. ' )
       ( '     MODIFY profiles FROM profile INDEX 1. ' )
       ( '     DELETE profiles FROM profile. ' )
+      ( '     DELETE profiles INDEX lines( profiles ). ' )
+
+      ( '     MODIFY profiles FROM VALUE #( ) TRANSPORTING profile WHERE username = sy-uname. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
@@ -429,6 +432,35 @@ CLASS ltc_exec_sql IMPLEMENTATION.
       ( ' CLASS example IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
       ( '     DELETE FROM ytab_profiles WHERE username = sy-uname. "#EC DB_ACCESS_UT ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
+CLASS ltc_attribution DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_attribution IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT unit_test. ' )
+
+      ( ' CLASS example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DATA update TYPE abap_bool. ' )
+      ( '     update  = space.  ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).

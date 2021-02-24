@@ -1,62 +1,53 @@
-CLASS y_exemption_of_class DEFINITION PUBLIC CREATE PUBLIC .
+CLASS y_exemption_of_class DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
-    INTERFACES y_if_exemption_of_objects .
-    ALIASES create FOR y_if_exemption_of_objects~create.
+    INTERFACES y_if_exemption_of_object.
+    ALIASES is_exempted FOR y_if_exemption_of_object~is_exempted.
 
   PRIVATE SECTION.
-    DATA class_header_data TYPE seoclassdf .
+    CLASS-DATA class_header_data TYPE seoclassdf.
 
-    METHODS is_srv_maint_ui_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_odata_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_ecatt_odata_test_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_fin_infotype_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_amdp_class
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_extensibility_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_shma_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_proxy_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_sadl_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_exit_class
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_exception_class
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_xlca_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_bcp_application
-      RETURNING
-        VALUE(result) TYPE abap_bool .
-    METHODS is_object_indepenent_generate
-      RETURNING
-        VALUE(result) TYPE abap_bool .
+    CLASS-METHODS is_srv_maint_ui_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_odata_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_ecatt_odata_test_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_fin_infotype_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_amdp_class RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_extensibility_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_shma_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_proxy_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_sadl_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_exit_class RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_exception_class RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_xlca_generate RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS is_bcp_application RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
 
-CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
+CLASS y_exemption_of_class IMPLEMENTATION.
 
+  METHOD y_if_exemption_of_object~is_exempted.
+    result = abap_true.
 
-  METHOD create.
-    result = NEW y_exemption_of_class( ).
+    SELECT SINGLE *
+    FROM seoclassdf
+    INTO @class_header_data
+    WHERE clsname = @object_name
+    AND version = 1.
+
+    IF sy-subrc = 0.
+      result = xsdbool( is_srv_maint_ui_generate( ) = abap_true OR
+                        is_odata_generate( ) = abap_true OR
+                        is_ecatt_odata_test_generate( ) = abap_true OR
+                        is_fin_infotype_generate(  ) = abap_true OR
+                        is_extensibility_generate(  ) = abap_true OR
+                        is_shma_generate(  ) = abap_true OR
+                        is_proxy_generate(  ) = abap_true OR
+                        is_sadl_generate(  ) = abap_true OR
+                        is_exit_class(  ) = abap_true OR
+                        is_exception_class(  ) = abap_true OR
+                        is_bcp_application( ) = abap_true ).
+    ENDIF.
   ENDMETHOD.
 
 
@@ -94,7 +85,7 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
     it_bsp_classes = VALUE #( ( 'CL_BSP_WD_COMPONENT_CONTROLLER' )
                               ( 'CL_BSP_WD_CONTEXT' )
                               ( 'CL_BSP_WD_CONTEXT_NODE' )
-                              (  'CL_BSP_WD_WINDOW' )
+                              ( 'CL_BSP_WD_WINDOW' )
                               ( 'CL_BSP_WD_CUSTOM_CONTROLLER' )
                               ( 'CL_BSP_WD_VIEW_CONTROLLER' )
                               ( 'CL_BSP_WD_ADVSEARCH_CONTROLLER' )
@@ -198,14 +189,6 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_object_indepenent_generate.
-    DATA: l_object TYPE sobj_name.
-    l_object = class_header_data-clsname.
-    result = y_exemption_general=>create( )->is_object_exempted( object_type = 'CLAS'
-                                                                 object_name = l_object ).
-  ENDMETHOD.
-
-
   METHOD is_odata_generate.
     SELECT SINGLE trobj_name FROM /iwbep/i_sbd_ga INTO @DATA(l_name)
       WHERE ( gen_art_type = 'DPCB' OR gen_art_type = 'MPCB' ) AND trobj_type = 'CLAS' AND trobj_name = @class_header_data-clsname. "#EC CI_NOFIELD
@@ -292,24 +275,4 @@ CLASS Y_EXEMPTION_OF_CLASS IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD y_if_exemption_of_objects~is_exempted.
-    result = abap_true.
-
-    SELECT SINGLE * FROM seoclassdf INTO @class_header_data
-      WHERE clsname = @name AND version = 1.
-    IF sy-subrc = 0.
-      result = xsdbool( is_srv_maint_ui_generate( ) = abap_true OR
-                        is_odata_generate( ) = abap_true OR
-                        is_ecatt_odata_test_generate( ) = abap_true OR
-                        is_fin_infotype_generate(  ) = abap_true OR
-                        is_extensibility_generate(  ) = abap_true OR
-                        is_shma_generate(  ) = abap_true OR
-                        is_proxy_generate(  ) = abap_true OR
-                        is_sadl_generate(  ) = abap_true OR
-                        is_exit_class(  ) = abap_true OR
-                        is_exception_class(  ) = abap_true OR
-                        is_object_indepenent_generate( ) = abap_true OR
-                        is_bcp_application( ) = abap_true ).
-    ENDIF.
-  ENDMETHOD.
 ENDCLASS.

@@ -38,6 +38,8 @@ The Profile Management Tool, which is an alternative of working with SCI based v
 - Multiple execution of several profiles at the same time (the sharpest/strongest and time valid configuration/threshold will be taken);
 - Delegation principle to facilitate team work (all delegates, for instance: team members, can work with the same profile);
 
+:warning: The checks are not RFC-Enabled due to local dependencies. 
+
 ## List of Checks
 
 - [Check Documentation](docs/check_documentation.md)
