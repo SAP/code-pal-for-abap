@@ -10,6 +10,9 @@ This check searches for comments in the code marked up with `"` instead of with 
 
 You should replace the comment sign from `*` to `"`.
 
+### What to do in case of exception?
+There is no exception for this check since it works as an indicator only. Thus, it is also not possible to suppress its findings.
+
 ### Example
 
 Before the check:

@@ -17,4 +17,4 @@ Solve the other issues so that less pragmas are used.
 
 ### What to do in case of exception?
 
-There should be no exception as the check works as an indication. Thus, it is also not possible to suppress Code Inspector findings from this check.
+There is no exception as this check works as an indicator. Thus, it is not possible to suppress Code Inspector findings from this check.
