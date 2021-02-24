@@ -242,6 +242,7 @@ CLASS y_check_base IMPLEMENTATION.
       CLEAR result.
       RETURN.
     ENDIF.
+
   ENDMETHOD.
 
 
@@ -746,7 +747,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD is_skipped.
-    result = xsdbool( ( config-threshold <= error_count AND settings-is_threshold_reversed = abap_true ) OR
+    result = xsdbool( ( config-threshold < error_count AND settings-is_threshold_reversed = abap_true ) OR
                       ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false ) OR
                       ( is_testcode = abap_true AND config-apply_on_testcode = abap_false ) OR
                       ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).

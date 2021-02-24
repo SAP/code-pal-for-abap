@@ -137,7 +137,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
     DELETE creation_dates WHERE cdat IS INITIAL.
 
     TRY.
-        result = creation_dates[ 0 ].
+        result = creation_dates[ 1 ].
       CATCH cx_sy_itab_line_not_found.
         CLEAR result.
     ENDTRY.
