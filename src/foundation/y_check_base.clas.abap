@@ -226,22 +226,6 @@ CLASS y_check_base IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
 
-    IF result IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    DATA(exempt) = clean_code_exemption_handler->is_object_exempted( object_type = tadir_keys-object
-                                                                     object_name = tadir_keys-obj_name  ).
-
-    IF exempt = abap_true.
-      CLEAR result.
-      RETURN.
-    ENDIF.
-
-    IF is_app_comp_in_scope( statement-level ) = abap_false.
-      CLEAR result.
-      RETURN.
-    ENDIF.
   ENDMETHOD.
 
 
@@ -646,6 +630,14 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD raise_error.
+    IF clean_code_exemption_handler->is_object_exempted( object_name = object_name object_type = object_type ) = abap_true.
+      RETURN.
+    ENDIF.
+
+    IF is_app_comp_in_scope( statement_level ) = abap_false.
+      RETURN.
+    ENDIF.
+
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                    scimessages      = scimessages
@@ -746,7 +738,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD is_skipped.
-    result = xsdbool( ( config-threshold <= error_count AND settings-is_threshold_reversed = abap_true ) OR
+    result = xsdbool( ( config-threshold < error_count AND settings-is_threshold_reversed = abap_true ) OR
                       ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false ) OR
                       ( is_testcode = abap_true AND config-apply_on_testcode = abap_false ) OR
                       ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).
