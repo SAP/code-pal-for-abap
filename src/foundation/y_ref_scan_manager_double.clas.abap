@@ -1,6 +1,6 @@
 CLASS y_ref_scan_manager_double DEFINITION PUBLIC INHERITING FROM y_ref_scan_manager. "#EC INTF_IN_CLASS
   PUBLIC SECTION.
-    CONSTANTS unit_test_identifier TYPE trdir-name VALUE 'CODE_PAL_FOR_ABAP_UNIT_tEST' ##NO_TEXT.
+    CONSTANTS unit_test_identifier TYPE trdir-name VALUE 'CODE_PAL_FOR_ABAP_UNIT_TEST' ##NO_TEXT.
 
     METHODS y_if_scan_manager~set_ref_scan REDEFINITION.
     METHODS inject_code IMPORTING source TYPE y_char255_tab.
@@ -23,7 +23,7 @@ ENDCLASS.
 
 
 
-CLASS y_ref_scan_manager_double IMPLEMENTATION.
+CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
 
 
   METHOD y_if_scan_manager~set_ref_scan.
@@ -94,5 +94,4 @@ CLASS y_ref_scan_manager_double IMPLEMENTATION.
   METHOD create_trdir.
     result = VALUE #( name = unit_test_identifier ).
   ENDMETHOD.
-
 ENDCLASS.
