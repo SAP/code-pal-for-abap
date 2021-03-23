@@ -54,7 +54,7 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
 
   METHOD is_setter_method.
     DATA(method_name) = get_token_abs( statement-from + 1 ).
-    result = COND #( WHEN method_name CS 'SET_' THEN abap_true ).
+    result = xsdbool( method_name CS 'SET_' ).
   ENDMETHOD.
 
 
