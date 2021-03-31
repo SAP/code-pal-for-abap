@@ -12,10 +12,14 @@ Upgrade Note
 ------------------
 Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective code inspector variant (SCI transaction)
 
-2021-03-24 v.1.13.0
+2021-03-24 v.1.13.1
 ------------------
 * y_ref_scan_manager_double
 * y_check_db_access_in_ut
+
+2021-03-24 v.1.13.0
+------------------
++ Added a Button to the Profile Manager Tool: Add Missing Checks
 
 2021-02-24 v1.12.3
 ------------------
