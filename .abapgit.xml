@@ -8,6 +8,7 @@
    <IGNORE>
     <item>/.gitattributes</item>
     <item>/.gitignore</item>
+    <item>/CODEOWNERS</item>
     <item>/LICENSE</item>
     <item>/*.md</item>
     <item>/*.yml</item>
