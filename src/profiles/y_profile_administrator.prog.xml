@@ -1541,6 +1541,12 @@
      <LENGTH>27</LENGTH>
     </item>
     <item>
+     <ID>I</ID>
+     <KEY>060</KEY>
+     <ENTRY>No checks are missing!</ENTRY>
+     <LENGTH>44</LENGTH>
+    </item>
+    <item>
      <ID>R</ID>
      <ENTRY>Profile Administrator for code pal for ABAP</ENTRY>
      <LENGTH>43</LENGTH>
