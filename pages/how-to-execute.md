@@ -11,10 +11,10 @@ You can simulate the checks using the provided `Y_DEMO_FAILURES` class (delivere
 It is possible to execute the "code pal for ABAP checks" against your objects via:
 
 1. `Code Inspector` (transactions SCI and SCII);
-2. `ABAP Test Cockpit (ATC)` in CI-mode by informing a check variant. (in most of the ATC transactions/interfaces as usual; e.g.: SE80 --> right mouse-click --> Check --> ABAP Test Cockpit --> ATC with...);
+2. `ABAP Test Cockpit (ATC)` in CI-mode by informing a check variant. (in most of the ATC transactions/interfaces as usual; e.g.: SE80 --> right mouse-click --> Check --> ABAP Test Cockpit (ATC) with...); hereby is ADT (Eclipse) also supported.
 3. `SUT - ABAP CHECK REPORT` running with in a CI-mode (flavour) and also informing a check variant;  
 
-#### ABAP Test Cockpit (ATC)
+#### Executing via ABAP Test Cockpit (ATC)
 
 ![sap gui execution](imgs/execute-sap-gui.png)
 
@@ -22,14 +22,22 @@ In the tab `Options`, you have to inform your global check variant:
 
 ![sap gui atc execution](imgs/sap-gui-atc.png)
 
-#### Code Inspector
+#### Executing via Code Inspector (CI)
 
-Start the transaction `SCII`, inform the object selection, and inform your global check variant.
+Start the transaction `SCI` or `SCII`, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
 
 ![code inspector execution](imgs/sap-gui-code-inspector.png)
 
-### Eclipse
+### Executing via Eclipse (ADT)
 
-Select `Run As` > `ABAP Test Cockpit With...`, and inform your global check variant.
+Select `Run As` > `ABAP Test Cockpit With...` and inform a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
 
 ![eclipse execution](imgs/execute-eclipse.png)
+
+### Executing via SUT (ABAP CHECK REPORT)
+
+Start the transaction: `SUT` and call the program: `ABAP CHECK REPORT`. Then, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
+
+
+
+
