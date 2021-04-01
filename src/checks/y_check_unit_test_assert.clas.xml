@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_UNIT_TEST_ASSERT</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Unit Test Aseert Validation</DESCRIPT>
+    <DESCRIPT>Unit Test Assert Validator</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
