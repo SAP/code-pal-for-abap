@@ -10,11 +10,11 @@ The tool is 100% compatible with the SAP CI Framework (Code Inspector). That is,
 It is also possible to create a CI-Variant and run the selected CHECKS using this variant at any time. This CI-Variant can be also used in SUT (ABAP CHECK REPORT), ATC or even using SAP-Workbench ABAP Editors (e.g.: SE80) or ADT (e.g.: Eclipse) with ATC/CI Integration directly (the CI-Variant will be asked).
 
 In summary, it is possible to use our tool directly in SCI/SCII, via ATC Integration, via API Call, via SUT, via CI-Variant or via Profile(s).
-But keep in mind, one has to choose betweeen using CI-Variants or Using Profile(s). Both features cannot be used in paralell in the same system for the same user. 
+But keep in mind, one has to choose betweeen using CI-Variants (Code Inspector Variants) or Using Profile/s (via Transaction: Y_CODE_PAL_PROFILE, delivered along with the toolkit). Both features cannot be used in paralell in the same system for the same user. For more details on using CI-Variant/s and Profile/s, please check the section: [How to Execute](https://github.com/SAP/code-pal-for-abap/blob/master/pages/how-to-execute.md). 
 
-Every CHECK can be configurable independenlty.
+Furtheremore, every single CHECK can be configurable independenlty.
 
-Check configuration: You can,
+By the Check configuration: You can,
 
 * Define check's validity period;
 * Restrict to objects created since a specific date;
