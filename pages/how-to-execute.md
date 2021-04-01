@@ -19,7 +19,7 @@ Start the transaction `SCI` or `SCII`, inform the object selection as well as a 
 
 
 
-#### Executing via ABAP Test Cockpit (ATC)
+## Executing via ABAP Test Cockpit (ATC)
 
 ![sap gui execution](imgs/execute-sap-gui.png)
 
@@ -28,7 +28,7 @@ In the tab `Options`, you have to inform your global check variant:
 ![sap gui atc execution](imgs/sap-gui-atc.png)
 
 
-# REMARK: In order to be able to execute the checks directly via ATC, a User-Parameter has to be set as follows: Go to Menu: SYSTEM --> User Profile --> User Data --> then in the tab `Parameters`, make sure this entry is set: `SATC_CI_MODE = X` (refer to screenshot below):  
+### REMARK: In order to be able to execute the checks directly via ATC, a User-Parameter has to be set as follows: Go to Menu: SYSTEM --> User Profile --> User Data --> then in the tab `Parameters`, make sure this entry is set: `SATC_CI_MODE = X` (refer to screenshot below):  
 
 ![image](https://user-images.githubusercontent.com/63100656/113266529-acd10180-92d5-11eb-80d9-c2717f0be1ca.png)
 
