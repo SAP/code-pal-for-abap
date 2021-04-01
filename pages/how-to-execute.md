@@ -30,7 +30,8 @@ In the tab `Options`, you have to inform your global check variant:
 
 ![sap gui atc execution](imgs/sap-gui-atc.png)
 
-#REMARK: In order to be able to execute the checks directly via ATC, a User-Parameter has to be set as follows: Go to Menu: SYSTEM --> User Profile --> User Data --> then in the tab `Parameters`, make sure this entry is set: `SATC_CI_MODE = X` (refer to screenshot below):  
+
+# REMARK: In order to be able to execute the checks directly via ATC, a User-Parameter has to be set as follows: Go to Menu: SYSTEM --> User Profile --> User Data --> then in the tab `Parameters`, make sure this entry is set: `SATC_CI_MODE = X` (refer to screenshot below):  
 
 ![image](https://user-images.githubusercontent.com/63100656/113266529-acd10180-92d5-11eb-80d9-c2717f0be1ca.png)
 
@@ -44,8 +45,10 @@ Select `Run As` > `ABAP Test Cockpit With...` and inform a global check variant 
 
 ### Executing via SUT (ABAP CHECK REPORT)
 
-Start the transaction: `SUT` and call the program: `ABAP CHECK REPORT`. Then, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
+Start the transaction: `SUT` and call the program: `ABAP CHECK REPORT`. Then, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit). Do not forget to select the `ATC Checks`checkbox as well as the `ATC Mode/Flavour` to Code Inspector (refer to screeshot below):
 
+
+![image](https://user-images.githubusercontent.com/63100656/113267616-da6a7a80-92d6-11eb-803f-f6392d032c79.png)
 
 
 
