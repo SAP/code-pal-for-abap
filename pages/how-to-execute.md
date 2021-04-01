@@ -50,4 +50,5 @@ Start the transaction: `SUT` and call the program: `ABAP CHECK REPORT`. Then, in
 ![image](https://user-images.githubusercontent.com/63100656/113267616-da6a7a80-92d6-11eb-803f-f6392d032c79.png)
 
 
+In summary, it is possible to use our tool directly in SCI/SCII, via ATC Integration, via API Call, via SUT, via CI-Variant or via Profile(s). But keep in mind, one has to choose betweeen using CI-Variants (Code Inspector Variants) or Using Profile/s (via Transaction: Y_CODE_PAL_PROFILE, delivered along with the toolkit). Both features cannot be used in paralell in the same system for the same user. 
 
