@@ -1464,14 +1464,12 @@ CLASS lcl_util IMPLEMENTATION.
 
     DATA missing_checks TYPE STANDARD TABLE OF ycicc_checkid.
     LOOP AT list_of_all_checks ASSIGNING FIELD-SYMBOL(<check>).
-      TRY.
-          DATA(tmp) = checks_available[ checkid = <check>-obj_name ]-checkid.
-        CATCH cx_sy_itab_line_not_found.
-          APPEND <check>-obj_name TO missing_checks.
-      ENDTRY.
+      IF NOT line_exists( checks_available[ checkid = <check>-obj_name ] ).
+        APPEND <check>-obj_name TO missing_checks.
+      ENDIF.
     ENDLOOP.
 
-    IF NOT line_exists( missing_checks[ 1 ] ).
+    IF missing_checks IS INITIAL.
       MESSAGE 'No checks are missing!'(060) TYPE 'I'.
       RETURN.
     ENDIF.
