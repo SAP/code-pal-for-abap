@@ -7,9 +7,9 @@
 **The default customizing (initial values) is not an SAP delivered standard value.**  
 
 The tool is 100% compatible with the SAP CI Framework (Code Inspector). That is, SAP Transactions: SCI and SCII. By means of these transactions, it is possible to create/run/save an inspection using our delivered CHECKS (the checks can be found under the "CODE PAL FOR ABAP" category). 
-It is also possible to create a CI-Variant and run the selected CHECKS using this variant at any time. This CI-Variant can be also used in SUT, ATC or even using SAP-Workbench ABAP Editors (e.g.: SE80) or ADT (e.g.: Eclipse) with ATC/CI Integration directly (the CI-Variant will be asked).
+It is also possible to create a CI-Variant and run the selected CHECKS using this variant at any time. This CI-Variant can be also used in SUT (ABAP CHECK REPORT), ATC or even using SAP-Workbench ABAP Editors (e.g.: SE80) or ADT (e.g.: Eclipse) with ATC/CI Integration directly (the CI-Variant will be asked).
 
-In summary, it is possible to use our tool directly in SCI/SCII, via ATC Integration, Via API Call, via CI-Variant or via Profile(s).
+In summary, it is possible to use our tool directly in SCI/SCII, via ATC Integration, via API Call, via SUT, via CI-Variant or via Profile(s).
 But keep in mind, one has to choose betweeen using CI-Variants or Using Profile(s). Both features cannot be used in paralell in the same system for the same user. 
 
 Every CHECK can be configurable independenlty.
