@@ -7,23 +7,24 @@
 You can to execute the "code pal for ABAP checks" against your objects in several different ways. If needed, you can easily simulate the checks using the provided `Y_DEMO_FAILURES` class (delivered along with the tookit). The most common ways of executing code pal are by means of:
 
 1. `Code Inspector` (transactions SCI and/or SCII); for more details, refer to the specific sections below.
-2. `ABAP Test Cockpit (ATC)` in CI-mode by informing a check variant. (in most of the ATC transactions/interfaces as usual; e.g.: SE80 --> right mouse-click --> Check --> ABAP Test Cockpit (ATC) with...); hereby is ADT (Eclipse) also supported.
-3. `SUT - ABAP CHECK REPORT` running with in a CI-mode (flavour) and also informing a check variant;  
+2. `ABAP Test Cockpit (ATC)` in CI-mode by informing a check variant**. (in most of the ATC transactions/interfaces as usual; e.g.: SE80 --> right mouse-click --> Check --> ABAP Test Cockpit (ATC) with...); hereby is ADT (Eclipse) also supported.
+3. `SUT - ABAP CHECK REPORT` running with in a CI-mode (flavour) and also informing a check variant**;  
 
+** It is also possible to execute code pal with a profile (instead of a variant). For that, plesae refer to transaction: Y_CODE_PAL_PROFILE.
 
 ## Executing via Code Inspector (CI)
 
-Start the transaction `SCI` or `SCII`, inform the object selection as well as a global check variant* (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
+Start the transaction `SCI` or `SCII`, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
 
 ![code inspector execution](imgs/sap-gui-code-inspector.png)
 
-* It is also possible to execute code pal with a profile (instead of a variant). For that, plesae refer to transaction: Y_CODE_PAL_PROFILE.
+
 
 ## Executing via ABAP Test Cockpit (ATC)
 
 ![sap gui execution](imgs/execute-sap-gui.png)
 
-In the tab `Options`, you have to inform your global check variant*:  
+In the tab `Options`, you have to inform your global check variant:  
 
 ![sap gui atc execution](imgs/sap-gui-atc.png)
 
@@ -32,15 +33,17 @@ In the tab `Options`, you have to inform your global check variant*:
 
 ![image](https://user-images.githubusercontent.com/63100656/113266529-acd10180-92d5-11eb-80d9-c2717f0be1ca.png)
 
-* It is also possible to execute code pal with a profile (instead of a variant). For that, plesae refer to transaction: Y_CODE_PAL_PROFILE.
+
+
 
 ## Executing via Eclipse (ADT)
 
-Select `Run As` > `ABAP Test Cockpit With...` and inform a global check variant* (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
+Select `Run As` > `ABAP Test Cockpit With...` and inform a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
 
 ![eclipse execution](imgs/execute-eclipse.png)
 
-* It is also possible to execute code pal with a profile (instead of a variant). For that, plesae refer to transaction: Y_CODE_PAL_PROFILE.
+
+
 
 ## Executing via SUT (ABAP CHECK REPORT)
 
