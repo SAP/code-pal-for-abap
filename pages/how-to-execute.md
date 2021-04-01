@@ -11,7 +11,7 @@ You can to execute the "code pal for ABAP checks" against your objects in severa
 3. `SUT - ABAP CHECK REPORT` running with in a CI-mode (flavour) and also informing a check variant;  
 
 
-#### Executing via Code Inspector (CI)
+## Executing via Code Inspector (CI)
 
 Start the transaction `SCI` or `SCII`, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
 
@@ -34,7 +34,7 @@ In the tab `Options`, you have to inform your global check variant:
 
 
 
-### Executing via Eclipse (ADT)
+## Executing via Eclipse (ADT)
 
 Select `Run As` > `ABAP Test Cockpit With...` and inform a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit).
 
@@ -42,7 +42,7 @@ Select `Run As` > `ABAP Test Cockpit With...` and inform a global check variant 
 
 
 
-### Executing via SUT (ABAP CHECK REPORT)
+## Executing via SUT (ABAP CHECK REPORT)
 
 Start the transaction: `SUT` and call the program: `ABAP CHECK REPORT`. Then, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit). Do not forget to select the `ATC Checks`checkbox as well as the `ATC Mode/Flavour` to Code Inspector (refer to screeshot below):
 
