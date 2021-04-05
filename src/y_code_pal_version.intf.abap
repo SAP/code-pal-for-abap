@@ -1,6 +1,3 @@
-interface Y_CODE_PAL_VERSION
-  public .
-
-
-  constants ABAP type STRING value '1.14.0' ##NO_TEXT.
-endinterface.
+INTERFACE y_code_pal_version PUBLIC.
+  CONSTANTS abap TYPE string VALUE '1.14.0' ##NO_TEXT.
+ENDINTERFACE.
