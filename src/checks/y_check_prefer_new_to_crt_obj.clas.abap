@@ -19,9 +19,9 @@ CLASS y_check_prefer_new_to_crt_obj IMPLEMENTATION.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-prio = c_warning.
-    settings-documentation = |{ c_docs_path-checks }prefer_new_to_create_object.md|.
+    settings-documentation = |{ c_docs_path-checks }prefer-new-to-create-object.md|.
 
-    set_check_message( 'Prefer NEW to CREATE OBJECT' ).
+    set_check_message( 'Prefer NEW to CREATE OBJECT!' ).
   ENDMETHOD.
 
 
