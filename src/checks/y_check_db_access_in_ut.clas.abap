@@ -130,13 +130,15 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
   METHOD is_internal_table.
     DATA(second_token) = get_token_abs( statement-from + 1 ).
     DATA(third_token) = get_token_abs( statement-from + 2 ).
+    DATA(fourth_token) = get_token_abs( statement-from + 2 ).
 
     IF second_token = keys-into.
       RETURN.
     ENDIF.
 
     DATA(table_name) = COND #( WHEN second_token = keys-from THEN third_token
-                                                             ELSE second_token ).
+                               WHEN third_token = keys-into  THEN fourth_token
+                               ELSE second_token ).
 
     result = xsdbool( is_persistent_object( table_name ) = abap_false ).
   ENDMETHOD.
@@ -272,4 +274,6 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
                     OR token-str = check_for-delete
                     OR token-str = check_for-insert ).
   ENDMETHOD.
+
+
 ENDCLASS.
