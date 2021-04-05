@@ -440,12 +440,12 @@ CLASS ltc_exec_sql IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltc_attribution DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_itab DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_attribution IMPLEMENTATION.
+CLASS ltc_itab IMPLEMENTATION.
 
   METHOD get_code_without_issue.
     result = VALUE #(
@@ -458,8 +458,9 @@ CLASS ltc_attribution IMPLEMENTATION.
 
       ( ' CLASS example IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA update TYPE abap_bool. ' )
-      ( '     update  = space.  ' )
+      ( '     DATA mt_messages TYPE symsg_tab. ' )
+      ( '     DATA message TYPE symsg. ' )
+      ( '     INSERT message INTO TABLE mt_messages. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
