@@ -1,0 +1,59 @@
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Unit-Test Assert Validator](unit_test_assert.md)
+
+## Unit-Test Assert Validator
+
+### What is the Intent of the Check?
+
+This check verifies invalid assertions in unit tests.  
+It supports the `CL_ABAP_UNIT_ASSERT=>ASSERT*` and `CL_AUNIT_ASSERT=>ASSERT*`.
+
+### How does the check work?
+
+It checks for actual (`act`) or expected (`exp`) invalid value, like:
+- When both use the same variable;
+- When both are hardcoded.
+
+### How to solve the issue?
+
+Fix the actual (`act`) or expected (`exp`) value in the unit test assertion.
+
+### What to do in case of exception?
+
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC UT_ASSERT` which has to be placed after the assertion statement:
+
+```abap
+cl_abap_unit_assert=>assert_equals( act = sum 
+                                    exp = sum ). "#EC UT_ASSERT 
+```
+
+### Example
+
+Before the check:
+
+```abap
+METHOD sum. 
+  " given 
+  DATA(first) = 10. 
+  DATA(second) = 10. 
+  " when 
+  DATA(sum) = first + second. 
+  " then 
+  cl_abap_unit_assert=>assert_equals( act = sum 
+                                      exp = sum ).
+ENDMETHOD. 
+```
+
+After the check:
+
+```abap
+METHOD sum. 
+  " given 
+  DATA(first) = 10. 
+  DATA(second) = 10. 
+  " when 
+  DATA(sum) = first + second. 
+  " then 
+  cl_abap_unit_assert=>assert_equals( act = sum 
+                                      exp = 20 ).
+ENDMETHOD. 
+```
