@@ -298,41 +298,7 @@ CLASS ltc_protected_data IMPLEMENTATION.
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
       ( |     cl_aunit_assert=>assert_differs( act = system | )
-      ( |                                      exp = 'B' ). | )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-
-CLASS ltc_similar_name DEFINITION INHERITING FROM ltc_hardcoded_string FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_code_with_issue REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_similar_name IMPLEMENTATION.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT y_example. ' )
-
-      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( '   PROTECTED SECTION. ' )
-      ( '     METHODS not_relevant. ' )
-      ( ' ENDCLASS. ' )
-
-      ( ' CLASS y_example IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( |     cl_aunit_assert=>assert_differs( act = 'A' | )
-      ( |                                      exp = 'B' ). | )
-      ( '   ENDMETHOD. ' )
-
-      ( '   METHOD not_relevant. ' )
-      ( '     DATA(A) = sy-repid. ' )
+      ( |                                      exp = 'system' ). | )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).
