@@ -50,4 +50,4 @@
 - [Self-Reference](checks/self-reference.md)
 - [TEST-SEAM Statement Usage](checks/test-seam-usage.md)
 - [Unit-Test Coverages (Statement, Branch and Procedure)](checks/unit-test-coverages.md)
-- [Unit Test Assert Validator](checks/unit_test_assert.md)
+- [Unit-Test Assert Validator](checks/unit_test_assert.md)
