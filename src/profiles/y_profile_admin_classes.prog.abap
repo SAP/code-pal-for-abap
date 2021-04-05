@@ -269,6 +269,8 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
       RAISING
         cx_failed.
     CLASS-METHODS remove_all_checks.
+    CLASS-METHODS add_missing_checks.
+
   PRIVATE SECTION.
     CLASS-METHODS request_confirmation
       IMPORTING
@@ -382,6 +384,9 @@ CLASS lcl_check_events IMPLEMENTATION.
 
       WHEN 'BTN_REMOVE_ALL'.
         lcl_util=>remove_all_checks( ).
+
+      WHEN 'BTN_MISSING_CK'.
+        lcl_util=>add_missing_checks( ).
 
     ENDCASE.
 
@@ -516,6 +521,11 @@ CLASS lcl_util IMPLEMENTATION.
                                                      icon      = '@VZ@'
                                                      butn_type = cntb_btype_button
                                                      quickinfo = 'Remove All'(059) ).
+
+        checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_MISSING_CK'
+                                                     icon      = '@A7@'
+                                                     butn_type = cntb_btype_button
+                                                     quickinfo = 'Add Missing Checks'(000) ).
 
         checks_tree->set_field_visibility( fieldname = 'START_DATE'
                                            is_visible = abap_true ).
@@ -1426,6 +1436,53 @@ CLASS lcl_util IMPLEMENTATION.
 
     profile_manager->remove_all_checks( profile ).
 
+    MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
+  ENDMETHOD.
+
+  METHOD add_missing_checks.
+    TRY.
+        DATA(profile) = lcl_util=>get_selected_profile( )-profile.
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+    ENDTRY.
+
+    TRY.
+        profile_manager->check_delegation_rights( profile ).
+      CATCH ycx_no_delegation_rights.
+        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'W'.
+    ENDTRY.
+
+    TRY.
+        DATA(checks_available) = profile_manager->select_checks( profile ).
+        request_confirmation( | Would you like to add all missing checks? | ).
+      CATCH ycx_entry_not_found.
+        add_all_checks( ).
+        RETURN.
+    ENDTRY.
+
+    DATA(list_of_all_checks) = profile_manager->get_checks_from_db( ).
+
+    DATA missing_checks TYPE STANDARD TABLE OF ycicc_checkid.
+    LOOP AT list_of_all_checks ASSIGNING FIELD-SYMBOL(<check>).
+      IF NOT line_exists( checks_available[ checkid = <check>-obj_name ] ).
+        APPEND <check>-obj_name TO missing_checks.
+      ENDIF.
+    ENDLOOP.
+
+    IF missing_checks IS INITIAL.
+      MESSAGE 'No checks are missing!'(060) TYPE 'I'.
+      RETURN.
+    ENDIF.
+
+    LOOP AT missing_checks ASSIGNING FIELD-SYMBOL(<checkname>).
+      io_check_id = <checkname>.
+      init_add_check( ).
+      TRY.
+          add_check( ).
+        CATCH cx_failed.
+          CONTINUE.
+      ENDTRY.
+    ENDLOOP.
     MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
   ENDMETHOD.
 

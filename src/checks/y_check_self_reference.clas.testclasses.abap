@@ -73,3 +73,32 @@ CLASS ltc_method IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+CLASS ltc_attribute DEFINITION INHERITING FROM ltc_method FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_attribute IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS constructor IMPORTING name TYPE string. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     DATA name TYPE string. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD constructor. ' )
+      ( '     me->name = name. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
