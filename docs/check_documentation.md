@@ -40,6 +40,7 @@
 - [Number of Output Parameter](checks/number-output-parameter.md)
 - [Prefer CASE to ELSEIF](checks/prefer-case-to-elseif.md)
 - [Prefer IS NOT to NOT IS](checks/prefer-is-not-to-not-is.md)
+- [Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT](checks/prefer-line-exists.md)
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
 - [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
 - [Optional Parameters](checks/optional-parameters.md)
