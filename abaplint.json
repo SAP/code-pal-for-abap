@@ -21,7 +21,7 @@
   ],
   "syntax": {
     "version": "v740sp08",
-    "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)",
+    "errorNamespace": "^(Y)",
     "globalConstants": ["cntb_btype_button", "scan_struc_stmnt_type", "scan_stmnt_type", "scan_struc_type", "scan_token_type"],
     "globalMacros": []
   },
