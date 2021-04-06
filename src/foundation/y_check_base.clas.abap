@@ -333,11 +333,11 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-col.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM p_n.
+      p_n = p_n - 1.
     ENDDO.
   ENDMETHOD.
 
@@ -353,27 +353,22 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-col.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM index.
+      index = index - 1.
     ENDDO.
   ENDMETHOD.
 
 
   METHOD get_include.
-    DATA l_levels_wa LIKE LINE OF ref_scan->levels.
-    DATA l_level TYPE i.
+    DATA(l_level) = COND #( WHEN p_level IS SUPPLIED THEN p_level
+                            ELSE statement_wa-level ).
 
-    IF p_level IS SUPPLIED.
-      l_level = p_level.
-    ELSE.
-      l_level = statement_wa-level.
-    ENDIF.
     DO.
-      READ TABLE ref_scan_manager->levels INDEX l_level INTO l_levels_wa.
-      IF sy-subrc NE 0.
+      READ TABLE ref_scan_manager->levels INDEX l_level INTO DATA(l_levels_wa).
+      IF sy-subrc <> 0.
         RETURN.
       ENDIF.
       IF l_levels_wa-type = 'P'.
@@ -393,11 +388,11 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-row.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM p_n.
+      p_n = p_n - 1.
     ENDDO.
   ENDMETHOD.
 
@@ -410,12 +405,12 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_column = <token>-col.
         p_line   = <token>-row.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM p_n.
+      p_n = p_n - 1.
     ENDDO.
   ENDMETHOD.
 
@@ -430,12 +425,12 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_column = <token>-col.
         p_line   = <token>-row.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM p_n.
+      p_n = p_n - 1.
     ENDDO.
   ENDMETHOD.
 
@@ -451,18 +446,18 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-row.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM index.
+      index = index - 1.
     ENDDO.
   ENDMETHOD.
 
 
   METHOD get_token_abs.
     READ TABLE ref_scan_manager->tokens INDEX p_n INTO token_wa.
-    IF sy-subrc EQ 0.
+    IF sy-subrc = 0.
       p_result = token_wa-str.
     ENDIF.
   ENDMETHOD.
@@ -655,7 +650,7 @@ CLASS y_check_base IMPLEMENTATION.
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
 
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
+    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) = 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
               p_position = statement_index
@@ -697,7 +692,7 @@ CLASS y_check_base IMPLEMENTATION.
         check_start_conditions( ).
         profile_configurations = clean_code_manager->read_check_customizing( myname ).
       CATCH ycx_no_check_customizing.
-        IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
+        IF profile_configurations IS INITIAL AND attributes_ok = abap_false.
           FREE ref_scan_manager.
           RETURN.
         ELSEIF attributes_ok = abap_true.

@@ -45,7 +45,7 @@ CLASS Y_CHECK_NUMBER_EVENTS IMPLEMENTATION.
   METHOD inspect_tokens.
     CASE get_token_abs( statement-from ).
       WHEN 'EVENTS' OR 'CLASS-EVENTS'.
-        ADD 1 TO event_counter.
+        event_counter = event_counter + 1.
     ENDCASE.
   ENDMETHOD.
 

@@ -67,9 +67,9 @@ CLASS lcl_check_registration IMPLEMENTATION.
 
   METHOD select_object_list.
     SELECT SINGLE devclass FROM tadir
-        WHERE obj_name EQ @reference-check_base
-        AND object EQ @reference-class
-        AND delflag EQ @abap_false
+        WHERE obj_name = @reference-check_base
+        AND object = @reference-class
+        AND delflag = @abap_false
         INTO @DATA(packagename).
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
@@ -78,9 +78,9 @@ CLASS lcl_check_registration IMPLEMENTATION.
     REPLACE reference-foundation IN packagename WITH reference-checks.
 
     SELECT obj_name FROM tadir
-      WHERE devclass EQ @packagename
-      AND object EQ @reference-class
-      AND delflag EQ @abap_false
+      WHERE devclass = @packagename
+      AND object = @reference-class
+      AND delflag = @abap_false
       INTO TABLE @result.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
@@ -142,10 +142,6 @@ CLASS lcl_util IMPLEMENTATION.
           count_successes = count_successes + 1.
         CATCH cx_failed.
           count_errors = count_errors + 1.
-
-
-          DATA dta TYPE REF TO cl_ci_tests.
-
       ENDTRY.
     ENDLOOP.
     WRITE: / |{ count_successes } { messages-successfully_activated }|.

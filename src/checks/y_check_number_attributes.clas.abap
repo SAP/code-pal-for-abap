@@ -70,9 +70,11 @@ CLASS y_check_number_attributes IMPLEMENTATION.
 
 
   METHOD checkif_attribute_in_structure.
-    IF ( second_token = 'BEGIN' AND third_token = 'OF' ).
+    IF second_token = 'BEGIN'
+    AND third_token = 'OF'.
       structure_depth = structure_depth + 1.
-    ELSEIF ( second_token = 'END' AND third_token = 'OF' ).
+    ELSEIF second_token = 'END'
+    AND third_token = 'OF'.
       structure_depth = structure_depth - 1.
     ENDIF.
   ENDMETHOD.
