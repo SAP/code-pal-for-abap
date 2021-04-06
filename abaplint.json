@@ -61,7 +61,7 @@
     "empty_line_in_statement": false,
     "empty_statement": true,
     "empty_structure": true,
-    "exit_or_check": true,
+    "exit_or_check": false,
     "exporting": true,
     "forbidden_identifier": false,
     "forbidden_pseudo_and_pragma": false,
