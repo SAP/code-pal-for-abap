@@ -24,7 +24,7 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
     settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }prefer-line-exists.md|.
 
-    set_check_message( 'Prefer LINE_EXISTS to READ TABLE or LOOP AT!' ).
+    set_check_message( 'Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT!' ).
   ENDMETHOD.
 
 
