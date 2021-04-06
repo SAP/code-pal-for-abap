@@ -59,13 +59,14 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     method_name = get_token_abs( stmnt_index + 1 ).
 
     LOOP AT good_method_names_beginning ASSIGNING FIELD-SYMBOL(<good_name_beginning>).
-      DATA(prefix) = substring( val = method_name
-                                len = strlen( <good_name_beginning> ) ).
+      IF strlen( method_name ) >= strlen( <good_name_beginning> ).
+        DATA(prefix) = substring( val = method_name
+                                  len = strlen( <good_name_beginning> ) ).
 
-      IF strlen( method_name ) >= strlen( <good_name_beginning> )
-      AND prefix = <good_name_beginning>.
-        result = abap_true.
-        RETURN.
+        IF prefix = <good_name_beginning>.
+          result = abap_true.
+          RETURN.
+        ENDIF.
       ENDIF.
     ENDLOOP.
 
