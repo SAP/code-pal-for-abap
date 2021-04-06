@@ -58,7 +58,7 @@
     "description_empty": true,
     "double_space": true,
     "downport": true,
-    "empty_line_in_statement": true,
+    "empty_line_in_statement": false,
     "empty_statement": true,
     "empty_structure": true,
     "exit_or_check": true,
