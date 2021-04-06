@@ -342,8 +342,84 @@ CLASS ltc_line_exists IMPLEMENTATION.
 
       ( ' START-OF-SELECTION. ' )
       ( '   DATA itab TYPE TABLE OF tadir. ' )
-      ( '   IF NOT line_exists( itab[ 0 ] ). ' )
-      ( '   ENDIF. ' )
+      ( '   ASSERT NOT line_exists( itab[ 0 ] ). ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
+CLASS ltc_contains DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_contains IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION. ' )
+      ( |   ASSERT NOT contains( val = 'code pal for ABAP' sub = 'ABAP' ). | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_matches DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_matches IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION. ' )
+      ( |   ASSERT NOT matches( val = 'a123e' regex = '[[:alpha:]]*' ). | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_contains_any_not_of DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_contains_any_not_of IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION. ' )
+      ( |   ASSERT NOT contains_any_not_of( val = 'a123e' sub = '123' ). | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_contains_any_of DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_contains_any_of IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION. ' )
+      ( |   ASSERT NOT contains_any_of( val = 'a123e' sub = '123' ). | )
     ).
   ENDMETHOD.
 

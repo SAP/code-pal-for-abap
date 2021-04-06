@@ -5,6 +5,9 @@ CLASS y_check_prefer_is_not DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
 
+    METHODS is_standard_function IMPORTING token TYPE stokesx
+                                 RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -33,7 +36,8 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
     WHERE str = 'IF'
     OR str = 'ELSEIF'
     OR str = 'AND'
-    OR str = 'OR'.
+    OR str = 'OR'
+    OR str = 'ASSERT'.
 
       DATA(position) = sy-tabix.
 
@@ -46,7 +50,7 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
       ENDTRY.
 
       TRY.
-          IF ref_scan_manager->tokens[ position + 2 ]-str = 'LINE_EXISTS('.
+          IF is_standard_function( ref_scan_manager->tokens[ position + 2 ] ) = abap_true.
             CONTINUE.
           ENDIF.
         CATCH cx_sy_itab_line_not_found.
@@ -66,5 +70,13 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
 
     ENDLOOP.
   ENDMETHOD.
+
+
+  METHOD is_standard_function.
+    result = xsdbool(    token-str CP 'CONTAINS*'
+                      OR token-str CP 'LINE_EXISTS*'
+                      OR token-str CP 'MATCHES*' ).
+  ENDMETHOD.
+
 
 ENDCLASS.
