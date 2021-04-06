@@ -52,7 +52,7 @@ CLASS y_check_number_attributes IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    checkif_attribute_found( first_token = get_token_abs( statement-from ) ).
+    checkif_attribute_found( get_token_abs( statement-from ) ).
 
     checkif_attribute_in_structure( second_token = get_token_abs( statement-from + 1 )
                                     third_token = get_token_abs( statement-from + 2 ) ).
@@ -63,7 +63,7 @@ CLASS y_check_number_attributes IMPLEMENTATION.
     CASE first_token.
       WHEN 'DATA' OR 'CLASS-DATA'.
         IF structure_depth <= structure_depth_threshold.
-          ADD 1 TO attribute_counter.
+          attribute_counter = attribute_counter + 1.
         ENDIF.
     ENDCASE.
   ENDMETHOD.
@@ -71,9 +71,9 @@ CLASS y_check_number_attributes IMPLEMENTATION.
 
   METHOD checkif_attribute_in_structure.
     IF ( second_token = 'BEGIN' AND third_token = 'OF' ).
-      ADD 1 TO structure_depth.
+      structure_depth = structure_depth + 1.
     ELSEIF ( second_token = 'END' AND third_token = 'OF' ).
-      SUBTRACT 1 FROM structure_depth.
+      structure_depth = structure_depth - 1.
     ENDIF.
   ENDMETHOD.
 
