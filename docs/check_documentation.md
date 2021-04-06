@@ -41,6 +41,7 @@
 - [Prefer CASE to ELSEIF](checks/prefer-case-to-elseif.md)
 - [Prefer IS NOT to NOT IS](checks/prefer-is-not-to-not-is.md)
 - [Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT](checks/prefer-line-exists.md)
+- [Prefer NEW to CREATE OBJECT](checks/prefer-new-to-create-object.md)
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
 - [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
 - [Optional Parameters](checks/optional-parameters.md)
@@ -51,3 +52,4 @@
 - [Self-Reference](checks/self-reference.md)
 - [TEST-SEAM Statement Usage](checks/test-seam-usage.md)
 - [Unit-Test Coverages (Statement, Branch and Procedure)](checks/unit-test-coverages.md)
+- [Unit-Test Assert Validator](checks/unit_test_assert.md)
