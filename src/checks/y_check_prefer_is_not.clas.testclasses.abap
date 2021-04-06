@@ -386,3 +386,41 @@ CLASS ltc_matches IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+CLASS ltc_contains_any_not_of DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_contains_any_not_of IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION. ' )
+      ( |   ASSERT NOT contains_any_not_of( val = 'a123e' sub = '123' ). | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_contains_any_of DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_contains_any_of IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION. ' )
+      ( |   ASSERT NOT contains_any_of( val = 'a123e' sub = '123' ). | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
