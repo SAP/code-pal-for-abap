@@ -4,11 +4,11 @@
 
 ### What is the Intent of the Check?
 
-Prefer `NEW` to `CREATE OBJECT` as it avoids needlessly longer statements.
+Prefer `NEW` over `CREATE OBJECT` as it avoids needlessly longer statements.
 
 ### How to solve the issue?
 
-Preferably, use a `NEW`.
+Preferably, use `NEW` for creating new objects/instances.
 
 ### What to do in case of exception?
 
