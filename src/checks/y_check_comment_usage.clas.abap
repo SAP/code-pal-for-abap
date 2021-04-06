@@ -71,7 +71,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
-      IF strlen( <token>-str ) GE 2 AND NOT
+      IF strlen( <token>-str ) >= 2 AND NOT
          ( <token>-str+0(2) = |*"| OR
            <token>-str+0(2) = |"!| OR
            <token>-str+0(2) = |##| OR
