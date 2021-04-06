@@ -85,7 +85,7 @@
     "line_break_multiple_parameters": true,
     "line_break_style": true,
     "line_length": false,
-    "line_only_punc": true,
+    "line_only_punc": false,
     "local_class_naming": false,
     "local_testclass_location": true,
     "local_variable_names": false,
