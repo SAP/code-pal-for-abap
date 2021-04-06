@@ -40,6 +40,7 @@
 - [Number of Output Parameter](checks/number-output-parameter.md)
 - [Prefer CASE to ELSEIF](checks/prefer-case-to-elseif.md)
 - [Prefer IS NOT to NOT IS](checks/prefer-is-not-to-not-is.md)
+- [Prefer NEW to CREATE OBJECT](checks/prefer-new-to-create-object.md)
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
 - [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
 - [Optional Parameters](checks/optional-parameters.md)
