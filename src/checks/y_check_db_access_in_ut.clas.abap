@@ -54,6 +54,7 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
 
     METHODS add_line_to_defined_classes IMPORTING statement TYPE sstmnt
                                                   structure TYPE sstruc.
+
     METHODS check_class IMPORTING index     TYPE i
                                   statement TYPE sstmnt
                                   structure TYPE sstruc.
@@ -147,7 +148,11 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD add_line_to_defined_classes.
-    DATA(class_config) = VALUE properties( name = get_class_name( structure ) ).
+    TRY.
+        DATA(class_config) = VALUE properties( name = get_class_name( structure ) ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
 
     IF line_exists( defined_classes[ name = class_config-name ] ).
       RETURN.
@@ -162,7 +167,12 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD check_class.
-    DATA(class_name) = get_class_name( structure ).
+    TRY.
+        DATA(class_name) = get_class_name( structure ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+
     IF NOT line_exists( defined_classes[ name = class_name ] ).
       RETURN.
     ENDIF.
