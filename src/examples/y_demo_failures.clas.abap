@@ -114,6 +114,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
         VALUE(age) TYPE i. "#EC RET_NAME #EC BOOL_PARAM "#EC OPTL_PARAM
     METHODS prefer_is_not_to_not_is.
     METHODS prefer_case_to_elseif.
+    METHODS prefer_new_to_create_object.
     METHODS deprecated_classes.
     METHODS scope_of_variable.
 
@@ -399,6 +400,12 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
     ELSEIF sy-mandt = 500.                                "#EC CI_MAGIC
       value = 5.
     ENDIF.
+  ENDMETHOD.
+
+
+  METHOD prefer_new_to_create_object.
+    DATA demo_failures TYPE REF TO y_demo_failures.
+    CREATE OBJECT demo_failures.
   ENDMETHOD.
 
 
