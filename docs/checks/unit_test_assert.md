@@ -9,17 +9,17 @@ It supports the `CL_ABAP_UNIT_ASSERT=>ASSERT*` and `CL_AUNIT_ASSERT=>ASSERT*`.
 
 ### How does the check work?
 
-It checks for actual (`act`) or expected (`exp`) invalid value, like:
-- When both use the same variable;
+It checks for actual (`act`) or expected (`exp`) invalid value(s), for instance:
+- When both are using the same variable for the Assertion (which will always return TRUE);
 - When both are hardcoded.
 
 ### How to solve the issue?
 
-Fix the actual (`act`) or expected (`exp`) value in the unit test assertion.
+Fix the actual (`act`) or expected (`exp`) value(s) in the unit test assertion in order to achieve a meaningful and real Assertion.
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC UT_ASSERT` which has to be placed after the assertion statement:
+In exceptional cases (if any), you can suppress this finding by using the pseudo comment `"#EC UT_ASSERT` which has to be placed after the assertion statement:
 
 ```abap
 cl_abap_unit_assert=>assert_equals( act = sum 
