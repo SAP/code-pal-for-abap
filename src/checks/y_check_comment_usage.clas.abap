@@ -77,7 +77,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
            <token>-str+0(2) = |##| OR
            <token>-str+0(2) = |*?| OR
            <token>-str+0(2) = |"?| OR
-           ( strlen( <token>-str ) GE 3 AND <token>-str+0(3) = |"#E| ) OR
+           ( strlen( <token>-str ) >= 3 AND <token>-str+0(3) = |"#E| ) OR
            <token>-str CP '"' && object_name && '*.' ).   "#EC CI_MAGIC
         comment_number = comment_number + 1.
       ENDIF.
