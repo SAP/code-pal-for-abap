@@ -70,9 +70,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
       cyclo_comp = 0.
     ENDIF.
 
-    compute_cyclomatic_complexity(
-      CHANGING
-        c_cyclo_comp = cyclo_comp ).
+    compute_cyclomatic_complexity( CHANGING c_cyclo_comp = cyclo_comp ).
 
     IF index = structure-stmnt_to.
       DATA(check_configuration) = detect_check_configuration( error_count = cyclo_comp
