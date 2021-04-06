@@ -29,15 +29,15 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
       WHEN 'IF' OR 'ELSEIF' OR 'WHILE' OR 'CHECK' OR
            'CATCH' OR 'CLEANUP' OR 'ASSERT' OR 'ENDAT' OR 'ENDSELECT' OR
            'LOOP' OR 'ON' OR 'PROVIDE'.
-        ADD 1 TO c_cyclo_comp.
+        c_cyclo_comp = c_cyclo_comp + 1.
       WHEN 'WHEN'.
         IF get_token_rel( second_token ) <> 'OTHERS'.
-          ADD 1 TO c_cyclo_comp.
+          c_cyclo_comp = c_cyclo_comp + 1.
         ENDIF.
       WHEN 'DO'.
         READ TABLE ref_scan_manager->tokens INDEX statement_wa-to INTO DATA(token).
         IF token-str = 'TIMES'.
-          ADD 1 TO c_cyclo_comp.
+          c_cyclo_comp = c_cyclo_comp + 1.
         ENDIF.
     ENDCASE.
   ENDMETHOD.
