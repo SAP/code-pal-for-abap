@@ -68,13 +68,13 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
       WHEN 'SUBMIT'.
         has_redirection = abap_true.
       WHEN 'CALL'.
-        IF ( token2 = 'FUNCTION' ) AND
-           ( ( token4 = 'DESTINATION' ) OR
-           ( ( token4to6 = 'STARTING NEW TASK' ) ) OR
-           ( ( token4to6 = 'IN UPDATE TASK' ) ) ).
+        IF token2 = 'FUNCTION'
+        AND ( token4 = 'DESTINATION'
+              OR token4to6 = 'STARTING NEW TASK'
+              OR token4to6 = 'IN UPDATE TASK' ).
           has_redirection = abap_true.
-        ELSEIF ( token2 = 'METHOD' ) AND
-               ( token3 CS 'CL_GUI_' ).
+        ELSEIF token2 = 'METHOD'
+        AND token3 CS 'CL_GUI_'.
           has_redirection = abap_true.
         ENDIF.
       WHEN OTHERS.
