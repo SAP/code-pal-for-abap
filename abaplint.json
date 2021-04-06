@@ -105,7 +105,7 @@
     "names_no_dash": true,
     "newline_between_methods": true,
     "no_public_attributes": false,
-    "no_yoda_conditions": true,
+    "no_yoda_conditions": false,
     "object_naming": false,
     "obsolete_statement": true,
     "omit_parameter_name": true,
