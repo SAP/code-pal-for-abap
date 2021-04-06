@@ -62,10 +62,12 @@ CLASS y_check_num_public_attributes IMPLEMENTATION.
 
 
   METHOD checkif_attribute_in_structure.
-    IF ( second_token = 'BEGIN' AND third_token = 'OF' ).
-      ADD 1 TO structure_depth.
-    ELSEIF ( second_token = 'END' AND third_token = 'OF' ).
-      SUBTRACT 1 FROM structure_depth.
+    IF second_token = 'BEGIN'
+    AND third_token = 'OF'.
+      structure_depth = structure_depth + 1.
+    ELSEIF second_token = 'END'
+    AND third_token = 'OF'.
+      structure_depth = structure_depth - 1.
     ENDIF.
   ENDMETHOD.
 
@@ -78,7 +80,7 @@ CLASS y_check_num_public_attributes IMPLEMENTATION.
 
     CHECK last_token <> 'READ-ONLY'.
 
-    ADD 1 TO public_attribute_counter.
+    public_attribute_counter = public_attribute_counter + 1.
   ENDMETHOD.
 
 
