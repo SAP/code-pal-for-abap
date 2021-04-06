@@ -56,7 +56,7 @@
     "db_operation_in_loop": false,
     "definitions_top": true,
     "description_empty": true,
-    "double_space": true,
+    "double_space": false,
     "downport": true,
     "empty_line_in_statement": false,
     "empty_statement": true,
