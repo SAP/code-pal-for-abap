@@ -151,7 +151,7 @@
     "unsecure_fae": false,
     "unused_methods": true,
     "unused_types": true,
-    "unused_variables": false,
+    "unused_variables": true,
     "use_bool_expression": true,
     "use_class_based_exceptions": true,
     "use_line_exists": true,
