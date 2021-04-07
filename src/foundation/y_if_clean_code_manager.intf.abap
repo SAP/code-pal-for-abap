@@ -1,29 +1,30 @@
-interface Y_IF_CLEAN_CODE_MANAGER
-  public .
+INTERFACE y_if_clean_code_manager
+  PUBLIC .
 
 
-  types:
+  TYPES:
     BEGIN OF check_configuration,
       object_creation_date     TYPE datum,
       threshold                TYPE ycicc_threshold,
       prio                     TYPE ycicc_message_kind,
       apply_on_productive_code TYPE ycicc_productive_code,
       apply_on_testcode        TYPE ycicc_testcode,
+      allow_pseudo_comments   TYPE ycicp_pseudo_comments,
     END OF check_configuration .
-  types:
+  TYPES:
     check_configurations TYPE STANDARD TABLE OF check_configuration WITH DEFAULT KEY .
 
-  methods READ_CHECK_CUSTOMIZING
-    importing
-      CHECKID type SEOCLSNAME
-    returning
-      value(RESULT) type CHECK_CONFIGURATIONS
-    raising
-      YCX_NO_CHECK_CUSTOMIZING .
-  methods CALCULATE_OBJ_CREATION_DATE
-    importing
-      OBJECT_NAME type SOBJ_NAME
-      OBJECT_TYPE type TROBJTYPE
-    returning
-      value(RESULT) type CREATIONDT .
-endinterface.
+  METHODS read_check_customizing
+    IMPORTING
+      checkid       TYPE seoclsname
+    RETURNING
+      VALUE(result) TYPE check_configurations
+    RAISING
+      ycx_no_check_customizing .
+  METHODS calculate_obj_creation_date
+    IMPORTING
+      object_name   TYPE sobj_name
+      object_type   TYPE trobjtype
+    RETURNING
+      VALUE(result) TYPE creationdt .
+ENDINTERFACE.
