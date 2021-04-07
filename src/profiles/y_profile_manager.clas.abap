@@ -51,23 +51,19 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD is_point_in_time.
-    result = xsdbool( time_start LE point AND time_end GE point ).
+    result = xsdbool( time_start <= point AND time_end >= point ).
   ENDMETHOD.
 
 
   METHOD y_if_profile_manager~check_delegation_rights.
     SELECT * FROM ytab_delegates INTO TABLE @DATA(table) WHERE profile = @profile AND delegate = @sy-uname.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_no_delegation_rights.
     ENDIF.
   ENDMETHOD.
 
 
   METHOD y_if_profile_manager~check_time_overlap.
-    IF check-start_date > check-end_date.
-      RAISE EXCEPTION TYPE ycx_time_overlap.
-    ENDIF.
-
     DATA table TYPE SORTED TABLE OF ytab_checks WITH UNIQUE KEY profile
                                                                 checkid
                                                                 start_date
@@ -76,12 +72,16 @@ CLASS y_profile_manager IMPLEMENTATION.
                                                                 prio
                                                                 apply_on_testcode.
 
-    SELECT * FROM ytab_checks INTO TABLE @table WHERE profile EQ @check-profile AND
-                                                      checkid EQ @check-checkid AND
-                                                      prio EQ @check-prio AND
-                                                      objects_created_on EQ @check-objects_created_on AND
-                                                      apply_on_testcode EQ @check-apply_on_testcode.
-    IF sy-subrc EQ 0.
+    IF check-start_date > check-end_date.
+      RAISE EXCEPTION TYPE ycx_time_overlap.
+    ENDIF.
+
+    SELECT * FROM ytab_checks INTO TABLE @table WHERE profile = @check-profile AND
+                                                      checkid = @check-checkid AND
+                                                      prio = @check-prio AND
+                                                      objects_created_on = @check-objects_created_on AND
+                                                      apply_on_testcode = @check-apply_on_testcode.
+    IF sy-subrc = 0.
       IF selected_check IS NOT INITIAL.
         DELETE TABLE table WITH TABLE KEY profile = selected_check-profile
                                           checkid = selected_check-checkid
@@ -96,7 +96,7 @@ CLASS y_profile_manager IMPLEMENTATION.
         IF has_time_collision( timeline_one_start = line-start_date
                                timeline_one_end   = line-end_date
                                timeline_two_start = check-start_date
-                               timeline_two_end   = check-end_date ) EQ abap_true.
+                               timeline_two_end   = check-end_date ) = abap_true.
           RAISE EXCEPTION TYPE ycx_time_overlap.
         ENDIF.
       ENDLOOP.
@@ -105,15 +105,15 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~delete_check.
-    DELETE FROM ytab_checks WHERE profile EQ @check-profile AND
-                                  checkid EQ @check-checkid AND
-                                  start_date EQ @check-start_date AND
-                                  end_date EQ @check-end_date AND
-                                  objects_created_on EQ @check-objects_created_on AND
-                                  prio EQ @check-prio AND
-                                  threshold EQ @check-threshold AND
-                                  apply_on_testcode EQ @check-apply_on_testcode.
-    IF sy-subrc NE 0.
+    DELETE FROM ytab_checks WHERE profile = @check-profile AND
+                                  checkid = @check-checkid AND
+                                  start_date = @check-start_date AND
+                                  end_date = @check-end_date AND
+                                  objects_created_on = @check-objects_created_on AND
+                                  prio = @check-prio AND
+                                  threshold = @check-threshold AND
+                                  apply_on_testcode = @check-apply_on_testcode.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_remove_a_line.
     ENDIF.
     COMMIT WORK.
@@ -121,9 +121,9 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~delete_delegate.
-    DELETE FROM ytab_delegates WHERE profile EQ @delegate-profile AND
-                                     delegate EQ @delegate-delegate.
-    IF sy-subrc NE 0.
+    DELETE FROM ytab_delegates WHERE profile = @delegate-profile AND
+                                     delegate = @delegate-delegate.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_remove_a_line.
     ENDIF.
     COMMIT WORK.
@@ -131,21 +131,21 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~delete_profile.
-    IF profile-is_standard EQ abap_true.
+    IF profile-is_standard = abap_true.
       RAISE EXCEPTION TYPE ycx_failed_to_remove_a_line.
     ENDIF.
 
-    DELETE FROM ytab_profiles WHERE username EQ @profile-username AND
-                                    profile EQ @profile-profile AND
-                                    is_standard EQ @abap_false.
-    IF sy-subrc NE 0.
+    DELETE FROM ytab_profiles WHERE username = @profile-username AND
+                                    profile = @profile-profile AND
+                                    is_standard = @abap_false.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_remove_a_line.
     ENDIF.
 
     TRY.
         y_if_profile_manager~select_checks( profile-profile ).
       CATCH ycx_entry_not_found.
-        DELETE FROM ytab_delegates WHERE profile EQ @profile-profile.
+        DELETE FROM ytab_delegates WHERE profile = @profile-profile.
     ENDTRY.
     COMMIT WORK.
   ENDMETHOD.
@@ -169,10 +169,10 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~get_check_description.
-    SELECT SINGLE descript FROM vseoclass WHERE langu EQ @sy-langu AND clsname EQ @classname INTO @result.
-    IF sy-subrc NE 0.
-      SELECT SINGLE descript FROM vseoclass WHERE clsname EQ @classname INTO @result.
-      IF sy-subrc NE 0.
+    SELECT SINGLE descript FROM vseoclass WHERE langu = @sy-langu AND clsname = @classname INTO @result.
+    IF sy-subrc <> 0.
+      SELECT SINGLE descript FROM vseoclass WHERE clsname = @classname INTO @result.
+      IF sy-subrc <> 0.
         RAISE EXCEPTION TYPE ycx_entry_not_found.
       ENDIF.
     ENDIF.
@@ -194,8 +194,8 @@ CLASS y_profile_manager IMPLEMENTATION.
     DATA(prof_subrc) = sy-subrc.
 
     SELECT profile FROM ytab_profiles APPENDING TABLE @result.
-    IF sy-subrc NE 0 AND
-       prof_subrc NE 0.
+    IF sy-subrc <> 0 AND
+       prof_subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
 
@@ -237,7 +237,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
   METHOD y_if_profile_manager~insert_check.
     INSERT INTO ytab_checks VALUES check.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
     COMMIT WORK.
@@ -246,7 +246,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
   METHOD y_if_profile_manager~insert_delegate.
     INSERT INTO ytab_delegates VALUES delegate.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
     COMMIT WORK.
@@ -254,12 +254,12 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~insert_profile.
-    IF profile-is_standard EQ abap_true OR
-       profile-profile EQ standardprofile.
+    IF profile-is_standard = abap_true OR
+       profile-profile = standardprofile.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
     MODIFY ytab_profiles FROM profile.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
     COMMIT WORK AND WAIT.
@@ -275,7 +275,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
   METHOD y_if_profile_manager~register_standard_profile.
     SELECT SINGLE * FROM ytab_profiles INTO @DATA(line) WHERE is_standard = @abap_true.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       DATA(profile) = VALUE ytab_profiles( username = 'ADMIN'
                                            profile = standardprofile
                                            is_standard = abap_true
@@ -284,7 +284,7 @@ CLASS y_profile_manager IMPLEMENTATION.
                                            last_changed_at = sy-timlo ). "#EC DECL_IN_IF
 
       INSERT INTO ytab_profiles VALUES profile.
-      IF sy-subrc NE 0.
+      IF sy-subrc <> 0.
         RAISE EXCEPTION TYPE cx_failed.
       ENDIF.
     ENDIF.
@@ -293,7 +293,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
   METHOD y_if_profile_manager~select_checks.
     SELECT * FROM ytab_checks INTO TABLE @result WHERE profile = @profile.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
   ENDMETHOD.
@@ -301,7 +301,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
   METHOD y_if_profile_manager~select_delegates.
     SELECT * FROM ytab_delegates INTO TABLE @result WHERE profile = @profile.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
   ENDMETHOD.
@@ -319,8 +319,8 @@ CLASS y_profile_manager IMPLEMENTATION.
       SELECT SINGLE clsname, descript
       FROM vseoclass
       INTO @DATA(line)
-      WHERE ( langu EQ @sy-langu OR langu EQ 'E' )
-      AND clsname EQ @<line>-obj_name.
+      WHERE ( langu = @sy-langu OR langu = 'E' )
+      AND clsname = @<line>-obj_name.
 
       IF sy-subrc = 0.
         APPEND line TO result.
@@ -334,11 +334,11 @@ CLASS y_profile_manager IMPLEMENTATION.
   METHOD y_if_profile_manager~select_profiles.
     SELECT * FROM ytab_profiles INTO TABLE @result WHERE username = @username OR
                                                          is_standard = @abap_true.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
 
-    LOOP AT result ASSIGNING FIELD-SYMBOL(<line>) WHERE username NE username AND is_standard = abap_true.
+    LOOP AT result ASSIGNING FIELD-SYMBOL(<line>) WHERE username <> username AND is_standard = abap_true.
       <line>-username = username.
     ENDLOOP.
     UNASSIGN <line>.
