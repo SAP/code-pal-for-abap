@@ -126,7 +126,9 @@
     "release_idoc": true,
     "remove_descriptions": false,
     "rfc_error_handling": true,
-    "select_add_order_by": true,
+    "select_add_order_by": {
+      "severity": "Warning"
+    },
     "select_performance": true,
     "selection_screen_naming": false,
     "sequential_blank": true,
