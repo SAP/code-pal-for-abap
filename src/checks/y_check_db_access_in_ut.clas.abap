@@ -119,14 +119,12 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
   METHOD is_persistent_object.
     DATA(upper_name) = to_upper( obj_name ).
 
-    SELECT SINGLE obj_name
+    SELECT SINGLE @abap_true
     FROM tadir
+    INTO @result
     WHERE obj_name = @upper_name
     AND object = @keys-table
-    AND delflag = @space
-    INTO @DATA(tmp).
-
-    result = xsdbool( sy-subrc = 0 ).
+    AND delflag = @space.
   ENDMETHOD.
 
 

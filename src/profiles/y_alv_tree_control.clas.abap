@@ -25,7 +25,6 @@ CLASS y_alv_tree_control DEFINITION PUBLIC CREATE PUBLIC.
       IMPORTING
         type_name  TYPE string
         sort_table TYPE lvc_t_sort
-        events     TYPE REF TO y_if_alv_events
         alv_tree   TYPE REF TO cl_gui_alv_tree_simple
         alv_header TYPE slis_t_listheader
       RAISING
@@ -95,7 +94,6 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
 
     result = NEW y_alv_tree_control( type_name = type_name
                                      sort_table = sort_table
-                                     events = events
                                      alv_tree = alv_tree
                                      alv_header = alv_header ).
   ENDMETHOD.

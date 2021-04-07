@@ -18,7 +18,6 @@ CLASS y_test_code_detector DEFINITION PUBLIC CREATE PUBLIC.
         IMPORTING token         TYPE stokesx
         RETURNING VALUE(result) TYPE abap_bool,
       try_testmethod
-        IMPORTING token         TYPE stokesx
         RETURNING VALUE(result) TYPE abap_bool,
       keyword
         RETURNING VALUE(result) TYPE string,
@@ -96,7 +95,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
         EXIT.
       ENDIF.
 
-      IF try_testmethod( <token> ).
+      IF try_testmethod( ).
         EXIT.
       ENDIF.
     ENDLOOP.
@@ -113,18 +112,17 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
 
 
   METHOD try_testmethod.
-    IF test_code-class IS NOT INITIAL AND (
-        keyword( ) = 'METHODS' OR
-        keyword( ) = 'CLASS-METHODS' ).
-
+    IF test_code-class IS NOT INITIAL
+    AND ( keyword( ) = 'METHODS'
+          OR keyword( ) = 'CLASS-METHODS' ).
       test_code-method = get_token_rel( 2 ).
       APPEND test_code TO test_codes.
       result = abap_true.
     ENDIF.
 
-    IF test_code-class IS NOT INITIAL AND
-       test_code-method IS INITIAL AND
-       keyword( ) = 'ENDCLASS'.
+    IF test_code-class IS NOT INITIAL
+    AND test_code-method IS INITIAL
+    AND keyword( ) = 'ENDCLASS'.
       APPEND test_code TO test_codes.
       result = abap_true.
     ENDIF.

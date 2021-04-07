@@ -75,22 +75,26 @@ CLASS y_exemption_of_function_group IMPLEMENTATION.
                               sub = 'SAPL'
                               off = l_offset ).
 
-    SELECT SINGLE funcname FROM tfdir INTO @DATA(rai_fugr_func)
-      WHERE pname = @fugr_name
-      AND NOT ( ( funcname LIKE '%_UPDATE' ) OR ( funcname LIKE '%_INSERT' ) OR ( funcname LIKE '%_RAI_CREATE_API' ) ). "#EC CI_GENBUFF.
+    SELECT SINGLE funcname
+    FROM tfdir
+    INTO @DATA(rai_fugr_func)
+    WHERE pname = @fugr_name
+    AND NOT ( ( funcname LIKE '%_UPDATE' )
+              OR ( funcname LIKE '%_INSERT' )
+              OR ( funcname LIKE '%_RAI_CREATE_API' ) ). "#EC CI_GENBUFF.
 
-    IF sy-subrc = 4.
+    IF rai_fugr_func IS INITIAL.
       result = abap_true.
     ENDIF.
   ENDMETHOD.
 
 
   METHOD is_table_maintenance_generate.
-    SELECT SINGLE area AS object FROM tlibt INTO @DATA(l_area)
-      WHERE area = @name AND ( areat = 'Extended Table Maintenance (Generated)' ) ##NO_TEXT. "#EC CI_GENBUFF
-    IF sy-subrc = 0.
-      result = abap_true.
-    ENDIF.
+    SELECT SINGLE @abap_true
+    FROM tlibt
+    INTO @result
+    WHERE area = @name
+    AND areat = 'Extended Table Maintenance (Generated)' ##NO_TEXT. "#EC CI_GENBUFF
   ENDMETHOD.
 
 
