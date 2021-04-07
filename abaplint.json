@@ -147,7 +147,9 @@
     "unsecure_fae": false,
     "unused_methods": true,
     "unused_types": true,
-    "unused_variables": true,
+    "unused_variables": {
+      "severity": "Warning",
+    },
     "use_bool_expression": true,
     "use_class_based_exceptions": true,
     "use_line_exists": true,
