@@ -2,7 +2,7 @@ CLASS y_profile_manager DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
     INTERFACES y_if_profile_manager.
     ALIASES create FOR y_if_profile_manager~create.
-    ALIASES get_checks_from_db for y_if_profile_manager~get_checks_from_db.
+    ALIASES get_checks_from_db FOR y_if_profile_manager~get_checks_from_db.
   PROTECTED SECTION.
     METHODS has_time_collision
       IMPORTING timeline_one_start TYPE dats
@@ -22,8 +22,8 @@ CLASS y_profile_manager DEFINITION PUBLIC CREATE PUBLIC .
                delegates_type TYPE tabname VALUE 'YTAB_DELEGATES',
                profiles_type  TYPE tabname VALUE 'YTAB_PROFILES'.
     CONSTANTS standardprofile TYPE ytab_profiles-profile VALUE 'SYSTEM-WIDE STANDARD'.
-    CLASS-METHODS get_check_base_package RETURNING value(result) TYPE devclass.
-    CLASS-METHODS get_checks_package RETURNING value(result) TYPE devclass.
+    CLASS-METHODS get_check_base_package RETURNING VALUE(result) TYPE devclass.
+    CLASS-METHODS get_checks_package RETURNING VALUE(result) TYPE devclass.
 ENDCLASS.
 
 
@@ -56,8 +56,13 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~check_delegation_rights.
-    SELECT * FROM ytab_delegates INTO TABLE @DATA(table) WHERE profile = @profile AND delegate = @sy-uname.
-    IF sy-subrc <> 0.
+    SELECT SINGLE delegate
+    FROM ytab_delegates
+    INTO @DATA(delegate)
+    WHERE profile = @profile
+    AND delegate = @sy-uname.
+
+    IF delegate IS INITIAL.
       RAISE EXCEPTION TYPE ycx_no_delegation_rights.
     ENDIF.
   ENDMETHOD.
@@ -222,7 +227,7 @@ CLASS y_profile_manager IMPLEMENTATION.
     y_if_profile_manager~cleanup_profile( profile-profile ).
 
     LOOP AT delegates ASSIGNING FIELD-SYMBOL(<delegate>).
-       y_if_profile_manager~insert_delegate( <delegate> ).
+      y_if_profile_manager~insert_delegate( <delegate> ).
     ENDLOOP.
 
     LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
@@ -274,8 +279,12 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~register_standard_profile.
-    SELECT SINGLE * FROM ytab_profiles INTO @DATA(line) WHERE is_standard = @abap_true.
-    IF sy-subrc <> 0.
+    SELECT SINGLE @abap_true
+    FROM ytab_profiles
+    INTO @DATA(exists)
+    WHERE is_standard = @abap_true.
+
+    IF exists = abap_false.
       DATA(profile) = VALUE ytab_profiles( username = 'ADMIN'
                                            profile = standardprofile
                                            is_standard = abap_true
@@ -393,12 +402,12 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~profile_exists.
-    try.
+    TRY.
         "Based on Delegates because the profile might be inactive
         result = xsdbool( y_if_profile_manager~select_delegates( name ) IS NOT INITIAL ).
-      catch ycx_entry_not_found.
+      CATCH ycx_entry_not_found.
         result = abap_false.
-    endtry.
+    ENDTRY.
   ENDMETHOD.
 
 
