@@ -30,7 +30,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
             apply_on_test_code            TYPE ycicc_testcode,
             documentation                 TYPE c LENGTH 1000,
             is_threshold_reversed         TYPE abap_bool,
-            allow_pseudo_comments         TYPE abap_bool,
           END OF settings.
 
     METHODS constructor.
@@ -105,7 +104,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   parameter_04           TYPE csequence OPTIONAL
                                   is_include_specific    TYPE sci_inclspec DEFAULT ' '
                                   additional_information TYPE xstring OPTIONAL
-                                  checksum               TYPE int4 OPTIONAL. "#EC OPTL_PARAM
+                                  checksum               TYPE int4 OPTIONAL
+                                  pseudo_comments        TYPE t_comments OPTIONAL. "#EC OPTL_PARAM
 
     METHODS get_column_abs  REDEFINITION.
     METHODS get_column_rel REDEFINITION.
@@ -149,14 +149,14 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_app_comp_in_scope IMPORTING level         TYPE stmnt_levl
-                                 RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_app_comp_in_scope IMPORTING level TYPE stmnt_levl
+                                 RETURNING value(result) TYPE abap_bool.
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_BASE IMPLEMENTATION.
+CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -181,7 +181,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-main }check_documentation.md|.
-    settings-allow_pseudo_comments = abap_true.
 
     has_attributes = do_attributes_exist( ).
 
@@ -299,7 +298,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       check_configuration-object_creation_date = settings-object_created_on.
       check_configuration-prio = settings-prio.
       check_configuration-threshold = settings-threshold.
-      check_configuration-allow_pseudo_comments = settings-allow_pseudo_comments.
+
       APPEND check_configuration TO check_configurations.
     ENDIF.
     EXPORT
@@ -308,7 +307,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       threshold = check_configuration-threshold
       apply_on_productive_code = check_configuration-apply_on_productive_code
       apply_on_testcode = check_configuration-apply_on_testcode
-      allow_pseudo_comments = check_configuration-allow_pseudo_comments
     TO DATA BUFFER p_attributes.
   ENDMETHOD.
 
@@ -514,7 +512,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
       check_configuration-apply_on_testcode = settings-apply_on_test_code.
       check_configuration-threshold = settings-threshold.
-      check_configuration-allow_pseudo_comments = settings-allow_pseudo_comments.
     ENDIF.
 
     INSERT VALUE #(
@@ -550,14 +547,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         kind = ''
         ref  = REF #( check_configuration-apply_on_testcode )
         text =  'Apply on Testcode'(202)
-      ) INTO TABLE sci_attributes.
-    ENDIF.
-
-    IF settings-pseudo_comment IS NOT INITIAL.
-      INSERT VALUE #(
-        kind = ''
-        ref  = REF #( check_configuration-allow_pseudo_comments )
-        text = |Allow { settings-pseudo_comment }|
       ) INTO TABLE sci_attributes.
     ENDIF.
 
@@ -608,7 +597,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
 
     IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = NEW y_exemption_handler( ).
+      clean_code_exemption_handler = new y_exemption_handler( ).
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.
@@ -649,7 +638,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
           threshold = check_configuration-threshold
           apply_on_productive_code = check_configuration-apply_on_productive_code
           apply_on_testcode = check_configuration-apply_on_testcode
-          allow_pseudo_comments = check_configuration-allow_pseudo_comments
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
       CATCH cx_root.                                  "#EC NEED_CX_ROOT
@@ -659,15 +647,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD raise_error.
-    DATA(pseudo_comment) = COND sci_pcom( WHEN settings-allow_pseudo_comments = abap_false THEN settings-pseudo_comment
-                                          ELSE space ).
-
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
                                                                                    scimessages      = scimessages
                                                                                    test             = myname
                                                                                    code             = get_code( error_priority )
-                                                                                   suppress         = pseudo_comment
+                                                                                   suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
 
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
@@ -680,15 +665,17 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
               p_kind = error_priority
               p_test = myname
               p_code = get_code( error_priority )
-              p_suppress = pseudo_comment
+              p_suppress = settings-pseudo_comment
               p_param_1 = parameter_01
               p_param_2 = parameter_02
               p_param_3 = parameter_03
               p_param_4 = parameter_04
               p_inclspec = is_include_specific
               p_detail = additional_information
-              p_checksum_1 = checksum ).
+              p_checksum_1 = checksum
+              p_comments = pseudo_comments ).
     ENDIF.
+
   ENDMETHOD.
 
 
@@ -810,4 +797,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         result = abap_true.
     ENDTRY.
   ENDMETHOD.
+
+
 ENDCLASS.

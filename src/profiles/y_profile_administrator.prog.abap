@@ -38,7 +38,7 @@ ENDMODULE.
 MODULE status_0400 OUTPUT.
   SET PF-STATUS check_customizing_screen.
   SET TITLEBAR check_customizing_screen.
-  lcl_util=>init_check_fields_active( ).
+  lcl_util=>init_check_fields_active( io_check_id ).
 ENDMODULE.
 
 MODULE status_0500 OUTPUT.
