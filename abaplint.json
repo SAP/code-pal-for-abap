@@ -12,11 +12,6 @@
       "url": "https://github.com/abaplint/deps",
       "folder": "/deps1",
       "files": "/src/**/*.*"
-    },
-    {
-      "url": "https://github.com/abapGit/abapGit",
-      "folder": "/deps2",
-      "files": "/src/**/*.*"
     }
   ],
   "syntax": {
