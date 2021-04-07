@@ -49,7 +49,7 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF act-str <> exp-str 
+    IF act-str <> exp-str
       AND ( is_variable( act ) = abap_true
         OR  is_variable( exp ) = abap_true ).
         RETURN.
