@@ -131,7 +131,9 @@
     "select_add_order_by": {
       "severity": "Warning"
     },
-    "select_performance": true,
+    "select_performance": {
+      "severity": "Warning"
+    },
     "selection_screen_naming": false,
     "sequential_blank": true,
     "short_case": true,
