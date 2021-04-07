@@ -290,8 +290,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_attributes.
-    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
-    READ TABLE check_configurations INTO check_configuration INDEX 1.
+    READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
     IF sy-subrc <> 0.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
       check_configuration-apply_on_testcode = settings-apply_on_test_code.
@@ -464,9 +463,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_token_rel.
-    DATA l_index TYPE i.
-
-    l_index = statement_wa-from + p_n - 1.
+    DATA(l_index) = statement_wa-from + p_n - 1.
     IF l_index > statement_wa-to.
       RETURN.
     ENDIF.
@@ -675,6 +672,8 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD run.
+    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
+
     instantiate_objects( ).
 
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
@@ -685,8 +684,6 @@ CLASS y_check_base IMPLEMENTATION.
       FREE ref_scan_manager.
       RETURN.
     ENDIF.
-
-    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
 
     TRY.
         check_start_conditions( ).

@@ -43,12 +43,14 @@ CLASS y_exemption_of_program IMPLEMENTATION.
 
 
   METHOD is_enterprise_search_generate.
-    SELECT * FROM trdir INTO TABLE @DATA(genprog)
-        WHERE name LIKE '%\_001' ESCAPE '\'
-          AND ( secu = 'ESH' OR name LIKE 'ESHS%' )
-          AND ( subc = 'S' OR subc = '1' )     "include programs ('I') are not supported
-          AND name = @name.
-    IF sy-subrc EQ 0.
+    SELECT SINGLE name FROM trdir
+    INTO @DATA(tmp)
+    WHERE name LIKE '%\_001' ESCAPE '\'
+    AND ( secu = 'ESH' OR name LIKE 'ESHS%' )
+    AND ( subc = 'S' OR subc = '1' )     "include programs ('I') are not supported
+    AND name = @name.
+
+    IF sy-subrc = 0.
       result = abap_true.
     ENDIF.
   ENDMETHOD.

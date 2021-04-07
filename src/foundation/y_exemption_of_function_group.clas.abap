@@ -35,21 +35,32 @@ CLASS y_exemption_of_function_group IMPLEMENTATION.
     IF name(1) = '/'.
       FIND FIRST OCCURRENCE OF '/' IN name+1 MATCH OFFSET DATA(l_offset).
       l_offset = l_offset + 2.
-      fugr_name = insert( val = name sub = 'SAPL' off = l_offset ).
+      fugr_name = insert( val = name
+                          sub = 'SAPL'
+                          off = l_offset ).
     ELSE.
       fugr_name = 'SAPL' && name.
     ENDIF.
 
-    SELECT SINGLE COUNT(*) FROM tfdir INTO fugr_func_viewframe
-      WHERE pname = fugr_name AND ( funcname LIKE 'VIEWFRAME%' OR funcname LIKE 'VIEWPROC%' OR funcname LIKE 'TABLEPROC%' OR funcname LIKE 'TABLEFRAME%' ). "#EC CI_BYPASS  "#EC CI_GENBUFF
+    SELECT SINGLE COUNT(*)
+    FROM tfdir
+    INTO @fugr_func_viewframe
+    WHERE pname = @fugr_name
+    AND (    funcname LIKE 'VIEWFRAME%'
+          OR funcname LIKE 'VIEWPROC%'
+          OR funcname LIKE 'TABLEPROC%'
+          OR funcname LIKE 'TABLEFRAME%' ). "#EC CI_BYPASS  "#EC CI_GENBUFF
 
     IF fugr_func_viewframe = 0 OR sy-subrc = 4.
       RETURN.
     ENDIF.
 
-    SELECT SINGLE COUNT(*) FROM tfdir INTO fugr_func
-      WHERE pname = fugr_name.          "#EC CI_BYPASS. "#EC CI_GENBUFF
-    IF ( fugr_func = fugr_func_viewframe ).
+    SELECT SINGLE COUNT(*)
+    FROM tfdir
+    INTO @fugr_func
+    WHERE pname = @fugr_name.          "#EC CI_BYPASS. "#EC CI_GENBUFF
+
+    IF fugr_func = fugr_func_viewframe.
       result = abap_true.
     ENDIF.
   ENDMETHOD.
@@ -60,7 +71,9 @@ CLASS y_exemption_of_function_group IMPLEMENTATION.
 
     FIND FIRST OCCURRENCE OF '/' IN name+1 MATCH OFFSET DATA(l_offset).
     l_offset = l_offset + 2.
-    DATA(fugr_name) = insert( val = name sub = 'SAPL' off = l_offset ).
+    DATA(fugr_name) = insert( val = name
+                              sub = 'SAPL'
+                              off = l_offset ).
 
     SELECT SINGLE funcname FROM tfdir INTO @DATA(rai_fugr_func)
       WHERE pname = @fugr_name

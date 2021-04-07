@@ -41,7 +41,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
     ENDIF.
 
     LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>)
-      WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition.
+      WHERE stmnt_type = scan_struc_stmnt_type-class_definition.
 
       process_statements( <structure> ).
     ENDLOOP.
@@ -62,7 +62,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
     IF keyword( ) = 'CLASS'.
       DATA(class) = get_token_rel( 2 ). "#EC DECL_IN_IF
       READ TABLE test_codes TRANSPORTING NO FIELDS WITH KEY class = class.
-      IF sy-subrc EQ 0.
+      IF sy-subrc = 0.
         result = abap_true.
       ENDIF.
     ENDIF.
@@ -107,7 +107,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
 
 
   METHOD try_testclass.
-    IF token-str EQ 'TESTING' AND
+    IF token-str = 'TESTING' AND
        keyword( ) = 'CLASS'.
       test_code-class = get_token_rel( 2 ).
       result = abap_true.
@@ -167,7 +167,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
           result = abap_true.
           EXIT.
         ENDIF.
-        IF low_level_structure-back EQ 0.
+        IF low_level_structure-back = 0.
           EXIT.
         ENDIF.
       ENDDO.

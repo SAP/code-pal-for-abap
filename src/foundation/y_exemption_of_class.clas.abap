@@ -10,14 +10,12 @@ CLASS y_exemption_of_class DEFINITION PUBLIC CREATE PUBLIC.
     CLASS-METHODS is_odata_generate RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_ecatt_odata_test_generate RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_fin_infotype_generate RETURNING VALUE(result) TYPE abap_bool.
-    CLASS-METHODS is_amdp_class RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_extensibility_generate RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_shma_generate RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_proxy_generate RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_sadl_generate RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_exit_class RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_exception_class RETURNING VALUE(result) TYPE abap_bool.
-    CLASS-METHODS is_xlca_generate RETURNING VALUE(result) TYPE abap_bool.
     CLASS-METHODS is_bcp_application RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
@@ -51,34 +49,6 @@ CLASS y_exemption_of_class IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_amdp_class.
-    DATA: lt_interfaces TYPE seor_implementing_keys.
-    DATA: lv_seoclskey TYPE  seoclskey.
-
-    lv_seoclskey = class_header_data-clsname.
-
-    CALL FUNCTION 'SEO_CLASS_ALL_IMPLEMENTG_GET'
-      EXPORTING
-        clskey       = lv_seoclskey
-      IMPORTING
-        set          = lt_interfaces
-      EXCEPTIONS
-        not_existing = 1
-        is_interface = 2
-        model_only   = 3
-        OTHERS       = 4.
-    IF sy-subrc <> 0.
-      RETURN.
-    ENDIF.
-
-    LOOP AT lt_interfaces TRANSPORTING NO FIELDS
-      WHERE refclsname = 'IF_AMDP_MARKER_HDB'.
-      result = abap_true.
-      RETURN.
-    ENDLOOP.
-  ENDMETHOD.
-
-
   METHOD is_bcp_application.
     DATA it_bsp_classes TYPE STANDARD TABLE OF seoclsname.
 
@@ -94,7 +64,7 @@ CLASS y_exemption_of_class IMPLEMENTATION.
     SELECT SINGLE refclsname FROM seometarel
       WHERE clsname = @class_header_data-clsname AND refclsname IS NOT NULL
       INTO @DATA(inherited_by).
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RETURN.
     ENDIF.
 
@@ -241,34 +211,6 @@ CLASS y_exemption_of_class IMPLEMENTATION.
     ENDIF.
     LOOP AT lt_interfaces TRANSPORTING NO FIELDS
       WHERE refclsname = '/FTI/IF_FTI_MODEL' OR refclsname = '/FTI/IF_NATIVE_SQL_GENERATOR'.
-      result = abap_true.
-      RETURN.
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD is_xlca_generate.
-    DATA: lt_interfaces TYPE seor_implementing_keys.
-    DATA: lv_seoclskey TYPE  seoclskey.
-
-    lv_seoclskey = class_header_data-clsname.
-
-    CALL FUNCTION 'SEO_CLASS_ALL_IMPLEMENTG_GET'
-      EXPORTING
-        clskey       = lv_seoclskey
-      IMPORTING
-        set          = lt_interfaces
-      EXCEPTIONS
-        not_existing = 1
-        is_interface = 2
-        model_only   = 3
-        OTHERS       = 4.
-    IF sy-subrc <> 0.
-      RETURN.
-    ENDIF.
-
-    LOOP AT lt_interfaces TRANSPORTING NO FIELDS
-      WHERE refclsname = 'IF_CTS_TABLE_CONVERSION'.
       result = abap_true.
       RETURN.
     ENDLOOP.
