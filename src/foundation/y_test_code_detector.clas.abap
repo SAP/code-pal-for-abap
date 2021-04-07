@@ -113,8 +113,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
 
   METHOD try_testmethod.
     IF test_code-class IS NOT INITIAL
-    AND ( keyword( ) = 'METHODS'
-          OR keyword( ) = 'CLASS-METHODS' ).
+    AND ( keyword( ) = 'METHODS' OR keyword( ) = 'CLASS-METHODS' ).
       test_code-method = get_token_rel( 2 ).
       APPEND test_code TO test_codes.
       result = abap_true.
