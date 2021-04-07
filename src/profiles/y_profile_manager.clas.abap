@@ -236,7 +236,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~insert_check.
-    INSERT INTO ytab_checks VALUES check.
+    INSERT INTO ytab_checks VALUES @check.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
@@ -245,7 +245,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~insert_delegate.
-    INSERT INTO ytab_delegates VALUES delegate.
+    INSERT INTO ytab_delegates VALUES @delegate.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
@@ -258,7 +258,7 @@ CLASS y_profile_manager IMPLEMENTATION.
        profile-profile = standardprofile.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
-    MODIFY ytab_profiles FROM profile.
+    MODIFY ytab_profiles FROM @profile.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_add_a_line.
     ENDIF.
@@ -283,7 +283,7 @@ CLASS y_profile_manager IMPLEMENTATION.
                                            last_changed_on = sy-datlo
                                            last_changed_at = sy-timlo ). "#EC DECL_IN_IF
 
-      INSERT INTO ytab_profiles VALUES profile.
+      INSERT INTO ytab_profiles VALUES @profile.
       IF sy-subrc <> 0.
         RAISE EXCEPTION TYPE cx_failed.
       ENDIF.
@@ -421,7 +421,7 @@ CLASS y_profile_manager IMPLEMENTATION.
   METHOD get_check_base_package.
     SELECT SINGLE devclass
     FROM tadir
-    INTO result
+    INTO @result
     WHERE obj_name = 'Y_CHECK_BASE'.
   ENDMETHOD.
 
