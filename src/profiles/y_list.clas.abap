@@ -100,7 +100,7 @@ CLASS Y_LIST IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD y_if_list~count.
+  METHOD y_if_list~number_of_rows.
     FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
     result = 0.
     ASSIGN table_component->* TO <table>.
