@@ -20,7 +20,7 @@ INTERFACE y_if_list
     IMPORTING line  TYPE any
               index TYPE i.
 
-  METHODS lines
+  METHODS count
     RETURNING VALUE(result) TYPE i.
 
   METHODS is_contained

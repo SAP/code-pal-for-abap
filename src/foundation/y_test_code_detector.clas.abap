@@ -61,10 +61,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
   METHOD is_test_class.
     IF keyword( ) = 'CLASS'.
       DATA(class) = get_token_rel( 2 ). "#EC DECL_IN_IF
-      READ TABLE test_codes TRANSPORTING NO FIELDS WITH KEY class = class.
-      IF sy-subrc = 0.
-        result = abap_true.
-      ENDIF.
+      result = xsdbool( line_exists( test_codes[ class = class ] ) ).
     ENDIF.
   ENDMETHOD.
 
@@ -158,7 +155,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
       DO.
         DATA(low_level_structure) = high_level_structure. "#EC DECL_IN_IF
         READ TABLE ref_scan_manager->structures INTO high_level_structure INDEX low_level_structure-back.
-        IF sy-subrc NE 0.
+        IF sy-subrc <> 0.
           EXIT.
         ENDIF.
 

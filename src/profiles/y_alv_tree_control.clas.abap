@@ -55,7 +55,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
   METHOD autosize_all_fields.
     DATA filler TYPE i VALUE 7.
     LOOP AT fieldcats ASSIGNING FIELD-SYMBOL(<line>).
-      IF <line>-dd_outlen GE strlen( <line>-coltext ).
+      IF <line>-dd_outlen >= strlen( <line>-coltext ).
         <line>-outputlen = <line>-dd_outlen + filler.
       ELSE.
         <line>-outputlen = strlen( <line>-coltext ) + filler.
@@ -130,7 +130,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
   METHOD y_if_alv_tree_control~get_selected_index.
     DATA index_table TYPE lvc_t_indx.
     CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
-    IF sy-subrc EQ 0.
+    IF sy-subrc = 0.
       alv_tree->get_selected_nodes( CHANGING ct_index_outtab = index_table ).
       TRY.
           result = index_table[ 1 ].
@@ -142,9 +142,12 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
 
 
   METHOD y_if_alv_tree_control~set_selected_index.
-    CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
     DATA index_table TYPE lvc_t_indx.
+
+    CHECK y_if_alv_tree_control~list_control( )->get_line_at( 1 ) IS NOT INITIAL.
+
     APPEND index TO index_table.
+
     alv_tree->set_selected_nodes(
       EXPORTING
         it_index_outtab         = index_table
@@ -196,7 +199,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
 
 
   METHOD y_if_alv_tree_control~set_field_header_text.
-    LOOP AT fieldcats ASSIGNING FIELD-SYMBOL(<line>) WHERE fieldname EQ to_upper( fieldname ).
+    LOOP AT fieldcats ASSIGNING FIELD-SYMBOL(<line>) WHERE fieldname = to_upper( fieldname ).
       <line>-coltext = header_text.
     ENDLOOP.
     UNASSIGN <line>.
@@ -204,8 +207,8 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
 
 
   METHOD y_if_alv_tree_control~set_field_visibility.
-    LOOP AT fieldcats ASSIGNING FIELD-SYMBOL(<line>) WHERE fieldname EQ to_upper( fieldname ).
-      <line>-no_out = xsdbool( is_visible EQ abap_false ).
+    LOOP AT fieldcats ASSIGNING FIELD-SYMBOL(<line>) WHERE fieldname = to_upper( fieldname ).
+      <line>-no_out = xsdbool( is_visible = abap_false ).
     ENDLOOP.
     UNASSIGN <line>.
   ENDMETHOD.
@@ -213,7 +216,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
 
   METHOD y_if_alv_tree_control~toolbar_control.
     alv_tree->get_toolbar_object( IMPORTING er_toolbar = result EXCEPTIONS OTHERS = 4 ).
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
   ENDMETHOD.
@@ -229,7 +232,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
       y_if_alv_tree_control~toolbar_control( )->set_button_state( EXPORTING enabled  = abap_true
                                                                             fcode    = <button>-function
                                                                   EXCEPTIONS OTHERS  = 4 ).
-      IF sy-subrc NE 0.
+      IF sy-subrc <> 0.
         RAISE EXCEPTION TYPE cx_failed.
       ENDIF.
     ENDLOOP.
@@ -241,7 +244,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
       y_if_alv_tree_control~toolbar_control( )->set_button_state( EXPORTING enabled  = abap_false
                                                                             fcode    = <button>-function
                                                                   EXCEPTIONS OTHERS  = 4 ).
-      IF sy-subrc NE 0.
+      IF sy-subrc <> 0.
         RAISE EXCEPTION TYPE cx_failed.
       ENDIF.
     ENDLOOP.

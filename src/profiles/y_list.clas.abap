@@ -93,16 +93,16 @@ CLASS Y_LIST IMPLEMENTATION.
     FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     FIND FIRST OCCURRENCE OF line IN TABLE <table>.
-    IF sy-subrc EQ 0.
+    IF sy-subrc = 0.
       result = abap_true.
     ENDIF.
     UNASSIGN: <table>.
   ENDMETHOD.
 
 
-  METHOD y_if_list~lines.
-    result = 0.
+  METHOD y_if_list~count.
     FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    result = 0.
     ASSIGN table_component->* TO <table>.
     DESCRIBE TABLE <table> LINES result.
     UNASSIGN <table>.

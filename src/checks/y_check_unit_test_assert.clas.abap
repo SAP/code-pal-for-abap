@@ -49,11 +49,9 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF act-str <> exp-str.
-      IF is_variable( act ) = abap_true
-      OR is_variable( exp ) = abap_true.
-        RETURN.
-      ENDIF.
+    IF act-str <> exp-str
+    AND ( is_variable( act ) = abap_true OR is_variable( exp ) = abap_true ).
+      RETURN.
     ENDIF.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
