@@ -133,7 +133,9 @@
     "sicf_consistency": true,
     "space_before_colon": true,
     "space_before_dot": true,
-    "sql_escape_host_variables": true,
+    "sql_escape_host_variables": {
+      "severity": "Warning"
+    },
     "start_at_tab": true,
     "superclass_final": true,
     "sy_modification": true,
