@@ -115,7 +115,9 @@
     "parser_702_chaining": false,
     "parser_error": true,
     "parser_missing_space": true,
-    "prefer_inline": true,
+    "prefer_inline": {
+      "severity": "Warning"
+    },
     "prefer_is_not": true,
     "prefer_raise_exception_new": true,
     "prefer_returning_to_exporting": true,
