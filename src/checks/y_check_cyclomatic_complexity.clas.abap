@@ -1,7 +1,6 @@
 CLASS y_check_cyclomatic_complexity DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     CONSTANTS second_token TYPE i VALUE 2.
-    CONSTANTS third_token TYPE i VALUE 3.
 
     METHODS constructor.
 
@@ -26,9 +25,18 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
 
   METHOD compute_cyclomatic_complexity.
     CASE keyword( ).
-      WHEN 'IF' OR 'ELSEIF' OR 'WHILE' OR 'CHECK' OR
-           'CATCH' OR 'CLEANUP' OR 'ASSERT' OR 'ENDAT' OR 'ENDSELECT' OR
-           'LOOP' OR 'ON' OR 'PROVIDE'.
+      WHEN 'IF'
+      OR 'ELSEIF'
+      OR 'WHILE'
+      OR 'CHECK'
+      OR 'CATCH'
+      OR 'CLEANUP'
+      OR 'ASSERT'
+      OR 'ENDAT'
+      OR 'ENDSELECT'
+      OR 'LOOP'
+      OR 'ON'
+      OR 'PROVIDE'.
         c_cyclo_comp = c_cyclo_comp + 1.
       WHEN 'WHEN'.
         IF get_token_rel( second_token ) <> 'OTHERS'.

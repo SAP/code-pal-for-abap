@@ -6,11 +6,9 @@ CLASS y_check_method_output_param DEFINITION PUBLIC  INHERITING FROM y_check_bas
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    DATA has_found_methods TYPE abap_bool.
     DATA has_exporting_parameter TYPE abap_bool.
     DATA has_changing_parameter TYPE abap_bool.
     DATA has_returning_parameter TYPE abap_bool.
-    DATA has_pseudo_comment TYPE abap_bool.
 
     METHODS has_error RETURNING VALUE(result) TYPE abap_bool.
 

@@ -49,7 +49,7 @@ CLASS y_check_self_reference IMPLEMENTATION.
 
 
   METHOD has_self_reference.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str CP 'ME->*'.
       result = abap_true.

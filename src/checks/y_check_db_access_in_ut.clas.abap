@@ -236,18 +236,16 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
   METHOD is_part_of_framework.
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
-      FROM structure-stmnt_from TO structure-stmnt_to.
-
-      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-       FROM <statement>-from TO <statement>-to
-       WHERE str = framework-qsql_if OR
-             str = framework-qsql_cl OR
-             str = framework-cds_if OR
-             str = framework-cds_cl.
+    FROM structure-stmnt_from TO structure-stmnt_to.
+      LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+      FROM <statement>-from TO <statement>-to
+      WHERE str = framework-qsql_if
+      OR str = framework-qsql_cl
+      OR str = framework-cds_if
+      OR str = framework-cds_cl.
         result = abap_true.
         RETURN.
       ENDLOOP.
-
     ENDLOOP.
   ENDMETHOD.
 
@@ -262,10 +260,10 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
   METHOD get_risk_level.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-         FROM statement-from TO statement-to
-         WHERE str = risk_level-harmless
-            OR str = risk_level-dangerous
-            OR str = risk_level-critical.
+    FROM statement-from TO statement-to
+    WHERE str = risk_level-harmless
+    OR str = risk_level-dangerous
+    OR str = risk_level-critical.
       result = <token>-str.
     ENDLOOP.
   ENDMETHOD.

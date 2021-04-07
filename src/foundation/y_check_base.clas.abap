@@ -44,7 +44,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     CONSTANTS initial_date TYPE datum VALUE '19000101'.
 
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
-    DATA check_name TYPE seoclsname.
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
     DATA is_testcode TYPE abap_bool.
