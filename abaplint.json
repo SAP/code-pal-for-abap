@@ -80,7 +80,9 @@
     "in_statement_indentation": false,
     "indentation": false,
     "inline_data_old_versions": true,
-    "intf_referencing_clas": true,
+    "intf_referencing_clas": {
+      "severity": "Warning"
+    },
     "keep_single_parameter_on_one_line": true,
     "line_break_multiple_parameters": true,
     "line_break_style": true,
