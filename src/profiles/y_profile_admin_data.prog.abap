@@ -18,5 +18,3 @@ DATA io_threshold TYPE ytab_checks-threshold.
 DATA io_prio TYPE ytab_checks-prio.
 DATA chbx_on_testcode TYPE abap_bool.
 DATA chbx_on_prodcode TYPE abap_bool.
-DATA chbx_allow_pcom TYPE abap_bool.
-DATA lbl_pcom_name TYPE sci_pcom.
