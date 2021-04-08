@@ -14,6 +14,7 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 
 2021-04-** v.1.14.0
 ------------------
+! abapLint Rules
 * Diffs for TABL (#359)
 + Unit Test Without/With Invalid Assert (#288)
 + Prefer NEW to CREATE OBJECT (#283)
