@@ -329,7 +329,7 @@ ENDCLASS.
 CLASS lcl_delegator_events IMPLEMENTATION.
 
   METHOD y_if_alv_events~handle_function_selected.
-    CHECK lcl_util=>check_delegate_rights( ) EQ abap_true.
+    CHECK lcl_util=>check_delegate_rights( ) = abap_true.
 
     CASE fcode.
       WHEN 'BTN_ADD'.
@@ -356,7 +356,7 @@ ENDCLASS.
 CLASS lcl_check_events IMPLEMENTATION.
 
   METHOD y_if_alv_events~handle_function_selected.
-    IF fcode EQ 'BTN_INFO'.
+    IF fcode = 'BTN_INFO'.
       handle_btn_info( ).
       RETURN.
     ENDIF.
@@ -629,7 +629,7 @@ CLASS lcl_util IMPLEMENTATION.
     DATA(line) = profiles_tree->get_selected_line( ).
     FIELD-SYMBOLS: <line> TYPE ytab_profiles.
     ASSIGN line->* TO <line>.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
     result = <line>.
@@ -645,7 +645,7 @@ CLASS lcl_util IMPLEMENTATION.
     DATA(line) = delegates_tree->get_selected_line( ).
     FIELD-SYMBOLS: <line> TYPE ytab_delegates.
     ASSIGN line->* TO <line>.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
     result = <line>.
@@ -656,7 +656,7 @@ CLASS lcl_util IMPLEMENTATION.
     DATA(line) = checks_tree->get_selected_line( ).
     FIELD-SYMBOLS: <line> TYPE ytab_checks.
     ASSIGN line->* TO <line>.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
     result = <line>.
@@ -730,7 +730,7 @@ CLASS lcl_util IMPLEMENTATION.
         return_tab   = result
       EXCEPTIONS
         OTHERS       = 4.
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
   ENDMETHOD.
@@ -821,19 +821,19 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(obj) = get_check( io_check_id ).
 
-        IF obj->settings-disable_threshold_selection EQ abap_true.
+        IF obj->settings-disable_threshold_selection = abap_true.
           set_threshold_active( abap_false ).
         ELSE.
           set_threshold_active( abap_true ).
         ENDIF.
 
-        IF obj->settings-disable_on_prodcode_selection EQ abap_true.
+        IF obj->settings-disable_on_prodcode_selection = abap_true.
           set_on_prodcode_active( abap_false ).
         ELSE.
           set_on_prodcode_active( abap_true ).
         ENDIF.
 
-        IF obj->settings-disable_on_testcode_selection EQ abap_true.
+        IF obj->settings-disable_on_testcode_selection = abap_true.
           set_on_testcode_active( abap_false ).
         ELSE.
           set_on_testcode_active( abap_true ).
@@ -847,7 +847,7 @@ CLASS lcl_util IMPLEMENTATION.
 
         lbl_pcom_name = obj->settings-pseudo_comment.
 
-        IF has_edit_mode_started EQ abap_true.
+        IF has_edit_mode_started = abap_true.
           io_threshold = obj->settings-threshold.
           io_prio = obj->settings-prio.
           io_creation_date = obj->settings-object_created_on.
@@ -898,8 +898,8 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD set_dynpro_field_active.
     LOOP AT SCREEN INTO DATA(line).
 
-      IF line-name EQ to_upper( fieldname ).
-        IF is_active EQ abap_true.
+      IF line-name = to_upper( fieldname ).
+        IF is_active = abap_true.
           line-input = 1.
         ELSE.
           line-input = 0.
@@ -1114,7 +1114,7 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_delegate.
-    CHECK user_command EQ 'ENTR_300' AND io_delegate_name NE space.
+    CHECK user_command = 'ENTR_300' AND io_delegate_name <> space.
 
     TRY.
         profile_manager->insert_delegate( VALUE #( profile = lcl_util=>get_selected_profile( )-profile
@@ -1159,7 +1159,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD check_delegate_rights.
     TRY.
         DATA(prof) = lcl_util=>get_selected_profile( ).
-        IF prof-is_standard EQ abap_true.
+        IF prof-is_standard = abap_true.
           RAISE EXCEPTION TYPE cx_failed.
         ENDIF.
 
@@ -1243,8 +1243,8 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD check_customization.
-    CHECK user_command EQ 'ENTR_400'
-    AND io_check_id NE space.
+    CHECK user_command = 'ENTR_400'
+    AND io_check_id <> space.
 
     add_check( edit_mode ).
   ENDMETHOD.

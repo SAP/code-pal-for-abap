@@ -659,15 +659,15 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD raise_error.
-    DATA(pseudo_comment) = COND sci_pcom( WHEN settings-ignore_pseudo_comments = abap_false THEN settings-pseudo_comment ).
-
+    DATA(pseudo_comment) = COND #( WHEN settings-ignore_pseudo_comments = abap_false THEN settings-pseudo_comment ).
+    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
+                                                                               scimessages = scimessages
+                                                                               test = myname
+                                                                               code = get_code( error_priority )
+                                                                               suppress = pseudo_comment
+                                                                               position = statement_index ).
     statistics->collect( kind = error_priority
-                         pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
-                                                                                   scimessages      = scimessages
-                                                                                   test             = myname
-                                                                                   code             = get_code( error_priority )
-                                                                                   suppress         = pseudo_comment
-                                                                                   position         = statement_index ) ).
+                         pc = pcom_detector ).
 
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type

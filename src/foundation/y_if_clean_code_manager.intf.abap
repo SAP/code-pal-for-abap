@@ -9,7 +9,7 @@ INTERFACE y_if_clean_code_manager
       prio                     TYPE ycicc_message_kind,
       apply_on_productive_code TYPE ycicc_productive_code,
       apply_on_testcode        TYPE ycicc_testcode,
-      ignore_pseudo_comments   TYPE ycicp_pseudo_comments,
+      ignore_pseudo_comments   TYPE y_code_pal_pseudo_comments,
     END OF check_configuration .
   TYPES:
     check_configurations TYPE STANDARD TABLE OF check_configuration WITH DEFAULT KEY .

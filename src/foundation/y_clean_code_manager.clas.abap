@@ -4,7 +4,6 @@ CLASS y_clean_code_manager DEFINITION PUBLIC CREATE PUBLIC.
     ALIASES calculate_obj_creation_date FOR y_if_clean_code_manager~calculate_obj_creation_date.
     ALIASES read_check_customizing FOR y_if_clean_code_manager~read_check_customizing.
 
-  PROTECTED SECTION.
   PRIVATE SECTION.
     METHODS determine_profiles RETURNING VALUE(result) TYPE string_table
                                RAISING   ycx_no_check_customizing.
@@ -36,8 +35,7 @@ CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
                                                                                       prio = <check>-prio
                                                                                       apply_on_productive_code = <check>-apply_on_productive_code
                                                                                       apply_on_testcode = <check>-apply_on_testcode
-                                                                                      ignore_pseudo_comments = <check>-ignore_pseudo_comments
-                                                                                      ).
+                                                                                      ignore_pseudo_comments = <check>-ignore_pseudo_comments ).
       result = VALUE #( BASE result ( CORRESPONDING #( check_configuration ) ) ).
     ENDLOOP.
   ENDMETHOD.
