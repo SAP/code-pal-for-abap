@@ -109,7 +109,7 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
 
 
   METHOD has_multiple_conditions.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'AND' OR str = 'OR'.
       result = abap_true.

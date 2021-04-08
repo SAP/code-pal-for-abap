@@ -59,17 +59,17 @@ CLASS lcl_check_registration IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_check_compatible.
-    IF name NE get_category_name( ).
-      DATA code_pal_check TYPE REF TO y_check_base. "#EC DECL_IN_IF
+    DATA code_pal_check TYPE REF TO y_check_base.
+    IF name <> get_category_name( ).
       CREATE OBJECT code_pal_check TYPE (name).
     ENDIF.
   ENDMETHOD.
 
   METHOD select_object_list.
     SELECT SINGLE devclass FROM tadir
-        WHERE obj_name EQ @reference-check_base
-        AND object EQ @reference-class
-        AND delflag EQ @abap_false
+        WHERE obj_name = @reference-check_base
+        AND object = @reference-class
+        AND delflag = @abap_false
         INTO @DATA(packagename).
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
@@ -78,9 +78,9 @@ CLASS lcl_check_registration IMPLEMENTATION.
     REPLACE reference-foundation IN packagename WITH reference-checks.
 
     SELECT obj_name FROM tadir
-      WHERE devclass EQ @packagename
-      AND object EQ @reference-class
-      AND delflag EQ @abap_false
+      WHERE devclass = @packagename
+      AND object = @reference-class
+      AND delflag = @abap_false
       INTO TABLE @result.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
@@ -93,7 +93,7 @@ CLASS lcl_check_registration IMPLEMENTATION.
   METHOD activate_check.
     is_check_compatible( name ).
 
-    INSERT scitests FROM name.
+    INSERT scitests FROM @name.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
@@ -102,7 +102,7 @@ CLASS lcl_check_registration IMPLEMENTATION.
   METHOD deactivate_check.
     is_check_compatible( name ).
 
-    DELETE FROM scitests WHERE name = name.
+    DELETE FROM scitests WHERE name = @name.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
@@ -140,12 +140,9 @@ CLASS lcl_util IMPLEMENTATION.
       TRY.
           lcl_check_registration=>activate_check( <name> ).
           count_successes = count_successes + 1.
-        CATCH cx_failed.
+        CATCH cx_failed
+              cx_sy_create_object_error.
           count_errors = count_errors + 1.
-
-
-          DATA dta TYPE REF TO cl_ci_tests.
-
       ENDTRY.
     ENDLOOP.
     WRITE: / |{ count_successes } { messages-successfully_activated }|.
@@ -159,7 +156,8 @@ CLASS lcl_util IMPLEMENTATION.
       TRY.
           lcl_check_registration=>deactivate_check( <name> ).
           count_successes = count_successes + 1.
-        CATCH cx_failed.
+        CATCH cx_failed
+              cx_sy_create_object_error.
           count_faults = count_faults + 1.
       ENDTRY.
     ENDLOOP.

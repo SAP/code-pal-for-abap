@@ -15,10 +15,10 @@ CLASS y_alv_events IMPLEMENTATION.
 
 
   METHOD y_if_alv_events~get_events.
-    IF mode EQ y_if_alv_events~mode_double_click.
+    IF mode = y_if_alv_events~mode_double_click.
       result = VALUE y_if_alv_events=>simple_events( ( eventid = cl_gui_column_tree=>eventid_node_double_click
                                                        appl_event = abap_true ) ).
-    ELSEIF mode EQ y_if_alv_events~mode_selection_changed.
+    ELSEIF mode = y_if_alv_events~mode_selection_changed.
       result = VALUE y_if_alv_events=>simple_events( ( eventid = cl_gui_column_tree=>eventid_selection_changed
                                                        appl_event = abap_true ) ).
     ENDIF.

@@ -50,12 +50,18 @@ CLASS y_clean_code_manager IMPLEMENTATION.
 
     FIND FIRST OCCURRENCE OF `Y_CLEAN_CODE_REPORTING` IN TABLE callstack.
     IF sy-subrc = 0.
-      SELECT SINGLE obj_name FROM tadir INTO obj_name
-        WHERE pgmid = 'R3TR' AND
-              object = 'TABL' AND
-              obj_name = profile_db.
+      SELECT SINGLE obj_name
+      FROM tadir
+      INTO @obj_name
+      WHERE pgmid = 'R3TR'
+      AND object = 'TABL'
+      AND obj_name = @profile_db.
+
       IF sy-subrc = 0.
-        SELECT profile FROM (profile_db) INTO TABLE result.
+        SELECT profile
+        FROM (profile_db)
+        INTO TABLE @result.
+
         IF sy-subrc = 0.
           RETURN.
         ENDIF.

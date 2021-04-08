@@ -33,8 +33,8 @@ CLASS y_check_equals_sign_chaining IMPLEMENTATION.
 
   METHOD inspect_tokens.
 
-    CHECK get_second_token( statement ) EQ '='.
-    CHECK get_fourth_token( statement ) EQ '='.
+    CHECK get_second_token( statement ) = '='.
+    CHECK get_fourth_token( statement ) = '='.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 

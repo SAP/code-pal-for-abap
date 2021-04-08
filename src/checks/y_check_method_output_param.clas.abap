@@ -6,13 +6,10 @@ CLASS y_check_method_output_param DEFINITION PUBLIC  INHERITING FROM y_check_bas
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    DATA has_found_methods TYPE abap_bool.
     DATA has_exporting_parameter TYPE abap_bool.
     DATA has_changing_parameter TYPE abap_bool.
     DATA has_returning_parameter TYPE abap_bool.
-    DATA has_pseudo_comment TYPE abap_bool.
 
-    METHODS check_token_content IMPORTING token TYPE stokesx.
     METHODS has_error RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
@@ -25,29 +22,16 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
   METHOD has_error.
     DATA(sum) = 0.
     IF has_exporting_parameter = abap_true.
-      ADD 1 TO sum.
+      sum = sum + 1.
     ENDIF.
     IF has_changing_parameter = abap_true.
-      ADD 1 TO sum.
+      sum = sum + 1.
     ENDIF.
     IF has_returning_parameter = abap_true.
-      ADD 1 TO sum.
+      sum = sum + 1.
     ENDIF.
     IF sum > 1.
       result = abap_true.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD check_token_content.
-    IF token-str EQ 'EXPORTING'.
-      has_exporting_parameter = abap_true.
-    ENDIF.
-    IF token-str EQ 'CHANGING'.
-      has_changing_parameter = abap_true.
-    ENDIF.
-    IF token-str EQ 'RETURNING'.
-      has_returning_parameter = abap_true.
     ENDIF.
   ENDMETHOD.
 

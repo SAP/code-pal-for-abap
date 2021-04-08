@@ -37,7 +37,7 @@ CLASS y_check_empty_procedures IMPLEMENTATION.
 
   METHOD get_next_token_from_index.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM index WHERE type EQ 'I'.
+    FROM index WHERE type = 'I'.
       IF result IS INITIAL.
         result = <token>.
         EXIT.

@@ -18,7 +18,6 @@ CLASS y_test_code_detector DEFINITION PUBLIC CREATE PUBLIC.
         IMPORTING token         TYPE stokesx
         RETURNING VALUE(result) TYPE abap_bool,
       try_testmethod
-        IMPORTING token         TYPE stokesx
         RETURNING VALUE(result) TYPE abap_bool,
       keyword
         RETURNING VALUE(result) TYPE string,
@@ -41,7 +40,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
     ENDIF.
 
     LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>)
-      WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition.
+      WHERE stmnt_type = scan_struc_stmnt_type-class_definition.
 
       process_statements( <structure> ).
     ENDLOOP.
@@ -61,10 +60,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
   METHOD is_test_class.
     IF keyword( ) = 'CLASS'.
       DATA(class) = get_token_rel( 2 ). "#EC DECL_IN_IF
-      READ TABLE test_codes TRANSPORTING NO FIELDS WITH KEY class = class.
-      IF sy-subrc EQ 0.
-        result = abap_true.
-      ENDIF.
+      result = xsdbool( line_exists( test_codes[ class = class ] ) ).
     ENDIF.
   ENDMETHOD.
 
@@ -99,7 +95,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
         EXIT.
       ENDIF.
 
-      IF try_testmethod( <token> ).
+      IF try_testmethod( ).
         EXIT.
       ENDIF.
     ENDLOOP.
@@ -107,7 +103,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
 
 
   METHOD try_testclass.
-    IF token-str EQ 'TESTING' AND
+    IF token-str = 'TESTING' AND
        keyword( ) = 'CLASS'.
       test_code-class = get_token_rel( 2 ).
       result = abap_true.
@@ -116,18 +112,16 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
 
 
   METHOD try_testmethod.
-    IF test_code-class IS NOT INITIAL AND (
-        keyword( ) = 'METHODS' OR
-        keyword( ) = 'CLASS-METHODS' ).
-
+    IF test_code-class IS NOT INITIAL
+    AND ( keyword( ) = 'METHODS' OR keyword( ) = 'CLASS-METHODS' ).
       test_code-method = get_token_rel( 2 ).
       APPEND test_code TO test_codes.
       result = abap_true.
     ENDIF.
 
-    IF test_code-class IS NOT INITIAL AND
-       test_code-method IS INITIAL AND
-       keyword( ) = 'ENDCLASS'.
+    IF test_code-class IS NOT INITIAL
+    AND test_code-method IS INITIAL
+    AND keyword( ) = 'ENDCLASS'.
       APPEND test_code TO test_codes.
       result = abap_true.
     ENDIF.
@@ -158,7 +152,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
       DO.
         DATA(low_level_structure) = high_level_structure. "#EC DECL_IN_IF
         READ TABLE ref_scan_manager->structures INTO high_level_structure INDEX low_level_structure-back.
-        IF sy-subrc NE 0.
+        IF sy-subrc <> 0.
           EXIT.
         ENDIF.
 
@@ -167,7 +161,7 @@ CLASS Y_TEST_CODE_DETECTOR IMPLEMENTATION.
           result = abap_true.
           EXIT.
         ENDIF.
-        IF low_level_structure-back EQ 0.
+        IF low_level_structure-back = 0.
           EXIT.
         ENDIF.
       ENDDO.

@@ -48,7 +48,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
       RETURN.
     ENDIF.
     IF token_wa-type <> scan_token_type-comment AND token_wa-type <> scan_token_type-pragma.
-      ADD 1 TO no_exec_statements.
+      no_exec_statements = no_exec_statements + 1.
     ENDIF.
   ENDMETHOD.
 

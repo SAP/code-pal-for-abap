@@ -19,8 +19,13 @@ CLASS y_exemption_general IMPLEMENTATION.
 
 
   METHOD y_if_exemption~is_object_exempted.
-    result = xsdbool( ( is_object_existing( object_type = object_type object_name = object_name ) = abap_true ) OR
-                      ( is_tadir_generated( object_type = object_type object_name = object_name ) = abap_true ) ).
+    DATA(object_exists) = is_object_existing( object_type = object_type
+                                              object_name = object_name ).
+
+    DATA(tadir_generated) = is_tadir_generated( object_type = object_type
+                                                object_name = object_name ).
+
+    result = xsdbool( object_exists = abap_true OR tadir_generated = abap_true ).
   ENDMETHOD.
 
 

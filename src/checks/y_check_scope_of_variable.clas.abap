@@ -62,7 +62,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<tokens>)
+      LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
       FROM <statement>-from TO <statement>-to
       WHERE str = variable.
 

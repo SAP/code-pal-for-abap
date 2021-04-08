@@ -59,15 +59,19 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
     method_name = get_token_abs( stmnt_index + 1 ).
 
     LOOP AT good_method_names_beginning ASSIGNING FIELD-SYMBOL(<good_name_beginning>).
-      IF strlen( method_name ) GE strlen( <good_name_beginning> )
-      AND substring( val = method_name len = strlen( <good_name_beginning> ) ) EQ <good_name_beginning>.
-        result = abap_true.
-        RETURN.
+      IF strlen( method_name ) >= strlen( <good_name_beginning> ).
+        DATA(prefix) = substring( val = method_name
+                                  len = strlen( <good_name_beginning> ) ).
+
+        IF prefix = <good_name_beginning>.
+          result = abap_true.
+          RETURN.
+        ENDIF.
       ENDIF.
     ENDLOOP.
 
     LOOP AT good_method_names_containing ASSIGNING FIELD-SYMBOL(<good_name_containing>).
-      IF strlen( method_name ) GE strlen( <good_name_containing> )
+      IF strlen( method_name ) >= strlen( <good_name_containing> )
       AND method_name CS <good_name_containing>.
         result = abap_true.
         RETURN.
@@ -84,8 +88,8 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
 
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
-      IF <token>-str EQ 'ABAP_BOOL'
-      AND get_token_abs( token_index - 3 ) EQ 'RETURNING'. "#EC CI_MAGIC
+      IF <token>-str = 'ABAP_BOOL'
+      AND get_token_abs( token_index - 3 ) = 'RETURNING'. "#EC CI_MAGIC
         has_found_bool = abap_true.
       ENDIF.
       token_index = token_index + 1.
