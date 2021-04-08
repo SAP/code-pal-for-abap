@@ -97,3 +97,45 @@ CLASS ltc_loop_at IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_loop_at_from_to DEFINITION INHERITING FROM ltc_loop_at FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_loop_at_from_to IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA from_list TYPE TABLE OF tadir. ' )
+      ( '   DATA exists TYPE abap_bool. ' )
+
+      ( |   LOOP AT from_list TRANSPORTING NO FIELDS WHERE object = 'y_check_prefer_line_exists'. | )
+      ( '     exists = abap_true. ' )
+      ( '   ENDLOOP. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA tadir TYPE TABLE OF tadir. ' )
+      ( '   DATA exists TYPE abap_bool. ' )
+
+      ( '   LOOP AT tadir TRANSPORTING NO FIELDS ' )
+      ( '   FROM 1 TO 50 ')
+      ( |   WHERE object = 'y_check_prefer_line_exists'. | )
+      ( '     exists = abap_true. ' )
+      ( '   ENDLOOP. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.

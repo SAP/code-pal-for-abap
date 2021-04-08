@@ -34,7 +34,12 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
 
     DATA(inline) = get_statement_inline( statement ).
 
-    IF inline NP '*TRANSPORTING NO FIELDS*'.
+    IF inline NP '* TRANSPORTING NO FIELDS *'.
+      RETURN.
+    ENDIF.
+
+    IF inline CP '* FROM *'
+    OR inline CP '* TO *'.
       RETURN.
     ENDIF.
 
