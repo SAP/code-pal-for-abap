@@ -20,6 +20,10 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 * Standard functions in Prefer IS NOT to NOT IS (#338)
 * In the profile feature, you can add all the missing checks (#346)
 
+2021-04-08 v.1.13.2
+------------------
+* Dump in Y_CHECK_DB_ACCESS_IN_UT (#363)
+
 2021-04-05 v.1.13.1
 ------------------
 * Y_CHECK_DB_ACCESS_IN_UT on INSERT INTO internal table (#348)
