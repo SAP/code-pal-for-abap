@@ -36,7 +36,7 @@ CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
                                                                                       prio = <check>-prio
                                                                                       apply_on_productive_code = <check>-apply_on_productive_code
                                                                                       apply_on_testcode = <check>-apply_on_testcode
-                                                                                      allow_pseudo_comments = <check>-ignore_pseudo_comments
+                                                                                      ignore_pseudo_comments = <check>-ignore_pseudo_comments
                                                                                       ).
       result = VALUE #( BASE result ( CORRESPONDING #( check_configuration ) ) ).
     ENDLOOP.

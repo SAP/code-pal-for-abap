@@ -557,7 +557,7 @@ CLASS lcl_util IMPLEMENTATION.
         checks_tree->set_field_header_text( fieldname   = 'APPLY_ON_TESTCODE'
                                             header_text = 'Apply on Testcode'(034) ).
         checks_tree->set_field_header_text( fieldname   = 'IGNORE_PSEUDO_COMMENTS'
-                                            header_text = 'Allow Pseudo Comments' ).
+                                            header_text = 'Ignore Pseudo Comments' ).
 
         checks_tree->init_display( ).
 
@@ -853,7 +853,7 @@ CLASS lcl_util IMPLEMENTATION.
           io_creation_date = obj->settings-object_created_on.
           chbx_on_prodcode = obj->settings-apply_on_productive_code.
           chbx_on_testcode = obj->settings-apply_on_test_code.
-          chbx_allow_pcom = obj->settings-allow_pseudo_comments.
+          chbx_allow_pcom = obj->settings-ignore_pseudo_comments.
           lbl_pcom_name = obj->settings-pseudo_comment.
           has_edit_mode_started = abap_false.
         ENDIF.
@@ -1211,7 +1211,7 @@ CLASS lcl_util IMPLEMENTATION.
         io_prio = obj->settings-prio.
         chbx_on_prodcode = obj->settings-apply_on_productive_code.
         chbx_on_testcode = obj->settings-apply_on_test_code.
-        chbx_allow_pcom = obj->settings-allow_pseudo_comments.
+        chbx_allow_pcom = obj->settings-ignore_pseudo_comments.
         lbl_pcom_name = obj->settings-pseudo_comment.
       CATCH cx_sy_create_object_error.
         RETURN.

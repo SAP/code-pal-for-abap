@@ -30,7 +30,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
             apply_on_test_code            TYPE ycicc_testcode,
             documentation                 TYPE c LENGTH 1000,
             is_threshold_reversed         TYPE abap_bool,
-            allow_pseudo_comments         TYPE abap_bool,
+            ignore_pseudo_comments        TYPE abap_bool,
           END OF settings.
 
     METHODS constructor.
@@ -181,7 +181,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-main }check_documentation.md|.
-    settings-allow_pseudo_comments = abap_true.
+    settings-ignore_pseudo_comments = abap_false.
 
     has_attributes = do_attributes_exist( ).
 
@@ -299,7 +299,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       check_configuration-object_creation_date = settings-object_created_on.
       check_configuration-prio = settings-prio.
       check_configuration-threshold = settings-threshold.
-      check_configuration-allow_pseudo_comments = settings-allow_pseudo_comments.
+      check_configuration-ignore_pseudo_comments = settings-ignore_pseudo_comments.
       APPEND check_configuration TO check_configurations.
     ENDIF.
     EXPORT
@@ -308,7 +308,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       threshold = check_configuration-threshold
       apply_on_productive_code = check_configuration-apply_on_productive_code
       apply_on_testcode = check_configuration-apply_on_testcode
-      allow_pseudo_comments = check_configuration-allow_pseudo_comments
+      ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
     TO DATA BUFFER p_attributes.
   ENDMETHOD.
 
@@ -514,7 +514,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
       check_configuration-apply_on_testcode = settings-apply_on_test_code.
       check_configuration-threshold = settings-threshold.
-      check_configuration-allow_pseudo_comments = settings-allow_pseudo_comments.
+      check_configuration-ignore_pseudo_comments = settings-ignore_pseudo_comments.
     ENDIF.
 
     INSERT VALUE #(
@@ -556,8 +556,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     IF settings-pseudo_comment IS NOT INITIAL.
       INSERT VALUE #(
         kind = ''
-        ref  = REF #( check_configuration-allow_pseudo_comments )
-        text = |Allow { settings-pseudo_comment }|
+        ref  = REF #( check_configuration-ignore_pseudo_comments )
+        text = |Ignore { settings-pseudo_comment }|
       ) INTO TABLE sci_attributes.
     ENDIF.
 
@@ -649,7 +649,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
           threshold = check_configuration-threshold
           apply_on_productive_code = check_configuration-apply_on_productive_code
           apply_on_testcode = check_configuration-apply_on_testcode
-          allow_pseudo_comments = check_configuration-allow_pseudo_comments
+          ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
       CATCH cx_root.                                  "#EC NEED_CX_ROOT
@@ -659,8 +659,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD raise_error.
-    DATA(pseudo_comment) = COND sci_pcom( WHEN settings-allow_pseudo_comments = abap_false THEN settings-pseudo_comment
-                                          ELSE space ).
+    DATA(pseudo_comment) = COND sci_pcom( WHEN settings-ignore_pseudo_comments = abap_false THEN settings-pseudo_comment ).
 
     statistics->collect( kind = error_priority
                          pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
