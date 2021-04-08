@@ -61,7 +61,7 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS is_part_of_framework IMPORTING structure     TYPE sstruc
                                  RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_persistent_object IMPORTING obj_name      TYPE string
+    METHODS is_persistent_object IMPORTING obj_name      TYPE tadir-obj_name
                                  RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_internal_table IMPORTING statement     TYPE sstmnt
@@ -140,7 +140,11 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
                                WHEN third_token = keys-into  THEN fourth_token
                                ELSE second_token ).
 
-    result = xsdbool( is_persistent_object( table_name ) = abap_false ).
+    IF strlen( table_name ) > 40.
+      RETURN.
+    ENDIF.
+
+    result = xsdbool( is_persistent_object( CONV #( table_name ) ) = abap_false ).
   ENDMETHOD.
 
 
