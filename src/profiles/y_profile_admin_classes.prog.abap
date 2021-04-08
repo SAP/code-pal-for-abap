@@ -1099,7 +1099,7 @@ CLASS lcl_util IMPLEMENTATION.
     result-last_changed_by = sy-uname.
     result-last_changed_on = sy-datum.
     result-last_changed_at = sy-timlo.
-    result-ignore_pseudo_comments = abap_true.
+    result-ignore_pseudo_comments = abap_false.
   ENDMETHOD.
 
   METHOD auto_re_start_delegate.
@@ -1201,7 +1201,7 @@ CLASS lcl_util IMPLEMENTATION.
     io_threshold = 0.
     chbx_on_prodcode = abap_true.
     chbx_on_testcode = abap_true.
-    chbx_allow_pcom = abap_true.
+    chbx_allow_pcom = abap_false.
     lbl_pcom_name = space.
 
     TRY.
