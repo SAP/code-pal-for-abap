@@ -1171,7 +1171,6 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD check_delegate_rights.
     TRY.
         DATA(prof) = get_selected_profile( ).
-        
         IF prof-is_standard = abap_true.
           RAISE EXCEPTION TYPE cx_failed.
         ENDIF.
