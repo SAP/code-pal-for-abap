@@ -41,10 +41,9 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
 
     CHECK get_token_abs( statement-from ) = 'FUNCTION'.
 
-    DATA fm_name TYPE c LENGTH 30.
-    fm_name = get_token_abs( statement-from + 1 ).
+    DATA(fm_name) = get_token_abs( statement-from + 1 ).
 
-    IF db_reader->is_fm_rfc_enabled( fm_name ) EQ abap_false.
+    IF db_reader->is_fm_rfc_enabled( CONV #( fm_name ) ) = abap_false.
 
       DATA(check_configuration) = detect_check_configuration( statement ).
 

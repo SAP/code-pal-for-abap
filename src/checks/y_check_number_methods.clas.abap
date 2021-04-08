@@ -47,7 +47,7 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
   METHOD inspect_tokens.
     CASE get_token_abs( statement-from ).
       WHEN 'METHODS' OR 'CLASS-METHODS'.
-        ADD 1 TO method_counter.
+        method_counter = method_counter + 1.
     ENDCASE.
   ENDMETHOD.
 

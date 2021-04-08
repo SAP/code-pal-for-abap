@@ -76,7 +76,7 @@ CLASS ltc_test_code_detector IMPLEMENTATION.
     ref_scan_manager_double->set_data_without_test( ).
 
     LOOP AT ref_scan_manager_double->y_if_scan_manager~structures ASSIGNING FIELD-SYMBOL(<structure>)
-          FROM 2 WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition.
+          FROM 2 WHERE stmnt_type = scan_struc_stmnt_type-class_definition.
 
       cl_abap_unit_assert=>assert_equals(
         act = cut->y_if_testcode_detector~is_testcode( <structure> )
@@ -89,7 +89,7 @@ CLASS ltc_test_code_detector IMPLEMENTATION.
     ref_scan_manager_double->set_data_with_test( ).
 
     LOOP AT ref_scan_manager_double->y_if_scan_manager~structures ASSIGNING FIELD-SYMBOL(<structure>)
-          FROM 2 WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition.
+          FROM 2 WHERE stmnt_type = scan_struc_stmnt_type-class_definition.
 
       cl_abap_unit_assert=>assert_equals(
         act = cut->y_if_testcode_detector~is_testcode( <structure> )
@@ -102,7 +102,7 @@ CLASS ltc_test_code_detector IMPLEMENTATION.
     ref_scan_manager_double->set_data_without_test( ).
 
     LOOP AT ref_scan_manager_double->y_if_scan_manager~structures ASSIGNING FIELD-SYMBOL(<structure>)
-          FROM 2 WHERE stmnt_type EQ scan_struc_stmnt_type-method.
+          FROM 2 WHERE stmnt_type = scan_struc_stmnt_type-method.
 
       cl_abap_unit_assert=>assert_equals(
         act = cut->y_if_testcode_detector~is_testcode( <structure> )
@@ -115,7 +115,7 @@ CLASS ltc_test_code_detector IMPLEMENTATION.
     ref_scan_manager_double->set_data_with_test( ).
 
     LOOP AT ref_scan_manager_double->y_if_scan_manager~structures ASSIGNING FIELD-SYMBOL(<structure>)
-          FROM 2 WHERE stmnt_type EQ scan_struc_stmnt_type-method.
+          FROM 2 WHERE stmnt_type = scan_struc_stmnt_type-method.
 
       cl_abap_unit_assert=>assert_equals(
         act = cut->y_if_testcode_detector~is_testcode( <structure> )
@@ -128,7 +128,7 @@ CLASS ltc_test_code_detector IMPLEMENTATION.
     ref_scan_manager_double->set_data_with_test( ).
 
     LOOP AT ref_scan_manager_double->y_if_scan_manager~structures ASSIGNING FIELD-SYMBOL(<structure>)
-          FROM 2 WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition.
+          FROM 2 WHERE stmnt_type = scan_struc_stmnt_type-class_definition.
 
       cl_abap_unit_assert=>assert_equals(
         act = cut->y_if_testcode_detector~is_testcode( <structure> )
@@ -141,7 +141,7 @@ CLASS ltc_test_code_detector IMPLEMENTATION.
     ref_scan_manager_double->set_data_without_test( ).
 
     LOOP AT ref_scan_manager_double->y_if_scan_manager~structures ASSIGNING FIELD-SYMBOL(<structure>)
-              FROM 2 WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition.
+              FROM 2 WHERE stmnt_type = scan_struc_stmnt_type-class_definition.
 
       cl_abap_unit_assert=>assert_equals(
         act = cut->y_if_testcode_detector~is_testcode( <structure> )
@@ -154,7 +154,7 @@ CLASS ltc_test_code_detector IMPLEMENTATION.
     ref_scan_manager_double->set_data_with_test( ).
 
     LOOP AT ref_scan_manager_double->y_if_scan_manager~structures ASSIGNING FIELD-SYMBOL(<structure>)
-              FROM 2 WHERE stmnt_type EQ scan_struc_stmnt_type-class_definition.
+              FROM 2 WHERE stmnt_type = scan_struc_stmnt_type-class_definition.
 
       cl_abap_unit_assert=>assert_equals(
         act = cut->y_if_testcode_detector~is_testcode( <structure> )

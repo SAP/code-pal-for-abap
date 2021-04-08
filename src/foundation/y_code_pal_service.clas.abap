@@ -195,8 +195,7 @@ CLASS y_code_pal_service IMPLEMENTATION.
     ENDTRY.
 
     TRY.
-        result_access->get_findings( IMPORTING e_findings           = DATA(findings)
-                                               e_findings_extension = DATA(findings_extension) ).
+        result_access->get_findings( IMPORTING e_findings = DATA(findings) ).
       CATCH cx_satc_failure.
         raise_internal_server_error( ).
         response->set_cdata( 'Result access failed (no authorization, etc.)' ).

@@ -86,7 +86,10 @@ CLASS y_object_creation_date IMPLEMENTATION.
       DELETE buffer FROM 1 TO max_entries / 2.
     ENDIF.
 
-    APPEND get_db_tadir_data( object_type = object_type object_name = object_name ) TO created_on_dates.
+    DATA(taidr) = get_db_tadir_data( object_type = object_type
+                                     object_name = object_name ).
+
+    APPEND taidr TO created_on_dates.
 
     DATA(repo_access) = COND #( WHEN object_type = 'FUGR' THEN convert_fugr_for_db_access( object_name )
                                 WHEN object_type = 'CLAS' THEN convert_class_for_repos_access( object_name )
@@ -178,7 +181,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
     DATA(search_pattern) = convert_fugr_for_db_access( fugr_name ).
 
     SELECT funcname INTO TABLE @DATA(functions) FROM tfdir WHERE pname = @search_pattern. "#EC CI_GENBUFF
-    IF sy-subrc NE 0.
+    IF sy-subrc <> 0.
       RETURN.
     ENDIF.
 
@@ -193,7 +196,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
       objtype = 'FUNC' AND
       objname IN @function_search_table AND
       datum IS NOT NULL AND                                     "only in HRI
-      datum NE '00000000'
+      datum <> '00000000'
     INTO @result.
   ENDMETHOD.
 

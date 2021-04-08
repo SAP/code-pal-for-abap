@@ -9,9 +9,6 @@ CLASS y_check_comment_position DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS has_wrong_position IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS get_first_character IMPORTING token TYPE stokesx
-                                RETURNING VALUE(result) TYPE char1.
-
     METHODS is_pseudo_comment IMPORTING token TYPE stokesx
                               RETURNING VALUE(result) TYPE abap_bool.
 
@@ -99,15 +96,6 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
     AND current_token-col <> next_token-col.
       result = abap_true.
     ENDIF.
-  ENDMETHOD.
-
-
-  METHOD get_first_character.
-    TRY.
-        result = token-str(1).
-      CATCH cx_sy_range_out_of_bounds.
-        CLEAR result.
-    ENDTRY.
   ENDMETHOD.
 
 

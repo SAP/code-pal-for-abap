@@ -72,7 +72,7 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     LOOP AT class_names ASSIGNING FIELD-SYMBOL(<object_name>).
       TRY.
           IF token-str CS call_get_pseudo_comment( <object_name> ).
-            ADD 1 TO pseudo_comment_counter.
+            pseudo_comment_counter = pseudo_comment_counter + 1.
           ENDIF.
         CATCH cx_sy_create_object_error.
           CONTINUE.
@@ -93,8 +93,8 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
   METHOD inspect_tokens.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
-    WHERE type EQ 'C'
-    OR type EQ 'P'.
+    WHERE type = 'C'
+    OR type = 'P'.
       count_cc_pseudo_comments( <token> ).
     ENDLOOP.
   ENDMETHOD.
@@ -118,17 +118,21 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
 
 
   METHOD select_object_list.
-    SELECT SINGLE devclass FROM tadir
-      WHERE obj_name EQ @myname
-      INTO @DATA(packagename).
+    SELECT SINGLE devclass
+    FROM tadir
+    WHERE obj_name = @myname
+    INTO @DATA(packagename).
+
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
 
-    SELECT obj_name FROM tadir
-      WHERE devclass EQ @packagename AND
-            obj_name NE @check_base_name
-      INTO TABLE @result.
+    SELECT obj_name
+    FROM tadir
+    WHERE devclass = @packagename
+    AND obj_name <> @check_base_name
+    INTO TABLE @result.
+
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.

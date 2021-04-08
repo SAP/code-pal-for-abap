@@ -17,20 +17,17 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
 
 
   METHOD check_if_error.
-    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
-    DATA(key_word) = get_token_abs( statement-from ).
-
-    check_configuration = detect_check_configuration( statement ).
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     IF check_configuration IS INITIAL.
       RETURN.
     ENDIF.
 
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ key_word }| ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from  = statement-from
+                 error_priority  = check_configuration-prio
+                 parameter_01    = get_token_abs( statement-from ) ).
   ENDMETHOD.
 
 
@@ -54,6 +51,8 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
+    DATA has_redirection TYPE abap_bool VALUE abap_false.
+
     DATA(token1) = get_token_abs( statement-from ).
     DATA(token2) = get_token_abs( statement-from + 1 ).
     DATA(token3) = get_token_abs( statement-from + 2 ).
@@ -62,19 +61,17 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
     DATA(token6) = get_token_abs( statement-from + 5 ).
     DATA(token4to6) = |{ token4 } { token5 } { token6 }|.
 
-    DATA has_redirection TYPE abap_bool VALUE abap_false.
-
     CASE token1.
       WHEN 'SUBMIT'.
         has_redirection = abap_true.
       WHEN 'CALL'.
-        IF ( token2 = 'FUNCTION' ) AND
-           ( ( token4 = 'DESTINATION' ) OR
-           ( ( token4to6 = 'STARTING NEW TASK' ) ) OR
-           ( ( token4to6 = 'IN UPDATE TASK' ) ) ).
+        IF token2 = 'FUNCTION'
+        AND ( token4 = 'DESTINATION'
+              OR token4to6 = 'STARTING NEW TASK'
+              OR token4to6 = 'IN UPDATE TASK' ).
           has_redirection = abap_true.
-        ELSEIF ( token2 = 'METHOD' ) AND
-               ( token3 CS 'CL_GUI_' ).
+        ELSEIF token2 = 'METHOD'
+        AND token3 CS 'CL_GUI_'.
           has_redirection = abap_true.
         ENDIF.
       WHEN OTHERS.
