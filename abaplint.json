@@ -51,7 +51,9 @@
     "db_operation_in_loop": false,
     "definitions_top": true,
     "description_empty": true,
-    "double_space": false,
+    "double_space": {
+      "startParen": true
+    },
     "downport": true,
     "empty_line_in_statement": false,
     "empty_statement": true,
