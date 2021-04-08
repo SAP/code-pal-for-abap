@@ -52,7 +52,7 @@
     "definitions_top": true,
     "description_empty": true,
     "double_space": {
-      "startParen": true
+      "startParen": false
     },
     "downport": true,
     "empty_line_in_statement": false,
