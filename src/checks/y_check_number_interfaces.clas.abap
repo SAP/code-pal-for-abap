@@ -45,7 +45,7 @@ CLASS y_check_number_interfaces IMPLEMENTATION.
 
   METHOD inspect_tokens.
     IF get_token_abs( statement-from ) = 'INTERFACES'.
-      ADD 1 TO interface_counter.
+      interface_counter = interface_counter + 1.
     ENDIF.
   ENDMETHOD.
 

@@ -66,7 +66,7 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
       AND get_second_token( statement ) <> 'FOR'
       AND get_third_token( statement ) <> 'TESTING'.
 
-    ADD 1 TO public_method_counter.
+    public_method_counter = public_method_counter + 1.
   ENDMETHOD.
 
 

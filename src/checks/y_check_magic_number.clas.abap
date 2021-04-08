@@ -39,13 +39,13 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
 
 
   METHOD is_exception.
-    IF token EQ 'ENDCASE' AND has_case_with_subrc EQ abap_true.
+    IF token = 'ENDCASE' AND has_case_with_subrc = abap_true.
       has_case_with_subrc = abap_false.
     ENDIF.
 
-    IF token EQ 'SY-SUBRC' OR has_case_with_subrc EQ abap_true.
+    IF token = 'SY-SUBRC' OR has_case_with_subrc = abap_true.
       result = abap_true.
-    ELSEIF token EQ 'CASE' AND get_token_rel( second_token ) = 'SY-SUBRC'.
+    ELSEIF token = 'CASE' AND get_token_rel( second_token ) = 'SY-SUBRC'.
       has_case_with_subrc = abap_true.
     ENDIF.
   ENDMETHOD.
@@ -93,7 +93,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
     ENDIF.
 
     FIND REGEX `^(?!'?[01]'?$)'?\d+'?$` IN token_string.
-    IF sy-subrc EQ 0.
+    IF sy-subrc = 0.
       magic_number = token_string.
       result = abap_true.
     ENDIF.

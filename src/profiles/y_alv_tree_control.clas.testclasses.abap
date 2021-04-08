@@ -162,7 +162,6 @@ CLASS lcl_unit_test IMPLEMENTATION.
     TRY.
         cut = NEW y_alv_tree_control( type_name   = 'YTAB_PROFILES'
                                       sort_table  = VALUE #( )
-                                      events      = NEW y_alv_events( )
                                       alv_tree    = NEW #( )
                                       alv_header  = VALUE #( ) ).
       CATCH cx_sy_create_data_error

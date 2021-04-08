@@ -22,7 +22,7 @@ CLASS Y_CATEGORY_CODE_PAL IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
-    description = get_class_description(  ).
+    description = get_class_description( ).
     category    = 'CL_CI_CATEGORY_TOP'.
     position    = '001'.
   ENDMETHOD.

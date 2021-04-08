@@ -59,15 +59,15 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
 
 
   METHOD is_not_relevant_token.
-    result = xsdbool(    token EQ 'METHOD'
-                      OR token EQ 'FORM'
-                      OR token EQ 'FUNCTION'
-                      OR token EQ 'MODULE'
-                      OR token EQ 'DATA'
-                      OR token EQ 'TYPES'
-                      OR token EQ 'CHECK'
-                      OR token EQ 'FIELD-SYMBOLS'
-                      OR token EQ 'CONSTANTS' ).
+    result = xsdbool(    token = 'METHOD'
+                      OR token = 'FORM'
+                      OR token = 'FUNCTION'
+                      OR token = 'MODULE'
+                      OR token = 'DATA'
+                      OR token = 'TYPES'
+                      OR token = 'CHECK'
+                      OR token = 'FIELD-SYMBOLS'
+                      OR token = 'CONSTANTS' ).
   ENDMETHOD.
 
 

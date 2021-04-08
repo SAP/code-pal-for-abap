@@ -31,7 +31,7 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
 
   METHOD get_next_token_from_index.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-      FROM index WHERE type EQ 'I'.
+      FROM index WHERE type = 'I'.
       IF result IS INITIAL.
         result = <token>.
         EXIT.
@@ -41,9 +41,9 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_next_token_from_index( statement-from )-str EQ 'CATCH' AND
-        ( get_next_token_from_index( statement-to + 1 )-str EQ 'ENDTRY' OR
-          get_next_token_from_index( statement-to + 1 )-str EQ 'ENDCATCH' ).
+    CHECK get_next_token_from_index( statement-from )-str = 'CATCH'
+    AND ( get_next_token_from_index( statement-to + 1 )-str = 'ENDTRY'
+          OR get_next_token_from_index( statement-to + 1 )-str = 'ENDCATCH' ).
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 

@@ -135,10 +135,12 @@ CLASS y_pseudo_comment_detector IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    result = has_comment( ref_scan_manager = ref_scan_manager position = position ).
+    result = has_comment( ref_scan_manager = ref_scan_manager
+                          position = position ).
 
     IF result <> cl_ci_test_root=>c_pc_exceptn_exists.
-      result = has_inline_comment( ref_scan_manager = ref_scan_manager position = position ).
+      result = has_inline_comment( ref_scan_manager = ref_scan_manager
+                                   position = position ).
     ENDIF.
 
   ENDMETHOD.

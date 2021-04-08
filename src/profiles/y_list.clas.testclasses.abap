@@ -53,7 +53,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     FIELD-SYMBOLS: <line> TYPE any.
     DATA(dta) = cut->get_line_at( index ).
     ASSIGN dta->* TO <line>.
-    IF sy-subrc EQ 0.
+    IF sy-subrc = 0.
       result = <line>.
     ENDIF.
   ENDMETHOD.
@@ -86,7 +86,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cut->append( 'A' ).
 
     cl_abap_unit_assert=>assert_equals( exp = 3
-                                        act = cut->lines( )
+                                        act = cut->number_of_rows( )
                                         msg = 'component are not append!'
                                         quit = if_aunit_constants=>quit-no ).
 
@@ -111,7 +111,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
                     index = 1 ).
 
     cl_abap_unit_assert=>assert_equals( exp = 4
-                                        act = cut->lines( )
+                                        act = cut->number_of_rows( )
                                         msg = 'component are not insert!'
                                         quit = if_aunit_constants=>quit-no ).
 
@@ -126,7 +126,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
                     index = 1 ).
 
     cl_abap_unit_assert=>assert_equals( exp = 4
-                                        act = cut->lines( )
+                                        act = cut->number_of_rows( )
                                         msg = 'component are not modified!'
                                         quit  = if_aunit_constants=>quit-no ).
 
@@ -140,7 +140,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cut->delete_at( 4 ).
 
     cl_abap_unit_assert=>assert_equals( exp = 3
-                                        act = cut->lines( )
+                                        act = cut->number_of_rows( )
                                         msg = 'component are not deleted!'
                                         quit  = if_aunit_constants=>quit-no ).
 
@@ -154,7 +154,7 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cut->delete_all( ).
 
     cl_abap_unit_assert=>assert_equals( exp = 0
-                                        act = cut->lines( )
+                                        act = cut->number_of_rows( )
                                         msg = 'table is not deleted!'
                                         quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
@@ -200,19 +200,21 @@ CLASS lcl_list_ut IMPLEMENTATION.
     cut->set_table( table ).
 
     cl_abap_unit_assert=>assert_equals( exp = 5
-                                        act = cut->lines( )
+                                        act = cut->number_of_rows( )
                                         msg = 'cannot set the table!'
                                         quit  = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD get_table.
     DATA dta  TYPE REF TO data.
-    dta = cut->get_table( ).
     FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+
+    dta = cut->get_table( ).
+
     ASSIGN dta->* TO <table>.
 
     cl_abap_unit_assert=>assert_equals( exp = lines( <table> )
-                                        act = cut->lines( )
+                                        act = cut->number_of_rows( )
                                         msg = 'cannot get the table!'
                                         quit  = if_aunit_constants=>quit-no ).
     UNASSIGN <table>.

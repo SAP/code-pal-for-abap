@@ -44,7 +44,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     CONSTANTS initial_date TYPE datum VALUE '19000101'.
 
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
-    DATA check_name TYPE seoclsname.
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
     DATA is_testcode TYPE abap_bool.
@@ -290,8 +289,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD get_attributes.
-    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
-    READ TABLE check_configurations INTO check_configuration INDEX 1.
+    READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
     IF sy-subrc <> 0.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
       check_configuration-apply_on_testcode = settings-apply_on_test_code.
@@ -333,11 +331,11 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-col.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM p_n.
+      p_n = p_n - 1.
     ENDDO.
   ENDMETHOD.
 
@@ -353,27 +351,22 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-col.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM index.
+      index = index - 1.
     ENDDO.
   ENDMETHOD.
 
 
   METHOD get_include.
-    DATA l_levels_wa LIKE LINE OF ref_scan->levels.
-    DATA l_level TYPE i.
+    DATA(l_level) = COND #( WHEN p_level IS SUPPLIED THEN p_level
+                            ELSE statement_wa-level ).
 
-    IF p_level IS SUPPLIED.
-      l_level = p_level.
-    ELSE.
-      l_level = statement_wa-level.
-    ENDIF.
     DO.
-      READ TABLE ref_scan_manager->levels INDEX l_level INTO l_levels_wa.
-      IF sy-subrc NE 0.
+      READ TABLE ref_scan_manager->levels INDEX l_level INTO DATA(l_levels_wa).
+      IF sy-subrc <> 0.
         RETURN.
       ENDIF.
       IF l_levels_wa-type = 'P'.
@@ -393,11 +386,11 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-row.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM p_n.
+      p_n = p_n - 1.
     ENDDO.
   ENDMETHOD.
 
@@ -410,12 +403,12 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_column = <token>-col.
         p_line   = <token>-row.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM p_n.
+      p_n = p_n - 1.
     ENDDO.
   ENDMETHOD.
 
@@ -430,12 +423,12 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_column = <token>-col.
         p_line   = <token>-row.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM p_n.
+      p_n = p_n - 1.
     ENDDO.
   ENDMETHOD.
 
@@ -451,27 +444,25 @@ CLASS y_check_base IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-row.
         RETURN.
       ENDIF.
-      SUBTRACT 1 FROM index.
+      index = index - 1.
     ENDDO.
   ENDMETHOD.
 
 
   METHOD get_token_abs.
     READ TABLE ref_scan_manager->tokens INDEX p_n INTO token_wa.
-    IF sy-subrc EQ 0.
+    IF sy-subrc = 0.
       p_result = token_wa-str.
     ENDIF.
   ENDMETHOD.
 
 
   METHOD get_token_rel.
-    DATA l_index TYPE i.
-
-    l_index = statement_wa-from + p_n - 1.
+    DATA(l_index) = statement_wa-from + p_n - 1.
     IF l_index > statement_wa-to.
       RETURN.
     ENDIF.
@@ -655,7 +646,7 @@ CLASS y_check_base IMPLEMENTATION.
                                                                                    suppress         = settings-pseudo_comment
                                                                                    position         = statement_index ) ).
 
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
+    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) = 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
               p_position = statement_index
@@ -680,6 +671,8 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD run.
+    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
+
     instantiate_objects( ).
 
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
@@ -691,13 +684,11 @@ CLASS y_check_base IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
-
     TRY.
         check_start_conditions( ).
         profile_configurations = clean_code_manager->read_check_customizing( myname ).
       CATCH ycx_no_check_customizing.
-        IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
+        IF profile_configurations IS INITIAL AND attributes_ok = abap_false.
           FREE ref_scan_manager.
           RETURN.
         ELSEIF attributes_ok = abap_true.
