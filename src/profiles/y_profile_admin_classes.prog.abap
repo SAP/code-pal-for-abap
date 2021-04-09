@@ -818,7 +818,6 @@ CLASS lcl_util IMPLEMENTATION.
                         value_help = DATA(tmp_retval)
                       CHANGING
                         value_table = tmp_checks ).
-                        
         IF tmp_retval IS NOT INITIAL.
           io_check_id = tmp_retval[ 1 ]-fieldval.
           has_edit_mode_started = abap_true.
