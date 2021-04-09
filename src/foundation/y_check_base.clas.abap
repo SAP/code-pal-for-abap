@@ -340,7 +340,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-col.
         RETURN.
       ENDIF.
@@ -360,7 +360,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-col.
         RETURN.
       ENDIF.
@@ -380,7 +380,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
     DO.
       READ TABLE ref_scan_manager->levels INDEX l_level INTO l_levels_wa.
-      IF sy-subrc NE 0.
+      IF sy-subrc <> 0.
         RETURN.
       ENDIF.
       IF l_levels_wa-type = 'P'.
@@ -400,7 +400,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-row.
         RETURN.
       ENDIF.
@@ -417,7 +417,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_column = <token>-col.
         p_line   = <token>-row.
         RETURN.
@@ -437,7 +437,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_column = <token>-col.
         p_line   = <token>-row.
         RETURN.
@@ -458,7 +458,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc EQ 0 AND <token>-row <> 0.
+      IF sy-subrc = 0 AND <token>-row <> 0.
         p_result = <token>-row.
         RETURN.
       ENDIF.
@@ -469,7 +469,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD get_token_abs.
     READ TABLE ref_scan_manager->tokens INDEX p_n INTO token_wa.
-    IF sy-subrc EQ 0.
+    IF sy-subrc = 0.
       p_result = token_wa-str.
     ENDIF.
   ENDMETHOD.
@@ -680,7 +680,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     statistics->collect( kind = error_priority
                          pc = pcom_detector ).
 
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
+    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) = 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
               p_position = statement_index
