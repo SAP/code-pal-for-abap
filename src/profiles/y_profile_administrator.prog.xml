@@ -230,7 +230,7 @@
       <TYPE>N</TYPE>
       <NEXTSCREEN>0400</NEXTSCREEN>
       <LINES>027</LINES>
-      <COLUMNS>123</COLUMNS>
+      <COLUMNS>124</COLUMNS>
      </HEADER>
      <CONTAINERS>
       <RPY_DYCATT>
@@ -542,7 +542,7 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_ALLOW_PCOM</NAME>
-       <TEXT>Allow_Pseudo-Comment_Exemption:__</TEXT>
+       <TEXT>Allow_Exemption:_________________</TEXT>
        <LINE>009</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>033</LENGTH>
