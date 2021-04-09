@@ -45,6 +45,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     CONSTANTS initial_date TYPE datum VALUE '19000101'.
 
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
+    DATA check_name TYPE seoclsname.
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
     DATA is_testcode TYPE abap_bool.
@@ -151,6 +152,10 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_app_comp_in_scope IMPORTING level         TYPE stmnt_levl
                                  RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS switch_bool
+      IMPORTING boolean       TYPE abap_bool
+      RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -224,6 +229,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
                                                      config          = <configuration> ) = abap_true.
         result = <configuration>.
       ENDIF.
+
     ENDLOOP.
 
     IF result IS INITIAL.
@@ -290,7 +296,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_attributes.
-    READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
+    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+    READ TABLE check_configurations INTO check_configuration INDEX 1.
     IF sy-subrc <> 0.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
       check_configuration-apply_on_testcode = settings-apply_on_test_code.
@@ -333,11 +340,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
+      IF sy-subrc EQ 0 AND <token>-row <> 0.
         p_result = <token>-col.
         RETURN.
       ENDIF.
-      p_n = p_n - 1.
+      SUBTRACT 1 FROM p_n.
     ENDDO.
   ENDMETHOD.
 
@@ -353,22 +360,27 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
+      IF sy-subrc EQ 0 AND <token>-row <> 0.
         p_result = <token>-col.
         RETURN.
       ENDIF.
-      index = index - 1.
+      SUBTRACT 1 FROM index.
     ENDDO.
   ENDMETHOD.
 
 
   METHOD get_include.
-    DATA(l_level) = COND #( WHEN p_level IS SUPPLIED THEN p_level
-                            ELSE statement_wa-level ).
+    DATA l_levels_wa LIKE LINE OF ref_scan->levels.
+    DATA l_level TYPE i.
 
+    IF p_level IS SUPPLIED.
+      l_level = p_level.
+    ELSE.
+      l_level = statement_wa-level.
+    ENDIF.
     DO.
-      READ TABLE ref_scan_manager->levels INDEX l_level INTO DATA(l_levels_wa).
-      IF sy-subrc <> 0.
+      READ TABLE ref_scan_manager->levels INDEX l_level INTO l_levels_wa.
+      IF sy-subrc NE 0.
         RETURN.
       ENDIF.
       IF l_levels_wa-type = 'P'.
@@ -388,11 +400,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
+      IF sy-subrc EQ 0 AND <token>-row <> 0.
         p_result = <token>-row.
         RETURN.
       ENDIF.
-      p_n = p_n - 1.
+      SUBTRACT 1 FROM p_n.
     ENDDO.
   ENDMETHOD.
 
@@ -405,12 +417,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
+      IF sy-subrc EQ 0 AND <token>-row <> 0.
         p_column = <token>-col.
         p_line   = <token>-row.
         RETURN.
       ENDIF.
-      p_n = p_n - 1.
+      SUBTRACT 1 FROM p_n.
     ENDDO.
   ENDMETHOD.
 
@@ -425,12 +437,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
+      IF sy-subrc EQ 0 AND <token>-row <> 0.
         p_column = <token>-col.
         p_line   = <token>-row.
         RETURN.
       ENDIF.
-      p_n = p_n - 1.
+      SUBTRACT 1 FROM p_n.
     ENDDO.
   ENDMETHOD.
 
@@ -446,25 +458,27 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     DO.
       READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
+      IF sy-subrc EQ 0 AND <token>-row <> 0.
         p_result = <token>-row.
         RETURN.
       ENDIF.
-      index = index - 1.
+      SUBTRACT 1 FROM index.
     ENDDO.
   ENDMETHOD.
 
 
   METHOD get_token_abs.
     READ TABLE ref_scan_manager->tokens INDEX p_n INTO token_wa.
-    IF sy-subrc = 0.
+    IF sy-subrc EQ 0.
       p_result = token_wa-str.
     ENDIF.
   ENDMETHOD.
 
 
   METHOD get_token_rel.
-    DATA(l_index) = statement_wa-from + p_n - 1.
+    DATA l_index TYPE i.
+
+    l_index = statement_wa-from + p_n - 1.
     IF l_index > statement_wa-to.
       RETURN.
     ENDIF.
@@ -544,11 +558,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       ) INTO TABLE sci_attributes.
     ENDIF.
 
+    check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
+
     IF settings-pseudo_comment IS NOT INITIAL.
       INSERT VALUE #(
         kind = ''
         ref  = REF #( check_configuration-ignore_pseudo_comments )
-        text = |Ignore { settings-pseudo_comment }|
+        text = |Allow { settings-pseudo_comment }|
       ) INTO TABLE sci_attributes.
     ENDIF.
 
@@ -563,8 +579,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
                          p_message    = message
                          p_display    = p_display ) = abap_true.
         attributes_ok = abap_true.
+        check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
         RETURN.
       ENDIF.
+
       IF check_configuration-apply_on_productive_code = abap_false AND
          check_configuration-apply_on_testcode        = abap_false.
         message = 'Choose the Type of Code to be checked'(300).
@@ -578,6 +596,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         attributes_ok = abap_true.
       ENDIF.
     ENDWHILE.
+
+    check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
 
     CLEAR check_configurations.
     APPEND check_configuration TO check_configurations.
@@ -660,7 +680,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     statistics->collect( kind = error_priority
                          pc = pcom_detector ).
 
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) = 'Y_REF_SCAN_MANAGER'.
+    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) EQ 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
               p_position = statement_index
@@ -683,8 +703,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD run.
-    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
-
     instantiate_objects( ).
 
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
@@ -696,11 +714,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
+
     TRY.
         check_start_conditions( ).
         profile_configurations = clean_code_manager->read_check_customizing( myname ).
       CATCH ycx_no_check_customizing.
-        IF profile_configurations IS INITIAL AND attributes_ok = abap_false.
+        IF  profile_configurations IS INITIAL AND attributes_ok = abap_false.
           FREE ref_scan_manager.
           RETURN.
         ELSEIF attributes_ok = abap_true.
@@ -746,6 +766,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
                                                                                          previous_threshold = previous_config-threshold ) = abap_true ) OR
                       ( previous_config-prio <> c_error AND config-prio = c_error ) OR
                       ( previous_config-prio = c_note AND config-prio = c_warning ) ).
+    "TODO
   ENDMETHOD.
 
 
@@ -799,5 +820,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
             ycx_entry_not_found.
         result = abap_true.
     ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD switch_bool.
+    result = COND #( WHEN boolean = abap_false THEN abap_true
+                     ELSE abap_false ).
   ENDMETHOD.
 ENDCLASS.

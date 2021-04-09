@@ -542,7 +542,7 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_ALLOW_PCOM</NAME>
-       <TEXT>Ignore_Pseudo-Comment_Exemption:_</TEXT>
+       <TEXT>Allow_Pseudo-Comment_Exemption:__</TEXT>
        <LINE>009</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>033</LENGTH>

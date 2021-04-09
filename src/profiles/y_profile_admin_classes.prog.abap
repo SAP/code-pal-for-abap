@@ -189,8 +189,8 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
                   window_title          TYPE c OPTIONAL
                   dynpro_program        TYPE sy-repid DEFAULT sy-cprog
                   dynpro_number         TYPE sy-dynnr DEFAULT sy-dynnr
-        EXPORTING value_help            TYPE y_if_profile_manager=>value_help
         CHANGING  value_table           TYPE STANDARD TABLE
+        RETURNING VALUE(result)         TYPE y_if_profile_manager=>value_help
         RAISING   cx_failed.    "#EC PARAMETER_OUT "#EC NUM_OUTPUT_PARA
 
 
@@ -266,6 +266,10 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
         cx_failed.
     CLASS-METHODS remove_all_checks.
     CLASS-METHODS add_missing_checks.
+
+    CLASS-METHODS switch_bool
+      IMPORTING boolean       TYPE abap_bool
+      RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     CLASS-METHODS request_confirmation
@@ -473,7 +477,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     ENDTRY.
 
-    refresh_profiles( ).
+    lcl_util=>refresh_profiles( ).
   ENDMETHOD.
 
   METHOD init_checks.
@@ -557,7 +561,7 @@ CLASS lcl_util IMPLEMENTATION.
         checks_tree->set_field_header_text( fieldname   = 'APPLY_ON_TESTCODE'
                                             header_text = 'Apply on Testcode'(034) ).
         checks_tree->set_field_header_text( fieldname   = 'IGNORE_PSEUDO_COMMENTS'
-                                            header_text = 'Ignore Pseudo Comments' ).
+                                            header_text = 'Allow Pseudo Comments' ).
 
         checks_tree->init_display( ).
 
@@ -626,8 +630,8 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_selected_profile.
-    FIELD-SYMBOLS: <line> TYPE ytab_profiles.
     DATA(line) = profiles_tree->get_selected_line( ).
+    FIELD-SYMBOLS: <line> TYPE ytab_profiles.
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
@@ -642,8 +646,8 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_selected_delegate.
-    FIELD-SYMBOLS: <line> TYPE ytab_delegates.
     DATA(line) = delegates_tree->get_selected_line( ).
+    FIELD-SYMBOLS: <line> TYPE ytab_delegates.
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
@@ -653,13 +657,14 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_selected_check.
-    FIELD-SYMBOLS: <line> TYPE ytab_checks.
     DATA(line) = checks_tree->get_selected_line( ).
+    FIELD-SYMBOLS: <line> TYPE ytab_checks.
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
     result = <line>.
+    result-ignore_pseudo_comments = switch_bool( result-ignore_pseudo_comments ).
     UNASSIGN <line>.
   ENDMETHOD.
 
@@ -677,7 +682,12 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD refresh_checks.
     CHECK checks_tree IS BOUND.
     TRY.
-        checks_tree->list_control( )->set_table( profile_manager->select_checks( get_selected_profile( )-profile ) ).
+        DATA(checks) = profile_manager->select_checks( get_selected_profile( )-profile ).
+        LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
+          <check>-ignore_pseudo_comments = switch_bool( <check>-ignore_pseudo_comments ).
+        ENDLOOP.
+
+        checks_tree->list_control( )->set_table( checks ).
 
       CATCH ycx_entry_not_found.
         checks_tree->list_control( )->delete_all( ).
@@ -727,7 +737,7 @@ CLASS lcl_util IMPLEMENTATION.
         window_title = window_title
       TABLES
         value_tab    = value_table
-        return_tab   = value_help
+        return_tab   = result
       EXCEPTIONS
         OTHERS       = 4.
     IF sy-subrc <> 0.
@@ -738,17 +748,13 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD profile_f4help_200.
     TRY.
         DATA(tmp_profiles) = profile_manager->get_registered_profiles( ).
-
-        call_f4help( EXPORTING
-                       referenced_field_name = 'PROFILE'
-                       window_title          = 'Available Profiles'(009)
-                       dynpro_program        = sy-cprog
-                       dynpro_number         = sy-dynnr
-                     IMPORTING
-                       value_help = DATA(tmp_retval)
-                     CHANGING
-                       value_table = tmp_profiles ).
-
+        DATA(tmp_retval) = lcl_util=>call_f4help( EXPORTING
+                                                   referenced_field_name = 'PROFILE'
+                                                   window_title          = 'Available Profiles'(009)
+                                                   dynpro_program        = sy-cprog
+                                                   dynpro_number         = sy-dynnr
+                                                  CHANGING
+                                                   value_table  = tmp_profiles ).
         IF tmp_retval IS NOT INITIAL.
           io_profilename = tmp_retval[ 1 ]-fieldval.
         ENDIF.
@@ -768,17 +774,13 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD profile_f4help_600.
     TRY.
         DATA(tmp_profiles) = profile_manager->get_registered_profiles( ).
-
-        call_f4help( EXPORTING
-                       referenced_field_name = 'PROFILE'
-                       window_title          = 'Available Profiles'(009)
-                       dynpro_program        = sy-cprog
-                       dynpro_number         = sy-dynnr
-                     IMPORTING
-                       value_help = DATA(tmp_retval)
-                     CHANGING
-                       value_table = tmp_profiles ).
-
+        DATA(tmp_retval) = lcl_util=>call_f4help( EXPORTING
+                                                   referenced_field_name = 'PROFILE'
+                                                   window_title          = 'Available Profiles'(009)
+                                                   dynpro_program        = sy-cprog
+                                                   dynpro_number         = sy-dynnr
+                                                  CHANGING
+                                                   value_table  = tmp_profiles ).
         IF tmp_retval IS NOT INITIAL.
           io_profilename = tmp_retval[ 1 ]-fieldval.
         ENDIF.
@@ -798,22 +800,18 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD check_f4help.
     TRY.
         DATA(tmp_checks) = profile_manager->select_existing_checks( ).
-
-        call_f4help( EXPORTING
-                        referenced_field_name = 'CHECKID'
-                        window_title          = 'Available Checks'(019)
-                        dynpro_program        = sy-cprog
-                        dynpro_number         = sy-dynnr
-                      IMPORTING
-                        value_help = DATA(tmp_retval)
-                      CHANGING
-                        value_table = tmp_checks ).
-
+        DATA(tmp_retval) = lcl_util=>call_f4help( EXPORTING
+                                                    referenced_field_name = 'CHECKID'
+                                                    window_title          = 'Available Checks'(019)
+                                                    dynpro_program        = sy-cprog
+                                                    dynpro_number         = sy-dynnr
+                                                  CHANGING
+                                                    value_table  = tmp_checks ).
         IF tmp_retval IS NOT INITIAL.
           io_check_id = tmp_retval[ 1 ]-fieldval.
           has_edit_mode_started = abap_true.
         ELSE.
-          io_check_id = get_selected_check( )-checkid.
+          io_check_id = lcl_util=>get_selected_check( )-checkid.
         ENDIF.
         io_check_description = profile_manager->get_check_description( io_check_id ).
 
@@ -865,7 +863,7 @@ CLASS lcl_util IMPLEMENTATION.
           io_creation_date = obj->settings-object_created_on.
           chbx_on_prodcode = obj->settings-apply_on_productive_code.
           chbx_on_testcode = obj->settings-apply_on_test_code.
-          chbx_allow_pcom = obj->settings-ignore_pseudo_comments.
+          chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
           lbl_pcom_name = obj->settings-pseudo_comment.
           has_edit_mode_started = abap_false.
         ENDIF.
@@ -949,7 +947,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD unassign_profile.
     TRY.
-        profile_manager->delete_profile( get_selected_profile( ) ).
+        profile_manager->delete_profile( lcl_util=>get_selected_profile( ) ).
 
       CATCH ycx_failed_to_remove_a_line.
         MESSAGE 'Profile cannot be unassigned!'(008) TYPE 'I'.
@@ -1071,7 +1069,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD export_profile.
     TRY.
-        DATA(profile) = get_selected_profile( ).
+        DATA(profile) = lcl_util=>get_selected_profile( ).
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'W'.
     ENDTRY.
@@ -1129,7 +1127,7 @@ CLASS lcl_util IMPLEMENTATION.
     CHECK user_command = 'ENTR_300' AND io_delegate_name <> space.
 
     TRY.
-        profile_manager->insert_delegate( VALUE #( profile = get_selected_profile( )-profile
+        profile_manager->insert_delegate( VALUE #( profile = lcl_util=>get_selected_profile( )-profile
                                                    delegate = io_delegate_name ) ).
 
       CATCH ycx_entry_not_found.
@@ -1143,7 +1141,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD remove_delegate.
     TRY.
-        get_selected_delegate( ).
+        lcl_util=>get_selected_delegate( ).
 
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a delegate!'(035)  TYPE 'I'.
@@ -1152,12 +1150,12 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
 
     TRY.
-        DATA(lines_of_delegates) = lines( profile_manager->select_delegates( get_selected_profile( )-profile ) ).
-        IF lines_of_delegates <= 1.
+        DATA(lines_of_delegates) = lines( profile_manager->select_delegates( lcl_util=>get_selected_profile( )-profile ) ).
+        IF lines_of_delegates LE 1.
           RAISE EXCEPTION TYPE ycx_entry_not_found.
         ENDIF.
 
-        profile_manager->delete_delegate( get_selected_delegate( ) ).
+        profile_manager->delete_delegate( lcl_util=>get_selected_delegate( ) ).
 
       CATCH ycx_entry_not_found.
         MESSAGE 'There must be at least one delegate!'(024) TYPE 'I'.
@@ -1170,7 +1168,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD check_delegate_rights.
     TRY.
-        DATA(prof) = get_selected_profile( ).
+        DATA(prof) = lcl_util=>get_selected_profile( ).
         IF prof-is_standard = abap_true.
           RAISE EXCEPTION TYPE cx_failed.
         ENDIF.
@@ -1204,6 +1202,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD init_add_check.
     DATA obj TYPE REF TO y_check_base.
 
+    "io_check_id = ''.
     io_check_description = ''.
     io_start_date = '20190101'.
     io_end_date = '99991231'.
@@ -1212,7 +1211,7 @@ CLASS lcl_util IMPLEMENTATION.
     io_threshold = 0.
     chbx_on_prodcode = abap_true.
     chbx_on_testcode = abap_true.
-    chbx_allow_pcom = abap_false.
+    chbx_allow_pcom = abap_true.
     lbl_pcom_name = space.
 
     TRY.
@@ -1222,7 +1221,7 @@ CLASS lcl_util IMPLEMENTATION.
         io_prio = obj->settings-prio.
         chbx_on_prodcode = obj->settings-apply_on_productive_code.
         chbx_on_testcode = obj->settings-apply_on_test_code.
-        chbx_allow_pcom = obj->settings-ignore_pseudo_comments.
+        chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
         lbl_pcom_name = obj->settings-pseudo_comment.
       CATCH cx_sy_create_object_error.
         RETURN.
@@ -1240,7 +1239,7 @@ CLASS lcl_util IMPLEMENTATION.
     io_prio = check_line-prio.
     chbx_on_prodcode = check_line-apply_on_productive_code.
     chbx_on_testcode = check_line-apply_on_testcode.
-    chbx_allow_pcom = check_line-ignore_pseudo_comments.
+    chbx_allow_pcom = switch_bool( check_line-ignore_pseudo_comments ).
 
     TRY.
         io_check_description = profile_manager->get_check_description( check_line-checkid ).
@@ -1262,7 +1261,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD add_check.
     TRY.
-        DATA(profile) = get_selected_profile( )-profile.
+        DATA(profile) = lcl_util=>get_selected_profile( )-profile.
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
     ENDTRY.
@@ -1276,7 +1275,7 @@ CLASS lcl_util IMPLEMENTATION.
                                      prio = io_prio
                                      apply_on_productive_code = chbx_on_prodcode
                                      apply_on_testcode = chbx_on_testcode
-                                     ignore_pseudo_comments = chbx_allow_pcom
+                                     ignore_pseudo_comments = switch_bool( chbx_allow_pcom )
                                      last_changed_by = sy-uname
                                      last_changed_on = sy-datum
                                      last_changed_at = sy-timlo ).
@@ -1297,9 +1296,9 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         IF edit_mode = abap_true.
           profile_manager->check_time_overlap( check = check
-                                               selected_check = get_selected_check( ) ).
+                                               selected_check = lcl_util=>get_selected_check( ) ).
 
-          profile_manager->delete_check( get_selected_check( ) ).
+          profile_manager->delete_check( lcl_util=>get_selected_check( ) ).
         ELSE.
           profile_manager->check_time_overlap( check = check ).
         ENDIF.
@@ -1331,7 +1330,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD remove_selected_check.
     TRY.
-        remove_check( get_selected_check( ) ).
+        remove_check( lcl_util=>get_selected_check( ) ).
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a check!'(015) TYPE 'W'.
     ENDTRY.
@@ -1350,7 +1349,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD check_selected_check_rights.
     TRY.
-        result = check_check_rights( get_selected_profile( )-profile ).
+        result = check_check_rights( lcl_util=>get_selected_profile( )-profile ).
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'W'.
     ENDTRY.
@@ -1374,7 +1373,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD add_all_checks.
     TRY.
-        DATA(profile) = get_selected_profile( )-profile.
+        DATA(profile) = lcl_util=>get_selected_profile( )-profile.
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
     ENDTRY.
@@ -1416,7 +1415,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD remove_all_checks.
     TRY.
-        DATA(profile) = get_selected_profile( )-profile.
+        DATA(profile) = lcl_util=>get_selected_profile( )-profile.
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
     ENDTRY.
@@ -1441,10 +1440,8 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_missing_checks.
-    DATA missing_checks TYPE STANDARD TABLE OF ycicc_checkid.
-
     TRY.
-        DATA(profile) = get_selected_profile( )-profile.
+        DATA(profile) = lcl_util=>get_selected_profile( )-profile.
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
     ENDTRY.
@@ -1465,6 +1462,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     DATA(list_of_all_checks) = profile_manager->get_checks_from_db( ).
 
+    DATA missing_checks TYPE STANDARD TABLE OF ycicc_checkid.
     LOOP AT list_of_all_checks ASSIGNING FIELD-SYMBOL(<check>).
       IF NOT line_exists( checks_available[ checkid = <check>-obj_name ] ).
         APPEND <check>-obj_name TO missing_checks.
@@ -1488,4 +1486,8 @@ CLASS lcl_util IMPLEMENTATION.
     MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
   ENDMETHOD.
 
+  METHOD switch_bool.
+    result = COND #( WHEN boolean = abap_false THEN abap_true
+                     ELSE abap_false ).
+  ENDMETHOD.
 ENDCLASS.
