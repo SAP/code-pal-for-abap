@@ -131,7 +131,7 @@ CLASS ltc_loop_at_from_to IMPLEMENTATION.
       ( '   DATA exists TYPE abap_bool. ' )
 
       ( '   LOOP AT tadir TRANSPORTING NO FIELDS ' )
-      ( '   FROM 1 TO 50 ')
+      ( '   FROM 1 TO 50 ' )
       ( |   WHERE object = 'y_check_prefer_line_exists'. | )
       ( '     exists = abap_true. ' )
       ( '   ENDLOOP. ' )
