@@ -30,6 +30,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
             apply_on_test_code            TYPE ycicc_testcode,
             documentation                 TYPE c LENGTH 1000,
             is_threshold_reversed         TYPE abap_bool,
+            ignore_pseudo_comments        TYPE abap_bool,
           END OF settings.
 
     METHODS constructor.
@@ -103,8 +104,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   parameter_04           TYPE csequence OPTIONAL
                                   is_include_specific    TYPE sci_inclspec DEFAULT ' '
                                   additional_information TYPE xstring OPTIONAL
-                                  checksum               TYPE int4 OPTIONAL
-                                  pseudo_comments        TYPE t_comments OPTIONAL. "#EC OPTL_PARAM
+                                  checksum               TYPE int4 OPTIONAL. "#EC OPTL_PARAM
 
     METHODS get_column_abs  REDEFINITION.
     METHODS get_column_rel REDEFINITION.
@@ -148,14 +148,17 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_app_comp_in_scope IMPORTING level TYPE stmnt_levl
-                                 RETURNING value(result) TYPE abap_bool.
+    METHODS is_app_comp_in_scope IMPORTING level         TYPE stmnt_levl
+                                 RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS switch_bool IMPORTING boolean       TYPE abap_bool
+                        RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
 
 
-CLASS y_check_base IMPLEMENTATION.
+CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -167,6 +170,9 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
+
+    remote_enabled = abap_true.
+    remote_rfc_enabled = abap_true.
 
     description = get_class_description(  ).
     category = 'Y_CATEGORY_CODE_PAL'.
@@ -180,6 +186,7 @@ CLASS y_check_base IMPLEMENTATION.
     settings-apply_on_productive_code = abap_true.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-main }check_documentation.md|.
+    settings-ignore_pseudo_comments = abap_false.
 
     has_attributes = do_attributes_exist( ).
 
@@ -219,10 +226,12 @@ CLASS y_check_base IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      IF result IS INITIAL OR is_config_setup_valid( previous_config = result
-                                                     config          = <configuration> ) = abap_true.
+      IF result IS INITIAL
+         OR is_config_setup_valid( previous_config = result
+                                   config          = <configuration> ) = abap_true.
         result = <configuration>.
       ENDIF.
+
     ENDLOOP.
 
     IF result IS INITIAL.
@@ -296,7 +305,7 @@ CLASS y_check_base IMPLEMENTATION.
       check_configuration-object_creation_date = settings-object_created_on.
       check_configuration-prio = settings-prio.
       check_configuration-threshold = settings-threshold.
-
+      check_configuration-ignore_pseudo_comments = settings-ignore_pseudo_comments.
       APPEND check_configuration TO check_configurations.
     ENDIF.
     EXPORT
@@ -305,6 +314,7 @@ CLASS y_check_base IMPLEMENTATION.
       threshold = check_configuration-threshold
       apply_on_productive_code = check_configuration-apply_on_productive_code
       apply_on_testcode = check_configuration-apply_on_testcode
+      ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
     TO DATA BUFFER p_attributes.
   ENDMETHOD.
 
@@ -503,6 +513,7 @@ CLASS y_check_base IMPLEMENTATION.
       check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
       check_configuration-apply_on_testcode = settings-apply_on_test_code.
       check_configuration-threshold = settings-threshold.
+      check_configuration-ignore_pseudo_comments = settings-ignore_pseudo_comments.
     ENDIF.
 
     INSERT VALUE #(
@@ -541,6 +552,16 @@ CLASS y_check_base IMPLEMENTATION.
       ) INTO TABLE sci_attributes.
     ENDIF.
 
+    check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
+
+    IF settings-pseudo_comment IS NOT INITIAL.
+      INSERT VALUE #(
+        kind = ''
+        ref  = REF #( check_configuration-ignore_pseudo_comments )
+        text = |Allow { settings-pseudo_comment }|
+      ) INTO TABLE sci_attributes.
+    ENDIF.
+
     title = description.
 
     attributes_ok = abap_false.
@@ -552,8 +573,10 @@ CLASS y_check_base IMPLEMENTATION.
                          p_message    = message
                          p_display    = p_display ) = abap_true.
         attributes_ok = abap_true.
+        check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
         RETURN.
       ENDIF.
+
       IF check_configuration-apply_on_productive_code = abap_false AND
          check_configuration-apply_on_testcode        = abap_false.
         message = 'Choose the Type of Code to be checked'(300).
@@ -567,6 +590,8 @@ CLASS y_check_base IMPLEMENTATION.
         attributes_ok = abap_true.
       ENDIF.
     ENDWHILE.
+
+    check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
 
     CLEAR check_configurations.
     APPEND check_configuration TO check_configurations.
@@ -588,7 +613,7 @@ CLASS y_check_base IMPLEMENTATION.
     ENDIF.
 
     IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = new y_exemption_handler( ).
+      clean_code_exemption_handler = NEW y_exemption_handler( ).
     ENDIF.
 
     IF test_code_detector IS NOT BOUND.
@@ -629,6 +654,7 @@ CLASS y_check_base IMPLEMENTATION.
           threshold = check_configuration-threshold
           apply_on_productive_code = check_configuration-apply_on_productive_code
           apply_on_testcode = check_configuration-apply_on_testcode
+          ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
       CATCH cx_root.                                  "#EC NEED_CX_ROOT
@@ -638,13 +664,15 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD raise_error.
+    DATA(pseudo_comment) = COND #( WHEN settings-ignore_pseudo_comments = abap_false THEN settings-pseudo_comment ).
+    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
+                                                                               scimessages = scimessages
+                                                                               test = myname
+                                                                               code = get_code( error_priority )
+                                                                               suppress = pseudo_comment
+                                                                               position = statement_index ).
     statistics->collect( kind = error_priority
-                         pc = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
-                                                                                   scimessages      = scimessages
-                                                                                   test             = myname
-                                                                                   code             = get_code( error_priority )
-                                                                                   suppress         = settings-pseudo_comment
-                                                                                   position         = statement_index ) ).
+                         pc = pcom_detector ).
 
     IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) = 'Y_REF_SCAN_MANAGER'.
       inform( p_sub_obj_type = object_type
@@ -656,17 +684,15 @@ CLASS y_check_base IMPLEMENTATION.
               p_kind = error_priority
               p_test = myname
               p_code = get_code( error_priority )
-              p_suppress = settings-pseudo_comment
+              p_suppress = pseudo_comment
               p_param_1 = parameter_01
               p_param_2 = parameter_02
               p_param_3 = parameter_03
               p_param_4 = parameter_04
               p_inclspec = is_include_specific
               p_detail = additional_information
-              p_checksum_1 = checksum
-              p_comments = pseudo_comments ).
+              p_checksum_1 = checksum ).
     ENDIF.
-
   ENDMETHOD.
 
 
@@ -730,24 +756,27 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD is_config_setup_valid.
-    result = xsdbool( ( previous_config-prio = config-prio AND is_treshold_config_valid( config_threshold = config-threshold
-                                                                                         previous_threshold = previous_config-threshold ) = abap_true ) OR
-                      ( previous_config-prio <> c_error AND config-prio = c_error ) OR
-                      ( previous_config-prio = c_note AND config-prio = c_warning ) ).
+    result = xsdbool( ( previous_config-prio = config-prio
+                       AND is_treshold_config_valid( config_threshold = config-threshold
+                                                     previous_threshold = previous_config-threshold ) = abap_true )
+                     OR ( previous_config-prio <> c_error AND config-prio = c_error )
+                     OR ( previous_config-prio = c_note AND config-prio = c_warning )
+                     OR ( previous_config-ignore_pseudo_comments = abap_false
+                         AND config-ignore_pseudo_comments = abap_true ) ).
   ENDMETHOD.
 
 
   METHOD is_skipped.
-    result = xsdbool( ( config-threshold < error_count AND settings-is_threshold_reversed = abap_true ) OR
-                      ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false ) OR
-                      ( is_testcode = abap_true AND config-apply_on_testcode = abap_false ) OR
-                      ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).
+    result = xsdbool( ( config-threshold < error_count AND settings-is_threshold_reversed = abap_true )
+                     OR ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false )
+                     OR ( is_testcode = abap_true AND config-apply_on_testcode = abap_false )
+                     OR ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).
   ENDMETHOD.
 
 
   METHOD is_treshold_config_valid.
-    result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false ) OR
-                      ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
+    result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false )
+                     OR ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
   ENDMETHOD.
 
 
@@ -790,4 +819,8 @@ CLASS y_check_base IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD switch_bool.
+    result = COND #( WHEN boolean = abap_false THEN abap_true
+                     ELSE abap_false ).
+  ENDMETHOD.
 ENDCLASS.
