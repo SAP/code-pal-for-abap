@@ -115,6 +115,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS prefer_is_not_to_not_is.
     METHODS prefer_case_to_elseif.
     METHODS prefer_new_to_create_object.
+    METHODS prefer_line_exists.
     METHODS deprecated_classes.
     METHODS scope_of_variable.
 
@@ -412,6 +413,16 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   METHOD prefer_is_not_to_not_is.
     IF NOT attribute_1 IS INITIAL.
       attribute_1 = attribute_2.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD prefer_line_exists.
+    DATA tadir TYPE TABLE OF tadir.
+    DATA exists TYPE abap_bool.
+    READ TABLE tadir TRANSPORTING NO FIELDS WITH KEY object = 'y_demo_failures'.
+    IF sy-subrc = 0.
+      exists = abap_true.
     ENDIF.
   ENDMETHOD.
 

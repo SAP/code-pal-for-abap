@@ -14,6 +14,7 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 
 2021-04-** v.1.14.0
 ------------------
++ Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT (#355)
 + Additional option to disable exceptions/pragmas (#329)
 ! abapLint Rules
 * Diffs for TABL (#359)
