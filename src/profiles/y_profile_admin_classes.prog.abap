@@ -271,6 +271,10 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
       IMPORTING boolean       TYPE abap_bool
       RETURNING VALUE(result) TYPE abap_bool.
 
+    CLASS-METHODS ux_usability_switch
+      IMPORTING checks        TYPE y_if_profile_manager=>check_assignments
+      RETURNING VALUE(result) TYPE y_if_profile_manager=>check_assignments.
+
   PRIVATE SECTION.
     CLASS-METHODS request_confirmation
       IMPORTING
@@ -560,6 +564,8 @@ CLASS lcl_util IMPLEMENTATION.
                                             header_text = 'Apply on Productive Code'(050) ).
         checks_tree->set_field_header_text( fieldname   = 'APPLY_ON_TESTCODE'
                                             header_text = 'Apply on Testcode'(034) ).
+
+* Cause of usability, the text is switched on the UX side.
         checks_tree->set_field_header_text( fieldname   = 'IGNORE_PSEUDO_COMMENTS'
                                             header_text = 'Allow Exemptions' ).
 
@@ -683,10 +689,7 @@ CLASS lcl_util IMPLEMENTATION.
     CHECK checks_tree IS BOUND.
     TRY.
         DATA(checks) = profile_manager->select_checks( get_selected_profile( )-profile ).
-        LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
-          <check>-ignore_pseudo_comments = switch_bool( <check>-ignore_pseudo_comments ).
-        ENDLOOP.
-
+        checks = ux_usability_switch( checks ).
         checks_tree->list_control( )->set_table( checks ).
 
       CATCH ycx_entry_not_found.
@@ -694,6 +697,14 @@ CLASS lcl_util IMPLEMENTATION.
 
     ENDTRY.
     checks_tree->refresh_display( ).
+  ENDMETHOD.
+
+  METHOD ux_usability_switch.
+    result = checks.
+    LOOP AT result ASSIGNING FIELD-SYMBOL(<check>).
+      <check>-ignore_pseudo_comments = switch_bool( <check>-ignore_pseudo_comments ).
+    ENDLOOP.
+    UNASSIGN <check>.
   ENDMETHOD.
 
   METHOD refresh_delegates.
