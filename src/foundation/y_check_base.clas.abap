@@ -171,9 +171,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    remote_enabled = abap_true.
-    remote_rfc_enabled = abap_true.
-
     description = get_class_description(  ).
     category = 'Y_CATEGORY_CODE_PAL'.
     position = y_code_pal_sorter=>get_position( myname ).
