@@ -820,7 +820,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD switch_bool.
-    result = COND #( WHEN boolean = abap_false THEN abap_true
-                     ELSE abap_false ).
+    result = xsdbool( boolean = abap_false ).
   ENDMETHOD.
 ENDCLASS.
