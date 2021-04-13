@@ -565,9 +565,8 @@ CLASS lcl_util IMPLEMENTATION.
         checks_tree->set_field_header_text( fieldname   = 'APPLY_ON_TESTCODE'
                                             header_text = 'Apply on Testcode'(034) ).
 
-* Cause of usability, the text is switched on the UX side.
         checks_tree->set_field_header_text( fieldname   = 'IGNORE_PSEUDO_COMMENTS'
-                                            header_text = 'Allow Exemptions' ).
+                                            header_text = 'Allow Exemptions' ). "Cause of usability, the text is switched on the UX side.
 
         checks_tree->init_display( ).
 
