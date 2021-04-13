@@ -75,7 +75,8 @@ CLASS y_profile_manager IMPLEMENTATION.
                                                                 end_date
                                                                 objects_created_on
                                                                 prio
-                                                                apply_on_testcode.
+                                                                apply_on_testcode
+                                                                ignore_pseudo_comments.
 
     IF check-start_date > check-end_date.
       RAISE EXCEPTION TYPE ycx_time_overlap.
@@ -85,7 +86,9 @@ CLASS y_profile_manager IMPLEMENTATION.
                                                       checkid = @check-checkid AND
                                                       prio = @check-prio AND
                                                       objects_created_on = @check-objects_created_on AND
-                                                      apply_on_testcode = @check-apply_on_testcode.
+                                                      apply_on_testcode = @check-apply_on_testcode AND
+                                                      ignore_pseudo_comments = @check-ignore_pseudo_comments.
+
     IF sy-subrc = 0.
       IF selected_check IS NOT INITIAL.
         DELETE TABLE table WITH TABLE KEY profile = selected_check-profile
@@ -94,7 +97,8 @@ CLASS y_profile_manager IMPLEMENTATION.
                                           end_date = selected_check-end_date
                                           objects_created_on = selected_check-objects_created_on
                                           prio = selected_check-prio
-                                          apply_on_testcode = selected_check-apply_on_testcode.
+                                          apply_on_testcode = selected_check-apply_on_testcode
+                                          ignore_pseudo_comments = selected_check-ignore_pseudo_comments.
       ENDIF.
 
       LOOP AT table INTO DATA(line).
@@ -117,7 +121,8 @@ CLASS y_profile_manager IMPLEMENTATION.
                                   objects_created_on = @check-objects_created_on AND
                                   prio = @check-prio AND
                                   threshold = @check-threshold AND
-                                  apply_on_testcode = @check-apply_on_testcode.
+                                  apply_on_testcode = @check-apply_on_testcode AND
+                                  ignore_pseudo_comments = @check-ignore_pseudo_comments.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_failed_to_remove_a_line.
     ENDIF.
@@ -167,6 +172,7 @@ CLASS y_profile_manager IMPLEMENTATION.
       y_if_profile_manager~delete_profile( <profile> ).
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD y_if_profile_manager~get_checks_type_name.
     result = checks_type.

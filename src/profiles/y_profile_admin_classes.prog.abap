@@ -200,22 +200,18 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
       check_f4help.
 
     CLASS-METHODS:
-      init_check_fields_active
-        IMPORTING checkid TYPE vseoclass-clsname,
-      get_disable_threshold_select
+      init_check_fields_active,
+      get_check
         IMPORTING checkid       TYPE vseoclass-clsname
-        RETURNING VALUE(result) TYPE abap_bool,
-      get_disable_on_prodcode_select
-        IMPORTING checkid       TYPE vseoclass-clsname
-        RETURNING VALUE(result) TYPE abap_bool,
-      get_disable_on_testcode_select
-        IMPORTING checkid       TYPE vseoclass-clsname
-        RETURNING VALUE(result) TYPE abap_bool,
+        RETURNING VALUE(result) TYPE REF TO y_check_base
+        RAISING   cx_sy_create_object_error,
       set_threshold_active
         IMPORTING is_active TYPE abap_bool DEFAULT abap_true,
       set_on_prodcode_active
         IMPORTING is_active TYPE abap_bool DEFAULT abap_true,
       set_on_testcode_active
+        IMPORTING is_active TYPE abap_bool DEFAULT abap_true,
+      set_allow_pcom_active
         IMPORTING is_active TYPE abap_bool DEFAULT abap_true,
       set_dynpro_field_active
         IMPORTING fieldname TYPE string
@@ -270,6 +266,14 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
         cx_failed.
     CLASS-METHODS remove_all_checks.
     CLASS-METHODS add_missing_checks.
+
+    CLASS-METHODS switch_bool
+      IMPORTING boolean       TYPE abap_bool
+      RETURNING VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS ux_usability_switch
+      IMPORTING checks        TYPE y_if_profile_manager=>check_assignments
+      RETURNING VALUE(result) TYPE y_if_profile_manager=>check_assignments.
 
   PRIVATE SECTION.
     CLASS-METHODS request_confirmation
@@ -541,6 +545,8 @@ CLASS lcl_util IMPLEMENTATION.
                                            is_visible = abap_true ).
         checks_tree->set_field_visibility( fieldname = 'APPLY_ON_TESTCODE'
                                            is_visible = abap_true ).
+        checks_tree->set_field_visibility( fieldname = 'IGNORE_PSEUDO_COMMENTS'
+                                           is_visible = abap_true ).
 
         checks_tree->set_field_header_text( fieldname   = 'PROFILE'
                                             header_text = 'Profile'(001) ).
@@ -558,6 +564,10 @@ CLASS lcl_util IMPLEMENTATION.
                                             header_text = 'Apply on Productive Code'(050) ).
         checks_tree->set_field_header_text( fieldname   = 'APPLY_ON_TESTCODE'
                                             header_text = 'Apply on Testcode'(034) ).
+
+        "Cause of usability, the text is switched on the UX side.
+        checks_tree->set_field_header_text( fieldname   = 'IGNORE_PSEUDO_COMMENTS'
+                                            header_text = 'Allow Exemptions' ).
 
         checks_tree->init_display( ).
 
@@ -660,6 +670,7 @@ CLASS lcl_util IMPLEMENTATION.
       RAISE EXCEPTION TYPE ycx_entry_not_found.
     ENDIF.
     result = <line>.
+    result-ignore_pseudo_comments = switch_bool( result-ignore_pseudo_comments ).
     UNASSIGN <line>.
   ENDMETHOD.
 
@@ -677,13 +688,23 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD refresh_checks.
     CHECK checks_tree IS BOUND.
     TRY.
-        checks_tree->list_control( )->set_table( profile_manager->select_checks( get_selected_profile( )-profile ) ).
+        DATA(checks) = profile_manager->select_checks( get_selected_profile( )-profile ).
+        checks = ux_usability_switch( checks ).
+        checks_tree->list_control( )->set_table( checks ).
 
       CATCH ycx_entry_not_found.
         checks_tree->list_control( )->delete_all( ).
 
     ENDTRY.
     checks_tree->refresh_display( ).
+  ENDMETHOD.
+
+  METHOD ux_usability_switch.
+    result = checks.
+    LOOP AT result ASSIGNING FIELD-SYMBOL(<check>).
+      <check>-ignore_pseudo_comments = switch_bool( <check>-ignore_pseudo_comments ).
+    ENDLOOP.
+    UNASSIGN <check>.
   ENDMETHOD.
 
   METHOD refresh_delegates.
@@ -808,7 +829,6 @@ CLASS lcl_util IMPLEMENTATION.
                         value_help = DATA(tmp_retval)
                       CHANGING
                         value_table = tmp_checks ).
-
         IF tmp_retval IS NOT INITIAL.
           io_check_id = tmp_retval[ 1 ]-fieldval.
           has_edit_mode_started = abap_true.
@@ -830,34 +850,43 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD init_check_fields_active.
-    DATA obj TYPE REF TO y_check_base.
-
     TRY.
-        IF get_disable_threshold_select( checkid ) = abap_true.
+        DATA(obj) = get_check( io_check_id ).
+
+        IF obj->settings-disable_threshold_selection = abap_true.
           set_threshold_active( abap_false ).
         ELSE.
           set_threshold_active( abap_true ).
         ENDIF.
 
-        IF get_disable_on_prodcode_select( checkid ) = abap_true.
+        IF obj->settings-disable_on_prodcode_selection = abap_true.
           set_on_prodcode_active( abap_false ).
         ELSE.
           set_on_prodcode_active( abap_true ).
         ENDIF.
 
-        IF get_disable_on_testcode_select( checkid ) = abap_true.
+        IF obj->settings-disable_on_testcode_selection = abap_true.
           set_on_testcode_active( abap_false ).
         ELSE.
           set_on_testcode_active( abap_true ).
         ENDIF.
 
-        CREATE OBJECT obj TYPE (io_check_id).
+        IF obj->settings-pseudo_comment IS INITIAL.
+          set_allow_pcom_active( abap_false ).
+        ELSE.
+          set_allow_pcom_active( abap_true ).
+        ENDIF.
+
+        lbl_pcom_name = obj->settings-pseudo_comment.
+
         IF has_edit_mode_started = abap_true.
           io_threshold = obj->settings-threshold.
           io_prio = obj->settings-prio.
           io_creation_date = obj->settings-object_created_on.
           chbx_on_prodcode = obj->settings-apply_on_productive_code.
           chbx_on_testcode = obj->settings-apply_on_test_code.
+          chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
+          lbl_pcom_name = obj->settings-pseudo_comment.
           has_edit_mode_started = abap_false.
         ENDIF.
 
@@ -866,40 +895,8 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-  METHOD get_disable_on_prodcode_select.
-    DATA obj TYPE REF TO y_check_base.
-    TRY.
-        CREATE OBJECT obj TYPE (checkid).
-        result =  obj->settings-disable_on_prodcode_selection.
-
-      CATCH cx_sy_create_object_error.
-        result = abap_false.
-
-    ENDTRY.
-  ENDMETHOD.
-
-  METHOD get_disable_on_testcode_select.
-    DATA obj TYPE REF TO y_check_base.
-    TRY.
-        CREATE OBJECT obj TYPE (checkid).
-        result =  obj->settings-disable_on_testcode_selection.
-
-      CATCH cx_sy_create_object_error.
-        result = abap_false.
-
-    ENDTRY.
-  ENDMETHOD.
-
-  METHOD get_disable_threshold_select.
-    DATA obj TYPE REF TO y_check_base.
-    TRY.
-        CREATE OBJECT obj TYPE (checkid).
-        result =  obj->settings-disable_threshold_selection.
-
-      CATCH cx_sy_create_object_error.
-        result = abap_false.
-
-    ENDTRY.
+  METHOD get_check.
+    CREATE OBJECT result TYPE (checkid).
   ENDMETHOD.
 
   METHOD set_on_prodcode_active.
@@ -920,6 +917,13 @@ CLASS lcl_util IMPLEMENTATION.
     set_dynpro_field_active( fieldname = 'LBL_TEXT_THRESHOLD'
                              is_active = is_active ).
     set_dynpro_field_active( fieldname = 'IO_THRESHOLD'
+                             is_active = is_active ).
+  ENDMETHOD.
+
+  METHOD set_allow_pcom_active.
+    set_dynpro_field_active( fieldname = 'LBL_ALLOW_PCOM'
+                             is_active = is_active ).
+    set_dynpro_field_active( fieldname = 'CHBX_ALLOW_PCOM'
                              is_active = is_active ).
   ENDMETHOD.
 
@@ -993,11 +997,11 @@ CLASS lcl_util IMPLEMENTATION.
         DATA(checklist) = profile_manager->select_checks( io_profilename ).
 
         profile_manager->insert_profile( VALUE #( username = sy-uname
-                                            profile  = io_to_profile
-                                            is_standard = abap_false
-                                            last_changed_by = sy-uname
-                                            last_changed_on = sy-datum
-                                            last_changed_at = sy-timlo ) ).
+                                                  profile  = io_to_profile
+                                                  is_standard = abap_false
+                                                  last_changed_by = sy-uname
+                                                  last_changed_on = sy-datum
+                                                  last_changed_at = sy-timlo ) ).
 
         profile_manager->check_delegation_rights( io_to_profile ).
 
@@ -1127,6 +1131,7 @@ CLASS lcl_util IMPLEMENTATION.
     result-last_changed_by = sy-uname.
     result-last_changed_on = sy-datum.
     result-last_changed_at = sy-timlo.
+    result-ignore_pseudo_comments = abap_false.
   ENDMETHOD.
 
   METHOD auto_re_start_delegate.
@@ -1195,8 +1200,8 @@ CLASS lcl_util IMPLEMENTATION.
 
       CATCH ycx_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
-      CATCH ycx_no_delegation_rights.
 
+      CATCH ycx_no_delegation_rights.
         MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'I'.
 
       CATCH cx_failed.
@@ -1227,6 +1232,8 @@ CLASS lcl_util IMPLEMENTATION.
     io_threshold = 0.
     chbx_on_prodcode = abap_true.
     chbx_on_testcode = abap_true.
+    chbx_allow_pcom = abap_true.
+    lbl_pcom_name = space.
 
     TRY.
         CREATE OBJECT obj TYPE (io_check_id).
@@ -1235,7 +1242,8 @@ CLASS lcl_util IMPLEMENTATION.
         io_prio = obj->settings-prio.
         chbx_on_prodcode = obj->settings-apply_on_productive_code.
         chbx_on_testcode = obj->settings-apply_on_test_code.
-
+        chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
+        lbl_pcom_name = obj->settings-pseudo_comment.
       CATCH cx_sy_create_object_error.
         RETURN.
     ENDTRY.
@@ -1252,6 +1260,7 @@ CLASS lcl_util IMPLEMENTATION.
     io_prio = check_line-prio.
     chbx_on_prodcode = check_line-apply_on_productive_code.
     chbx_on_testcode = check_line-apply_on_testcode.
+    chbx_allow_pcom = switch_bool( check_line-ignore_pseudo_comments ).
 
     TRY.
         io_check_description = profile_manager->get_check_description( check_line-checkid ).
@@ -1287,6 +1296,7 @@ CLASS lcl_util IMPLEMENTATION.
                                      prio = io_prio
                                      apply_on_productive_code = chbx_on_prodcode
                                      apply_on_testcode = chbx_on_testcode
+                                     ignore_pseudo_comments = switch_bool( chbx_allow_pcom )
                                      last_changed_by = sy-uname
                                      last_changed_on = sy-datum
                                      last_changed_at = sy-timlo ).
@@ -1497,5 +1507,11 @@ CLASS lcl_util IMPLEMENTATION.
     ENDLOOP.
     MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
   ENDMETHOD.
+
+
+  METHOD switch_bool.
+    result = xsdbool( boolean = abap_false ).
+  ENDMETHOD.
+
 
 ENDCLASS.

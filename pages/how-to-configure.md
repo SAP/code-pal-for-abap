@@ -21,7 +21,8 @@ By the Check configuration: You can,
 * Define check's severity;
 * Define check's threshold (if applicable);
 * Define if it is applicable in productive code (if applicable);
-* Define if it is applicable in test code (if applicable).
+* Define if it is applicable in test code (if applicable);
+* Define if it allows exemption via pseudo comments (if applicable).
 
 Check behavior:
 
