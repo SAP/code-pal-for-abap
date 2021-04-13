@@ -158,7 +158,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_base IMPLEMENTATION.
+CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD check_start_conditions.
@@ -170,6 +170,9 @@ CLASS y_check_base IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
+
+    remote_enabled = abap_true.
+    remote_rfc_enabled = abap_true.
 
     description = get_class_description(  ).
     category = 'Y_CATEGORY_CODE_PAL'.
@@ -223,8 +226,9 @@ CLASS y_check_base IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      IF result IS INITIAL OR is_config_setup_valid( previous_config = result
-                                                     config          = <configuration> ) = abap_true.
+      IF result IS INITIAL
+         OR is_config_setup_valid( previous_config = result
+                                   config          = <configuration> ) = abap_true.
         result = <configuration>.
       ENDIF.
 
@@ -752,25 +756,27 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD is_config_setup_valid.
-    result = xsdbool( ( previous_config-prio = config-prio AND is_treshold_config_valid( config_threshold = config-threshold
-                                                                                         previous_threshold = previous_config-threshold ) = abap_true ) OR
-                      ( previous_config-prio <> c_error AND config-prio = c_error ) OR
-                      ( previous_config-prio = c_note AND config-prio = c_warning ) ).
-    "TODO
+    result = xsdbool( ( previous_config-prio = config-prio
+                       AND is_treshold_config_valid( config_threshold = config-threshold
+                                                     previous_threshold = previous_config-threshold ) = abap_true )
+                     OR ( previous_config-prio <> c_error AND config-prio = c_error )
+                     OR ( previous_config-prio = c_note AND config-prio = c_warning )
+                     OR ( previous_config-ignore_pseudo_comments = abap_false
+                         AND config-ignore_pseudo_comments = abap_true ) ).
   ENDMETHOD.
 
 
   METHOD is_skipped.
-    result = xsdbool( ( config-threshold < error_count AND settings-is_threshold_reversed = abap_true ) OR
-                      ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false ) OR
-                      ( is_testcode = abap_true AND config-apply_on_testcode = abap_false ) OR
-                      ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).
+    result = xsdbool( ( config-threshold < error_count AND settings-is_threshold_reversed = abap_true )
+                     OR ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false )
+                     OR ( is_testcode = abap_true AND config-apply_on_testcode = abap_false )
+                     OR ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).
   ENDMETHOD.
 
 
   METHOD is_treshold_config_valid.
-    result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false ) OR
-                      ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
+    result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false )
+                     OR ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
   ENDMETHOD.
 
 
