@@ -16,7 +16,6 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 ------------------
 + Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT (#355)
 + Additional option to disable exceptions/pragmas (#329)
-! abapLint Rules
 * Diffs for TABL (#359)
 + Unit Test Without/With Invalid Assert (#288)
 + Prefer NEW to CREATE OBJECT (#283)
