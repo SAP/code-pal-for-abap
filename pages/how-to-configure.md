@@ -12,7 +12,7 @@ The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management 
   
 ### 1. Profile
 
-> You can see a Profile as a Code Inspector Variant.
+> Profile is similar to a Code Inspector Variant.
 
 Behavior:
 - If you assign a Profile to your user, it overwrites the Code Inspector Variant;
@@ -26,7 +26,9 @@ To create or assign it, click on the `+` button, and inform the Profile name:
 
 ### 2. Delegates
 
-Delegates are users which can maintain the checks. As you are creating a new check, you will be added automatically. In case you want to add someone else as an owner, click on the `+` button and inform his/her user name.
+> Delegates are the Profile owners who are allowed to configure it. 
+
+To add someone else, click on the `+` button and inform his / her user name.
 
 ![assign delegate](imgs/assign-delegate.png)
 
