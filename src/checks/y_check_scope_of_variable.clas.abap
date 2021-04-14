@@ -28,7 +28,6 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
     settings-pseudo_comment = '"#EC SCOPE_OF_VAR' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }scope-of-variable.md|.
 
     set_check_message( 'Variable in use out of its scope!' ).

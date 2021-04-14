@@ -23,7 +23,6 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
     settings-pseudo_comment = '"#EC CHAIN_DECL_USAG' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }chain-declaration-usage.md|.
 
     set_check_message( 'Do not chain up-front declarations!' ).

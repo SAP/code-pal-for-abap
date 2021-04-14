@@ -52,7 +52,6 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
-    settings-prio = c_note.
 
     relevant_statement_types = VALUE #( BASE relevant_statement_types
                                       ( scan_struc_stmnt_type-class_definition )

@@ -28,7 +28,6 @@ CLASS y_check_profile_message IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
-    settings-prio = c_note.
 
     set_check_message( '&1 Profile(s) in use: &2.' ).
   ENDMETHOD.

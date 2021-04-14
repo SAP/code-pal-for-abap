@@ -36,7 +36,6 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
     settings-pseudo_comment = '"#EC INTF_IN_CLASS' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 1.
-    settings-prio = c_warning.
     settings-apply_on_test_code = abap_false.
     settings-documentation = |{ c_docs_path-checks }interface-in-class.md|.
 

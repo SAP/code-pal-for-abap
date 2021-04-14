@@ -29,7 +29,6 @@ CLASS y_check_comment_usage IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    settings-prio = c_note.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
 

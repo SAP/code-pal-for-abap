@@ -21,7 +21,6 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
     settings-pseudo_comment = '"#EC PREF_LINE_EX' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }prefer-line-exists.md|.
 
     set_check_message( 'Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT!' ).
