@@ -14,11 +14,11 @@ Together, both support you in writing a clean ABAP code.
 - Ignores automatically generated code;
 - Supports exemptions;
 - Provides a new user-friendly way to create variants ([Profile Management](pages/how-to-configure.md));
-- Configurable rules:
+- Allows configuration based on:
   - Threshold;
   - Severity / Priority;
-  - Valid for productive, test, or both codes;
-  - Valid for objects created since a specific date;
+  - Validity for productive code, test code, or both;
+  - Validity for objects created since a specific date;
   - Validity period;
   - Allow / Deny exemption.
  
