@@ -174,11 +174,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     description = get_class_description(  ).
     category = 'Y_CATEGORY_CODE_PAL'.
     position = y_code_pal_sorter=>get_position( myname ).
-    version = '0001'.
+    version = '0000'.
     has_documentation = abap_true.
 
     settings-object_created_on = '20190101'.
-    settings-prio = c_note.
+    settings-prio = c_info.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
     settings-apply_on_test_code = abap_true.
