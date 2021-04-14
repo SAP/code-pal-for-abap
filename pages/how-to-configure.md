@@ -4,7 +4,7 @@
 
 ## How to Configure
 
-💡 The tool is compatible with the SAP Code Inspector framework (`SCI` / `SCII`), and you can find the respective checks under the `code pal for ABAP (open source plugin)` category once you have it installed.
+💡 The tool is compatible with the SAP Code Inspector framework (`SCI` / `SCII`).
 
 ⚠️The below documentation is valid for our own `Profile Management Tool` feature only.
 
