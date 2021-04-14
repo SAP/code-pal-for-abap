@@ -10,9 +10,9 @@
 
 - [Code Pal for ABAP](#code-pal-for-abap)
   - [How to Configure](#how-to-configure)
-    - [1. Profiles](#1-profiles)
-    - [2. Delegates](#2-delegates)
-    - [3. Checks](#3-checks)
+    - [Profiles](#1-profiles)
+    - [Delegates](#2-delegates)
+    - [Checks](#3-checks)
   - [Further Features](#further-features)
     - [Import / Export Profile](#import--export-profile)
     - [Import via API](#import-via-api)
