@@ -23,7 +23,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_comment_usage IMPLEMENTATION.
+CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -32,6 +32,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     settings-prio = c_note.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
+    settings-ignore_pseudo_comments = abap_true.
 
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_definition )
                                         ( scan_struc_stmnt_type-class_implementation )
@@ -129,6 +130,4 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
     result = xsdbool( is_function_module = abap_false ).
   ENDMETHOD.
-
-
 ENDCLASS.

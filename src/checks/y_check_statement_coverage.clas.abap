@@ -5,12 +5,11 @@ CLASS y_check_statement_coverage DEFINITION PUBLIC INHERITING FROM y_check_base 
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-
 ENDCLASS.
 
 
 
-CLASS y_check_statement_coverage IMPLEMENTATION.
+CLASS Y_CHECK_STATEMENT_COVERAGE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -24,6 +23,7 @@ CLASS y_check_statement_coverage IMPLEMENTATION.
     settings-disable_on_prodcode_selection = abap_true.
     settings-disable_on_testcode_selection = abap_true.
     settings-apply_on_test_code = abap_false.
+    settings-ignore_pseudo_comments = abap_true.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
     set_check_message( 'Statement Coverage must be higher than &2%! (&1%<=&2%)' ).
@@ -65,6 +65,4 @@ CLASS y_check_statement_coverage IMPLEMENTATION.
   METHOD inspect_tokens.
     RETURN.
   ENDMETHOD.
-
-
 ENDCLASS.

@@ -28,7 +28,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
+CLASS Y_CHECK_PSEUDO_COMMENT_USAGE IMPLEMENTATION.
 
 
   METHOD call_get_pseudo_comment.
@@ -52,6 +52,7 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
+    settings-ignore_pseudo_comments = abap_true.
     settings-prio = c_note.
 
     relevant_statement_types = VALUE #( BASE relevant_statement_types
@@ -137,6 +138,4 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
   ENDMETHOD.
-
-
 ENDCLASS.

@@ -10,11 +10,13 @@ CLASS y_check_profile_message DEFINITION PUBLIC INHERITING FROM y_check_base CRE
   PRIVATE SECTION.
     CLASS-DATA ran TYPE abap_bool.
     METHODS get_profiles RETURNING VALUE(result) TYPE y_if_profile_manager=>profile_assignments.
-    METHODS list_profiles IMPORTING profiles TYPE y_if_profile_manager=>profile_assignments
-                          RETURNING value(result) TYPE string.
+    METHODS list_profiles IMPORTING profiles      TYPE y_if_profile_manager=>profile_assignments
+                          RETURNING VALUE(result) TYPE string.
 ENDCLASS.
 
-CLASS y_check_profile_message IMPLEMENTATION.
+
+
+CLASS Y_CHECK_PROFILE_MESSAGE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -28,6 +30,7 @@ CLASS y_check_profile_message IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
+    settings-ignore_pseudo_comments = abap_true.
     settings-prio = c_note.
 
     set_check_message( '&1 Profile(s) in use: &2.' ).
@@ -99,6 +102,4 @@ CLASS y_check_profile_message IMPLEMENTATION.
                        ELSE |{ result }, { <profile>-profile }| ).
     ENDLOOP.
   ENDMETHOD.
-
-
 ENDCLASS.

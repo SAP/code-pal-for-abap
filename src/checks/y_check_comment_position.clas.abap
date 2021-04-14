@@ -6,21 +6,21 @@ CLASS y_check_comment_position DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS has_wrong_position IMPORTING statement TYPE sstmnt
+    METHODS has_wrong_position IMPORTING statement     TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_pseudo_comment IMPORTING token TYPE stokesx
+    METHODS is_pseudo_comment IMPORTING token         TYPE stokesx
                               RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_type_asterisk IMPORTING token TYPE stokesx
+    METHODS is_type_asterisk IMPORTING token         TYPE stokesx
                              RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_pragma IMPORTING token TYPE stokesx
+    METHODS is_pragma IMPORTING token         TYPE stokesx
                       RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS get_next_token IMPORTING current_position TYPE i
-                           RETURNING VALUE(result) TYPE stokesx
-                           RAISING cx_sy_itab_line_not_found.
+                           RETURNING VALUE(result)    TYPE stokesx
+                           RAISING   cx_sy_itab_line_not_found.
 
 ENDCLASS.
 
@@ -33,6 +33,7 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
     super->constructor( ).
 
     settings-disable_threshold_selection = abap_true.
+    settings-ignore_pseudo_comments = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }comment-position.md|.
 
