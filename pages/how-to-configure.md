@@ -8,8 +8,6 @@
 
 ⚠️The below documentation is valid for our own `Profile Management Tool` feature only.
 
-The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management Tool`.
-
 - [Code Pal for ABAP](#code-pal-for-abap)
   - [How to Configure](#how-to-configure)
     - [1. Profiles](#1-profiles)
@@ -21,7 +19,9 @@ The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management 
     - [Add / Remove All Checks](#add--remove-all-checks)
     - [Add Missing Checks](#add-missing-checks)
   
-### 1. Profiles
+The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management Tool`.
+
+### Profiles
 
 > Profiles are similar to Code Inspector Variants.
 
@@ -36,7 +36,7 @@ To create or assign it, click on the `+` button, and inform the Profile name:
 
 ![create a profile](imgs/create-profile.png)
 
-### 2. Delegates
+### Delegates
 
 > Delegates are the Profile owners who are allowed to configure it;
 > Multiple delegates are allowed.
@@ -49,7 +49,7 @@ To add someone else, click on the `+` button and inform his / her user name:
 
 ![assign delegate](imgs/assign-delegate.png)
 
-### 3. Checks
+### Checks
 
 > Checks are the rules based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md) style guide.
 
