@@ -10,7 +10,7 @@ Together, both support you in writing a clean ABAP code.
 
 ## Features
 
-- Supported by Code Inspector (SCI / SCII) and ABAP Test Cockpit (ATC) (SE80 / Eclipse);
+- Supported by Code Inspector (`SCI` / `SCII`) and ABAP Test Cockpit (ATC) (`SE80` / Eclipse);
 - Ignores automatically generated code;
 - Supports exemptions;
 - Provides a new user-friendly way to create variants ([Profile Management](pages/how-to-configure.md));
