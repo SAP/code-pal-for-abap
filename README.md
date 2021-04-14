@@ -3,7 +3,7 @@
 [![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/SAP/code-pal-for-abap/src/y_code_pal_version.intf.abap/abap&label=version)](changelog.txt)
 [![license](https://img.shields.io/github/license/SAP/code-pal-for-abap)](LICENSE)
 
-Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) style guide, this tool contains a set of checks to guarantee the Clean ABAP adherence.  
+Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) style guide, this tool contains a set of checks to guarantee the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) adherence.  
 Together, both support you in writing a clean ABAP code. 
 
 ❣️ It's **free** and **open-source**.
@@ -24,7 +24,7 @@ Together, both support you in writing a clean ABAP code.
  
 ⚠️ Tool is not RFC-Enabled ([#268](https://github.com/SAP/code-pal-for-abap/issues/268)). 
 
-⚠️ Severities pre-defined as `Notification` by default ([#368](https://github.com/SAP/code-pal-for-abap/issues/368)).
+⚠️ Severities set to `Notification` / `Priority 3` by default ([#368](https://github.com/SAP/code-pal-for-abap/issues/368)).
 
 ## Set of Checks
 
