@@ -3,7 +3,8 @@
 [![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/SAP/code-pal-for-abap/src/y_code_pal_version.intf.abap/abap&label=version)](changelog.txt)
 [![license](https://img.shields.io/github/license/SAP/code-pal-for-abap)](LICENSE)
 
-Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) style guide, this tool contains a set of checks to guarantee the Clean ABAP adherence. Together, both support you in writing a clean ABAP code. 
+Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) style guide, this tool contains a set of checks to guarantee the Clean ABAP adherence.  
+Together, both support you in writing a clean ABAP code. 
 
 ❣️ It's **free** and **open-source**.
 
