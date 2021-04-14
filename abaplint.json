@@ -78,7 +78,7 @@
     "indentation": false,
     "inline_data_old_versions": true,
     "intf_referencing_clas": {
-      "severity": "Warning"
+      "allow": ["cl_ci_scan"]
     },
     "keep_single_parameter_on_one_line": true,
     "line_break_multiple_parameters": true,
