@@ -22,9 +22,9 @@ Together, both support you in writing a clean ABAP code.
   - Validity period;
   - Allow / Deny exemption.
  
-⚠️ Tool is not RFC-Enabled due to local dependencies ([#268](https://github.com/SAP/code-pal-for-abap/issues/268)). 
+⚠️ Tool is not RFC-Enabled ([#268](https://github.com/SAP/code-pal-for-abap/issues/268)). 
 
-⚠️ Severities pre-defined as `Notification` by default so you can decide with your team what is an `Error` / `Warning` based on your needs. 
+⚠️ Severities pre-defined as `Notification` by default ([#368](https://github.com/SAP/code-pal-for-abap/issues/368)).
 
 ## Set of Checks
 
