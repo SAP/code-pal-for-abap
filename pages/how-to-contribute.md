@@ -79,7 +79,7 @@ raise_error( statement_level = statement-level
 
 The `execute_check` method can be redefined when the check searches for an issue in a non-default statement type. The default types are defined in the `y_check_base`->`execute_check`.
 
-### How to Create the Unit Test
+### How to Create a Unit-Test
 
 Create a local test class under the global test class created above. It should inherit and implement the abstract methods from the `y_unit_test_base` class.  
 We will use the `y_check_prefer_is_not` check as an example.
