@@ -178,6 +178,7 @@ Thank you in advance for contributing and sharing your ideas within our communit
 
 ## Further Reading
 
+- [How to write an ATC Check](https://www.sap.com/documents/2018/09/905bfdab-1a7d-0010-87a3-c30de2ffd8ff.html)
 - [How to scan ABAP source code](https://www.abapoptimizer.com/blog/how-to-scan-abap)
 - [Understanding the GitHub flow](https://guides.github.com/introduction/flow/)
 - [Write a good commit message](https://chris.beams.io/posts/git-commit/)
