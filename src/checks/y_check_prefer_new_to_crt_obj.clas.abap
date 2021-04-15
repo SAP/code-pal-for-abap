@@ -18,7 +18,6 @@ CLASS y_check_prefer_new_to_crt_obj IMPLEMENTATION.
     settings-pseudo_comment = '"#EC PREF_NEW' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }prefer-new-to-create-object.md|.
 
     set_check_message( 'Prefer NEW to CREATE OBJECT!' ).
