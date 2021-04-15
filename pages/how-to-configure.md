@@ -4,9 +4,9 @@
 
 ## How to Configure
 
-⚠️This documentation describes how to configure the code pal for ABAP attributes using the `Profile Management Tool` feature only.
+⚠️This documentation describes how to configure using the `Profile Management Tool` feature only.
 
-💡Alternatively, you can configure them using the SAP Code Inspector variants using the `SCI` transaction.
+💡Alternatively, you can use the SAP Code Inspector variants in the `SCI` transaction.
 
 Table of Contents:
 
