@@ -4,9 +4,11 @@
 
 ## How to Configure
 
-💡 The tool is compatible with the SAP Code Inspector framework (`SCI` / `SCII`) and you can launch it using your own SCI/SCII variant(s). Alternatively, you may also use the tool by means of defining Profiles as described bellow.
+⚠️This documentation describes how to configure the code pal for ABAP attributes using the `Profile Management Tool` feature only.
 
-⚠️The below documentation is valid for our own `Profile Management Tool` (transaction: `Y_CODE_PAL_PROFILE`) feature only.
+💡Alternatively, you can configure them using the SAP Code Inspector variants using the `SCI` transaction.
+
+Table of Contents:
 
 - [Code Pal for ABAP](#code-pal-for-abap)
   - [How to Configure](#how-to-configure)
@@ -19,7 +21,7 @@
     - [Add / Remove All Checks](#add--remove-all-checks)
     - [Add Missing Checks](#add-missing-checks)
 
-The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management Tool`.
+💡 The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management Tool`.
 
 ### Profiles
 
@@ -27,7 +29,7 @@ The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management 
 
 Behavior:
 
-- If you assign a Profile to your user, it overwrites the Code Inspector Variant (❗);
+- (❗) If you assign a Profile to your user, **it overwrites the Code Inspector variant** (❗);
 - If you assign multiple Profiles to your user, the tool will combine them in runtime;
 - You can assign someone else Profile to your user;
 - The Profile is deleted once it has no check and assigned to nobody.
