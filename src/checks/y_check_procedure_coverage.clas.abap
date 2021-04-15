@@ -5,7 +5,6 @@ CLASS y_check_procedure_coverage DEFINITION PUBLIC INHERITING FROM y_check_base 
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-
 ENDCLASS.
 
 
@@ -24,6 +23,7 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
     settings-disable_on_prodcode_selection = abap_true.
     settings-disable_on_testcode_selection = abap_true.
     settings-apply_on_test_code = abap_false.
+    settings-ignore_pseudo_comments = abap_true.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
     set_check_message( 'Procedure Coverage must be higher than &2%! (&1%<=&2%)' ).
@@ -50,14 +50,14 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( statement_level     = 1
-                 statement_index     = 1
-                 statement_from      = 1
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ procedure }|
-                 parameter_02        = |{ check_configuration-threshold }|
-                 parameter_03        = |{ coverage->get_total( ) }|
-                 parameter_04        = |{ coverage->get_executed( ) }| ).
+    raise_error( statement_level = 1
+                 statement_index = 1
+                 statement_from = 1
+                 error_priority = check_configuration-prio
+                 parameter_01 = |{ procedure }|
+                 parameter_02 = |{ check_configuration-threshold }|
+                 parameter_03 = |{ coverage->get_total( ) }|
+                 parameter_04 = |{ coverage->get_executed( ) }| ).
 
   ENDMETHOD.
 
@@ -65,6 +65,4 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
   METHOD inspect_tokens.
     RETURN.
   ENDMETHOD.
-
-
 ENDCLASS.
