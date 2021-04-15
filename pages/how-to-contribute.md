@@ -4,9 +4,9 @@
 
 ## How to Contribute
 
-We are a team with limited capacity dedicated to several projects. Every single contribution is valid and more than welcome.
+How about having 1000s of ABAP Developers worldwide using a CHECK developed by you? How about helping our ABAP Ecosystem by writing Clean ABAP Checks that could be accessile by everyone? Got you curious?  
 
-Feel free to help us in developing new ABAP Checks and keeping this project up & running!
+So, don't miss the opportunity to contribute with your ideas to this Open-Source Project! Let's keep this project up & running!
 
 > :bulb: [Keep it Simple](https://en.wikipedia.org/wiki/KISS_principle): One check validates one single behavior.
 
@@ -79,7 +79,7 @@ raise_error( statement_level = statement-level
 
 The `execute_check` method can be redefined when the check searches for an issue in a non-default statement type. The default types are defined in the `y_check_base`->`execute_check`.
 
-### How to Create the Unit Test
+### How to Create a Unit-Test
 
 Create a local test class under the global test class created above. It should inherit and implement the abstract methods from the `y_unit_test_base` class.  
 We will use the `y_check_prefer_is_not` check as an example.
@@ -178,6 +178,7 @@ Thank you in advance for contributing and sharing your ideas within our communit
 
 ## Further Reading
 
+- [How to write an ATC Check](https://www.sap.com/documents/2018/09/905bfdab-1a7d-0010-87a3-c30de2ffd8ff.html)
 - [How to scan ABAP source code](https://www.abapoptimizer.com/blog/how-to-scan-abap)
 - [Understanding the GitHub flow](https://guides.github.com/introduction/flow/)
 - [Write a good commit message](https://chris.beams.io/posts/git-commit/)

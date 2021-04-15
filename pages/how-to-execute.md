@@ -4,7 +4,7 @@
 
 ## How to Execute
 
-You can to execute the "code pal for ABAP checks" against your objects in several different ways. If needed, you can easily simulate the checks using the provided `Y_DEMO_FAILURES` class (delivered along with the tookit). The most common ways of executing code pal are by means of:
+You can to execute the "code pal for ABAP checks" against your objects in several different ways. If needed, you can easily simulate an execution of the checks using the provided `Y_DEMO_FAILURES` class (delivered along with the tookit). The most common ways of executing code pal are by means of:
 
 1. `Code Inspector` (transactions SCI and/or SCII); for more details, refer to the specific sections below.
 2. `ABAP Test Cockpit (ATC)` in CI-mode by informing a check variant**. (in most of the ATC transactions/interfaces as usual; e.g.: SE80 --> right mouse-click --> Check --> ABAP Test Cockpit (ATC) with...); hereby is ADT (Eclipse) also supported.
