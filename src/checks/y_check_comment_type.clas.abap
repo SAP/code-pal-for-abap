@@ -9,20 +9,24 @@ CLASS y_check_comment_type DEFINITION PUBLIC INHERITING FROM y_check_base CREATE
     METHODS get_second_character IMPORTING token TYPE stokesx RETURNING VALUE(result) TYPE char1.
 ENDCLASS.
 
+
+
 CLASS y_check_comment_type IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
 
     settings-disable_threshold_selection = abap_true.
+    settings-ignore_pseudo_comments = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }comment-type.md|.
 
     set_check_message( 'Comment with ", not with *!' ).
   ENDMETHOD.
 
-  METHOD inspect_tokens.
 
+  METHOD inspect_tokens.
     CHECK statement-type = 'P'.
     CHECK has_wrong_comment_type( statement ).
 
@@ -34,10 +38,11 @@ CLASS y_check_comment_type IMPLEMENTATION.
 
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 error_priority = configuration-prio ).
 
   ENDMETHOD.
+
 
   METHOD has_wrong_comment_type.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
@@ -50,6 +55,7 @@ CLASS y_check_comment_type IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD get_first_character.
     TRY.
         result = token-str(1).
@@ -58,6 +64,7 @@ CLASS y_check_comment_type IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD get_second_character.
     TRY.
         result = token-str(2).
@@ -65,5 +72,4 @@ CLASS y_check_comment_type IMPLEMENTATION.
         result = ''.
     ENDTRY.
   ENDMETHOD.
-
 ENDCLASS.
