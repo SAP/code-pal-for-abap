@@ -4,9 +4,9 @@
 
 ## How to Configure
 
-💡 The tool is compatible with the SAP Code Inspector framework (`SCI` / `SCII`).
+💡 The tool is compatible with the SAP Code Inspector framework (`SCI` / `SCII`) and you can launch it using your own SCI/SCII variant(s). Alternatively, you may also use the tool by means of defining Profiles as described bellow.
 
-⚠️The below documentation is valid for our own `Profile Management Tool` feature only.
+⚠️The below documentation is valid for our own `Profile Management Tool` (transaction: `Y_CODE_PAL_PROFILE`) feature only.
 
 - [Code Pal for ABAP](#code-pal-for-abap)
   - [How to Configure](#how-to-configure)
@@ -18,7 +18,7 @@
     - [Import via API](#import-via-api)
     - [Add / Remove All Checks](#add--remove-all-checks)
     - [Add Missing Checks](#add-missing-checks)
-  
+
 The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management Tool`.
 
 ### Profiles
