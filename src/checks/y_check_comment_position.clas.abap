@@ -6,27 +6,27 @@ CLASS y_check_comment_position DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS has_wrong_position IMPORTING statement     TYPE sstmnt
+    METHODS has_wrong_position IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_pseudo_comment IMPORTING token         TYPE stokesx
+    METHODS is_pseudo_comment IMPORTING token TYPE stokesx
                               RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_type_asterisk IMPORTING token         TYPE stokesx
+    METHODS is_type_asterisk IMPORTING token TYPE stokesx
                              RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_pragma IMPORTING token         TYPE stokesx
+    METHODS is_pragma IMPORTING token TYPE stokesx
                       RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS get_next_token IMPORTING current_position TYPE i
-                           RETURNING VALUE(result)    TYPE stokesx
-                           RAISING   cx_sy_itab_line_not_found.
+                           RETURNING VALUE(result) TYPE stokesx
+                           RAISING cx_sy_itab_line_not_found.
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
+CLASS y_check_comment_position IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -42,7 +42,6 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-
     CHECK statement-type = 'P'.
     CHECK has_wrong_position( statement ).
 
@@ -54,8 +53,8 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
 
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 error_priority = configuration-prio ).
 
   ENDMETHOD.
 

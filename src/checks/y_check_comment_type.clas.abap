@@ -11,7 +11,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_COMMENT_TYPE IMPLEMENTATION.
+CLASS y_check_comment_type IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -27,7 +27,6 @@ CLASS Y_CHECK_COMMENT_TYPE IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-
     CHECK statement-type = 'P'.
     CHECK has_wrong_comment_type( statement ).
 
@@ -39,8 +38,8 @@ CLASS Y_CHECK_COMMENT_TYPE IMPLEMENTATION.
 
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 error_priority = configuration-prio ).
 
   ENDMETHOD.
 

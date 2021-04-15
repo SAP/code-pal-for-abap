@@ -15,15 +15,15 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
 
     METHODS check_result IMPORTING structure TYPE sstruc.
 
-    METHODS is_code_disabled IMPORTING structure     TYPE sstruc
-                                       statement     TYPE sstmnt
+    METHODS is_code_disabled IMPORTING structure TYPE sstruc
+                                       statement TYPE sstmnt
                              RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
+CLASS y_check_comment_usage IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -58,7 +58,6 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
   METHOD inspect_tokens.
     DATA(code_disabled) = is_code_disabled( statement = statement
                                             structure = structure ).
-
     IF code_disabled = abap_true.
       RETURN.
     ENDIF.
@@ -98,13 +97,13 @@ CLASS Y_CHECK_COMMENT_USAGE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( statement_level     = statement_for_message-level
-                 statement_index     = structure-stmnt_from
-                 statement_from      = statement_for_message-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ comment_number }|
-                 parameter_02        = |{ percentage_of_comments }|
-                 parameter_03        = |{ check_configuration-threshold }| ).
+    raise_error( statement_level = statement_for_message-level
+                 statement_index = structure-stmnt_from
+                 statement_from = statement_for_message-from
+                 error_priority = check_configuration-prio
+                 parameter_01 = |{ comment_number }|
+                 parameter_02 = |{ percentage_of_comments }|
+                 parameter_03 = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 

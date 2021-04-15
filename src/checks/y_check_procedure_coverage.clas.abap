@@ -9,7 +9,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_PROCEDURE_COVERAGE IMPLEMENTATION.
+CLASS y_check_procedure_coverage IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -50,14 +50,14 @@ CLASS Y_CHECK_PROCEDURE_COVERAGE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( statement_level     = 1
-                 statement_index     = 1
-                 statement_from      = 1
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ procedure }|
-                 parameter_02        = |{ check_configuration-threshold }|
-                 parameter_03        = |{ coverage->get_total( ) }|
-                 parameter_04        = |{ coverage->get_executed( ) }| ).
+    raise_error( statement_level = 1
+                 statement_index = 1
+                 statement_from = 1
+                 error_priority = check_configuration-prio
+                 parameter_01 = |{ procedure }|
+                 parameter_02 = |{ check_configuration-threshold }|
+                 parameter_03 = |{ coverage->get_total( ) }|
+                 parameter_04 = |{ coverage->get_executed( ) }| ).
 
   ENDMETHOD.
 
