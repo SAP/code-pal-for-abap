@@ -68,22 +68,22 @@ CLASS y_check_profile_message IMPLEMENTATION.
   METHOD inform.
     super->inform( p_sub_obj_type = 'TRAN'
                    p_sub_obj_name = 'Y_CODE_PAL_PROFILE'
-                   p_position     = ''
-                   p_line         = ''
-                   p_column       = ''
-                   p_errcnt       = p_errcnt
-                   p_kind         = p_kind
-                   p_test         = p_test
-                   p_code         = p_code
-                   p_suppress     = p_suppress
-                   p_param_1      = p_param_1
-                   p_param_2      = p_param_2
-                   p_param_3      = p_param_3
-                   p_param_4      = p_param_4
-                   p_inclspec     = p_inclspec
-                   p_detail       = p_detail
-                   p_checksum_1   = p_checksum_1
-                   p_comments     = p_comments ).
+                   p_position = ''
+                   p_line = ''
+                   p_column = ''
+                   p_errcnt = p_errcnt
+                   p_kind = p_kind
+                   p_test = p_test
+                   p_code = p_code
+                   p_suppress = p_suppress
+                   p_param_1 = p_param_1
+                   p_param_2 = p_param_2
+                   p_param_3 = p_param_3
+                   p_param_4 = p_param_4
+                   p_inclspec = p_inclspec
+                   p_detail = p_detail
+                   p_checksum_1 = p_checksum_1
+                   p_comments = p_comments ).
   ENDMETHOD.
 
 
