@@ -10,16 +10,15 @@
 
 Table of Contents:
 
-- [Code Pal for ABAP](#code-pal-for-abap)
-  - [How to Configure](#how-to-configure)
-    - [Profiles](#1-profiles)
-    - [Delegates](#2-delegates)
-    - [Checks](#3-checks)
-  - [Further Features](#further-features)
-    - [Import / Export Profile](#import--export-profile)
-    - [Import via API](#import-via-api)
-    - [Add / Remove All Checks](#add--remove-all-checks)
-    - [Add Missing Checks](#add-missing-checks)
+- [How to Configure](#how-to-configure)
+  - [Profiles](#1-profiles)
+  - [Delegates](#2-delegates)
+  - [Checks](#3-checks)
+- [Further Features](#further-features)
+  - [Import / Export Profile](#import--export-profile)
+  - [Import via API](#import-via-api)
+  - [Add / Remove All Checks](#add--remove-all-checks)
+  - [Add Missing Checks](#add-missing-checks)
 
 💡 The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management Tool`.
 
