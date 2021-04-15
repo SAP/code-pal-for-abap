@@ -4,9 +4,9 @@
 
 ## How to Contribute
 
-We are a team with limited capacity dedicated to several projects. Every single contribution is valid and more than welcome.
+How about having 1000s of ABAP Developers worldwide using a CHECK developed by you? How about helping our ABAP Ecosystem by writing Clean ABAP Checks that could be accessile by everyone? Got you curious?  
 
-Feel free to help us in developing new ABAP Checks and keeping this project up & running!
+So, don't miss the opportunity to contribute with your ideas to this Open-Source Project! Let's keep this project up & running!
 
 > :bulb: [Keep it Simple](https://en.wikipedia.org/wiki/KISS_principle): One check validates one single behavior.
 
