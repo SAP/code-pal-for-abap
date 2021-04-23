@@ -28,7 +28,6 @@ CLASS y_check_empty_procedures IMPLEMENTATION.
     settings-pseudo_comment = '"#EC EMPTY_PROCEDURE' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }empty-procedure.md|.
 
     set_check_message( 'Empty Procedure should be removed!' ).
@@ -37,7 +36,7 @@ CLASS y_check_empty_procedures IMPLEMENTATION.
 
   METHOD get_next_token_from_index.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM index WHERE type EQ 'I'.
+    FROM index WHERE type = 'I'.
       IF result IS INITIAL.
         result = <token>.
         EXIT.

@@ -22,7 +22,6 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
     settings-pseudo_comment = '"#EC EMPTY_CATCH' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-prio = c_warning.
     settings-documentation = |{ c_docs_path-checks }empty-catch.md|.
 
     set_check_message( 'Empty catch should be removed!' ).
@@ -31,7 +30,7 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
 
   METHOD get_next_token_from_index.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-      FROM index WHERE type EQ 'I'.
+      FROM index WHERE type = 'I'.
       IF result IS INITIAL.
         result = <token>.
         EXIT.
@@ -41,9 +40,9 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_next_token_from_index( statement-from )-str EQ 'CATCH' AND
-        ( get_next_token_from_index( statement-to + 1 )-str EQ 'ENDTRY' OR
-          get_next_token_from_index( statement-to + 1 )-str EQ 'ENDCATCH' ).
+    CHECK get_next_token_from_index( statement-from )-str = 'CATCH'
+    AND ( get_next_token_from_index( statement-to + 1 )-str = 'ENDTRY'
+          OR get_next_token_from_index( statement-to + 1 )-str = 'ENDCATCH' ).
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 

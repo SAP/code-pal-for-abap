@@ -25,7 +25,7 @@ CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) EQ 'TEST-SEAM'.
+    CHECK get_token_abs( statement-from ) = 'TEST-SEAM'.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
@@ -33,9 +33,9 @@ CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from  = statement-from
+                 error_priority  = check_configuration-prio ).
   ENDMETHOD.
 ENDCLASS.

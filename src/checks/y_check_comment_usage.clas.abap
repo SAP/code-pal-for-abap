@@ -15,8 +15,8 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
 
     METHODS check_result IMPORTING structure TYPE sstruc.
 
-    METHODS is_code_disabled IMPORTING structure     TYPE sstruc
-                                       statement     TYPE sstmnt
+    METHODS is_code_disabled IMPORTING structure TYPE sstruc
+                                       statement TYPE sstmnt
                              RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
@@ -29,9 +29,9 @@ CLASS y_check_comment_usage IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    settings-prio = c_note.
     settings-threshold = 10.
     settings-documentation = |{ c_docs_path-checks }comment-usage.md|.
+    settings-ignore_pseudo_comments = abap_true.
 
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_definition )
                                         ( scan_struc_stmnt_type-class_implementation )
@@ -57,12 +57,11 @@ CLASS y_check_comment_usage IMPLEMENTATION.
   METHOD inspect_tokens.
     DATA(code_disabled) = is_code_disabled( statement = statement
                                             structure = structure ).
-
     IF code_disabled = abap_true.
       RETURN.
     ENDIF.
 
-    IF statement-to EQ statement-from.
+    IF statement-to = statement-from.
       abs_statement_number = abs_statement_number + 1.
     ELSE.
       abs_statement_number = abs_statement_number + ( statement-to - statement-from ).
@@ -70,14 +69,14 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
-    WHERE type EQ scan_token_type-comment.
-      IF strlen( <token>-str ) GE 2 AND NOT
-         ( <token>-str+0(2) EQ |*"| OR
-           <token>-str+0(2) EQ |"!| OR
-           <token>-str+0(2) EQ |##| OR
-           <token>-str+0(2) EQ |*?| OR
-           <token>-str+0(2) EQ |"?| OR
-           ( strlen( <token>-str ) GE 3 AND <token>-str+0(3) EQ |"#E| ) OR
+    WHERE type = scan_token_type-comment.
+      IF strlen( <token>-str ) >= 2 AND NOT
+         ( <token>-str+0(2) = |*"| OR
+           <token>-str+0(2) = |"!| OR
+           <token>-str+0(2) = |##| OR
+           <token>-str+0(2) = |*?| OR
+           <token>-str+0(2) = |"?| OR
+           ( strlen( <token>-str ) >= 3 AND <token>-str+0(3) = |"#E| ) OR
            <token>-str CP '"' && object_name && '*.' ).   "#EC CI_MAGIC
         comment_number = comment_number + 1.
       ENDIF.
@@ -97,13 +96,13 @@ CLASS y_check_comment_usage IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    raise_error( statement_level     = statement_for_message-level
-                 statement_index     = structure-stmnt_from
-                 statement_from      = statement_for_message-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ comment_number }|
-                 parameter_02        = |{ percentage_of_comments }|
-                 parameter_03        = |{ check_configuration-threshold }| ).
+    raise_error( statement_level = statement_for_message-level
+                 statement_index = structure-stmnt_from
+                 statement_from = statement_for_message-from
+                 error_priority = check_configuration-prio
+                 parameter_01 = |{ comment_number }|
+                 parameter_02 = |{ percentage_of_comments }|
+                 parameter_03 = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 
@@ -119,16 +118,14 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
 
   METHOD is_code_disabled.
-    CHECK structure-stmnt_type EQ scan_struc_stmnt_type-function.
+    CHECK structure-stmnt_type = scan_struc_stmnt_type-function.
 
-    IF get_token_abs( statement-from ) EQ if_kaizen_keywords_c=>gc_function.
+    IF get_token_abs( statement-from ) = if_kaizen_keywords_c=>gc_function.
       is_function_module = abap_true.
-    ELSEIF get_token_abs( statement-from ) EQ if_kaizen_keywords_c=>gc_endfunction.
+    ELSEIF get_token_abs( statement-from ) = if_kaizen_keywords_c=>gc_endfunction.
       is_function_module = abap_false.
     ENDIF.
 
-    result = xsdbool( is_function_module EQ abap_false ).
+    result = xsdbool( is_function_module = abap_false ).
   ENDMETHOD.
-
-
 ENDCLASS.

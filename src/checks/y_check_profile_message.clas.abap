@@ -11,8 +11,10 @@ CLASS y_check_profile_message DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     CLASS-DATA ran TYPE abap_bool.
     METHODS get_profiles RETURNING VALUE(result) TYPE y_if_profile_manager=>profile_assignments.
     METHODS list_profiles IMPORTING profiles TYPE y_if_profile_manager=>profile_assignments
-                          RETURNING value(result) TYPE string.
+                          RETURNING VALUE(result) TYPE string.
 ENDCLASS.
+
+
 
 CLASS y_check_profile_message IMPLEMENTATION.
 
@@ -28,7 +30,7 @@ CLASS y_check_profile_message IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
-    settings-prio = c_note.
+    settings-ignore_pseudo_comments = abap_true.
 
     set_check_message( '&1 Profile(s) in use: &2.' ).
   ENDMETHOD.
@@ -46,12 +48,12 @@ CLASS y_check_profile_message IMPLEMENTATION.
 
     DATA(profiles) = get_profiles( ).
 
-    raise_error( statement_level     = 1
-                 statement_index     = 1
-                 statement_from      = 1
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ lines( profiles ) }|
-                 parameter_02        = |{ list_profiles( profiles ) }| ).
+    raise_error( statement_level = 1
+                 statement_index = 1
+                 statement_from = 1
+                 error_priority = check_configuration-prio
+                 parameter_01 = |{ lines( profiles ) }|
+                 parameter_02 = |{ list_profiles( profiles ) }| ).
 
     ran = abap_true.
   ENDMETHOD.
@@ -63,24 +65,24 @@ CLASS y_check_profile_message IMPLEMENTATION.
 
 
   METHOD inform.
-    super->inform( p_sub_obj_type    = 'TRAN'
-                   p_sub_obj_name    = 'Y_CODE_PAL_PROFILE'
-                   p_position        = ''
-                   p_line            = ''
-                   p_column          = ''
-                   p_errcnt          = p_errcnt
-                   p_kind            = p_kind
-                   p_test            = p_test
-                   p_code            = p_code
-                   p_suppress        = p_suppress
-                   p_param_1         = p_param_1
-                   p_param_2         = p_param_2
-                   p_param_3         = p_param_3
-                   p_param_4         = p_param_4
-                   p_inclspec        = p_inclspec
-                   p_detail          = p_detail
-                   p_checksum_1      = p_checksum_1
-                   p_comments        = p_comments ).
+    super->inform( p_sub_obj_type = 'TRAN'
+                   p_sub_obj_name = 'Y_CODE_PAL_PROFILE'
+                   p_position = ''
+                   p_line = ''
+                   p_column = ''
+                   p_errcnt = p_errcnt
+                   p_kind = p_kind
+                   p_test = p_test
+                   p_code = p_code
+                   p_suppress = p_suppress
+                   p_param_1 = p_param_1
+                   p_param_2 = p_param_2
+                   p_param_3 = p_param_3
+                   p_param_4 = p_param_4
+                   p_inclspec = p_inclspec
+                   p_detail = p_detail
+                   p_checksum_1 = p_checksum_1
+                   p_comments = p_comments ).
   ENDMETHOD.
 
 
@@ -99,6 +101,4 @@ CLASS y_check_profile_message IMPLEMENTATION.
                        ELSE |{ result }, { <profile>-profile }| ).
     ENDLOOP.
   ENDMETHOD.
-
-
 ENDCLASS.

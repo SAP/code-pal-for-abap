@@ -9,9 +9,6 @@ CLASS y_check_comment_position DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS has_wrong_position IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS get_first_character IMPORTING token TYPE stokesx
-                                RETURNING VALUE(result) TYPE char1.
-
     METHODS is_pseudo_comment IMPORTING token TYPE stokesx
                               RETURNING VALUE(result) TYPE abap_bool.
 
@@ -29,13 +26,14 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
+CLASS y_check_comment_position IMPLEMENTATION.
 
 
   METHOD constructor.
     super->constructor( ).
 
     settings-disable_threshold_selection = abap_true.
+    settings-ignore_pseudo_comments = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }comment-position.md|.
 
@@ -44,7 +42,6 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-
     CHECK statement-type = 'P'.
     CHECK has_wrong_position( statement ).
 
@@ -56,8 +53,8 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
 
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 error_priority = configuration-prio ).
 
   ENDMETHOD.
 
@@ -99,15 +96,6 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
     AND current_token-col <> next_token-col.
       result = abap_true.
     ENDIF.
-  ENDMETHOD.
-
-
-  METHOD get_first_character.
-    TRY.
-        result = token-str(1).
-      CATCH cx_sy_range_out_of_bounds.
-        CLEAR result.
-    ENDTRY.
   ENDMETHOD.
 
 

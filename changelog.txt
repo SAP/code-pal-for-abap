@@ -10,7 +10,18 @@ Legend
 
 Upgrade Note
 ------------------
-Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective code inspector variant (SCI transaction)
+Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective Code Inspector Variant (SCI transaction)
+
+2021-04-23 v.1.14.0
+------------------
+! Notification as Default Severity (#368)
++ Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT (#355)
++ Additional option to disable exceptions/pragmas (#329)
+* Diffs for TABL (#359)
++ Unit Test Without/With Invalid Assert (#288)
++ Prefer NEW to CREATE OBJECT (#283)
+* Standard functions in Prefer IS NOT to NOT IS (#338)
+* In the profile feature, you can add all the missing checks (#346)
 
 2021-04-08 v.1.13.2
 ------------------

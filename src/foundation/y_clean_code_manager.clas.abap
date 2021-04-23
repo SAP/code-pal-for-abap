@@ -6,16 +6,17 @@ CLASS y_clean_code_manager DEFINITION PUBLIC CREATE PUBLIC.
 
   PRIVATE SECTION.
     METHODS determine_profiles RETURNING VALUE(result) TYPE string_table
-                               RAISING ycx_no_check_customizing.
+                               RAISING   ycx_no_check_customizing.
 
-    METHODS determine_checks IMPORTING profile TYPE ycicc_profile
-                                       checkid TYPE seoclsname
+    METHODS determine_checks IMPORTING profile       TYPE ycicc_profile
+                                       checkid       TYPE seoclsname
                              RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configurations
-                             RAISING ycx_no_check_customizing .
+                             RAISING   ycx_no_check_customizing .
 ENDCLASS.
 
 
-CLASS y_clean_code_manager IMPLEMENTATION.
+
+CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
 
 
   METHOD determine_checks.
@@ -33,7 +34,8 @@ CLASS y_clean_code_manager IMPLEMENTATION.
                                                                                       threshold = <check>-threshold
                                                                                       prio = <check>-prio
                                                                                       apply_on_productive_code = <check>-apply_on_productive_code
-                                                                                      apply_on_testcode = <check>-apply_on_testcode ).
+                                                                                      apply_on_testcode = <check>-apply_on_testcode
+                                                                                      ignore_pseudo_comments = <check>-ignore_pseudo_comments ).
       result = VALUE #( BASE result ( CORRESPONDING #( check_configuration ) ) ).
     ENDLOOP.
   ENDMETHOD.
@@ -50,12 +52,18 @@ CLASS y_clean_code_manager IMPLEMENTATION.
 
     FIND FIRST OCCURRENCE OF `Y_CLEAN_CODE_REPORTING` IN TABLE callstack.
     IF sy-subrc = 0.
-      SELECT SINGLE obj_name FROM tadir INTO obj_name
-        WHERE pgmid = 'R3TR' AND
-              object = 'TABL' AND
-              obj_name = profile_db.
+      SELECT SINGLE obj_name
+      FROM tadir
+      INTO @obj_name
+      WHERE pgmid = 'R3TR'
+      AND object = 'TABL'
+      AND obj_name = @profile_db.
+
       IF sy-subrc = 0.
-        SELECT profile FROM (profile_db) INTO TABLE result.
+        SELECT profile
+        FROM (profile_db)
+        INTO TABLE @result.
+
         IF sy-subrc = 0.
           RETURN.
         ENDIF.

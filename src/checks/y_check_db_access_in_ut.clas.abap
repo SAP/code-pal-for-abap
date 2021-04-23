@@ -54,6 +54,7 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
 
     METHODS add_line_to_defined_classes IMPORTING statement TYPE sstmnt
                                                   structure TYPE sstruc.
+
     METHODS check_class IMPORTING index     TYPE i
                                   statement TYPE sstmnt
                                   structure TYPE sstruc.
@@ -117,13 +118,13 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
   METHOD is_persistent_object.
     DATA(upper_name) = to_upper( obj_name ).
-    SELECT * FROM tadir
-      WHERE obj_name = @upper_name
-        AND object = @keys-table
-        AND delflag = @space
-      INTO TABLE @DATA(tmp).
 
-    result = xsdbool( sy-subrc = 0 ).
+    SELECT SINGLE @abap_true
+    FROM tadir
+    INTO @result
+    WHERE obj_name = @upper_name
+    AND object = @keys-table
+    AND delflag = @space.
   ENDMETHOD.
 
 
@@ -149,7 +150,11 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD add_line_to_defined_classes.
-    DATA(class_config) = VALUE properties( name = get_class_name( structure ) ).
+    TRY.
+        DATA(class_config) = VALUE properties( name = get_class_name( structure ) ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
 
     IF line_exists( defined_classes[ name = class_config-name ] ).
       RETURN.
@@ -164,7 +169,12 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD check_class.
-    DATA(class_name) = get_class_name( structure ).
+    TRY.
+        DATA(class_name) = get_class_name( structure ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+
     IF NOT line_exists( defined_classes[ name = class_name ] ).
       RETURN.
     ENDIF.
@@ -228,18 +238,16 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
   METHOD is_part_of_framework.
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
-      FROM structure-stmnt_from TO structure-stmnt_to.
-
-      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-       FROM <statement>-from TO <statement>-to
-       WHERE str = framework-qsql_if OR
-             str = framework-qsql_cl OR
-             str = framework-cds_if OR
-             str = framework-cds_cl.
+    FROM structure-stmnt_from TO structure-stmnt_to.
+      LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+      FROM <statement>-from TO <statement>-to
+      WHERE str = framework-qsql_if
+      OR str = framework-qsql_cl
+      OR str = framework-cds_if
+      OR str = framework-cds_cl.
         result = abap_true.
         RETURN.
       ENDLOOP.
-
     ENDLOOP.
   ENDMETHOD.
 
@@ -254,10 +262,10 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
   METHOD get_risk_level.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-         FROM statement-from TO statement-to
-         WHERE str = risk_level-harmless
-            OR str = risk_level-dangerous
-            OR str = risk_level-critical.
+    FROM statement-from TO statement-to
+    WHERE str = risk_level-harmless
+    OR str = risk_level-dangerous
+    OR str = risk_level-critical.
       result = <token>-str.
     ENDLOOP.
   ENDMETHOD.

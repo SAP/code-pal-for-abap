@@ -25,14 +25,26 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
 
   METHOD compute_nesting_level.
     CASE token_str.
-      WHEN 'IF' OR 'WHILE'   OR 'LOOP' OR
-           'DO' OR 'PROVIDE' OR 'TRY'  OR 'CASE'.
-        ADD 1 TO curr_nesting.
-      WHEN 'ENDIF' OR 'ENDWHILE'   OR 'ENDLOOP' OR
-           'ENDDO' OR 'ENDPROVIDE' OR 'ENDTRY'  OR 'ENDCASE'.
-        max_nesting = nmax( val1 = max_nesting val2 = curr_nesting ).
-        SUBTRACT 1 FROM curr_nesting.
-      WHEN 'ENDAT' OR 'ENDSELECT'.
+      WHEN 'IF'
+      OR 'WHILE'
+      OR 'LOOP'
+      OR 'DO'
+      OR 'PROVIDE'
+      OR 'TRY'
+      OR 'CASE'.
+        curr_nesting = curr_nesting + 1.
+      WHEN 'ENDIF'
+      OR 'ENDWHILE'
+      OR 'ENDLOOP'
+      OR 'ENDDO'
+      OR 'ENDPROVIDE'
+      OR 'ENDTRY'
+      OR 'ENDCASE'.
+        max_nesting = nmax( val1 = max_nesting
+                            val2 = curr_nesting ).
+        curr_nesting = curr_nesting - 1.
+      WHEN 'ENDAT'
+      OR 'ENDSELECT'.
         IF curr_nesting >= max_nesting.
           max_nesting = curr_nesting + 1.
         ENDIF.

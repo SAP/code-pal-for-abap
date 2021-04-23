@@ -25,7 +25,7 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
 
   METHOD inspect_tokens.
     CHECK get_token_abs( statement-from ) CP '*(*'.
-    CHECK get_token_abs( statement-from ) NE 'BADI'.
+    CHECK get_token_abs( statement-from ) <> 'BADI'.
 
     DATA(has_receiving) = abap_false.
     DATA(has_classic_exception) = abap_false.
@@ -35,12 +35,12 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
       IF has_receiving = abap_false.
-        has_receiving = xsdbool( <token>-str EQ 'RECEIVING' AND
-                                 get_token_abs( statement-from + token_index + 1 ) NE '=' ).
+        has_receiving = xsdbool( <token>-str = 'RECEIVING' AND
+                                 get_token_abs( statement-from + token_index + 1 ) <> '=' ).
       ENDIF.
       IF has_classic_exception = abap_false.
-        has_classic_exception = xsdbool( <token>-str EQ 'EXCEPTIONS' AND
-                                         get_token_abs( statement-from + token_index + 1 ) NE '=' ).
+        has_classic_exception = xsdbool( <token>-str = 'EXCEPTIONS' AND
+                                         get_token_abs( statement-from + token_index + 1 ) <> '=' ).
       ENDIF.
 
       token_index = token_index + 1.

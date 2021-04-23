@@ -94,7 +94,7 @@ CLASS y_check_empty_if_branches IMPLEMENTATION.
   METHOD get_first_token_from_index.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM index
-    WHERE type EQ 'I'.
+    WHERE type = 'I'.
       IF result IS INITIAL.
         result = <token>.
         EXIT.
@@ -116,22 +116,22 @@ CLASS y_check_empty_if_branches IMPLEMENTATION.
 
 
   METHOD is_statement_type_excluded.
-    result = xsdbool( statement-type EQ scan_stmnt_type-empty OR
-                      statement-type EQ scan_stmnt_type-comment OR
-                      statement-type EQ scan_stmnt_type-comment_in_stmnt OR
-                      statement-type EQ scan_stmnt_type-pragma ).
+    result = xsdbool( statement-type = scan_stmnt_type-empty OR
+                      statement-type = scan_stmnt_type-comment OR
+                      statement-type = scan_stmnt_type-comment_in_stmnt OR
+                      statement-type = scan_stmnt_type-pragma ).
   ENDMETHOD.
 
 
   METHOD set_found_statement_to_false.
-    IF branch_counter LT first_if.
+    IF branch_counter < first_if.
       found_statement = abap_false.
     ENDIF.
   ENDMETHOD.
 
 
   METHOD set_found_statement_to_true.
-    IF branch_counter GT first_if.
+    IF branch_counter > first_if.
       found_statement = abap_true.
     ENDIF.
   ENDMETHOD.

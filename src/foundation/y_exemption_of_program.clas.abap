@@ -43,31 +43,22 @@ CLASS y_exemption_of_program IMPLEMENTATION.
 
 
   METHOD is_enterprise_search_generate.
-    SELECT * FROM trdir INTO TABLE @DATA(genprog)
-        WHERE name LIKE '%\_001' ESCAPE '\'
-          AND ( secu = 'ESH' OR name LIKE 'ESHS%' )
-          AND ( subc = 'S' OR subc = '1' )     "include programs ('I') are not supported
-          AND name = @name.
-    IF sy-subrc EQ 0.
-      result = abap_true.
-    ENDIF.
+    SELECT SINGLE @abap_true
+    FROM trdir
+    INTO @result
+    WHERE name LIKE '%\_001' ESCAPE '\'
+    AND ( secu = 'ESH' OR name LIKE 'ESHS%' )
+    AND ( subc = 'S' OR subc = '1' )     "include programs ('I') are not supported
+    AND name = @name.
   ENDMETHOD.
 
 
   METHOD is_fin_infotyp_generate.
-    SELECT SINGLE repid FROM t777d INTO @DATA(lv_inftype1_progs)
-      WHERE repid = @name.
-    IF sy-subrc = 0.
-      result = abap_true.
-      RETURN.
-    ENDIF.
-
-    SELECT SINGLE btci_prog FROM t777d INTO @DATA(lv_inftype2_progs)
-      WHERE btci_prog = @name.
-    IF sy-subrc = 0.
-      result = abap_true.
-      RETURN.
-    ENDIF.
+    SELECT SINGLE @abap_true
+    FROM t777d
+    INTO @result
+    WHERE repid = @name
+    OR btci_prog = @name.
   ENDMETHOD.
 
 
@@ -113,11 +104,10 @@ CLASS y_exemption_of_program IMPLEMENTATION.
 
 
   METHOD is_object_sw01_generate.
-    SELECT SINGLE progname FROM tojtb  INTO @DATA(l_prog)
-      WHERE progname = @name.                           "#EC CI_GENBUFF
-    IF sy-subrc = 0.
-      result = abap_true.
-    ENDIF.
+    SELECT SINGLE @abap_true
+    FROM tojtb
+    INTO @result
+    WHERE progname = @name.  "#EC CI_GENBUFF
   ENDMETHOD.
 
 
