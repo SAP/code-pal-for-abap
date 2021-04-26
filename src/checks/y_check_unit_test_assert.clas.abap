@@ -37,8 +37,7 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) CP 'CL_ABAP_UNIT_ASSERT=>ASSERT*'
-    OR get_token_abs( statement-from ) CP 'CL_AUNIT_ASSERT=>ASSERT*'.
+    CHECK get_token_abs( statement-from ) CP '*ASSERT*'.
 
     get_act_and_exp( EXPORTING statement = statement
                      IMPORTING act = DATA(act)
