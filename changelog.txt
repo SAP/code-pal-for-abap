@@ -12,6 +12,9 @@ Upgrade Note
 ------------------
 Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective Code Inspector Variant (SCI transaction)
 
+2021-04-30 v.1.14.1
+------------------
+
 2021-04-23 v.1.14.0
 ------------------
 ! Notification as Default Severity (#368)
