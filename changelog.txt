@@ -14,6 +14,8 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 
 2021-04-30 v.1.14.1
 ------------------
++ Y_CHECK_UNIT_TEST_ASSERT supports non-standard assertion classes (#383)
+* Y_CHECK_UNIT_TEST_ASSERT bug fix (#381)
 
 2021-04-23 v.1.14.0
 ------------------
