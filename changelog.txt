@@ -14,6 +14,8 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 
 2021-04-30 v.1.14.1
 ------------------
++ Assert Classes (#378)
+* Unit Test Assertion (#383)
 
 2021-04-23 v.1.14.0
 ------------------
