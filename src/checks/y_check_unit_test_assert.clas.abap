@@ -54,6 +54,11 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
         RETURN.
     ENDTRY.
 
+    IF act IS INITIAL
+    OR exp IS INITIAL.
+      RETURN.
+    ENDIF.
+
     IF act <> exp.
       RETURN.
     ENDIF.
