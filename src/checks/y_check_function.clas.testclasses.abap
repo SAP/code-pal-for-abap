@@ -111,7 +111,7 @@ CLASS local_test_class DEFINITION FOR TESTING
 
     METHODS:
       setup,
-      assert_errors IMPORTING err_cnt TYPE i,
+      aseert_info IMPORTING count TYPE i,
       assert_pseudo_comments IMPORTING pc_cnt TYPE i,
       is_bound FOR TESTING,
       rfc_function_ok FOR TESTING,
@@ -140,7 +140,7 @@ CLASS local_test_class IMPLEMENTATION.
     cut->db_reader = NEW ltd_rfc_function( ).
     ref_scan_manager_double->set_data_for_ok( ).
     cut->run( ).
-    assert_errors( 0 ).
+    aseert_info( 0 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -148,7 +148,7 @@ CLASS local_test_class IMPLEMENTATION.
     cut->db_reader = NEW ltd_no_rfc_function( ).
     ref_scan_manager_double->set_data_for_error( ).
     cut->run( ).
-    assert_errors( 2 ).
+    aseert_info( 2 ).
     assert_pseudo_comments( 0 ).
   ENDMETHOD.
 
@@ -156,7 +156,7 @@ CLASS local_test_class IMPLEMENTATION.
     cut->db_reader = NEW ltd_no_rfc_function( ).
     ref_scan_manager_double->set_pseudo_comment_ok( ).
     cut->run( ).
-    assert_errors( 0 ).
+    aseert_info( 0 ).
     assert_pseudo_comments( 1 ).
   ENDMETHOD.
 
@@ -165,8 +165,8 @@ CLASS local_test_class IMPLEMENTATION.
                                         exp = pc_cnt ).
   ENDMETHOD.
 
-  METHOD assert_errors.
-    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_errors( )
-                                        exp = err_cnt ).
+  METHOD aseert_info.
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_notes( )
+                                        exp = count ).
   ENDMETHOD.
 ENDCLASS.

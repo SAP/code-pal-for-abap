@@ -18,11 +18,11 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS check_result.
 
     METHODS select_object_list RETURNING VALUE(result) LIKE name_tab
-                               RAISING   cx_failed.
+                               RAISING cx_failed.
 
-    METHODS call_get_pseudo_comment IMPORTING obj_name      TYPE stokesx-str
+    METHODS call_get_pseudo_comment IMPORTING obj_name TYPE stokesx-str
                                     RETURNING VALUE(result) TYPE stokesx-str
-                                    RAISING   cx_sy_create_object_error.
+                                    RAISING cx_sy_create_object_error.
 
 ENDCLASS.
 
@@ -52,7 +52,7 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     settings-threshold = 0.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
-    settings-prio = c_note.
+    settings-ignore_pseudo_comments = abap_true.
 
     relevant_statement_types = VALUE #( BASE relevant_statement_types
                                       ( scan_struc_stmnt_type-class_definition )
@@ -112,8 +112,8 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     raise_error( statement_level = 1
                  statement_index = 1
                  statement_from  = 1
-                 error_priority  = check_configuration-prio
-                 parameter_01    = |{ pseudo_comment_counter }| ).
+                 error_priority = check_configuration-prio
+                 parameter_01 = |{ pseudo_comment_counter }| ).
   ENDMETHOD.
 
 
@@ -137,6 +137,4 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
   ENDMETHOD.
-
-
 ENDCLASS.

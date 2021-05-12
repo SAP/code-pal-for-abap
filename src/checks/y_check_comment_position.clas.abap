@@ -26,13 +26,14 @@ ENDCLASS.
 
 
 
-CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
+CLASS y_check_comment_position IMPLEMENTATION.
 
 
   METHOD constructor.
     super->constructor( ).
 
     settings-disable_threshold_selection = abap_true.
+    settings-ignore_pseudo_comments = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }comment-position.md|.
 
@@ -41,7 +42,6 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-
     CHECK statement-type = 'P'.
     CHECK has_wrong_position( statement ).
 
@@ -53,8 +53,8 @@ CLASS Y_CHECK_COMMENT_POSITION IMPLEMENTATION.
 
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 error_priority = configuration-prio ).
 
   ENDMETHOD.
 

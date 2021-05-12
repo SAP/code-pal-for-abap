@@ -6,9 +6,10 @@ CLASS y_check_unit_test_assert DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS get_act_and_exp IMPORTING statement TYPE sstmnt
-                            EXPORTING act TYPE stokesx
-                                      exp TYPE stokesx.
+    METHODS get_parameter_reference IMPORTING statement TYPE sstmnt
+                                              parameter TYPE string
+                                    RETURNING VALUE(result) TYPE string
+                                    RAISING cx_sy_itab_line_not_found.
 
     METHODS is_variable IMPORTING token TYPE stokesx
                         RETURNING VALUE(result) TYPE abap_bool.
@@ -37,20 +38,23 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) CP 'CL_ABAP_UNIT_ASSERT=>ASSERT*'
-    OR get_token_abs( statement-from ) CP 'CL_AUNIT_ASSERT=>ASSERT*'.
+    DATA(token) = ref_scan_manager->tokens[ statement-from ].
 
-    get_act_and_exp( EXPORTING statement = statement
-                     IMPORTING act = DATA(act)
-                               exp = DATA(exp) ).
-
-    IF act IS INITIAL
-    OR exp IS INITIAL.
+    IF token-str NP '*ASSERT*'
+    OR token-type = scan_token_type-comment.
       RETURN.
     ENDIF.
 
-    IF act-str <> exp-str
-    AND ( is_variable( act ) = abap_true OR is_variable( exp ) = abap_true ).
+    TRY.
+        DATA(act) = get_parameter_reference( statement = statement
+                                             parameter = 'ACT' ).
+        DATA(exp) = get_parameter_reference( statement = statement
+                                             parameter = 'EXP' ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
+
+    IF act <> exp.
       RETURN.
     ENDIF.
 
@@ -67,25 +71,65 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_act_and_exp.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-from TO statement-to.
-      DATA(tabix) = sy-tabix.
-      CASE <token>-str.
-        WHEN 'ACT'.
-          act = ref_scan_manager->tokens[ tabix + 2 ].
-        WHEN 'EXP'.
-          exp = ref_scan_manager->tokens[ tabix + 2 ].
-        WHEN OTHERS.
-          CONTINUE.
-      ENDCASE.
-    ENDLOOP.
+  METHOD get_parameter_reference.
+    DATA(in) = abap_false.
+    DATA(depth) = 0.
+    DATA(position) = statement-from.
+
+    DO.
+      IF position = statement-to.
+        RETURN.
+      ENDIF.
+
+      DATA(token) = ref_scan_manager->tokens[ position ].
+
+      IF token-type = scan_token_type-comment.
+        position = position + 1.
+        CONTINUE.
+      ENDIF.
+
+      IF token-str = parameter.
+        in = abap_true.
+        depth = 0.
+        position = position + 2.
+        CONTINUE.
+      ENDIF.
+
+      IF in = abap_false.
+        position = position + 1.
+        CONTINUE.
+      ENDIF.
+
+      IF token-str CP '*(*'.
+        depth = depth + 1.
+      ELSEIF token-str CP '*)*'.
+        depth = depth - 1.
+      ENDIF.
+
+      IF depth = 0
+      AND line_exists( ref_scan_manager->tokens[ position + 1 ] ).
+        DATA(next) = ref_scan_manager->tokens[ position + 1 ].
+        IF next-str = '='.
+          in = abap_false.
+          RETURN.
+        ENDIF.
+      ENDIF.
+
+      IF is_variable( token ) = abap_false.
+        token-str = '*'.
+      ENDIF.
+
+      result = COND #( WHEN result IS INITIAL THEN token-str
+                                              ELSE |{ result } { token-str }| ).
+
+      position = position + 1.
+    ENDDO.
   ENDMETHOD.
 
 
   METHOD is_variable.
-    result = COND #( WHEN token-type = scan_token_type-literal THEN abap_false
-                     WHEN token-type = scan_token_type-identifier THEN xsdbool( token-str CN '0123456789' ) ).
+    CHECK token-type = scan_token_type-identifier.
+    result = xsdbool( token-str CN '0123456789' ).
   ENDMETHOD.
 
 
