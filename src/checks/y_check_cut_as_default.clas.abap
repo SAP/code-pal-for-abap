@@ -6,16 +6,16 @@ CLASS y_check_cut_as_default DEFINITION PUBLIC INHERITING FROM y_check_base CREA
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS is_for_testing IMPORTING method_name TYPE string
+    METHODS is_for_testing IMPORTING method_name      TYPE string
                                      class_definition TYPE sstruc
-                           RETURNING VALUE(result) TYPE abap_bool.
+                           RETURNING VALUE(result)    TYPE abap_bool.
 
-    METHODS has_cut IMPORTING structure TYPE sstruc
+    METHODS has_cut IMPORTING structure     TYPE sstruc
                     RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS get_class_definition IMPORTING structure TYPE sstruc
+    METHODS get_class_definition IMPORTING structure     TYPE sstruc
                                  RETURNING VALUE(result) TYPE sstruc
-                                 RAISING cx_sy_itab_line_not_found.
+                                 RAISING   cx_sy_itab_line_not_found.
 
 ENDCLASS.
 
@@ -103,10 +103,10 @@ CLASS y_check_cut_as_default IMPLEMENTATION.
       result = xsdbool(    statement_abs CP '* CUT *'
                         OR statement_abs CP '*_CUT *' ).
 
-     IF result = abap_true.
-       RETURN.
-     ENDIF.
-   ENDLOOP.
+      IF result = abap_true.
+        RETURN.
+      ENDIF.
+    ENDLOOP.
   ENDMETHOD.
 
 
