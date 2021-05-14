@@ -25,6 +25,8 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC UT_ASSERT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
+    settings-disable_on_testcode_selection = abap_true.
+    settings-disable_on_prodcode_selection = abap_true.
     settings-apply_on_productive_code = abap_false.
     settings-apply_on_test_code = abap_true.
     settings-threshold = 0.
