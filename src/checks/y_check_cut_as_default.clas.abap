@@ -37,7 +37,7 @@ CLASS y_check_cut_as_default IMPLEMENTATION.
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-method ) ).
     relevant_structure_types = VALUE #( ).
 
-    set_check_message( 'Give the variable that represents the code under test the `cut` name' ).
+    set_check_message( 'Name the code under test to `cut`' ).
   ENDMETHOD.
 
 

@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_CUT_AS_DEFAULT</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Name the Class Under Test to CUT</DESCRIPT>
+    <DESCRIPT>Name the Code Under Test to `cut`</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
