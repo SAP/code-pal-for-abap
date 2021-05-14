@@ -105,6 +105,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   is_include_specific    TYPE sci_inclspec DEFAULT ' '
                                   additional_information TYPE xstring OPTIONAL
                                   checksum               TYPE int4 OPTIONAL. "#EC OPTL_PARAM
+    METHODS get_statement_abs IMPORTING statement TYPE sstmnt
+                              RETURNING VALUE(result) TYPE string.
 
     METHODS get_column_abs  REDEFINITION.
     METHODS get_column_rel REDEFINITION.
@@ -819,4 +821,16 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD switch_bool.
     result = xsdbool( boolean = abap_false ).
   ENDMETHOD.
+
+
+  METHOD get_statement_abs.
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to.
+      result = COND #( WHEN result IS INITIAL THEN <token>-str
+                                              ELSE |{ result } { <token>-str }| ).
+
+    ENDLOOP.
+  ENDMETHOD.
+
+
 ENDCLASS.
