@@ -14,6 +14,7 @@
 - [Comment Type](checks/comment-type.md)
 - [Comment Usage](checks/comment-usage.md)
 - [Constants Interface](checks/constants-interface.md)
+- [`cut` as Default](checks/cut-as-default.md)
 - [Cyclomatic Complexity](checks/cyclomatic-complexity.md)
 - [CX_ROOT Usage](checks/cx-root-usage.md)
 - [Database Access in Unit-Test](checks/db-access-in-ut.md)
