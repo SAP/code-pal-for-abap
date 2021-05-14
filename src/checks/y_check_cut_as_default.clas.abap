@@ -33,7 +33,7 @@ CLASS y_check_cut_as_default IMPLEMENTATION.
     settings-apply_on_productive_code = abap_false.
     settings-apply_on_test_code = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }cut_as_default.md|.
+    settings-documentation = |{ c_docs_path-checks }cut-as-default.md|.
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-method ) ).
     relevant_structure_types = VALUE #( ).
 
