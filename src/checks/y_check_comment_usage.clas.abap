@@ -19,6 +19,9 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
                                        statement TYPE sstmnt
                              RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS is_comment_excluded IMPORTING token TYPE string
+                                RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -70,19 +73,24 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
-      IF strlen( <token>-str ) >= 2 AND NOT
-         ( <token>-str+0(2) = |*"| OR
-           <token>-str+0(2) = |"!| OR
-           <token>-str+0(2) = |##| OR
-           <token>-str+0(2) = |*?| OR
-           <token>-str+0(2) = |"?| OR
-           ( strlen( <token>-str ) >= 3 AND <token>-str+0(3) = |"#E| ) OR
-           <token>-str CP '"' && object_name && '*.' ).   "#EC CI_MAGIC
+      IF strlen( <token>-str ) >= 2 AND NOT is_comment_excluded( <token>-str ).   "#EC CI_MAGIC
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
+  METHOD is_comment_excluded.
+      DATA(token_len) = strlen( token ).
+      result = xsdbool( token+0(2) = |*"| OR
+                        token+0(2) = |"!| OR
+                        token+0(2) = |##| OR
+                        token+0(2) = |*?| OR
+                        token+0(2) = |"?| OR
+                        token CO '*' OR
+                        ( token_len >= 9 AND token CP '* INCLUDE' ) OR
+                        ( token_len >= 3 AND token+0(3) = |"#E| ) OR
+                        ( token CP '"' && object_name && '*.' ) ).
+  ENDMETHOD.
 
   METHOD check_result.
     DATA(percentage_of_comments) = get_percentage_of_comments( ).
