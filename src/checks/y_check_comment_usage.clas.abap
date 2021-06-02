@@ -7,10 +7,6 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    CONSTANTS minimal_comment_len TYPE i VALUE 2.
-    CONSTANTS exception_comment_len TYPE i VALUE 3.
-    CONSTANTS include_comment_len TYPE i VALUE 9.
-
     DATA abs_statement_number TYPE i VALUE 0.
     DATA comment_number TYPE i VALUE 0.
     DATA is_function_module TYPE abap_bool.
