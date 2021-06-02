@@ -7,6 +7,10 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
+    CONSTANTS minimal_comment_len TYPE i VALUE 2.
+    CONSTANTS exception_comment_len TYPE i VALUE 3.
+    CONSTANTS include_comment_len TYPE i VALUE 9.
+
     DATA abs_statement_number TYPE i VALUE 0.
     DATA comment_number TYPE i VALUE 0.
     DATA is_function_module TYPE abap_bool.
@@ -73,23 +77,24 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
-      IF strlen( <token>-str ) >= 2 AND NOT is_comment_excluded( <token>-str ).   "#EC CI_MAGIC
+      IF strlen( <token>-str ) >= minimal_comment_len AND NOT is_comment_excluded( <token>-str ).
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
   METHOD is_comment_excluded.
+
       DATA(token_len) = strlen( token ).
-      result = xsdbool( token+0(2) = |*"| OR
-                        token+0(2) = |"!| OR
-                        token+0(2) = |##| OR
-                        token+0(2) = |*?| OR
-                        token+0(2) = |"?| OR
+      result = xsdbool( token+0(minimal_comment_len) = |*"| OR
+                        token+0(minimal_comment_len) = |"!| OR
+                        token+0(minimal_comment_len) = |##| OR
+                        token+0(minimal_comment_len) = |*?| OR
+                        token+0(minimal_comment_len) = |"?| OR
                         token CO |*| OR
-                        token_len >= 3 AND token+0(3) = |"#E| OR
+                        token_len >= exception_comment_len AND token+0(exception_comment_len) = |"#E| OR
                         token CP '"' && object_name && '*.'  OR
-                        token_len >= 9 AND token+0(9) = |* INCLUDE| ).
+                        token_len >= include_comment_len AND token+0(include_comment_len) = |* INCLUDE| ).
   ENDMETHOD.
 
   METHOD check_result.
