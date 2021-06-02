@@ -89,7 +89,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
                         token CO |*| OR
                         token_len >= 3 AND token+0(3) = |"#E| OR
                         token CP '"' && object_name && '*.'  OR
-                        token_len >= 9 AND token CP '* INCLUDE' ).
+                        token_len >= 9 AND token+0(9) = |* INCLUDE| ).
   ENDMETHOD.
 
   METHOD check_result.
