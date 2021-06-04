@@ -26,7 +26,6 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
                                              start_with TYPE string
                                    RETURNING VALUE(result) TYPE abap_bool
                                    RAISING cx_sy_range_out_of_bounds.
-
 ENDCLASS.
 
 
@@ -86,14 +85,22 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
   METHOD is_comment_excluded.
     TRY.
-      IF has_token_started_with( token = token start_with = |*"| )
-        OR has_token_started_with( token = token start_with = |"!| )
-        OR has_token_started_with( token = token start_with = |##| )
-        OR has_token_started_with( token = token start_with = |*?| )
-        OR has_token_started_with( token = token start_with = |"?| )
-        OR has_token_started_with( token = token start_with = |*| )
-        OR has_token_started_with( token = token start_with = |"#E| )
-        OR has_token_started_with( token = token start_with = |* INCLUDE| )
+      IF has_token_started_with( token = token
+                                 start_with = |*"| )
+        OR has_token_started_with( token = token
+                                   start_with = |"!| )
+        OR has_token_started_with( token = token
+                                   start_with = |##| )
+        OR has_token_started_with( token = token
+                                   start_with = |*?| )
+        OR has_token_started_with( token = token
+                                   start_with = |"?| )
+        OR has_token_started_with( token = token
+                                   start_with = |*| )
+        OR has_token_started_with( token = token
+                                   start_with = |"#E| )
+        OR has_token_started_with( token = token
+                                   start_with = |* INCLUDE| )
         OR token CP '"' && object_name && '*.'.
 
       result = abap_true.
