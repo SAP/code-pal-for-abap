@@ -194,6 +194,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     relevant_structure_types = VALUE #( ( scan_struc_type-event ) ).
 
+    pseudo_remote_enabled = abap_true.
+
     INSERT VALUE #( test = myname
                     code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
