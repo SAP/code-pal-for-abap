@@ -80,7 +80,11 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
     DO.
       IF position = statement-to.
-        RETURN.
+        IF result IS INITIAL.
+          RAISE EXCEPTION TYPE cx_sy_itab_line_not_found.
+        ELSE.
+          RETURN.
+        ENDIF.
       ENDIF.
 
       DATA(token) = ref_scan_manager->tokens[ position ].
