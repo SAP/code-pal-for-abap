@@ -532,3 +532,31 @@ CLASS ltc_call_static IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_fail DEFINITION INHERITING FROM ltc_hardcoded_string FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_fail IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( |     cl_aunit_assert=>fail( 'Not Allowed' ). | )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
