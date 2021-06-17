@@ -104,7 +104,9 @@
     "names_no_dash": true,
     "newline_between_methods": true,
     "no_public_attributes": false,
-    "no_yoda_conditions": false,
+    "no_yoda_conditions": {
+      "onlyConstants": true 
+    },
     "object_naming": false,
     "obsolete_statement": true,
     "omit_parameter_name": true,
@@ -143,7 +145,7 @@
     "try_without_catch": true,
     "type_form_parameters": true,
     "types_naming": false,
-    "uncaught_exception": false,
+    "uncaught_exception": true,
     "unknown_types": true,
     "unreachable_code": true,
     "unsecure_fae": false,

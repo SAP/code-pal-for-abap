@@ -18,6 +18,10 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 * False-Positive: Generated Comments (#402)
 * CALL METHOD Usage does not check if the method call is dynamic (#396)
 
+2021-05-07 v.1.14.2
+------------------
+* Y_CHECK_UNIT_TEST_ASSERT: False-positive (#388)
+
 2021-05-03 v.1.14.1
 ------------------
 + Assert Classes (#378)

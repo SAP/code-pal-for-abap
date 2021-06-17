@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-This check searches for chained boolean assigments in the code which might generate some confusion with an equal condition.
+This check searches for chained boolean assignments in the code which might generate some confusion with an equal condition.
 
 ### How does the check work?
 
