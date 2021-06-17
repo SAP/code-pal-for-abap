@@ -118,6 +118,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS keyword REDEFINITION.
     METHODS set_check_message IMPORTING message TYPE itex132.
     METHODS get_class_description  RETURNING VALUE(result) TYPE string.
+    METHODS set_pseudo_remote_enabled IMPORTING enabled TYPE abap_bool.
 
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
@@ -194,7 +195,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     relevant_structure_types = VALUE #( ( scan_struc_type-event ) ).
 
-    pseudo_remote_enabled = abap_true.
+    set_pseudo_remote_enabled( abap_true ).
 
     INSERT VALUE #( test = myname
                     code = c_code_not_maintained
@@ -821,4 +822,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD switch_bool.
     result = xsdbool( boolean = abap_false ).
   ENDMETHOD.
+
+
+  METHOD set_pseudo_remote_enabled.
+    ASSIGN me->('pseudo_remote_enabled') TO FIELD-SYMBOL(<pseudo_remote_enabled>).
+    IF sy-subrc = 0.
+      <pseudo_remote_enabled> = enabled.
+    ENDIF.
+  ENDMETHOD.
+
 ENDCLASS.
