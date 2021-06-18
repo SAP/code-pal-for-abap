@@ -826,7 +826,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD condense_tokens.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-from TO statement-to.
+    FROM statement-from TO statement-to
+    WHERE type <> scan_token_type-comment
+    AND type <> scan_token_type-pragma.
       result = |{ result }{ <token>-str } |.
     ENDLOOP.
   ENDMETHOD.
