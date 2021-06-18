@@ -20,7 +20,7 @@ CLASS y_check_assemble_text IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }assemble-text.md|.
 
-    set_check_message( 'Use ´|´ to assemble text!' ).
+    set_check_message( 'Use | to assemble text!' ).
   ENDMETHOD.
 
 
