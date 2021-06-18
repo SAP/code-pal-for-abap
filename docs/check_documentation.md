@@ -4,7 +4,7 @@
 
 ## Check Documentation
 
-- [Assemble Text[(checks/assemble-text.md)
+- [Assemble Text](checks/assemble-text.md)
 - [Boolean Input Parameter](checks/boolean-input-parameter.md)
 - [CALL Method Usage](checks/call-method-usage.md)
 - [Chain Declaration Usage](checks/chain-declaration-usage.md)
