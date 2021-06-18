@@ -4,6 +4,7 @@
 
 ## Check Documentation
 
+- [Avoid DEFAULT KEY](checks/avoid-default-key.md)
 - [Boolean Input Parameter](checks/boolean-input-parameter.md)
 - [CALL Method Usage](checks/call-method-usage.md)
 - [Chain Declaration Usage](checks/chain-declaration-usage.md)
