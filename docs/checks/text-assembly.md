@@ -15,9 +15,9 @@ Use `|` to assemble text
 In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC TEXT_ASSEMBLY` which has to be placed after the statement:
 
 ```abap
-  DATA(first) = 'One'.
-  DATA(second) = 'Two'. 
-  DATA(third) = 'Three'.
+  DATA(first) = 'A'.
+  DATA(second) = 'B'. 
+  DATA(third) = 'C'.
   
   WRITE first && ': ' && second && ' - ' && third. "#EC TEXT_ASSEMBLY 
 ```
@@ -27,9 +27,9 @@ In exceptional cases, you can suppress this finding by using the pseudo comment 
 Before the check:
 
 ```abap
-  DATA(first) = 'One'.
-  DATA(second) = 'Two'. 
-  DATA(third) = 'Three'.
+  DATA(first) = 'A'.
+  DATA(second) = 'B'. 
+  DATA(third) = 'C'.
   
   WRITE first && ': ' && second && ' - ' && third.
 ```
@@ -37,9 +37,9 @@ Before the check:
 After the check:
 
 ```abap
-  DATA(first) = 'One'.
-  DATA(second) = 'Two'. 
-  DATA(third) = 'Three'.
+  DATA(first) = 'A'.
+  DATA(second) = 'B'. 
+  DATA(third) = 'C'.
 
   WRITE |{ first }: { second } - { third }|. 
 ```
