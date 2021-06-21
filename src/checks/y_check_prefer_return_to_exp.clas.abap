@@ -9,6 +9,10 @@ CLASS y_check_prefer_return_to_exp DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS has_only_one_exporting IMPORTING statement TYPE sstmnt
                                    RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS is_exception_case IMPORTING statement TYPE sstmnt
+                                        position TYPE sy-tabix
+                              RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -60,7 +64,8 @@ CLASS y_check_prefer_return_to_exp IMPLEMENTATION.
 
       IF <token>-str = 'IMPORTING'
       OR <token>-str = 'CHANGING'
-      OR <token>-str = 'RETURNING'.
+      OR <token>-str = 'RETURNING'
+      OR <token>-str = 'RAISING'.
         skip = abap_true.
       ELSEIF <token>-str = 'EXPORTING'.
         skip = abap_false.
@@ -72,12 +77,32 @@ CLASS y_check_prefer_return_to_exp IMPLEMENTATION.
 
       IF <token>-str = 'TYPE'
       OR <token>-str = 'LIKE'.
+        DATA(exception) = is_exception_case( statement = statement
+                                             position = sy-tabix ).
+
+        IF exception = abap_true.
+          CONTINUE.
+        ENDIF.
+
         count = count + 1.
       ENDIF.
 
     ENDLOOP.
 
     result = xsdbool( count = 1 ).
+  ENDMETHOD.
+
+
+  METHOD is_exception_case.
+    TRY.
+        DATA(one_ahead) = ref_scan_manager->tokens[ position + 1 ]-str.
+        DATA(two_ahead) = ref_scan_manager->tokens[ position + 2 ]-str.
+
+        result = xsdbool(     one_ahead = 'STANDARD'
+                          AND two_ahead = 'TABLE' ).
+      CATCH cx_sy_itab_line_not_found.
+        RETURN.
+    ENDTRY.
   ENDMETHOD.
 
 
