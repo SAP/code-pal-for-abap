@@ -1,4 +1,4 @@
-CLASS y_check_assemble_text DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_text_assembly DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
 
@@ -9,16 +9,16 @@ ENDCLASS.
 
 
 
-CLASS y_check_assemble_text IMPLEMENTATION.
+CLASS y_check_text_assembly IMPLEMENTATION.
 
 
   METHOD constructor.
     super->constructor( ).
 
-    settings-pseudo_comment = '"#EC ASSEMBLE_TEXT'.
+    settings-pseudo_comment = '"#EC TEXT_ASSEMBLY'.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }assemble-text.md|.
+    settings-documentation = |{ c_docs_path-checks }text-assembly.md|.
 
     set_check_message( 'Use | to assemble text!' ).
   ENDMETHOD.
