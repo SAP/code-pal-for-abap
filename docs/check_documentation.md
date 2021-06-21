@@ -4,7 +4,6 @@
 
 ## Check Documentation
 
-- [Assemble Text](checks/assemble-text.md)
 - [Boolean Input Parameter](checks/boolean-input-parameter.md)
 - [CALL Method Usage](checks/call-method-usage.md)
 - [Chain Declaration Usage](checks/chain-declaration-usage.md)
@@ -52,5 +51,6 @@
 - [Scope of Variable](checks/scope-of-variable.md)
 - [Self-Reference](checks/self-reference.md)
 - [TEST-SEAM Statement Usage](checks/test-seam-usage.md)
+- [Text Assembly](checks/text-assembly.md)
 - [Unit-Test Coverages (Statement, Branch and Procedure)](checks/unit-test-coverages.md)
 - [Unit-Test Assert Validator](checks/unit_test_assert.md)
