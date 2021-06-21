@@ -118,8 +118,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS prefer_line_exists.
     METHODS deprecated_classes.
     METHODS scope_of_variable.
-    METHODS default_key.
-    METHODS asseble_text.
+    METHODS text_assembly.
 
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
@@ -477,17 +476,12 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
 
 
-  METHOD default_key.
-    DATA tadir TYPE STANDARD TABLE OF tadir WITH DEFAULT KEY.
-  ENDMETHOD.
+  METHOD text_assembly.
+    DATA(first) = 'A'.
+    DATA(second) = 'B'.
+    DATA(third) = 'C'.
 
-
-  METHOD asseble_text.
-    DATA(first) = 'This'.
-    DATA(second) = 'is'.
-    DATA(third) = 'an example'.
-
-    WRITE first && ' ' && second && ' ' && third.
+    WRITE first && ': ' && second && ' - ' && third.
   ENDMETHOD.
 
 ENDCLASS.
