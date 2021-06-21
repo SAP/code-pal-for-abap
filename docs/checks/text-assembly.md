@@ -15,11 +15,11 @@ Use `|` to assemble text
 In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC TEXT_ASSEMBLY` which has to be placed after the statement:
 
 ```abap
-  DATA(first) = 'This'.
-  DATA(second) = 'is'. 
-  DATA(third) = 'an example'.
+  DATA(first) = 'One'.
+  DATA(second) = 'Two'. 
+  DATA(third) = 'Three'.
   
-  WRITE first && ' - ' && second && ' ~ ' && third. "#EC TEXT_ASSEMBLY 
+  WRITE first && ': ' && second && ' - ' && third. "#EC TEXT_ASSEMBLY 
 ```
 
 ### Example
@@ -27,21 +27,21 @@ In exceptional cases, you can suppress this finding by using the pseudo comment 
 Before the check:
 
 ```abap
-  DATA(first) = 'This'.
-  DATA(second) = 'is'. 
-  DATA(third) = 'an example'.
+  DATA(first) = 'One'.
+  DATA(second) = 'Two'. 
+  DATA(third) = 'Three'.
   
-  WRITE first && ' - ' && second && ' ~ ' && third.
+  WRITE first && ': ' && second && ' - ' && third.
 ```
 
 After the check:
 
 ```abap
-  DATA(first) = 'This'.
-  DATA(second) = 'is'. 
-  DATA(third) = 'an example'.
+  DATA(first) = 'One'.
+  DATA(second) = 'Two'. 
+  DATA(third) = 'Three'.
 
-  WRITE |{ first } { second } { third }|. 
+  WRITE |{ first }: { second } - { third }|. 
 ```
 
 ### Further Readings & Knowledge
