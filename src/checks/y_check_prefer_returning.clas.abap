@@ -1,4 +1,4 @@
-CLASS y_check_prefer_return_to_exp DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_prefer_returning DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
 
@@ -17,7 +17,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_prefer_return_to_exp IMPLEMENTATION.
+CLASS y_check_prefer_returning IMPLEMENTATION.
 
 
   METHOD constructor.

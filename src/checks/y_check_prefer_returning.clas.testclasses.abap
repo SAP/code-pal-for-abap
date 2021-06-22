@@ -9,7 +9,7 @@ ENDCLASS.
 CLASS ltc_one_exporting IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefer_return_to_exp( ).
+    result ?= NEW y_check_prefer_returning( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -108,7 +108,7 @@ ENDCLASS.
 CLASS ltc_multiple_one_exporting IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_prefer_return_to_exp( ).
+    result ?= NEW y_check_prefer_returning( ).
   ENDMETHOD.
 
   METHOD get_expected_count.
