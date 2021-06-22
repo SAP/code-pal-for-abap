@@ -9,8 +9,7 @@ CLASS y_check_prefer_returning DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS has_only_one_exporting IMPORTING statement TYPE sstmnt
                                    RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_exception_case IMPORTING statement TYPE sstmnt
-                                        position TYPE sy-tabix
+    METHODS is_exception_case IMPORTING position TYPE sy-tabix
                               RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
@@ -77,14 +76,9 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
 
       IF <token>-str = 'TYPE'
       OR <token>-str = 'LIKE'.
-        DATA(exception) = is_exception_case( statement = statement
-                                             position = sy-tabix ).
-
-        IF exception = abap_true.
-          CONTINUE.
+        IF is_exception_case( sy-tabix ) = abap_false.
+          count = count + 1.
         ENDIF.
-
-        count = count + 1.
       ENDIF.
 
     ENDLOOP.
