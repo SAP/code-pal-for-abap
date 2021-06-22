@@ -74,11 +74,12 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      IF <token>-str = 'TYPE'
-      OR <token>-str = 'LIKE'.
-        IF is_exception_case( sy-tabix ) = abap_false.
-          count = count + 1.
-        ENDIF.
+      DATA(is_declaration) = xsdbool(    <token>-str = 'TYPE'
+                                      OR <token>-str = 'LIKE' ).
+
+      IF is_declaration = abap_true
+      AND is_exception_case( sy-tabix ) = abap_false.
+        count = count + 1.
       ENDIF.
 
     ENDLOOP.
