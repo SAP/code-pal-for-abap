@@ -86,8 +86,14 @@ CLASS y_check_undetectable_message IMPLEMENTATION.
 
 
   METHOD get_message_class_name.
-    IF NOT contains( val = string sub = '(' )
-    OR NOT contains( val = string sub = ')' ).
+    DATA(contains_open_braket) = xsdbool( contains( val = string
+                                                    sub = '(' ) ).
+
+    DATA(contains_close_braket) = xsdbool( contains( val = string
+                                                     sub = ')' ) ).
+
+    IF contains_open_braket = abap_false
+    OR contains_close_braket = abap_false.
       result = string.
       RETURN.
     ENDIF.
