@@ -28,7 +28,7 @@ CLASS y_check_undetectable_message IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    settings-pseudo_comment = '"#EC DYNAMIC_MSG'.
+    settings-pseudo_comment = '"#EC UNDETEC_MSG'.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }undetectable-message-statement.md|.
@@ -72,6 +72,10 @@ CLASS y_check_undetectable_message IMPLEMENTATION.
         result = abap_true.
         RETURN.
       ENDIF.
+    ENDIF.
+
+    IF token-type = scan_token_type-literal.
+      RETURN.
     ENDIF.
 
     DATA(message_class) = get_message_class_name( token-str ).

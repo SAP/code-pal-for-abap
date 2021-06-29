@@ -50,10 +50,10 @@ CLASS ltc_variable IMPLEMENTATION.
       ( |   DATA(message_class) = '00'. | )
       ( |   DATA(message_id) = '002'. | )
 
-      ( |   MESSAGE i002(message_class). "#EC DYNAMIC_MSG | )
-      ( |   MESSAGE i002(message_class) WITH 'Enter a valid value'. "#EC DYNAMIC_MSG | )
-      ( |   MESSAGE i002(message_class) WITH text-002. "#EC DYNAMIC_MSG | )
-      ( |   MESSAGE i002(message_class) WITH sy-uname. "#EC DYNAMIC_MSG | )
+      ( |   MESSAGE i002(message_class). "#EC UNDETEC_MSG | )
+      ( |   MESSAGE i002(message_class) WITH 'Enter a valid value'. "#EC UNDETEC_MSG | )
+      ( |   MESSAGE i002(message_class) WITH text-002. "#EC UNDETEC_MSG | )
+      ( |   MESSAGE i002(message_class) WITH sy-uname. "#EC UNDETEC_MSG | )
     ).
   ENDMETHOD.
 
@@ -100,14 +100,14 @@ CLASS ltc_id_variable IMPLEMENTATION.
       ( |   DATA(message_class) = '00'. | )
       ( |   DATA(message_id) = '002'. | )
 
-      ( |   MESSAGE ID message_class type 'I' NUMBER message_id. "#EC DYNAMIC_MSG | )
+      ( |   MESSAGE ID message_class type 'I' NUMBER message_id. "#EC UNDETEC_MSG | )
     ).
   ENDMETHOD.
 
 ENDCLASS.
 
 
-CLASS ltc_hardcoded DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_hardcoded_id DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
@@ -115,7 +115,7 @@ CLASS ltc_hardcoded DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK
     METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_hardcoded IMPLEMENTATION.
+CLASS ltc_hardcoded_id IMPLEMENTATION.
 
   METHOD get_cut.
     result ?= NEW y_check_undetectable_message( ).
@@ -141,14 +141,14 @@ CLASS ltc_hardcoded IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT y_example. ' )
       ( ' START-OF-SELECTION. ' )
-      ( |   MESSAGE ID '00' type 'I' NUMBER '002'. "#EC DYNAMIC_MSG | )
+      ( |   MESSAGE ID '00' type 'I' NUMBER '002'. "#EC UNDETEC_MSG | )
     ).
   ENDMETHOD.
 
 ENDCLASS.
 
 
-CLASS ltc_variable_named_message DEFINITION INHERITING FROM ltc_hardcoded FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_variable_named_message DEFINITION INHERITING FROM ltc_hardcoded_id FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
@@ -167,7 +167,7 @@ CLASS ltc_variable_named_message IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltc_object_with_message_class DEFINITION INHERITING FROM ltc_hardcoded FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_object_with_message_class DEFINITION INHERITING FROM ltc_hardcoded_id FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
@@ -186,7 +186,7 @@ ENDCLASS.
 
 
 
-CLASS ltc_sy_msgid DEFINITION INHERITING FROM ltc_hardcoded FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_sy_msgid DEFINITION INHERITING FROM ltc_hardcoded_id FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
@@ -204,7 +204,7 @@ CLASS ltc_sy_msgid IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltc_try_catch DEFINITION INHERITING FROM ltc_hardcoded FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_try_catch DEFINITION INHERITING FROM ltc_hardcoded_id FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
@@ -221,6 +221,24 @@ CLASS ltc_try_catch IMPLEMENTATION.
       ( |     CATCH cx_sy_itab_line_not_found INTO DATA(line_not_found). | )
       ( |       MESSAGE line_not_found TYPE 'W'. | )
       ( |   ENDTRY. | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_hardcoded_msg DEFINITION INHERITING FROM ltc_hardcoded_id FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_hardcoded_msg IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+      ( ' START-OF-SELECTION. ' )
+      ( |   MESSAGE 'File not found' TYPE 'i'. | )
     ).
   ENDMETHOD.
 
