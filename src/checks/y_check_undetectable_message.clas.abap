@@ -125,7 +125,7 @@ CLASS y_check_undetectable_message IMPLEMENTATION.
 
     SELECT arbgb
     FROM t100a
-    INTO TABLE message_classes.
+    INTO TABLE @message_classes.
   ENDMETHOD.
 
 
