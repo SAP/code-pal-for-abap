@@ -13,12 +13,17 @@ CLASS y_check_undetectable_message DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS is_message_dynamic IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS get_message_class_name IMPORTING string TYPE string
-                                       RETURNING VALUE(result) TYPE string
-                                       RAISING cx_sy_itab_line_not_found.
+    METHODS is_message_class_explicitly IMPORTING string TYPE string
+                                        RETURNING VALUE(result) TYPE string.
 
-    METHODS is_message_class IMPORTING name TYPE string
-                             RETURNING VALUE(result) TYPE string.
+    METHODS is_text_element IMPORTING string TYPE string
+                            RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_sy_msgid IMPORTING string TYPE string
+                        RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_static_short_form IMPORTING string TYPE string
+                                 RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -41,6 +46,7 @@ CLASS y_check_undetectable_message IMPLEMENTATION.
     CHECK statement-type = scan_stmnt_type-standard.
     CHECK get_token_abs( statement-from ) = 'MESSAGE'.
 
+    "TODO: Recursive
     IF ref_scan_manager->structures[ statement-struc ]-stmnt_type = scan_struc_stmnt_type-catch.
       RETURN.
     ENDIF.
@@ -78,10 +84,10 @@ CLASS y_check_undetectable_message IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(message_class) = get_message_class_name( token-str ).
-
-    IF message_class = 'SY-MSGID'
-    OR is_message_class( message_class ) = abap_true.
+    IF is_text_element( token-str ) = abap_true
+    OR is_sy_msgid( token-str ) = abap_true
+    OR is_static_short_form( token-str ) = abap_true
+    OR is_message_class_explicitly( token-str ) = abap_true.
       RETURN.
     ENDIF.
 
@@ -89,44 +95,24 @@ CLASS y_check_undetectable_message IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_message_class_name.
-    DATA(contains_open_braket) = xsdbool( contains( val = string
-                                                    sub = '(' ) ).
+  METHOD is_message_class_explicitly.
+    DATA(message_class) = string.
 
-    DATA(contains_close_braket) = xsdbool( contains( val = string
-                                                     sub = ')' ) ).
-
-    IF contains_open_braket = abap_false
-    OR contains_close_braket = abap_false.
-      result = string.
-      RETURN.
-    ENDIF.
-
-    SPLIT string AT '(' INTO TABLE DATA(parts).
-    SPLIT parts[ 2 ] AT ')' INTO TABLE parts.
-    result = parts[ 1 ].
-  ENDMETHOD.
-
-
-  METHOD is_message_class.
-    IF strlen( name ) = 4.
-      DATA(type) = name(1).
-      DATA(id) = name+1(3).
-
-      IF id CA sy-abcde
-      AND type = 'A'
-      OR type = 'E'
-      OR type = 'I'
-      OR type = 'S'
-      OR type = 'W'.
-        result = abap_true.
-        RETURN.
-      ENDIF.
+    IF string CA ( '()' ).
+      SPLIT string AT '(' INTO TABLE DATA(parts).
+      SPLIT parts[ 2 ] AT ')' INTO TABLE parts.
+      message_class = parts[ 1 ].
     ENDIF.
 
     load_message_classes( ).
 
-    result = xsdbool( line_exists( message_classes[ table_line = name ] ) ).
+    result = xsdbool( line_exists( message_classes[ table_line = message_class ] ) ).
+  ENDMETHOD.
+
+
+  METHOD is_text_element.
+    result = xsdbool( contains( val = string
+                                start = 'TEXT-' ) ).
   ENDMETHOD.
 
 
@@ -138,5 +124,17 @@ CLASS y_check_undetectable_message IMPLEMENTATION.
     INTO TABLE @message_classes.
   ENDMETHOD.
 
+
+  METHOD is_sy_msgid.
+    result = xsdbool( string = 'SY-MSGID' ).
+  ENDMETHOD.
+
+
+  METHOD is_static_short_form.
+    CHECK strlen( string ) = 4.
+    CHECK string(1) CA 'AEISW'.
+    CHECK string+1(3) NA sy-abcde.
+    result = abap_true.
+  ENDMETHOD.
 
 ENDCLASS.

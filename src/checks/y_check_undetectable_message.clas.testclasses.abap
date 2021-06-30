@@ -243,3 +243,22 @@ CLASS ltc_hardcoded_msg IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_text_elements DEFINITION INHERITING FROM ltc_hardcoded_id FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_text_elements IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+      ( ' START-OF-SELECTION. ' )
+      ( |   MESSAGE TEXT-006 TYPE 'I' DISPLAY LIKE 'S'. | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
