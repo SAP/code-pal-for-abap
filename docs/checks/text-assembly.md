@@ -8,7 +8,7 @@ Following the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-ab
 
 ### How to solve the issue?
 
-Use `|` to assemble text
+Use `|` to assemble the text
 
 ### What to do in case of exception?
 
