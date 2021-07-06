@@ -118,6 +118,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS prefer_line_exists.
     METHODS deprecated_classes.
     METHODS scope_of_variable.
+    METHODS text_assembly.
 
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
@@ -473,4 +474,14 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
     "   DATA(report_name) = sy-repid.
     " END-TEST-SEAM.
   ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+
+
+  METHOD text_assembly.
+    DATA(first) = 'A'.
+    DATA(second) = 'B'.
+    DATA(third) = 'C'.
+
+    WRITE first && ': ' && second && ' - ' && third.
+  ENDMETHOD.
+
 ENDCLASS.
