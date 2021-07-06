@@ -119,6 +119,8 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS deprecated_classes.
     METHODS scope_of_variable.
     METHODS default_key.
+    METHODS prefer_returning EXPORTING result TYPE string.
+    METHODS text_assembly.
 
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
@@ -478,6 +480,20 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
   METHOD default_key.
     DATA tadir TYPE STANDARD TABLE OF tadir WITH DEFAULT KEY.
+  ENDMETHOD.
+
+
+  METHOD prefer_returning.
+    result = ''.
+  ENDMETHOD.
+
+
+  METHOD text_assembly.
+    DATA(first) = 'A'.
+    DATA(second) = 'B'.
+    DATA(third) = 'C'.
+
+    WRITE first && ': ' && second && ' - ' && third.
   ENDMETHOD.
 
 ENDCLASS.
