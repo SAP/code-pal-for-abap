@@ -27,7 +27,7 @@
 - [FORM Routine Usage](checks/form-routine.md)
 - [FUNCTION Module Usage](checks/function-routine.md)
 - [Missing Interface](checks/interface-in-class.md)
-- [Message Translatable](checks/message-translatable.md)
+- [Message Translation](checks/message-translation.md)
 - [Magic Number Usage](checks/magic-number.md)
 - [Method Return Bool](checks/method-return-bool.md)
 - [Nesting Depth](checks/maximum-nesting-depth.md)
