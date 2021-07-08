@@ -4,7 +4,7 @@
 
 ## How to Contribute
 
-How about having 1000s of ABAP Developers worldwide using a CHECK developed by you? How about helping our ABAP Ecosystem by writing Clean ABAP Checks that could be accessile by everyone? Got you curious?  
+How about having 1000s of ABAP Developers worldwide using a CHECK developed by you? How about helping our ABAP Ecosystem by writing Clean ABAP Checks that could be accessible to everyone? Got you curious?  
 
 So, don't miss the opportunity to contribute with your ideas to this Open-Source Project! Let's keep this project up & running!
 
@@ -104,7 +104,7 @@ METHOD get_cut.
 ENDMETHOD.
 ```
 
-The `get_code_with_issue` method must return a snippet of code which raises the check.  
+The `get_code_with_issue` method must return a snippet of code that raises the check.  
 
 ```abap
 METHOD get_code_with_issue.
@@ -136,7 +136,7 @@ METHOD get_code_with_issue.
 ENDMETHOD.
 ```
 
-The `get_code_with_exemption` method must return a snippet of code which usage of the pseudo comment.
+The `get_code_with_exemption` method must return a snippet of code that usage of the pseudo comment.
 
 ```abap
 METHOD get_code_with_exemption.
@@ -167,9 +167,9 @@ Then, run the code inspector or ATC using the global check variant.
 
 When it is done, please `stage` --> `commit` --> `push` the files to your fork.
 
-In the github.com, create a pull request from your fork to our base repo.
+In GitHub.com, create a pull request from your fork to our base repo.
 
-At this point of time, we will verify your code and authorize/approve the merge (if applicable).  
+At this point in time, we will verify your code and authorize/approve the merge (if applicable).  
 Please create the pull request to merge it with our `master` branch.
 
 Thank you in advance for contributing and sharing your ideas within our community!

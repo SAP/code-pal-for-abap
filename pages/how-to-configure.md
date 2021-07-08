@@ -31,7 +31,7 @@ Behavior:
 - (❗) If you assign a Profile to your user, **it overwrites the Code Inspector variant** (❗);
 - If you assign multiple Profiles to your user, the tool will combine them in runtime;
 - You can assign someone else Profile to your user;
-- The Profile is deleted once it has no check and assigned to nobody.
+- The Profile is deleted once it has no Check and unassigned.
 
 To create or assign it, click on the `+` button, and inform the Profile name:
 
@@ -91,7 +91,7 @@ To consume the API, you have to `POST` the `JSON` file to the service with the r
 Possible returns:
 
 - `HTTP 400 - Bad Request` if the file format is not valid, or if the request has a wrong `Content-Type`;
-- `HTTP 403 - Forbidden` if the profile already exists in the system and the authentication user is not listed as a delegate;
+- `HTTP 403 - Forbidden` if the Profile already exists in the system and the authentication user is not listed as a delegate;
 - `HTTP 500 - Internal Server Error` if the functionality is not working as expected.
 
 ### Add / Remove All Checks

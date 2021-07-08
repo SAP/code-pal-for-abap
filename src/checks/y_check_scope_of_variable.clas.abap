@@ -6,13 +6,13 @@ CLASS y_check_scope_of_variable DEFINITION PUBLIC INHERITING FROM y_check_base C
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS is_isolated IMPORTING strucutre_row TYPE stmnt_stru
+    METHODS is_isolated IMPORTING structure_row TYPE stmnt_stru
                         RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS extract_variable_name IMPORTING token         TYPE string
                                   RETURNING VALUE(result) TYPE string.
 
-    METHODS get_scope_structure IMPORTING strucutre_row TYPE stmnt_stru
+    METHODS get_scope_structure IMPORTING structure_row TYPE stmnt_stru
                                 RETURNING VALUE(result) TYPE sstruc.
 
 ENDCLASS.
@@ -82,7 +82,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
 
 
   METHOD is_isolated.
-    DATA(structure) = ref_scan_manager->structures[ strucutre_row ].
+    DATA(structure) = ref_scan_manager->structures[ structure_row ].
 
     result = xsdbool(    structure-stmnt_type = scan_struc_stmnt_type-if
                       OR structure-stmnt_type = scan_struc_stmnt_type-then
@@ -105,7 +105,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
 
 
   METHOD get_scope_structure.
-    DATA(structure) = ref_scan_manager->structures[ strucutre_row ].
+    DATA(structure) = ref_scan_manager->structures[ structure_row ].
 
     DATA(is_root) = xsdbool(    structure-stmnt_type = scan_struc_stmnt_type-form
                              OR structure-stmnt_type = scan_struc_stmnt_type-method

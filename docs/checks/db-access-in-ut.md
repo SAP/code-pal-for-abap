@@ -41,29 +41,29 @@ The pseudo comment must be placed right after the DB access statement.
 SELECT XXXXX.       "#EC DB_ACCESS_UT
 ```
 ### How to set the "Risk Level"
-Definition: The RISK LEVEL describes the effects that a test can have on the data security of the system.
-The RISK LEVEL is assigned by the following extension to the CLASS DEFINITION statement of a test class:
+Definition: The `RISK LEVEL` describes the effects that a test can have on the data security of the system.
+The `RISK LEVEL` is assigned by the following extension to the `CLASS DEFINITION` statement of a test class:
 
-•	RISK LEVEL CRITICAL (default) - such as changes to system settings or Customizing;
+•	`RISK LEVEL CRITICAL` (default) - such as changes to system settings or Customizing;
 
-•	RISK LEVEL DANGEROUS          - such as changes to persistent data;
+•	`RISK LEVEL DANGEROUS`          - such as changes to persistent data;
 
-•	RISK LEVEL HARMLESS           - no effects on persistent data or system settings.
+•	 `RISK LEVEL HARMLESS`          - no effects on persistent data or system settings.
 
 
 ### How to set the "Duration"
-Definition: The DURATION property allows you to define an expected runtime for all methods of a test class.
+Definition: The `DURATION` property allows you to define an expected runtime for all methods of a test class.
 
-At runtime the cumulated duration of all test methods is measured. If the actual duration exceeds the expectation ABAP Unit will raise an alert.
-Please not the cumulated duration contains also system activities as program compilation. In case of doubts it is recommend to choose the higher category.
+At runtime, the cumulated duration of all test methods is measured. If the actual duration exceeds the expectation ABAP Unit will raise an alert.
+Please note the cumulated duration contains system activities as program compilation. In case of doubts, it is recommended to choose the higher category.
 
-Maintenance: Use on of the following key words in the CLASS DEFINITON statement of a test class to specify the duration category:
+Maintenance: Use one of the following key-words in the `CLASS DEFINITION` statement of a test class to specify the duration category:
 
-•	DURATION SHORT (default) - within the blink of an eye ( < 10 seconds );
+•	`DURATION SHORT` (default) - within the blink of an eye ( < 10 seconds );
 
-•	DURATION MEDIUM          - take a sip of tea ( < 2 minutes );
+•	`DURATION MEDIUM`          - take a sip of tea ( < 2 minutes );
 
-•	DURATION LONG            - get another cup.
+•	`DURATION LONG`            - get another cup.
 
 Purpose: Unit tests consist of source code and can contain errors. It is easy to recognize syntax errors and runtime errors, but endless loops are more difficult to detect.
 With help of this classification of the duration the test runner is able to detect these situations and cancel the execution.
