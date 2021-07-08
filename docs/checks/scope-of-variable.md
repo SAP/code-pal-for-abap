@@ -8,20 +8,20 @@ If a variable is declared in a statement, it should be used/referred to inside t
 ### How does the check work?
 It searches for `DATA` and `FIELD-SYMBOLS` declaration inside of `IF`, `ELSEIF`, `ELSE`, `DO`, `CASE/WHEN`, `LOOP`, and `WHILE` statements, and for its usage/reference outside this statement.
 
-ABAP lacks of proper scope handling. If a variable is declared in a IF-Block, it should only be used/referred inside this IF-block (not outside). The same applies for LOOP, DO, WHILE or any block structure. In otehr words, it is not allowed the usage of a variable outside the block/scope where it was declared. Thus, it is still possible to make usage of dynamic declarations inside of blocks with a single statement:
+ABAP lacks of proper scope handling. If a variable is declared in a IF-Block, it should only be used/referred inside this IF-block (not outside). The same applies for LOOP, DO, WHILE or any block structure. In other words, it is not allowed the usage of a variable outside the block/scope where it was declared. Thus, it is still possible to make usage of dynamic declarations inside of blocks with a single statement:
 
 ```abap
-IF cond = ABAP_TRUE.
-  DATA(MYDATA) = MY_METHOD().
+IF condition = abap_true.
+  DATA(entry) = method().
 ENDIF.
-mydata = ABAP_TRUE. "no longer accepted
+entry = abap_true. "no longer accepted
 ```
 
 ### How to solve the issue?
 Relocate the declaration.
 
 ### What to do in case of exception?
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC SCOPE_OF_VAR` which should be placed right after the variable usage/referece:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC SCOPE_OF_VAR` which should be placed right after the variable usage/reference:
 
 ```abap
 IF has_entries = abap_true.

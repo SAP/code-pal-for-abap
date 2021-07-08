@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-This check searches for non-class based execeptions raised in your code. 
+This check searches for non-class based exceptions raised in your code. 
 
 ### How does the check work?
 
