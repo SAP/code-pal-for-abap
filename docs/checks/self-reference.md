@@ -34,4 +34,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#omit-the-self-reference-me-when-calling-an-instance-method)
+* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#omit-the-self-reference-me-when-calling-an-instance-method)

@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-This check intends to avoid the creation and usage of an interface object for merely definying contants.
+This check intends to avoid the creation and usage of an interface object for merely defining constants.
 You should always prefer [enumeration classes](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-enumeration-classes-to-constants-interfaces) to constants interfaces.
 
 ```abap
@@ -50,4 +50,4 @@ ENDINTERFACE.
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-enumeration-classes-to-constants-interfaces)
+* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-enumeration-classes-to-constants-interfaces)

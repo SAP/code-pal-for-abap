@@ -35,4 +35,4 @@ x = y = z.        "#EC EQUALS_CHAINING
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-xsdbool-to-set-boolean-variables)
+* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-xsdbool-to-set-boolean-variables)
