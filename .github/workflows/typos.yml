@@ -1,10 +1,11 @@
-name: Test GitHub Action
-on: [pull_request]
+name: check-typos
+on: [push, pull_request]
 
 jobs:
-  run:
-    name: Spell Check with Typos
+  typos:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-    - name: Checkout Actions Repository
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+    - name: Spell checking over all files
+      uses: crate-ci/typos@master
