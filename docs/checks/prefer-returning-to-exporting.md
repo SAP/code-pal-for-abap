@@ -36,4 +36,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code: Prefer RETURNING to EXPORTING](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-returning-to-exporting)
+* [SAP Code Style Guides: Prefer RETURNING to EXPORTING](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-returning-to-exporting)

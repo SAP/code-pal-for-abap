@@ -60,4 +60,4 @@ DATA itab1 TYPE STANDARD TABLE OF row_type WITH EMPTY KEY.
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code: Avoid DEFAULT KEY](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-default-key)
+* [SAP Code Style Guides: Avoid DEFAULT KEY](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-default-key)

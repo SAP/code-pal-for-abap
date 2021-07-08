@@ -46,4 +46,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code: Use | to assemble text](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use--to-assemble-text)
+* [SAP Code Style Guides: Use | to assemble text](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use--to-assemble-text)
