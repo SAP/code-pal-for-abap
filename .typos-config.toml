@@ -1,4 +1,4 @@
 [files]
-extend-exclude = ["*.abap", "abaplint.json"]
+extend-exclude = ["*.abap"]
 [default.extend-words]
 clas = "clas"
