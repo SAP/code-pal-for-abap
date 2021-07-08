@@ -4,6 +4,7 @@
 
 ## Check Documentation
 
+- [Avoid DEFAULT KEY](checks/avoid-default-key.md)
 - [Boolean Input Parameter](checks/boolean-input-parameter.md)
 - [CALL Method Usage](checks/call-method-usage.md)
 - [Chain Declaration Usage](checks/chain-declaration-usage.md)
@@ -40,6 +41,7 @@
 - [Number of Public Attributes](checks/number-public-attributes.md)
 - [Number of Output Parameter](checks/number-output-parameter.md)
 - [Prefer CASE to ELSEIF](checks/prefer-case-to-elseif.md)
+- [Prefer RETURNING to EXPORTING](checks/prefer-returning-to-exporting.md)
 - [Prefer IS NOT to NOT IS](checks/prefer-is-not-to-not-is.md)
 - [Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT](checks/prefer-line-exists.md)
 - [Prefer NEW to CREATE OBJECT](checks/prefer-new-to-create-object.md)
@@ -52,5 +54,6 @@
 - [Scope of Variable](checks/scope-of-variable.md)
 - [Self-Reference](checks/self-reference.md)
 - [TEST-SEAM Statement Usage](checks/test-seam-usage.md)
+- [Text Assembly](checks/text-assembly.md)
 - [Unit-Test Coverages (Statement, Branch and Procedure)](checks/unit-test-coverages.md)
 - [Unit-Test Assert Validator](checks/unit_test_assert.md)
