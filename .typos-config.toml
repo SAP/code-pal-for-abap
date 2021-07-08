@@ -1,2 +1,2 @@
 [files]
-extend-exclude = ["*.abap", "*.clas.xml"]
+extend-exclude = ["*.abap", "*.clas.xml", "abaplint.json"]
