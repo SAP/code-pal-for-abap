@@ -18,5 +18,5 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: zwaldowski/cspell-action@1.0.0
         with:
-          paths: "*"
+          paths: "*.md"
           
