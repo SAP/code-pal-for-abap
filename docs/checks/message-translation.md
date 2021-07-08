@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-It identifies ´MESSAGES´ statements where the text is hard-coded as they cannot be translated.
+It identifies the `MESSAGES` statement where the text is hard-coded as it cannot be translated.
 
 ### How to solve the issue?
 
@@ -12,7 +12,7 @@ Use [Message Classes](https://help.sap.com/doc/saphelp_nw75/7.5.5/en-us/4e/c242f
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC MSG_TRANSL` which has to be placed after the `MESSAGES` declaration:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC MSG_TRANSL` which has to be placed after the `MESSAGE` statement:
 
 ```abap
   MESSAGE 'File not found!' TYPE 'W'. "#EC MSG_TRANSL
