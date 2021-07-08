@@ -16,7 +16,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: zwaldowski/cspell-action@1.0.0
+      - uses: zwaldowski/cspell-action@v1
         with:
           paths: "**/*.{md,MD,txt,TXT}"
           config: /.cspell.json
