@@ -9,3 +9,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: Spell checking over all files
       uses: crate-ci/typos@master
+      with:
+        config: .typos-config.toml
