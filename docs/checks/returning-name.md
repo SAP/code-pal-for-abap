@@ -41,4 +41,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#consider-calling-the-returning-parameter-result)
+* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#consider-calling-the-returning-parameter-result)

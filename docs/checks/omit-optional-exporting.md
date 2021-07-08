@@ -43,4 +43,4 @@ In exceptional cases, you can suppress this finding by using the pseudo comment 
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#omit-the-optional-keyword-exporting)
+* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#omit-the-optional-keyword-exporting)

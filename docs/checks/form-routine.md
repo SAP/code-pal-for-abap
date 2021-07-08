@@ -26,4 +26,4 @@ ENDFORM.
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-object-orientation-to-procedural-programming)
+* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-object-orientation-to-procedural-programming)

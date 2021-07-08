@@ -27,4 +27,4 @@ TEST-SEAM seam_name.    "#EC TEST_SEAM_USAGE
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides - Avoid Usage of TEST-SEAM](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-test-seams-as-temporary-workaround)
+* [SAP Code Style Guides - Avoid Usage of TEST-SEAM](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-test-seams-as-temporary-workaround)

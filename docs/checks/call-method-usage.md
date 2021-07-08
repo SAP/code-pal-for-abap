@@ -40,4 +40,4 @@ class->method( ).
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides: Avoid CALL METHOD Statement](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-functional-to-procedural-calls)
+* [SAP Code Style Guides: Avoid CALL METHOD Statement](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-functional-to-procedural-calls)
