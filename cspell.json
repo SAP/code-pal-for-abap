@@ -46,7 +46,8 @@
     "OPTL",
     "ENDCASE",
     "itab",
-    "reimplement"
+    "reimplement",
+    "USAG"
   ],
   // flagWords - list of words to be always considered incorrect
   // This is useful for offensive words and common spelling errors.
