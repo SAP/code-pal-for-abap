@@ -37,4 +37,4 @@ MESSAGE msg_name RAISING ex_name. "#EC NON_CL_EXCEPT
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code - Use class based exceptions](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-class-based-exceptions)
+* [SAP Code Style Guides - Use class based exceptions](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-class-based-exceptions)

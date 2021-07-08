@@ -3,7 +3,7 @@
 ## CHECK in LOOP
 
 ### What is the Intent of the Check?
-This check verifies if a `CHECK` statement is being used inside of a `LOOP` structure. A CHECK within a LOOP, ends the current iteration and proceeds to the next one. This behaviour might lead to some confusion like: Does it end the method processing or does it exit the loop?
+This check verifies if a `CHECK` statement is being used inside of a `LOOP` structure. A CHECK within a LOOP, ends the current iteration and proceeds to the next one. This behavior might lead to some confusion like: Does it end the method processing or does it exit the loop?
 
 ### How to solve the issue?
 Prefer using `CONTINUE` (within an IF-Statement) instead of using the CHECK Statement in this case. Since the keyword `CONTINUE` can only be used in LOOPS, the intention is then automatic clear to everyone reading the code.

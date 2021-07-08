@@ -28,4 +28,4 @@ aggregate_values(
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code - Omit RECEIVING Statement](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#omit-receiving)
+* [SAP Code Style Guides - Omit RECEIVING Statement](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#omit-receiving)

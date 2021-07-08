@@ -8,7 +8,7 @@ If a variable is declared in a statement, it should be used/referred to inside t
 ### How does the check work?
 It searches for `DATA` and `FIELD-SYMBOLS` declaration inside of `IF`, `ELSEIF`, `ELSE`, `DO`, `CASE/WHEN`, `LOOP`, and `WHILE` statements, and for its usage/reference outside this statement.
 
-ABAP lacks of proper scope handling. If a variable is declared in a IF-Block, it should only be used/refered inside this IF-block (not outside). The same applies for LOOP, DO, WHILE or any block structure. In otehr words, it is not allowed the usage of a variable outside the block/scope where it was declared. Thus, it is still possible to make usage of dynamic declarations inside of blocks with a single statement:
+ABAP lacks of proper scope handling. If a variable is declared in a IF-Block, it should only be used/referred inside this IF-block (not outside). The same applies for LOOP, DO, WHILE or any block structure. In otehr words, it is not allowed the usage of a variable outside the block/scope where it was declared. Thus, it is still possible to make usage of dynamic declarations inside of blocks with a single statement:
 
 ```abap
 IF cond = ABAP_TRUE.
@@ -54,4 +54,4 @@ ENDIF.
 ```
 
 ### Further Readings & Knowledge
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#dont-declare-inline-in-optional-branches)
+* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#dont-declare-inline-in-optional-branches)
