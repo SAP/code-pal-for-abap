@@ -25,6 +25,8 @@ CLASS ltc_string IMPLEMENTATION.
       ( ' REPORT y_example. ' )
       ( ' START-OF-SELECTION. ' )
       ( |   MESSAGE i002(00). | )
+      ( |   MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4. | )
+      ( |   MESSAGE TEXT-006 TYPE 'I' DISPLAY LIKE 'S'. | )
     ).
   ENDMETHOD.
 
