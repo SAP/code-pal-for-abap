@@ -1,11 +1,14 @@
-name: CI
-on: push
+name: lint
+
+"on":
+  pull_request:
+
 jobs:
-  check:
+  spellcheck:
     runs-on: ubuntu-latest
     steps:
-      - name: simple-cspell
-        uses: zwaldowski/cspell-action@1.0.0
+      - uses: actions/checkout@v2
+      - uses: zwaldowski/cspell-action@v1
         with:
-          paths: "**/*.md"
-          config: .github/workflows/cspell.json
+          config: cspell.json
+          paths: "**/*"
