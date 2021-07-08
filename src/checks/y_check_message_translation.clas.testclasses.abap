@@ -9,7 +9,7 @@ ENDCLASS.
 CLASS ltc_string IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_untranslatable_message( ).
+    result ?= NEW y_check_message_translation( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -32,7 +32,7 @@ CLASS ltc_string IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT y_example. ' )
       ( ' START-OF-SELECTION. ' )
-      ( |   MESSAGE 'File not found!' TYPE 'W'. "#EC UNTRANSL_MSG | )
+      ( |   MESSAGE 'File not found!' TYPE 'W'. "#EC MSG_TRANSL | )
     ).
   ENDMETHOD.
 

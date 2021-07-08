@@ -1,4 +1,4 @@
-CLASS y_check_untranslatable_message DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_message_translation DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
 
@@ -8,15 +8,15 @@ CLASS y_check_untranslatable_message DEFINITION PUBLIC INHERITING FROM y_check_b
 ENDCLASS.
 
 
-CLASS y_check_untranslatable_message IMPLEMENTATION.
+CLASS y_check_message_translation IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
 
-    settings-pseudo_comment = '"#EC UNTRANSL_MSG'.
+    settings-pseudo_comment = '"#EC MSG_TRANSL'.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }untranslatable-message-statement.md|.
+    settings-documentation = |{ c_docs_path-checks }message-translation.md|.
 
     set_check_message( 'Make the Message Translatable!' ).
   ENDMETHOD.

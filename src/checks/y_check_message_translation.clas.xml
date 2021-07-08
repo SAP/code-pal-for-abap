@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>Y_CHECK_UNTRANSLATABLE_MESSAGE</CLSNAME>
+    <CLSNAME>Y_CHECK_MESSAGE_TRANSLATION</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Undetectable Message Statement</DESCRIPT>
+    <DESCRIPT>Message Translation</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
