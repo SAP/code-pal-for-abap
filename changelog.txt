@@ -14,6 +14,7 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 
 2021-05-XX v.1.15.0
 ------------------
++ Make Messages Translatable (#420)
 * Nesting Depth - Macro (#422)
 * False-Positive: Assert=>Fail (#400)
 * False-Positive: Generated Comments (#402)
