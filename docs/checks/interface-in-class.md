@@ -26,4 +26,4 @@ ENDCLASS.
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#public-instance-methods-should-be-part-of-an-interface)
+* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#public-instance-methods-should-be-part-of-an-interface)
