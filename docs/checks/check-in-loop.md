@@ -36,5 +36,5 @@ ENDLOOP.
 ```
 
 ### Further Readings & Knowledge
-- [ABAP Clean ABAP on Clean Code: Avoid CHECK in other positions](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-check-in-other-positions)
+- [Clean ABAP: Avoid CHECK in other positions](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-check-in-other-positions)
 - [Exiting Loops -> Check](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/abapcheck_loop.htm)
