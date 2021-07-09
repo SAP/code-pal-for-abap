@@ -20,7 +20,6 @@ CLASS ltc_class IMPLEMENTATION.
       ( '  PUBLIC SECTION. ' )
       ( '    METHODS class_method. ' )
       ( '    CLASS-METHODS execute. ' )
-      ( '  PROTECTED SECTION. ' )
       ( 'ENDCLASS. ' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION. ' )
@@ -41,12 +40,12 @@ CLASS ltc_class IMPLEMENTATION.
       ( '  PUBLIC SECTION. ' )
       ( '    METHODS class_method. ' )
       ( '    CLASS-METHODS execute. ' )
-      ( '  PROTECTED SECTION. ' )
       ( 'ENDCLASS. ' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION. ' )
       ( '  METHOD class_method. ' )
       ( '    lcl_classname=>execute( ). ' )
+      ( |    CALL METHOD ('execute'). | )
       ( '  ENDMETHOD. ' )
       ( '  METHOD execute. ' )
       ( '  ENDMETHOD. ' )
@@ -62,7 +61,6 @@ CLASS ltc_class IMPLEMENTATION.
       ( '  PUBLIC SECTION. ' )
       ( '    METHODS class_method. ' )
       ( '    CLASS-METHODS execute. ' )
-      ( '  PROTECTED SECTION. ' )
       ( 'ENDCLASS. ' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION. ' )
@@ -98,7 +96,6 @@ CLASS ltc_report IMPLEMENTATION.
       ( 'CLASS lcl_classname DEFINITION. ' )
       ( '  PUBLIC SECTION. ' )
       ( '    CLASS-METHODS execute. ' )
-      ( '  PROTECTED SECTION. ' )
       ( 'ENDCLASS. ' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION. ' )
@@ -120,7 +117,6 @@ CLASS ltc_report IMPLEMENTATION.
       ( 'CLASS lcl_classname DEFINITION. ' )
       ( '  PUBLIC SECTION. ' )
       ( '    CLASS-METHODS execute. ' )
-      ( '  PROTECTED SECTION. ' )
       ( 'ENDCLASS. ' )
 
       ( 'CLASS lcl_classname IMPLEMENTATION. ' )

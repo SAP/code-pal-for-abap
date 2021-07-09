@@ -57,7 +57,7 @@ Definition: The DURATION property allows you to define an expected runtime for a
 At runtime the cumulated duration of all test methods is measured. If the actual duration exceeds the expectation ABAP Unit will raise an alert.
 Please not the cumulated duration contains also system activities as program compilation. In case of doubts it is recommend to choose the higher category.
 
-Maintenance: Use on of the following key words in the CLASS DEFINITON statement of a test class to specify the duration category:
+Maintenance: Use on of the following key words in the CLASS DEFINITION statement of a test class to specify the duration category:
 
 •	DURATION SHORT (default) - within the blink of an eye ( < 10 seconds );
 

@@ -52,7 +52,7 @@ To add someone else, click on the `+` button and inform his / her user name:
 
 ### Checks
 
-> Checks are the rules based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md) style guide.
+> Checks are the rules based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md).
 
 Behavior:
 

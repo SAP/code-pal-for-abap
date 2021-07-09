@@ -20,4 +20,4 @@ There is no exception for this check since it works as an indicator only. Thus, 
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code: Less is more](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#express-yourself-in-code-not-in-comments)
+* [Clean ABAP: Less is more](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#express-yourself-in-code-not-in-comments)

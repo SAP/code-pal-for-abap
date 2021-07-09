@@ -16,6 +16,9 @@ CLASS y_check_max_nesting_depth DEFINITION PUBLIC INHERITING FROM y_check_base C
                                          index         TYPE i
                                RETURNING VALUE(result) TYPE int4.
 
+    METHODS is_macro IMPORTING token TYPE stokesx
+                     RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -80,6 +83,10 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
+      IF is_macro( <token> ).
+        CONTINUE.
+      ENDIF.
+
       compute_nesting_level( <token>-str ).
 
       IF index = structure-stmnt_to.
@@ -98,4 +105,10 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
+
+
+  METHOD is_macro.
+    result = xsdbool( token-row = 0 ).
+  ENDMETHOD.
+
 ENDCLASS.

@@ -51,4 +51,4 @@ DATA a            TYPE c.
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code: Do not chain up-front declarations](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#do-not-chain-up-front-declarations)
+* [Clean ABAP: Do not chain up-front declarations](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#do-not-chain-up-front-declarations)

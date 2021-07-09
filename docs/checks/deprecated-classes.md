@@ -26,7 +26,7 @@ DATA aunit TYPE REF TO cl_abap_unit_assert.
 
 ### What to do in case of exception?
 
-In exceptional cases (e.g.: for keeping downport release compatibility), you can suppress this finding by using the pseudo comment `"#EC DEPRECATED_CLAS` which should be placed right after the statement:
+In exceptional cases (e.g.: for keeping release compatibility), you can suppress this finding by using the pseudo comment `"#EC DEPRECATED_CLAS` which should be placed right after the statement:
 
 ```abap
 DATA aunit TYPE REF TO cl_aunit_assert. "#EC DEPRECATED_CLAS` 

@@ -553,7 +553,7 @@ CLASS ltc_assert_fail IMPLEMENTATION.
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( |     cl_aunit_assert=>fail( msg = 'method ended unexpectedly' ). | )
+      ( |     cl_aunit_assert=>fail( 'Not Allowed' ). | )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).

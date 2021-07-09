@@ -4,13 +4,13 @@
 
 ## How to Execute
 
-You can to execute the "code pal for ABAP checks" against your objects in several different ways. If needed, you can easily simulate an execution of the checks using the provided `Y_DEMO_FAILURES` class (delivered along with the tookit). The most common ways of executing code pal are by means of:
+You can to execute the "code pal for ABAP checks" against your objects in several different ways. If needed, you can easily simulate an execution of the checks using the provided `Y_DEMO_FAILURES` class (delivered along with the toolkit). The most common ways of executing code pal are by means of:
 
 1. `Code Inspector` (transactions SCI and/or SCII); for more details, refer to the specific sections below.
 2. `ABAP Test Cockpit (ATC)` in CI-mode by informing a check variant**. (in most of the ATC transactions/interfaces as usual; e.g.: SE80 --> right mouse-click --> Check --> ABAP Test Cockpit (ATC) with...); hereby is ADT (Eclipse) also supported.
 3. `SUT - ABAP CHECK REPORT` running with in a CI-mode (flavour) and also informing a check variant**;  
 
-** It is also possible to execute code pal with a profile (instead of a variant). For that, plesae refer to transaction: Y_CODE_PAL_PROFILE.
+** It is also possible to execute code pal with a profile (instead of a variant). For that, please refer to transaction: Y_CODE_PAL_PROFILE.
 
 ## Executing via Code Inspector (CI)
 
@@ -47,11 +47,11 @@ Select `Run As` > `ABAP Test Cockpit With...` and inform a global check variant 
 
 ## Executing via SUT (ABAP CHECK REPORT)
 
-Start the transaction: `SUT` and call the program: `ABAP CHECK REPORT`. Then, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit). Do not forget to select the `ATC Checks`checkbox as well as the `ATC Mode/Flavour` to Code Inspector (refer to screeshot below):
+Start the transaction: `SUT` and call the program: `ABAP CHECK REPORT`. Then, inform the object selection as well as a global check variant (for instance, you could provide the global variant `Y_CODE_PAL` which is a preset variant containing all existing checks and delivered along with the toolkit). Do not forget to select the `ATC Checks`checkbox as well as the `ATC Mode/Flavour` to Code Inspector (refer to screenshot below):
 
 
 ![image](https://user-images.githubusercontent.com/63100656/113267616-da6a7a80-92d6-11eb-803f-f6392d032c79.png)
 
 
-In summary, it is possible to use our tool directly in SCI/SCII, via ATC Integration, via API Call, via SUT, via CI-Variant or via Profile(s). But keep in mind, one has to choose betweeen using CI-Variants (Code Inspector Variants) or Using Profile/s (via Transaction: Y_CODE_PAL_PROFILE, delivered along with the toolkit). Both features cannot be used in paralell in the same system for the same user. 
+In summary, it is possible to use our tool directly in SCI/SCII, via ATC Integration, via API Call, via SUT, via CI-Variant or via Profile(s). But keep in mind, one has to choose between using CI-Variants (Code Inspector Variants) or Using Profile/s (via Transaction: Y_CODE_PAL_PROFILE, delivered along with the toolkit). Both features cannot be used in parallel in the same system for the same user. 
 
