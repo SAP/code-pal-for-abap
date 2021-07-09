@@ -1,10 +1,10 @@
-[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Undetectable Message Statement](undetectable-message-statement.md)
+[code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Message Easy To Find](message-easy-to-find.md)
 
-## Undetectable Message Statement
+## Message Easy To Find
 
 ### What is the Intent of the Check?
 
-The [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#make-messages-easy-to-find) style guide says to make the message easy to find through a where-used search from transaction `SE91`.
+Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#make-messages-easy-to-find), it searches for messages classes in which you cannot find if you run a where-used search in the transaction `SE91`.
 
 :bulb: `sy-msgid` and `sy-msgno` are exempt.  
 :bulb: `MESSAGE` in the `catch` block is exempt.  
@@ -17,11 +17,11 @@ Declare the message class instead of making it dynamic.
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC UNDETEC_MSG` which has to be placed after the message statement:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC MSG_FIND` which has to be placed after the message statement:
 
 ```abap
   DATA(message_class) = '00'.
-  MESSAGE i002(message_class). "#EC UNDETEC_MSG
+  MESSAGE i002(message_class). "#EC MSG_FIND
 ```
 
 ### Example
