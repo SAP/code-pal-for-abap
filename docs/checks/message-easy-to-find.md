@@ -4,12 +4,7 @@
 
 ### What is the Intent of the Check?
 
-Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#make-messages-easy-to-find), it searches for messages classes in which you cannot find if you run a where-used search in the transaction `SE91`.
-
-:bulb: `sy-msgid` and `sy-msgno` are exempt.  
-:bulb: `MESSAGE` in the `catch` block is exempt.  
-:bulb: Hardcoded `MESSAGE` is exempt.  
-:bulb: Text Elements are exempt.  
+Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#make-messages-easy-to-find), it searches for the `MESSAGE` statement that cannot be detected if you run a where-used search in the transaction `SE91`.
 
 ### How to solve the issue?
 
