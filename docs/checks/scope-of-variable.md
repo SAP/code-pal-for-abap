@@ -54,4 +54,4 @@ ENDIF.
 ```
 
 ### Further Readings & Knowledge
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md#dont-declare-inline-in-optional-branches)
+* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#dont-declare-inline-in-optional-branches)

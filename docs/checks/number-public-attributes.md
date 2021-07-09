@@ -27,6 +27,6 @@ ENDCLASS.
 ```
 
 ### Further Reading
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md#members-private-by-default-protected-only-if-needed) 
+* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#members-private-by-default-protected-only-if-needed) 
 
 

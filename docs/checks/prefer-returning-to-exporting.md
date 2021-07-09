@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md#prefer-returning-to-exporting), this check searches in classes and interfaces for methods that have only one exporting parameter. If it finds one, it will recommend you to change it from `EXPORTING` to `RETURNING`. 
+Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-returning-to-exporting), this check searches in classes and interfaces for methods that have only one exporting parameter. If it finds one, it will recommend you to change it from `EXPORTING` to `RETURNING`. 
 
 ### How to solve the issue?
 
