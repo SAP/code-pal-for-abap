@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-This check searches for non-class based execeptions raised in your code. 
+This check searches for non-class based exceptions raised in your code. 
 
 ### How does the check work?
 
@@ -37,4 +37,4 @@ MESSAGE msg_name RAISING ex_name. "#EC NON_CL_EXCEPT
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code - Use class based exceptions](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-class-based-exceptions)
+* [Clean ABAP - Use class based exceptions](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-class-based-exceptions)

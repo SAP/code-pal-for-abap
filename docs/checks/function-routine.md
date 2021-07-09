@@ -4,11 +4,11 @@
 
 ### What is the Intent of the Check?
 
-This check searches for the usage of FUNCTION Modules (procedural programming) since with the release of Object Oriented ABAP this syntax became obsolete.
+This check searches for the usage of FUNCTION Modules (procedural programming) since with the release of Object-Oriented ABAP this syntax became obsolete.
 
 ### How does the check work?
 
-This check searches for Function Modules within a function group. However, since Remote Function Calls (RFC) can only be executed via FUNCTION MODULES, these ones (Function Modules with RFC enablement) will not be caught by this check.
+This check searches for Function Modules within a function group. However, since Remote Function Calls (RFC) can only be executed via FUNCTION MODULES, these ones (Function Modules with RFC enabled) will not be caught by this check.
 
 Note: This check does not search for the `CALL FUNCTION` statement within your source code (e.g. in a method or program).
 
@@ -28,4 +28,4 @@ ENDFUNCTION.
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-object-orientation-to-procedural-programming)
+* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-object-orientation-to-procedural-programming)
