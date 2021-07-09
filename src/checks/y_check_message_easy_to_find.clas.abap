@@ -1,4 +1,4 @@
-CLASS y_check_undetectable_message DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_message_easy_to_find DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
     METHODS constructor.
 
@@ -28,17 +28,17 @@ CLASS y_check_undetectable_message DEFINITION PUBLIC INHERITING FROM y_check_bas
 ENDCLASS.
 
 
-CLASS y_check_undetectable_message IMPLEMENTATION.
+CLASS y_check_message_easy_to_find IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
 
-    settings-pseudo_comment = '"#EC UNDETEC_MSG'.
+    settings-pseudo_comment = '"#EC MSG_FIND'.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }undetectable-message-statement.md|.
+    settings-documentation = |{ c_docs_path-checks }message-easy-to-find.md|.
 
-    set_check_message( 'Make the Messages Easy to Find!' ).
+    set_check_message( 'Make the Message Easy to Find!' ).
   ENDMETHOD.
 
 

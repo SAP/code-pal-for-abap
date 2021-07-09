@@ -10,7 +10,7 @@ ENDCLASS.
 CLASS ltc_variable IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_undetectable_message( ).
+    result ?= NEW y_check_message_easy_to_find( ).
   ENDMETHOD.
 
   METHOD get_expected_count.
@@ -50,10 +50,10 @@ CLASS ltc_variable IMPLEMENTATION.
       ( |   DATA(message_class) = '00'. | )
       ( |   DATA(message_id) = '002'. | )
 
-      ( |   MESSAGE i002(message_class). "#EC UNDETEC_MSG | )
-      ( |   MESSAGE i002(message_class) WITH 'Enter a valid value'. "#EC UNDETEC_MSG | )
-      ( |   MESSAGE i002(message_class) WITH text-002. "#EC UNDETEC_MSG | )
-      ( |   MESSAGE i002(message_class) WITH sy-uname. "#EC UNDETEC_MSG | )
+      ( |   MESSAGE i002(message_class). "#EC MSG_FIND | )
+      ( |   MESSAGE i002(message_class) WITH 'Enter a valid value'. "#EC MSG_FIND | )
+      ( |   MESSAGE i002(message_class) WITH text-002. "#EC MSG_FIND | )
+      ( |   MESSAGE i002(message_class) WITH sy-uname. "#EC MSG_FIND | )
     ).
   ENDMETHOD.
 
@@ -71,7 +71,7 @@ ENDCLASS.
 CLASS ltc_id_variable IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_undetectable_message( ).
+    result ?= NEW y_check_message_easy_to_find( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -100,7 +100,7 @@ CLASS ltc_id_variable IMPLEMENTATION.
       ( |   DATA(message_class) = '00'. | )
       ( |   DATA(message_id) = '002'. | )
 
-      ( |   MESSAGE ID message_class type 'I' NUMBER message_id. "#EC UNDETEC_MSG | )
+      ( |   MESSAGE ID message_class type 'I' NUMBER message_id. "#EC MSG_FIND | )
     ).
   ENDMETHOD.
 
@@ -118,7 +118,7 @@ ENDCLASS.
 CLASS ltc_hardcoded_id IMPLEMENTATION.
 
   METHOD get_cut.
-    result ?= NEW y_check_undetectable_message( ).
+    result ?= NEW y_check_message_easy_to_find( ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
@@ -141,7 +141,7 @@ CLASS ltc_hardcoded_id IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT y_example. ' )
       ( ' START-OF-SELECTION. ' )
-      ( |   MESSAGE ID '00' type 'I' NUMBER '002'. "#EC UNDETEC_MSG | )
+      ( |   MESSAGE ID '00' type 'I' NUMBER '002'. "#EC MSG_FIND | )
     ).
   ENDMETHOD.
 
@@ -219,7 +219,8 @@ CLASS ltc_try_catch IMPLEMENTATION.
       ( |   TRY. | )
       ( |       DATA(name) = 'codepal'. | )
       ( |     CATCH cx_sy_itab_line_not_found INTO DATA(line_not_found). | )
-      ( |       MESSAGE line_not_found TYPE 'W'. | )
+      ( |       DATA(text) = line_not_found->get_text( ). | )
+      ( |       MESSAGE text TYPE 'W'. | )
       ( |   ENDTRY. | )
     ).
   ENDMETHOD.
