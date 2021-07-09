@@ -26,4 +26,4 @@ ENDCLASS.
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides - RETURN, EXPORT, or CHANGE exactly one parameter](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#return-export-or-change-exactly-one-parameter)
+* [Clean ABAP - RETURN, EXPORT, or CHANGE exactly one parameter](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#return-export-or-change-exactly-one-parameter)

@@ -5,7 +5,7 @@
 ### What is the Intent of the Check?
 This check verifies whether the `CHECK` statement is the very first statement within a method, function-module or form-routine.  
 
-The [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-check-in-other-positions) says:
+The [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md#avoid-check-in-other-positions) says:
 > Do not use `CHECK` outside of the initialization section of a method. The statement behaves differently in different positions and may lead to unclear, unexpected effects.
 
 REMARKS: 
@@ -55,4 +55,4 @@ ENDMETHOD.
 ``` 
 
 ### Further Readings & Knowledge
-- [SAP Code Style Guides: Avoid CHECK in other positions (SAP Code Style Guides)](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-check-in-other-positions)
+- [Clean ABAP: Avoid CHECK in other positions (Clean ABAP)](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-check-in-other-positions)

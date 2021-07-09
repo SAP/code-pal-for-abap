@@ -39,4 +39,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides: Comment sign](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#comment-with--not-with-)
+* [Clean ABAP: Comment sign](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#comment-with--not-with-)

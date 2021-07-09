@@ -4,7 +4,11 @@
 [![license](https://img.shields.io/github/license/SAP/code-pal-for-abap)](LICENSE)
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/code-pal-for-abap)](https://api.reuse.software/info/github.com/SAP/code-pal-for-abap)
 
+<<<<<<< Updated upstream
 Based on the [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md), this tool contains a set of checks to guarantee the [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) adherence.  
+=======
+Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md) style guide, this tool contains a set of checks to guarantee the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md) adherence.  
+>>>>>>> Stashed changes
 Together, we both support you in writing a clean ABAP code. 
 
 ❣️ It's **free** and **open-source**.
@@ -45,7 +49,11 @@ Together, we both support you in writing a clean ABAP code.
 
 ## Recommended Readings
 
+<<<<<<< Updated upstream
 - [SAP Code Style Guides](https://github.com/SAP/styleguides/)
+=======
+- [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md)
+>>>>>>> Stashed changes
 - [ABAP 7.40 Quick Reference](https://blogs.sap.com/2015/10/25/abap-740-quick-reference/)
 - [ABAP Built-in Functions](https://blogs.sap.com/2015/11/30/reminder-abap-built-in-functions/)
 - [ABAP - Release-Specific Changes](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/abennews.htm)

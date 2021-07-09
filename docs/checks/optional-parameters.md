@@ -47,4 +47,4 @@ In exceptional cases, you can suppress this finding by using the pseudo comment 
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#split-methods-instead-of-adding-optional-parameters)
+* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md#split-methods-instead-of-adding-optional-parameters)

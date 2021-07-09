@@ -60,6 +60,6 @@ ENDMETHOD.
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides: Don't obsess about coverage](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#dont-obsess-about-coverage)
+* [Clean ABAP: Don't obsess about coverage](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#dont-obsess-about-coverage)
 
 

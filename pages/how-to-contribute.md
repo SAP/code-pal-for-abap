@@ -4,7 +4,7 @@
 
 ## How to Contribute
 
-How about having 1000s of ABAP Developers worldwide using a CHECK developed by you? How about helping our ABAP Ecosystem by writing SAP Code Style Guides Checks that could be accessible by everyone? Got you curious?  
+How about having 1000s of ABAP Developers worldwide using a CHECK developed by you? How about helping our ABAP Ecosystem by writing Clean ABAP Checks that could be accessible by everyone? Got you curious?  
 
 So, don't miss the opportunity to contribute with your ideas to this Open-Source Project! Let's keep this project up & running!
 

@@ -43,5 +43,5 @@ ENDTRY.
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides: Using class based exceptions](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-class-based-exceptions)
+* [Clean ABAP: Using class based exceptions](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-class-based-exceptions)
 

@@ -37,4 +37,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [SAP Code Style Guides: Boolean Input Parameter(s)](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#split-method-instead-of-boolean-input-parameter)
+* [Clean ABAP: Boolean Input Parameter(s)](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#split-method-instead-of-boolean-input-parameter)
