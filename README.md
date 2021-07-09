@@ -45,11 +45,7 @@ Together, we both support you in writing a clean ABAP code.
 
 ## Recommended Readings
 
-<<<<<<< Updated upstream
-- [SAP Code Style Guides](https://github.com/SAP/styleguides/)
-=======
 - [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md)
->>>>>>> Stashed changes
 - [ABAP 7.40 Quick Reference](https://blogs.sap.com/2015/10/25/abap-740-quick-reference/)
 - [ABAP Built-in Functions](https://blogs.sap.com/2015/11/30/reminder-abap-built-in-functions/)
 - [ABAP - Release-Specific Changes](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/abennews.htm)
