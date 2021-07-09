@@ -80,3 +80,43 @@ CLASS local_test_class IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+CLASS ltc_macro DEFINITION INHERITING FROM local_test_class FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_macro IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT ut_test.' )
+
+      ( ' DEFINE example. ' )
+      ( '   IF &1 = &2. ' )
+      ( '   ENDIF. ' )
+      ( ' END-OF-DEFINITION.' )
+
+      ( ' START-OF-SELECTION.' )
+      ( '   DATA val_a TYPE i VALUE 1.' )
+      ( '   DATA val_b TYPE i VALUE 2.' )
+      ( '   DATA itab TYPE STANDARD TABLE OF i.' )
+
+      ( '   IF val_a = 1.' )
+      ( '     val_b = 2.' )
+      ( '     LOOP AT itab INTO DATA(line).' )
+      ( '       AT FIRST.' )
+      ( '       ENDAT.' )
+      ( '       CASE line.' )
+      ( '         WHEN 0.' )
+      ( '           IF sy-tabix = 1.' )
+      ( '             example sy-uname sy-sysid.' )
+      ( '           ENDIF.' )
+      ( '       ENDCASE.' )
+      ( '     ENDLOOP.' )
+      ( '   ENDIF.' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.

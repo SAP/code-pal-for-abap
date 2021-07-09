@@ -120,6 +120,9 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS get_class_description  RETURNING VALUE(result) TYPE string.
     METHODS set_pseudo_remote_enabled IMPORTING enabled TYPE abap_bool.
 
+    METHODS condense_tokens IMPORTING statement TYPE sstmnt
+                            RETURNING VALUE(result) TYPE string.
+
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
@@ -829,6 +832,16 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     IF sy-subrc = 0.
       <pseudo_remote_enabled> = enabled.
     ENDIF.
+  ENDMETHOD.
+
+
+  METHOD condense_tokens.
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to
+    WHERE type <> scan_token_type-comment
+    AND type <> scan_token_type-pragma.
+      result = |{ result }{ <token>-str } |.
+    ENDLOOP.
   ENDMETHOD.
 
 ENDCLASS.
