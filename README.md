@@ -4,11 +4,7 @@
 [![license](https://img.shields.io/github/license/SAP/code-pal-for-abap)](LICENSE)
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/code-pal-for-abap)](https://api.reuse.software/info/github.com/SAP/code-pal-for-abap)
 
-<<<<<<< Updated upstream
-Based on the [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md), this tool contains a set of checks to guarantee the [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) adherence.  
-=======
-Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md) style guide, this tool contains a set of checks to guarantee the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md) adherence.  
->>>>>>> Stashed changes
+Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md), this tool contains a set of checks to guarantee the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md) adherence.  
 Together, we both support you in writing a clean ABAP code. 
 
 ❣️ It's **free** and **open-source**.

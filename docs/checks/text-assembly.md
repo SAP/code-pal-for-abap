@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-Following the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md#use--to-assemble-text) style guide, this check searches for text assembly and suggests the usage of the `|` to perform it.
+Following the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md/blob/main/clean-abap/CleanABAP.md#use--to-assemble-text), this check searches for text assembly and suggests the usage of the `|` to perform it.
 
 ### How to solve the issue?
 
