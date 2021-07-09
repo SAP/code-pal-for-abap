@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-> 💡 Code pal for ABAP follows the [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) style guide. If the issue relates to coding style, please submit it [here](https://github.com/SAP/styleguides/issues). 
+> 💡 Code pal for ABAP follows the [SAP Code Style Guides](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md). If the issue relates to coding style, please submit it [here](https://github.com/SAP/styleguides/issues). 
 
 **Check Name**
 > Use this section to identify the affected Check.
