@@ -20,7 +20,7 @@ In exceptional cases, you can suppress this finding by using the pseudo comment 
 
 ```abap
 CLASS class_name DEFINITION.
-  PUBLIC SECTION. "#EC INTF_MISS
+  PUBLIC SECTION. "#EC INTF_IN_CLASS
 ENDCLASS.
 ```
 
