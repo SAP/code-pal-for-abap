@@ -23,6 +23,8 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 * False-Positive: Assert=>Fail (#400)
 * False-Positive: Generated Comments (#402)
 * CALL METHOD Usage does not check if the method call is dynamic (#396)
+* Pragma in the docu for "Interface in Class"
+* Code example in the docu for "Method Ouput Parameter"
 
 2021-05-07 v.1.14.2
 ------------------
