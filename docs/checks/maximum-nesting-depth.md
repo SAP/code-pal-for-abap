@@ -39,4 +39,4 @@ ENDMETHOD. "#EC CI_NESTING
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code - keep the Nesting Depth low](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#keep-the-nesting-depth-low)
+* [Clean ABAP - keep the Nesting Depth low](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#keep-the-nesting-depth-low)

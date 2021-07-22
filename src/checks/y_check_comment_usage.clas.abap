@@ -19,6 +19,13 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
                                        statement TYPE sstmnt
                              RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS is_comment_excluded IMPORTING token TYPE string
+                                RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS has_token_started_with IMPORTING token TYPE string
+                                             start_with TYPE string
+                                   RETURNING VALUE(result) TYPE abap_bool
+                                   RAISING cx_sy_range_out_of_bounds.
 ENDCLASS.
 
 
@@ -70,19 +77,48 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
-      IF strlen( <token>-str ) >= 2 AND NOT
-         ( <token>-str+0(2) = |*"| OR
-           <token>-str+0(2) = |"!| OR
-           <token>-str+0(2) = |##| OR
-           <token>-str+0(2) = |*?| OR
-           <token>-str+0(2) = |"?| OR
-           ( strlen( <token>-str ) >= 3 AND <token>-str+0(3) = |"#E| ) OR
-           <token>-str CP '"' && object_name && '*.' ).   "#EC CI_MAGIC
+      IF NOT is_comment_excluded( <token>-str ).
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
+  METHOD is_comment_excluded.
+    TRY.
+      IF has_token_started_with( token = token
+                                 start_with = |*"| )
+        OR has_token_started_with( token = token
+                                   start_with = |"!| )
+        OR has_token_started_with( token = token
+                                   start_with = |##| )
+        OR has_token_started_with( token = token
+                                   start_with = |*?| )
+        OR has_token_started_with( token = token
+                                   start_with = |"?| )
+        OR has_token_started_with( token = token
+                                   start_with = |*| )
+        OR has_token_started_with( token = token
+                                   start_with = |"#E| )
+        OR has_token_started_with( token = token
+                                   start_with = |* INCLUDE| )
+        OR token CP '"' && object_name && '*.'.
+
+      result = abap_true.
+
+      ENDIF.
+    CATCH cx_sy_range_out_of_bounds.
+      result = abap_false.
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD has_token_started_with.
+    DATA(token_length) = strlen( start_with ).
+    IF substring( val = token
+                  off = 0
+                  len = token_length ) = start_with.
+      result = abap_true.
+    ENDIF.
+  ENDMETHOD.
 
   METHOD check_result.
     DATA(percentage_of_comments) = get_percentage_of_comments( ).

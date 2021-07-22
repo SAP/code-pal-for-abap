@@ -25,6 +25,8 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
     settings-pseudo_comment = '"#EC UT_ASSERT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
+    settings-disable_on_testcode_selection = abap_true.
+    settings-disable_on_prodcode_selection = abap_true.
     settings-apply_on_productive_code = abap_false.
     settings-apply_on_test_code = abap_true.
     settings-threshold = 0.
@@ -83,7 +85,11 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
     DO.
       IF position = statement-to.
-        RETURN.
+        IF result IS INITIAL.
+          RAISE EXCEPTION TYPE cx_sy_itab_line_not_found.
+        ELSE.
+          RETURN.
+        ENDIF.
       ENDIF.
 
       DATA(token) = ref_scan_manager->tokens[ position ].
