@@ -32,7 +32,8 @@ CLASS y_check_call_method_usage IMPLEMENTATION.
     DATA(is_dynamic) = xsdbool( token CP '*->(*)*'
                              OR token CP '*=>(*)*'
                              OR token CP '*)=>(*)*'
-                             OR token CP '*)=>*' ).
+                             OR token CP '*)=>*'
+                             OR token CP '(*)' ).
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 

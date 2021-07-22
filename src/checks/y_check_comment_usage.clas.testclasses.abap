@@ -29,7 +29,9 @@ CLASS ltc_report IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( 'REPORT y_example. ' )
-
+      ( '***********************' )
+      ( '* INCLUDE ABC' )
+      ( '***********************' )
       ( 'AT SELECTION-SCREEN.' )
       ( '  DATA name3 TYPE string. ' )
       ( '  "?<html> ' )
