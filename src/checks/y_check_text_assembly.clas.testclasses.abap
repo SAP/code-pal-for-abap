@@ -81,17 +81,20 @@ ENDCLASS.
 
 CLASS ltc_literals_only DEFINITION INHERITING FROM ltc_ampersand_with_literal  FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
-    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
 
 CLASS ltc_literals_only IMPLEMENTATION.
 
-  METHOD get_code_with_issue.
+  METHOD get_code_without_issue.
     result = VALUE #(
       ( 'REPORT y_example. ' )
 
       ( ' START-OF-SELECTION. ' )
-      ( |   WRITE 'A: ' && 'B - ' && 'C'. | )
+      ( |   WRITE '<p>' | )
+      ( |      && '  <p>one</p>' | )
+      ( |      && '  <p>two</p>' | )
+      ( |      && '</p>'. | )
     ).
   ENDMETHOD.
 
