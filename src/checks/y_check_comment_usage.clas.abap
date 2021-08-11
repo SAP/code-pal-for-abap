@@ -96,12 +96,13 @@ CLASS y_check_comment_usage IMPLEMENTATION.
         OR has_token_started_with( token = token
                                    start_with = |"?| )
         OR has_token_started_with( token = token
-                                   start_with = |*| )
+                                   start_with = |*&| )
         OR has_token_started_with( token = token
-                                   start_with = |"#E| )
+                                   start_with = |"#EC| )
         OR has_token_started_with( token = token
                                    start_with = |* INCLUDE| )
-        OR token CP '"' && object_name && '*.'.
+        OR token CP '"' && object_name && '*.'
+        OR token CO '*'.
 
       result = abap_true.
 
