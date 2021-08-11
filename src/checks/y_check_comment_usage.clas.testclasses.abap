@@ -140,7 +140,7 @@ CLASS ltc_include IMPLEMENTATION.
     result = VALUE #(
       ( 'REPORT y_example. ' )
       ( '  START-OF-SELECTION.' )
-      ( '* INCLUDE ZxxxUO01')
+      ( '* INCLUDE ZxxxUO01' )
       ( '*&---------------------------------------------------------------------*' )
       ( '*& Include ZxxxTOP' )
       ( '*&---------------------------------------------------------------------*' )
