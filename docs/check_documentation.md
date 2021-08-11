@@ -28,7 +28,7 @@
 - [FORM Routine Usage](checks/form-routine.md)
 - [FUNCTION Module Usage](checks/function-routine.md)
 - [Magic Number Usage](checks/magic-number.md)
-- [Message Easy To Find](checks/message-easy-to-find.md.md)
+- [Message Easy To Find](checks/message-easy-to-find.md)
 - [Message Translation](checks/message-translation.md)
 - [Method Return Bool](checks/method-return-bool.md)
 - [Missing Interface](checks/interface-in-class.md)
