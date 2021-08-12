@@ -4,7 +4,7 @@
 
 ### What is the Intent of the Check?
 
-This check searches for arbitrary values in the source code having no meaningful conotation.
+This check searches for arbitrary values in the source code having no meaningful connotation.
 
 Using magic numbers has disadvantages:
 
@@ -39,4 +39,4 @@ ENDDO.
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#use-constants-instead-of-magic-numbers)
+* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-constants-instead-of-magic-numbers)

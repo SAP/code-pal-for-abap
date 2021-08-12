@@ -12,7 +12,7 @@ The threshold determines the maximum number of conditions.
 
 ### How to solve the issue?
 
-Use `CASE` insead of `ELSEIF` for multiple alternative conditions.
+Use `CASE` instead of `ELSEIF` for multiple alternative conditions.
 
 ### What to do in case of exception?
 
@@ -57,4 +57,4 @@ ENDCASE.
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#prefer-case-to-else-if-for-multiple-alternative-conditions)
+* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-case-to-else-if-for-multiple-alternative-conditions)

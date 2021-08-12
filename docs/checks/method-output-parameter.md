@@ -15,15 +15,15 @@ Use just one sort of output type per method.
 In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC PARAMETER_OUT` which should be placed right after the method definition header:
 
 ```abap
-CLASS class_name DEFINITION.
+CLASS class_name DEFINITION PUBLIC.
   PUBLIC SECTION.
-    METHOD method_name
+    METHODS method_name
       EXPORTING param1 TYPE c
       CHANGING param2  TYPE c
-      RETURNING VALUE(result) TYPE c. "#EC PARAMETER_OUT
+      RETURNING VALUE(result) TYPE string. "#EC PARAMETER_OUT
 ENDCLASS.
 ```
 
 ### Further Readings & Knowledge
 
-* [ABAP Styleguides on Clean Code - RETURN, EXPORT, or CHANGE exactly one parameter](https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#return-export-or-change-exactly-one-parameter)
+* [Clean ABAP - RETURN, EXPORT, or CHANGE exactly one parameter](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#return-export-or-change-exactly-one-parameter)
