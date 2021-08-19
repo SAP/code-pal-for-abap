@@ -37,10 +37,21 @@ CLASS y_check_collect IMPLEMENTATION.
 
     DATA(table) = extract_table_name( statement ).
 
+    " COLLECT in header line
+    IF table IS INITIAL.
+      RETURN.
+    ENDIF.
+
     DATA(declaration) = find_internal_table( structure = structure
                                              table_name = table ).
 
+    " INTERNAL TABLE declaration out of scope
     IF declaration IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    " INTERNAL TABLE declared as DDIC table type
+    IF declaration NS 'TABLE'.
       RETURN.
     ENDIF.
 
