@@ -4,23 +4,14 @@ CLASS y_check_collect DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBL
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS extract_table_name
-      IMPORTING
-        statement     TYPE sstmnt
-      RETURNING
-        VALUE(result) TYPE string.
+
   PRIVATE SECTION.
-    METHODS find_internal_table
-      IMPORTING
-        structure     TYPE sstruc
-        name          TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
-    METHODS extract_table_type
-      IMPORTING
-        declaration   TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
+    METHODS extract_table_name IMPORTING statement     TYPE sstmnt
+                               RETURNING  VALUE(result) TYPE string.
+
+    METHODS find_internal_table IMPORTING structure     TYPE sstruc
+                                          table_name    TYPE string
+                                RETURNING VALUE(result) TYPE string.
 
 ENDCLASS.
 
@@ -48,7 +39,9 @@ CLASS y_check_collect IMPLEMENTATION.
     CHECK get_token_abs( statement-from ) = 'COLLECT'.
 
     DATA(table) = extract_table_name( statement ).
-    DATA(declaration) = find_internal_table( structure = structure name = table ).
+
+    DATA(declaration) = find_internal_table( structure = structure
+                                             table_name = table ).
 
     IF declaration IS INITIAL.
       RETURN.
@@ -77,7 +70,6 @@ CLASS y_check_collect IMPLEMENTATION.
   ENDMETHOD.
 
 
-
   METHOD extract_table_name.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
@@ -96,7 +88,7 @@ CLASS y_check_collect IMPLEMENTATION.
         CONTINUE.
       ENDIF.
       DATA(tokens) = condense_tokens( <statement> ).
-      IF tokens NS name.
+      IF tokens NS table_name.
         CONTINUE.
       ENDIF.
       result = tokens.
@@ -104,9 +96,5 @@ CLASS y_check_collect IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
-  METHOD extract_table_type.
-
-  ENDMETHOD.
 
 ENDCLASS.
