@@ -28,9 +28,6 @@ CLASS y_check_collect IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }collect.md|.
 
-    relevant_statement_types = VALUE #( BASE relevant_statement_types
-                                      ( scan_struc_stmnt_type-class_definition ) ).
-
     set_check_message( 'Only use the statement COLLECT for hashed tables or sorted tables with a unique key!' ).
   ENDMETHOD.
 
@@ -94,6 +91,12 @@ CLASS y_check_collect IMPLEMENTATION.
       result = tokens.
       RETURN.
     ENDLOOP.
+    IF result IS INITIAL
+    AND structure-back > 0.
+      DATA(back) = ref_scan_manager->structures[ structure-back ].
+      result = find_internal_table( structure = back
+                                    table_name = table_name ).
+    ENDIF.
   ENDMETHOD.
 
 
