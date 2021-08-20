@@ -250,3 +250,24 @@ CLASS ltc_class_attriute IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_ddic_table_type DEFINITION INHERITING FROM ltc_sorted_table FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_ddic_table_type IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+      ( '   START-OF-SELECTION.      ' )
+      ( '     DATA table TYPE flprice_t. ' )
+      ( |     DATA(entry) = VALUE flprice_s( currency = 'BRL' price = 10 ). | )
+      ( '     COLLECT entry INTO table. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.

@@ -51,7 +51,8 @@ CLASS y_check_collect IMPLEMENTATION.
     ENDIF.
 
     " INTERNAL TABLE declared as DDIC table type
-    IF declaration NS 'TABLE'.
+    IF declaration NP 'DATA*TYPE*TABLE*'
+    AND declaration NP 'DATA*LIKE*TABLE*'.
       RETURN.
     ENDIF.
 
