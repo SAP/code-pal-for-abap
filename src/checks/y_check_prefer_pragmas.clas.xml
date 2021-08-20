@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>Y_CHECK_PREFER_PRAGMAS</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Prefer pragmas to pseudo comments</DESCRIPT>
+    <DESCRIPT>Prefer Pragmas to Pseudo Comments</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

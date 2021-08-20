@@ -32,12 +32,7 @@ CLASS y_check_prefer_pragmas IMPLEMENTATION.
     settings-ignore_pseudo_comments = abap_true.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }prefer_pragmas_to_pseudo_comments.md|.
-
-    relevant_statement_types = VALUE #( BASE relevant_statement_types
-                                      ( scan_struc_stmnt_type-check ) ).
-
-    relevant_structure_types = VALUE #( ).
+    settings-documentation = |{ c_docs_path-checks }prefer-pragmas-to-pseudo-comments.md|.
 
     IF mappings IS INITIAL.
       SELECT pragma, pseudo_com FROM slin_desc INTO CORRESPONDING FIELDS OF TABLE @mappings.
