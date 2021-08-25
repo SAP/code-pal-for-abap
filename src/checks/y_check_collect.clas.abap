@@ -7,14 +7,14 @@ CLASS y_check_collect DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBL
 
   PRIVATE SECTION.
     METHODS extract_itab_name IMPORTING statement     TYPE sstmnt
-                                        RETURNING VALUE(result) TYPE string.
+                              RETURNING VALUE(result) TYPE string.
 
     METHODS find_itab_declaration IMPORTING structure     TYPE sstruc
-                                          name          TYPE string
-                                RETURNING VALUE(result) TYPE sstmnt.
+                                            name          TYPE string
+                                  RETURNING VALUE(result) TYPE sstmnt.
 
     METHODS extract_itab_type IMPORTING statement     TYPE sstmnt
-                               RETURNING VALUE(result) TYPE string.
+                              RETURNING VALUE(result) TYPE string.
 
     METHODS get_table_rtti IMPORTING table_name    TYPE string
                            RETURNING VALUE(result) TYPE REF TO cl_abap_tabledescr.
@@ -166,14 +166,15 @@ CLASS y_check_collect IMPLEMENTATION.
 
 
   METHOD get_table_rtti.
-    CALL METHOD cl_abap_elemdescr=>describe_by_name
+    cl_abap_elemdescr=>describe_by_name(
       EXPORTING
         p_name         = table_name
       RECEIVING
-        p_descr_ref    = DATA(rtti_type)
+        p_descr_ref = DATA(rtti_type)
       EXCEPTIONS
         type_not_found = 1
-        OTHERS         = 2.
+        OTHERS         = 2
+    ).
 
     IF sy-subrc IS NOT INITIAL.
       RETURN.
