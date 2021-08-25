@@ -122,6 +122,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS prefer_returning EXPORTING result TYPE string.
     METHODS text_assembly.
     METHODS collect.
+    METHODS prefer_pragmas.
 
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
@@ -509,6 +510,14 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
      seats = VALUE #( carrid = '01' connid = '02' seatsocc = 30 ).
      COLLECT seats INTO seats_tab.
+  ENDMETHOD.
+
+
+  METHOD prefer_pragmas.
+    TRY.
+        DATA(div_by_zero) = 1 / 0.
+      CATCH cx_root.               "#EC CATCH_ALL
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.
