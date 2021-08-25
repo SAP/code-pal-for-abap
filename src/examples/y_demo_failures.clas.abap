@@ -121,6 +121,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS default_key.
     METHODS prefer_returning EXPORTING result TYPE string.
     METHODS text_assembly.
+    METHODS collect.
 
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
@@ -494,6 +495,20 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
     DATA(third) = 'C'.
 
     WRITE first && ': ' && second && ' - ' && third.
+  ENDMETHOD.
+
+
+  METHOD collect.
+     DATA: BEGIN OF seats,
+             carrid   TYPE sflight-carrid,
+             connid   TYPE sflight-connid,
+             seatsocc TYPE sflight-seatsocc,
+           END OF seats.
+
+     DATA seats_tab LIKE SORTED TABLE OF seats WITH NON-UNIQUE KEY carrid connid.
+
+     seats = VALUE #( carrid = '01' connid = '02' seatsocc = 30 ).
+     COLLECT seats INTO seats_tab.
   ENDMETHOD.
 
 ENDCLASS.
