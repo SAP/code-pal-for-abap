@@ -108,6 +108,10 @@ CLASS y_check_collect IMPLEMENTATION.
         RETURN.
       ENDIF.
     ENDLOOP.
+    " Header Line
+    IF statement-to - statement-from = 1.
+      result = get_token_abs( statement-to ).
+    ENDIF.
   ENDMETHOD.
 
 

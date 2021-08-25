@@ -293,3 +293,23 @@ CLASS ltc_types_table_type IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_table_headerline DEFINITION INHERITING FROM ltc_sorted_table FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_table_headerline IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+      ( '   START-OF-SELECTION. ' )
+      ( '     DATA table TYPE TABLE OF flprice_s WITH HEADER LINE. ' )
+      ( '     COLLECT table. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
