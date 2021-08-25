@@ -6,12 +6,18 @@ CLASS y_check_collect DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBL
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS extract_table_name IMPORTING statement     TYPE sstmnt
-                               RETURNING  VALUE(result) TYPE string.
+    METHODS extract_itab_name IMPORTING statement     TYPE sstmnt
+                                        RETURNING VALUE(result) TYPE string.
 
-    METHODS find_internal_table IMPORTING structure     TYPE sstruc
-                                          table_name    TYPE string
-                                RETURNING VALUE(result) TYPE string.
+    METHODS find_itab_declaration IMPORTING structure     TYPE sstruc
+                                          name          TYPE string
+                                RETURNING VALUE(result) TYPE sstmnt.
+
+    METHODS extract_itab_type IMPORTING statement     TYPE sstmnt
+                               RETURNING VALUE(result) TYPE string.
+
+    METHODS get_table_rtti IMPORTING table_name    TYPE string
+                           RETURNING VALUE(result) TYPE REF TO cl_abap_tabledescr.
 
 ENDCLASS.
 
@@ -35,35 +41,50 @@ CLASS y_check_collect IMPLEMENTATION.
   METHOD inspect_tokens.
     CHECK get_token_abs( statement-from ) = 'COLLECT'.
 
-    DATA(table) = extract_table_name( statement ).
+    DATA(itab_name) = extract_itab_name( statement ).
 
     " COLLECT in header line
-    IF table IS INITIAL.
+    IF itab_name IS INITIAL.
       RETURN.
     ENDIF.
 
-    DATA(declaration) = find_internal_table( structure = structure
-                                             table_name = table ).
+    DATA(itab_declaration) = find_itab_declaration( structure = structure
+                                                    name = itab_name ).
 
-    " INTERNAL TABLE declaration out of scope
-    IF declaration IS INITIAL.
+    " local declaration out of scope
+    IF itab_declaration IS INITIAL.
       RETURN.
     ENDIF.
 
-    " INTERNAL TABLE declared as DDIC table type
-    IF declaration NP 'DATA*TYPE*TABLE*'
-    AND declaration NP 'DATA*LIKE*TABLE*'.
+    DATA(declaration_tokens) = condense_tokens( itab_declaration ).
+
+    IF declaration_tokens CS 'SORTED TABLE OF'
+    AND declaration_tokens CS 'WITH UNIQUE KEY'.
       RETURN.
     ENDIF.
 
-    IF declaration CS 'SORTED TABLE'
-    AND declaration CS 'WITH UNIQUE KEY'.
+    IF declaration_tokens CS 'HASHED TABLE OF'
+    AND declaration_tokens CS 'WITH UNIQUE KEY'.
       RETURN.
     ENDIF.
 
-    IF declaration CS 'HASHED TABLE'
-    AND declaration CS 'WITH UNIQUE KEY'.
-      RETURN.
+    " global table type (DDIC)
+    IF declaration_tokens NP '*TYPE *TABLE OF*'
+    AND declaration_tokens NP '*LIKE *TABLE OF*'.
+      DATA(itab_type) = extract_itab_type( itab_declaration ).
+      DATA(type_rtti) = get_table_rtti( itab_type ).
+
+      IF type_rtti IS NOT INITIAL.
+        IF type_rtti->table_kind = cl_abap_tabledescr=>tablekind_sorted
+        AND type_rtti->has_unique_key = abap_true.
+          RETURN.
+        ENDIF.
+
+        IF type_rtti->table_kind = cl_abap_tabledescr=>tablekind_hashed
+        AND type_rtti->has_unique_key = abap_true.
+          RETURN.
+        ENDIF.
+      ENDIF.
     ENDIF.
 
     DATA(configuration) = detect_check_configuration( statement ).
@@ -79,7 +100,7 @@ CLASS y_check_collect IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD extract_table_name.
+  METHOD extract_itab_name.
     LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF <token>-str = 'INTO'.
@@ -90,25 +111,76 @@ CLASS y_check_collect IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD find_internal_table.
+  METHOD find_itab_declaration.
     LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from TO structure-stmnt_to.
-      IF get_token_abs( <statement>-from ) <> 'DATA'.
-        CONTINUE.
-      ENDIF.
       DATA(tokens) = condense_tokens( <statement> ).
-      IF tokens NS table_name.
+
+      IF  tokens NP |DATA { name } TYPE *|
+      AND tokens NP |DATA { name } LIKE *|
+      AND tokens NP |TYPES* { name }* TYPE *|
+      AND tokens NP |TYPES* { name }* LIKE *|.
         CONTINUE.
       ENDIF.
-      result = tokens.
+
+      IF tokens CP '* TABLE OF *'.
+        result = <statement>.
+      ELSE.
+        DATA(local_typed) = find_itab_declaration( structure = ref_scan_manager->structures[ structure-back ]
+                                                   name = extract_itab_type( <statement> ) ).
+
+        result = COND #( WHEN local_typed IS NOT INITIAL THEN local_typed
+                         ELSE <statement> ).
+      ENDIF.
+
+      RETURN.
+
+    ENDLOOP.
+
+    IF structure-back = 0.
+      RETURN.
+    ENDIF.
+
+    result = find_itab_declaration( structure = ref_scan_manager->structures[ structure-back ]
+                                    name = name ).
+  ENDMETHOD.
+
+
+  METHOD extract_itab_type.
+    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to
+    WHERE str = 'OF'.
+      IF get_token_abs( sy-tabix - 1 ) = 'TABLE'.
+        result = get_token_abs( sy-tabix + 1 ).
+        RETURN.
+      ENDIF.
+    ENDLOOP.
+
+    LOOP AT ref_scan_manager->tokens ASSIGNING <token>
+    FROM statement-from TO statement-to
+    WHERE str = 'TYPE'
+    OR str = 'LIKE'.
+      result = get_token_abs( sy-tabix + 1 ).
       RETURN.
     ENDLOOP.
-    IF result IS INITIAL
-    AND structure-back > 0.
-      DATA(back) = ref_scan_manager->structures[ structure-back ].
-      result = find_internal_table( structure = back
-                                    table_name = table_name ).
+  ENDMETHOD.
+
+
+  METHOD get_table_rtti.
+    CALL METHOD cl_abap_elemdescr=>describe_by_name
+      EXPORTING
+        p_name         = table_name
+      RECEIVING
+        p_descr_ref    = DATA(rtti_type)
+      EXCEPTIONS
+        type_not_found = 1
+        OTHERS         = 2.
+
+    IF sy-subrc IS NOT INITIAL.
+      RETURN.
     ENDIF.
+
+    result ?= rtti_type.
   ENDMETHOD.
 
 
