@@ -43,11 +43,6 @@ CLASS y_check_collect IMPLEMENTATION.
 
     DATA(itab_name) = extract_itab_name( statement ).
 
-    " COLLECT in header line
-    IF itab_name IS INITIAL.
-      RETURN.
-    ENDIF.
-
     DATA(itab_declaration) = find_itab_declaration( structure = structure
                                                     name = itab_name ).
 
@@ -123,30 +118,30 @@ CLASS y_check_collect IMPLEMENTATION.
       IF  tokens NP |DATA { name } TYPE *|
       AND tokens NP |DATA { name } LIKE *|
       AND tokens NP |TYPES* { name }* TYPE *|
-      AND tokens NP |TYPES* { name }* LIKE *|.
+      AND tokens NP |TYPES* { name }* LIKE *|
+      AND tokens NP |CLASS-DATA* { name }* TYPE *|
+      AND tokens NP |CLASS-DATA* { name }* LIKE *|.
         CONTINUE.
       ENDIF.
 
       IF tokens CP '* TABLE OF *'.
         result = <statement>.
-      ELSE.
-        DATA(local_typed) = find_itab_declaration( structure = ref_scan_manager->structures[ structure-back ]
-                                                   name = extract_itab_type( <statement> ) ).
-
-        result = COND #( WHEN local_typed IS NOT INITIAL THEN local_typed
-                         ELSE <statement> ).
+        RETURN.
       ENDIF.
 
-      RETURN.
+      DATA(local_typed) = find_itab_declaration( structure = structure
+                                                 name = extract_itab_type( <statement> ) ).
 
+      result = COND #( WHEN local_typed IS NOT INITIAL THEN local_typed
+                       ELSE <statement> ).
+
+      RETURN.
     ENDLOOP.
 
-    IF structure-back = 0.
-      RETURN.
+    IF structure-back > 0.
+      result = find_itab_declaration( structure = ref_scan_manager->structures[ structure-back ]
+                                      name = name ).
     ENDIF.
-
-    result = find_itab_declaration( structure = ref_scan_manager->structures[ structure-back ]
-                                    name = name ).
   ENDMETHOD.
 
 

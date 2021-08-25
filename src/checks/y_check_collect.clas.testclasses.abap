@@ -204,7 +204,7 @@ CLASS ltc_class_attriute IMPLEMENTATION.
       ( '       PUBLIC SECTION. ' )
       ( '         METHODS example FOR TESTING. ' )
       ( '       PROTECTED SECTION. ' )
-      ( '         DATA: BEGIN OF seats, ' )
+      ( '         CLASS-DATA: BEGIN OF seats, ' )
       ( '                 carrid   TYPE sflight-carrid, ' )
       ( '                 connid   TYPE sflight-connid, ' )
       ( '                 seatsocc TYPE sflight-seatsocc, ' )
