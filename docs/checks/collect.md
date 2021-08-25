@@ -24,10 +24,6 @@ It searches for `COLLECT` in:
 * Internal tables typed as `SORTED TABLE` with `NON-UNIQUE KEY`;
 * Internal tables typed as `STANDARD TABLE`;
 
-Known GAPs:
-* Internal tables with header line are not supported;
-* Internal tables typed as DDIC table type are not supported;
-
 ### How to solve the issue?
 
 Change the internal table to `SORTED` or `HASHED` as recommended, or perform the collection manually.   
