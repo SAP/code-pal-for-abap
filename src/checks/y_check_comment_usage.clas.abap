@@ -3,6 +3,7 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
     METHODS constructor.
 
   PROTECTED SECTION.
+    METHODS execute_check REDEFINITION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
@@ -26,6 +27,8 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
                                              start_with TYPE string
                                    RETURNING VALUE(result) TYPE abap_bool
                                    RAISING cx_sy_range_out_of_bounds.
+
+    METHODS is_badi_example_class RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -48,6 +51,12 @@ CLASS y_check_comment_usage IMPLEMENTATION.
                                         ( scan_struc_stmnt_type-module ) ).
 
     set_check_message( 'Percentage of comments must be lower than &3% of the productive code! (&2%>=&3%) (&1 lines found)' ).
+  ENDMETHOD.
+
+
+  METHOD execute_check.
+    CHECK is_badi_example_class( ) = abap_false.
+    super->execute_check( ).
   ENDMETHOD.
 
 
@@ -165,4 +174,20 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
     result = xsdbool( is_function_module = abap_false ).
   ENDMETHOD.
+
+
+  METHOD is_badi_example_class.
+    CHECK object_type = 'CLAS'.
+
+    SELECT SINGLE enhspot
+    FROM enhspotobj
+    INTO @DATA(enhancement)
+    WHERE obj_type = @object_type
+    AND obj_name = @object_name
+    AND VERSION = 'A'.
+
+    result = xsdbool( enhancement IS NOT INITIAL ).
+  ENDMETHOD.
+
+
 ENDCLASS.
