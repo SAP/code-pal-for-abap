@@ -14,6 +14,9 @@ CLASS y_check_unit_test_assert DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS is_variable IMPORTING token TYPE stokesx
                         RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS is_internal_table IMPORTING position TYPE i
+                              RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -126,7 +129,8 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
         ENDIF.
       ENDIF.
 
-      IF is_variable( token ) = abap_false.
+      IF is_variable( token ) = abap_false
+      AND is_internal_table( position ) = abap_false.
         token-str = '*'.
       ENDIF.
 
@@ -141,6 +145,18 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
   METHOD is_variable.
     CHECK token-type = scan_token_type-identifier.
     result = xsdbool( token-str CN '0123456789' ).
+  ENDMETHOD.
+
+
+  METHOD is_internal_table.
+    TRY.
+        DATA(previous_token) = ref_scan_manager->tokens[ position - 1 ].
+        DATA(next_token) = ref_scan_manager->tokens[ position + 1 ].
+        result = xsdbool( previous_token-str CP '*[' AND next_token-str CP ']*').
+      CATCH cx_sy_itab_line_not_found.
+        result = abap_false.
+        RETURN.
+    ENDTRY.
   ENDMETHOD.
 
 
