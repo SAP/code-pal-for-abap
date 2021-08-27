@@ -159,8 +159,10 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS handle_ignore_pseudo_comments IMPORTING  check_configuration TYPE y_if_clean_code_manager=>check_configuration.
 
-    METHODS handle_statistics IMPORTING statement_index TYPE i
-                                        check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+    METHODS is_running_unit_test RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS handle_unit_test_statistics IMPORTING statement_index TYPE i
+                                                  check_configuration TYPE y_if_clean_code_manager=>check_configuration.
 
 ENDCLASS.
 
@@ -670,29 +672,27 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     handle_ignore_pseudo_comments( check_configuration ).
 
-    handle_statistics( statement_index =  statement_index
-                       check_configuration = check_configuration ).
-
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) <> 'Y_REF_SCAN_MANAGER'.
-      RETURN.
+    IF is_running_unit_test( ) = abap_true.
+      handle_unit_test_statistics( statement_index =  statement_index
+                                   check_configuration = check_configuration ).
+    ELSE.
+      inform( p_sub_obj_type = object_type
+              p_sub_obj_name = get_include( p_level = statement_level )
+              p_position = statement_index
+              p_line = get_line_abs( statement_from )
+              p_column = get_column_abs( statement_from )
+              p_errcnt = error_counter
+              p_kind = check_configuration-prio
+              p_test = myname
+              p_code = get_code( check_configuration-prio )
+              p_param_1 = parameter_01
+              p_param_2 = parameter_02
+              p_param_3 = parameter_03
+              p_param_4 = parameter_04
+              p_inclspec = is_include_specific
+              p_detail = additional_information
+              p_checksum_1 = checksum ).
     ENDIF.
-
-    inform( p_sub_obj_type = object_type
-            p_sub_obj_name = get_include( p_level = statement_level )
-            p_position = statement_index
-            p_line = get_line_abs( statement_from )
-            p_column = get_column_abs( statement_from )
-            p_errcnt = error_counter
-            p_kind = check_configuration-prio
-            p_test = myname
-            p_code = get_code( check_configuration-prio )
-            p_param_1 = parameter_01
-            p_param_2 = parameter_02
-            p_param_3 = parameter_03
-            p_param_4 = parameter_04
-            p_inclspec = is_include_specific
-            p_detail = additional_information
-            p_checksum_1 = checksum ).
   ENDMETHOD.
 
 
@@ -849,10 +849,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD handle_statistics.
-    " Relevant for unit tests only
-    CHECK statistics IS BOUND.
+  METHOD is_running_unit_test.
+    result = xsdbool( statistics IS BOUND ).
+  ENDMETHOD.
 
+
+  METHOD handle_unit_test_statistics.
     DATA(code) = get_code( check_configuration-prio ).
 
     DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
