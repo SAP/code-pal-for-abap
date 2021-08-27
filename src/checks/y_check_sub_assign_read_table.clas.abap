@@ -64,14 +64,10 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
       DATA(check_configuration) = detect_check_configuration( <statement> ).
 
-      IF check_configuration IS INITIAL.
-        CONTINUE.
-      ENDIF.
-
-      raise_error( statement_level     = <statement>-level
-                   statement_index     = position
-                   statement_from      = <statement>-from
-                   error_priority      = check_configuration-prio ).
+      raise_error( statement_level = <statement>-level
+                   statement_index = position
+                   statement_from = <statement>-from
+                   check_configuration = check_configuration ).
 
     ENDLOOP.
   ENDMETHOD.

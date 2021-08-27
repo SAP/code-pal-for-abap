@@ -35,16 +35,14 @@ CLASS y_check_call_method_usage IMPLEMENTATION.
                              OR token CP '*)=>*'
                              OR token CP '(*)' ).
 
-    DATA(check_configuration) = detect_check_configuration( statement ).
+    IF has_keyword = abap_true
+    AND is_dynamic = abap_false.
+      DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS NOT INITIAL
-      AND has_keyword = abap_true
-      AND is_dynamic = abap_false.
-
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio ).
+      raise_error( statement_level  = statement-level
+                   statement_index = index
+                   statement_from = statement-from
+                   check_configuration = check_configuration ).
     ENDIF.
   ENDMETHOD.
 

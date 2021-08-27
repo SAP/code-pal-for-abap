@@ -97,14 +97,14 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   statement_index        TYPE int4
                                   statement_from         TYPE int4
                                   error_counter          TYPE sci_errcnt OPTIONAL
-                                  error_priority         TYPE sychar01
                                   parameter_01           TYPE csequence OPTIONAL
                                   parameter_02           TYPE csequence OPTIONAL
                                   parameter_03           TYPE csequence OPTIONAL
                                   parameter_04           TYPE csequence OPTIONAL
                                   is_include_specific    TYPE sci_inclspec DEFAULT ' '
                                   additional_information TYPE xstring OPTIONAL
-                                  checksum               TYPE int4 OPTIONAL. "#EC OPTL_PARAM
+                                  checksum               TYPE int4 OPTIONAL
+                                  check_configuration    TYPE y_if_clean_code_manager=>check_configuration. "#EC OPTL_PARAM
 
     METHODS get_column_abs  REDEFINITION.
     METHODS get_column_rel REDEFINITION.
@@ -156,6 +156,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS switch_bool IMPORTING boolean       TYPE abap_bool
                         RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS handle_ignore_pseudo_comments IMPORTING  check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+
+    METHODS handle_statistics IMPORTING statement_index TYPE i
+                                        check_configuration TYPE y_if_clean_code_manager=>check_configuration.
 
 ENDCLASS.
 
@@ -622,10 +627,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     test_code_detector->clear( ).
     test_code_detector->set_ref_scan_manager( ref_scan_manager ).
 
-    IF statistics IS NOT BOUND.
-      statistics = NEW y_scan_statistics( ).
-    ENDIF.
-
     IF lines( check_configurations ) = 1
     AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
       CLEAR check_configurations.
@@ -664,35 +665,34 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD raise_error.
-    DATA(pseudo_comment) = COND #( WHEN settings-ignore_pseudo_comments = abap_false THEN settings-pseudo_comment ).
-    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
-                                                                               scimessages = scimessages
-                                                                               test = myname
-                                                                               code = get_code( error_priority )
-                                                                               suppress = pseudo_comment
-                                                                               position = statement_index ).
-    statistics->collect( kind = error_priority
-                         pc = pcom_detector ).
+    " Probably, the Profile is not relevant (threshold, dates, etc)
+    CHECK check_configuration IS NOT INITIAL.
 
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) = 'Y_REF_SCAN_MANAGER'.
-      inform( p_sub_obj_type = object_type
-              p_sub_obj_name = get_include( p_level = statement_level )
-              p_position = statement_index
-              p_line = get_line_abs( statement_from )
-              p_column = get_column_abs( statement_from )
-              p_errcnt = error_counter
-              p_kind = error_priority
-              p_test = myname
-              p_code = get_code( error_priority )
-              p_suppress = pseudo_comment
-              p_param_1 = parameter_01
-              p_param_2 = parameter_02
-              p_param_3 = parameter_03
-              p_param_4 = parameter_04
-              p_inclspec = is_include_specific
-              p_detail = additional_information
-              p_checksum_1 = checksum ).
+    handle_ignore_pseudo_comments( check_configuration ).
+
+    handle_statistics( statement_index =  statement_index
+                       check_configuration = check_configuration ).
+
+    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) <> 'Y_REF_SCAN_MANAGER'.
+      RETURN.
     ENDIF.
+
+    inform( p_sub_obj_type = object_type
+            p_sub_obj_name = get_include( p_level = statement_level )
+            p_position = statement_index
+            p_line = get_line_abs( statement_from )
+            p_column = get_column_abs( statement_from )
+            p_errcnt = error_counter
+            p_kind = check_configuration-prio
+            p_test = myname
+            p_code = get_code( check_configuration-prio )
+            p_param_1 = parameter_01
+            p_param_2 = parameter_02
+            p_param_3 = parameter_03
+            p_param_4 = parameter_04
+            p_inclspec = is_include_specific
+            p_detail = additional_information
+            p_checksum_1 = checksum ).
   ENDMETHOD.
 
 
@@ -705,7 +705,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       raise_error( statement_level = 1
                    statement_index = 1
                    statement_from  = 1
-                   error_priority  = '' ).
+                   check_configuration = VALUE #( prio = `E` ) ).
       FREE ref_scan_manager.
       RETURN.
     ENDIF.
@@ -831,6 +831,39 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     AND type <> scan_token_type-pragma.
       result = |{ result }{ <token>-str } |.
     ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD handle_ignore_pseudo_comments.
+    DATA(code) = get_code( check_configuration-prio ).
+
+    LOOP AT scimessages ASSIGNING FIELD-SYMBOL(<message>)
+    WHERE test = myname
+    AND code = code.
+      IF check_configuration-ignore_pseudo_comments = abap_true.
+        <message>-pcom = c_exceptn_by_table_entry.
+      ELSE.
+        <message>-pcom = settings-pseudo_comment+5.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD handle_statistics.
+    " Relevant for unit tests only
+    CHECK statistics IS BOUND.
+
+    DATA(code) = get_code( check_configuration-prio ).
+
+    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
+                                                                               scimessages = scimessages
+                                                                               test = myname
+                                                                               code = code
+                                                                               suppress = settings-pseudo_comment
+                                                                               position = statement_index ).
+
+    statistics->collect( kind = check_configuration-prio
+                         pc = pcom_detector ).
   ENDMETHOD.
 
 ENDCLASS.

@@ -73,17 +73,14 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
 
     IF index = structure-stmnt_to.
       DATA(check_configuration) = detect_check_configuration( error_count = no_exec_statements
-                                                              statement = statement_for_message ). "#EC DECL_IN_IF
-      IF check_configuration IS INITIAL.
-        RETURN.
-      ENDIF.
+                                                              statement = statement_for_message ).
 
-      raise_error( statement_level     = statement_for_message-level
-                   statement_index     = determine_position( type = structure-type index = index )
-                   statement_from      = statement_for_message-from
-                   error_priority      = check_configuration-prio
-                   parameter_01        = |{ no_exec_statements }|
-                   parameter_02        = |{ check_configuration-threshold }| ).
+      raise_error( statement_level = statement_for_message-level
+                   statement_index = determine_position( type = structure-type index = index )
+                   statement_from = statement_for_message-from
+                   check_configuration = check_configuration
+                   parameter_01 = |{ no_exec_statements }|
+                   parameter_02 = |{ check_configuration-threshold }| ).
     ENDIF.
   ENDMETHOD.
 

@@ -45,14 +45,10 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
     DATA(check_configuration) = detect_check_configuration( error_count = CONV #( procedure )
                                                             statement = VALUE #( level = 1 ) ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = 1
                  statement_index = 1
                  statement_from = 1
-                 error_priority = check_configuration-prio
+                 check_configuration = check_configuration
                  parameter_01 = |{ procedure }|
                  parameter_02 = |{ check_configuration-threshold }|
                  parameter_03 = |{ coverage->get_total( ) }|

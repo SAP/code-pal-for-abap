@@ -93,17 +93,13 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
 
   METHOD check_result.
     LOOP AT counters ASSIGNING FIELD-SYMBOL(<counter>).
-      DATA(configuration) = detect_check_configuration( error_count = <counter>-count
-                                                        statement = <counter>-if_statement ).
-
-      IF configuration IS INITIAL.
-        CONTINUE.
-      ENDIF.
+      DATA(check_configuration) = detect_check_configuration( error_count = <counter>-count
+                                                              statement = <counter>-if_statement ).
 
       raise_error( statement_level = <counter>-if_statement-level
                    statement_index = <counter>-if_structure-stmnt_from
                    statement_from = <counter>-if_statement-from
-                   error_priority = configuration-prio ).
+                   check_configuration = check_configuration ).
     ENDLOOP.
   ENDMETHOD.
 
