@@ -15,6 +15,7 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 2021-08-XX v.1.16.0
 ------------------
 * BAdI example class vs Percentage Comment (#443)
+* Unit-Test Assert Validator (#450)
 + Prefer Pragmas to Pseudo Comments (#421)
 + COLLECT restriction (#441)
 * RAP needs CREATE OBJECT ... FOR TESTING (#444)
