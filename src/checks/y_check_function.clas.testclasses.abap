@@ -9,7 +9,6 @@ CLASS ltd_ref_scan_manager DEFINITION FOR TESTING. "#EC INTF_IN_CLASS
 
 ENDCLASS.
 
-
 CLASS ltd_ref_scan_manager IMPLEMENTATION.
   METHOD y_if_scan_manager~set_ref_scan.
     RETURN.
