@@ -65,17 +65,12 @@ CLASS y_check_deprecated_classes IMPLEMENTATION.
 
       DATA(check_configuration) = detect_check_configuration( statement ).
 
-      IF check_configuration IS INITIAL.
-        RETURN.
-      ENDIF.
-
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio
-                   parameter_01        = deprecated-original
-                   parameter_02        = deprecated-replacement ).
-
+      raise_error( statement_level = statement-level
+                   statement_index = index
+                   statement_from = statement-from
+                   check_configuration = check_configuration
+                   parameter_01 = deprecated-original
+                   parameter_02 = deprecated-replacement ).
     ENDLOOP.
 
   ENDMETHOD.

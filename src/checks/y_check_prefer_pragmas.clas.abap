@@ -55,20 +55,16 @@ CLASS y_check_prefer_pragmas IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     pragma = |##{ pragma }|.
 
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = configuration-prio
-                 parameter_01        = pseudo_comment
-                 parameter_02        = pragma ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration
+                 parameter_01 = pseudo_comment
+                 parameter_02 = pragma ).
   ENDMETHOD.
 
 

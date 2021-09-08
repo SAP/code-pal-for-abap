@@ -34,16 +34,12 @@ CLASS y_check_self_reference IMPLEMENTATION.
     CHECK statement-type = method_call.
     CHECK has_self_reference( statement ) = abap_true.
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 check_configuration  = check_configuration ).
 
   ENDMETHOD.
 

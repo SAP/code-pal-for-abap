@@ -138,14 +138,10 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     DATA(check_configuration) = detect_check_configuration( error_count = percentage_of_comments
                                                             statement = statement_for_message ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = statement_for_message-level
                  statement_index = structure-stmnt_from
                  statement_from = statement_for_message-from
-                 error_priority = check_configuration-prio
+                 check_configuration = check_configuration
                  parameter_01 = |{ comment_number }|
                  parameter_02 = |{ percentage_of_comments }|
                  parameter_03 = |{ check_configuration-threshold }| ).

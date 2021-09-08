@@ -105,14 +105,10 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
 
     DATA(check_configuration) = detect_check_configuration( VALUE #( level = 1 ) ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = 1
                  statement_index = 1
-                 statement_from  = 1
-                 error_priority = check_configuration-prio
+                 statement_from = 1
+                 check_configuration = check_configuration
                  parameter_01 = |{ pseudo_comment_counter }| ).
   ENDMETHOD.
 

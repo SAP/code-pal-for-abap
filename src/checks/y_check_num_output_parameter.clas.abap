@@ -38,19 +38,15 @@ CLASS y_check_num_output_parameter IMPLEMENTATION.
 
     DATA(outputs_of_statement) = count_outputs_of_statement( statement ).
 
-    DATA(configuration) = detect_check_configuration( error_count = outputs_of_statement
-                                                      statement = statement ).
+    DATA(check_configuration) = detect_check_configuration( error_count = outputs_of_statement
+                                                            statement = statement ).
 
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from + 1
-                 error_priority      = configuration-prio
-                 parameter_01        = |{ outputs_of_statement }|
-                 parameter_02        = |{ configuration-threshold }| ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from + 1
+                 check_configuration = check_configuration
+                 parameter_01 = |{ outputs_of_statement }|
+                 parameter_02 = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 

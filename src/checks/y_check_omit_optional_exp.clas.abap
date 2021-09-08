@@ -30,16 +30,12 @@ CLASS y_check_omit_optional_exp IMPLEMENTATION.
 
     CHECK has_optional_exporting( statement ).
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     raise_error( statement_level = statement-level
                  statement_index = index
                  statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 check_configuration  = check_configuration ).
 
   ENDMETHOD.
 

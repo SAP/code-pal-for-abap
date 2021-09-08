@@ -40,14 +40,10 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
 
     DATA(configuration) = detect_check_configuration( statement ).
 
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 check_configuration = configuration ).
 
   ENDMETHOD.
 
