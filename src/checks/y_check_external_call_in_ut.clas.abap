@@ -19,14 +19,10 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
   METHOD check_if_error.
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = statement-level
                  statement_index = index
                  statement_from  = statement-from
-                 error_priority  = check_configuration-prio
+                 check_configuration  = check_configuration
                  parameter_01    = get_token_abs( statement-from ) ).
   ENDMETHOD.
 

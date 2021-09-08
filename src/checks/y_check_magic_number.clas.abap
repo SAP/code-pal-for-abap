@@ -62,16 +62,13 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
       ENDIF.
 
       IF is_magic_number( <token>-str ).
-        DATA(check_configuration) = detect_check_configuration( statement_wa ). "#EC DECL_IN_IF
-        IF check_configuration IS INITIAL.
-          CONTINUE.
-        ENDIF.
+        DATA(check_configuration) = detect_check_configuration( statement_wa ).
 
-        raise_error( statement_level     = statement_wa-level
-                     statement_index     = index
-                     statement_from      = statement_wa-from
-                     error_priority      = check_configuration-prio
-                     parameter_01        = |{ magic_number }| ).
+        raise_error( statement_level = statement_wa-level
+                     statement_index = index
+                     statement_from = statement_wa-from
+                     check_configuration = check_configuration
+                     parameter_01 = |{ magic_number }| ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
