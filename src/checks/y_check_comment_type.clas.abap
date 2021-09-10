@@ -40,7 +40,7 @@ CLASS y_check_comment_type IMPLEMENTATION.
 
 
   METHOD has_wrong_comment_type.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF get_first_character( <token> ) = '*'
       AND get_second_character( <token> ) <> '&'.

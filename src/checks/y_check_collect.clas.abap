@@ -92,7 +92,7 @@ CLASS y_check_collect IMPLEMENTATION.
 
 
   METHOD extract_itab_name.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF <token>-str = 'INTO'.
         result = get_token_abs( sy-tabix + 1 ).
@@ -107,7 +107,7 @@ CLASS y_check_collect IMPLEMENTATION.
 
 
   METHOD find_itab_declaration.
-    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from TO structure-stmnt_to.
       DATA(tokens) = condense_tokens( <statement> ).
 
@@ -135,14 +135,14 @@ CLASS y_check_collect IMPLEMENTATION.
     ENDLOOP.
 
     IF structure-back > 0.
-      result = find_itab_declaration( structure = ref_scan_manager->structures[ structure-back ]
+      result = find_itab_declaration( structure = ref_scan->structures[ structure-back ]
                                       name = name ).
     ENDIF.
   ENDMETHOD.
 
 
   METHOD extract_itab_type.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE str = 'OF'.
       IF get_token_abs( sy-tabix - 1 ) = 'TABLE'.
@@ -151,7 +151,7 @@ CLASS y_check_collect IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING <token>
+    LOOP AT ref_scan->tokens ASSIGNING <token>
     FROM statement-from TO statement-to
     WHERE str = 'TYPE'
     OR str = 'LIKE'.

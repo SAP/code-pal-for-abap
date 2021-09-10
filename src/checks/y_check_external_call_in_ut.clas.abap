@@ -71,7 +71,7 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
           has_redirection = abap_true.
         ENDIF.
       WHEN OTHERS.
-        LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+        LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
         FROM statement-from TO statement-to
         WHERE type = 'I'.
           IF <token>-str CS 'CL_GUI_'

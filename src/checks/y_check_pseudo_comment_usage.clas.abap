@@ -91,7 +91,7 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = 'C'
     OR type = 'P'.

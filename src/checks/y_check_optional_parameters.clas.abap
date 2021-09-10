@@ -42,7 +42,7 @@ CLASS Y_CHECK_OPTIONAL_PARAMETERS IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD has_optional_parameter.
-    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+    LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'OPTIONAL'.
       result = abap_true.

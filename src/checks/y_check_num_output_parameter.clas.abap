@@ -53,7 +53,7 @@ CLASS y_check_num_output_parameter IMPLEMENTATION.
   METHOD count_outputs_of_statement.
     DATA(skip) = abap_false.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from
     TO statement-to.
 

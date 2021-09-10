@@ -61,7 +61,7 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
     has_changing_parameter = abap_false.
     has_returning_parameter = abap_false.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
       CASE <token>-str.

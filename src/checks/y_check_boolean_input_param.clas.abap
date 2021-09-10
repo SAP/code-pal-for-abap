@@ -56,7 +56,7 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
 
   METHOD has_boolean_input_param.
     DATA(skip) = abap_true.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
 
       IF <token>-str = 'IMPORTING'.

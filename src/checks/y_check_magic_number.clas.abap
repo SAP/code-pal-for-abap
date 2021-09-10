@@ -54,7 +54,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
   METHOD inspect_tokens.
     statement_wa = statement.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
 
       IF is_exception( <token>-str ) = abap_true.

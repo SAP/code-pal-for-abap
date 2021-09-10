@@ -47,7 +47,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
-    DATA ref_scan_manager TYPE REF TO y_if_scan_manager.
     DATA statistics TYPE REF TO y_if_scan_statistics.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
     DATA attributes_maintained TYPE abap_bool.
@@ -61,8 +60,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA relevant_structure_types TYPE TABLE OF sstruc-type.
 
     METHODS execute_check.
-
-    METHODS check_start_conditions RAISING ycx_object_not_processed.
 
     "! <p class="shorttext synchronized" lang="en">Validates the Customizing</p>
     "! @parameter statement | Received from inspect_tokens method.
@@ -104,16 +101,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   checksum               TYPE int4 OPTIONAL
                                   check_configuration    TYPE y_if_clean_code_manager=>check_configuration. "#EC OPTL_PARAM
 
-    METHODS get_column_abs  REDEFINITION.
-    METHODS get_column_rel REDEFINITION.
-    METHODS get_include  REDEFINITION.
-    METHODS get_line_abs REDEFINITION.
-    METHODS get_line_column_abs REDEFINITION.
-    METHODS get_line_column_rel  REDEFINITION.
-    METHODS get_line_rel REDEFINITION.
-    METHODS get_token_abs REDEFINITION.
-    METHODS get_token_rel REDEFINITION.
-    METHODS keyword REDEFINITION.
     METHODS set_check_message IMPORTING message TYPE itex132.
     METHODS get_class_description  RETURNING VALUE(result) TYPE string.
 
@@ -163,13 +150,6 @@ ENDCLASS.
 
 
 CLASS Y_CHECK_BASE IMPLEMENTATION.
-
-
-  METHOD check_start_conditions.
-    IF ref_scan_manager->is_scan_ok( ) = abap_false.
-      RAISE EXCEPTION TYPE ycx_object_not_processed.
-    ENDIF.
-  ENDMETHOD.
 
 
   METHOD constructor.
@@ -260,6 +240,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       CLEAR result.
       RETURN.
     ENDIF.
+
+    IF no_aunit = abap_false.
+      ref_scan->determine_aunit_lines( ).
+    ENDIF.
   ENDMETHOD.
 
 
@@ -280,7 +264,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD inspect_structures.
-    LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
+    LOOP AT ref_scan->structures ASSIGNING FIELD-SYMBOL(<structure>).
       IF is_statement_type_relevant( <structure> ) = abap_true
       OR is_structure_type_relevant( <structure> ) = abap_true.
         inspect_statements( <structure> ).
@@ -292,7 +276,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD inspect_statements.
     DATA(index) = structure-stmnt_from.
 
-    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from
     TO structure-stmnt_to.
       inspect_tokens( index = index
@@ -337,154 +321,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       WHEN OTHERS.
         result = c_code_not_maintained.
     ENDCASE.
-  ENDMETHOD.
-
-
-  METHOD get_column_abs.
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_result = <token>-col.
-        RETURN.
-      ENDIF.
-      p_n = p_n - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_column_rel.
-    DATA(index) = statement_wa-from + p_n - 1.
-    CHECK index <= statement_wa-to.
-
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_result = <token>-col.
-        RETURN.
-      ENDIF.
-      index = index - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_include.
-    DATA(l_level) = COND #( WHEN p_level IS SUPPLIED THEN p_level
-                            ELSE statement_wa-level ).
-
-    DO.
-      READ TABLE ref_scan_manager->levels INDEX l_level INTO DATA(l_levels_wa).
-      IF sy-subrc <> 0.
-        RETURN.
-      ENDIF.
-      IF l_levels_wa-type = 'P'.
-        p_result = l_levels_wa-name.
-        RETURN.
-      ENDIF.
-      l_level = l_levels_wa-level.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_line_abs.
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_result = <token>-row.
-        RETURN.
-      ENDIF.
-      p_n = p_n - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_line_column_abs.
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_column = <token>-col.
-        p_line   = <token>-row.
-        RETURN.
-      ENDIF.
-      p_n = p_n - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_line_column_rel.
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    p_n = statement_wa-from + p_n - 1.
-
-    DO.
-      READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_column = <token>-col.
-        p_line   = <token>-row.
-        RETURN.
-      ENDIF.
-      p_n = p_n - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_line_rel.
-    DATA(index) = statement_wa-from + p_n - 1.
-    CHECK index <= statement_wa-to.
-
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_result = <token>-row.
-        RETURN.
-      ENDIF.
-      index = index - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_token_abs.
-    READ TABLE ref_scan_manager->tokens INDEX p_n INTO token_wa.
-    IF sy-subrc = 0.
-      p_result = token_wa-str.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD get_token_rel.
-    DATA(l_index) = statement_wa-from + p_n - 1.
-    IF l_index > statement_wa-to.
-      RETURN.
-    ENDIF.
-    READ TABLE ref_scan_manager->tokens INDEX l_index INTO token_wa.
-    p_result = token_wa-str.
   ENDMETHOD.
 
 
@@ -607,15 +443,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD instantiate_objects.
-    IF ref_scan_manager IS NOT BOUND.
-      ref_scan_manager = NEW y_ref_scan_manager( ).
-      IF ref_scan IS INITIAL.
-        get( ).
-      ENDIF.
-    ENDIF.
-
-    ref_scan->determine_aunit_lines( ).
-    ref_scan_manager->set_ref_scan( ref_scan ).
+    " Always load the ref_scan
+    get( ).
 
     IF clean_code_manager IS NOT BOUND.
       clean_code_manager = NEW y_clean_code_manager( ).
@@ -629,16 +458,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
       CLEAR check_configurations.
     ENDIF.
-  ENDMETHOD.
-
-
-  METHOD keyword.
-    IF statement_wa-type = 'C'.
-      p_result = 'COMPUTE'.
-      RETURN.
-    ENDIF.
-    READ TABLE ref_scan_manager->tokens INDEX statement_wa-from INTO token_wa.
-    p_result = token_wa-str.
   ENDMETHOD.
 
 
@@ -697,29 +516,28 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     instantiate_objects( ).
 
+    IF ref_scan IS INITIAL
+    OR ref_scan->subrc IS NOT INITIAL.
+      RETURN.
+    ENDIF.
+
     IF attributes_maintained = abap_false AND has_attributes = abap_true.
       raise_error( statement_level = 1
                    statement_index = 1
                    statement_from  = 1
                    check_configuration = VALUE #( prio = `E` ) ).
-      FREE ref_scan_manager.
       RETURN.
     ENDIF.
 
     TRY.
-        check_start_conditions( ).
         profile_configurations = clean_code_manager->read_check_customizing( myname ).
       CATCH ycx_no_check_customizing.
-        IF profile_configurations IS INITIAL AND attributes_ok = abap_false.
-          FREE ref_scan_manager.
+        IF profile_configurations IS INITIAL
+        AND attributes_ok = abap_false.
           RETURN.
         ELSEIF attributes_ok = abap_true.
           profile_configurations = check_configurations.
         ENDIF.
-      CATCH ycx_object_not_processed.
-        FREE ref_scan_manager.
-        RETURN.
-
     ENDTRY.
 
     IF lines( profile_configurations ) > 0.
@@ -727,8 +545,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
 
     execute_check( ).
-
-    FREE ref_scan_manager.
   ENDMETHOD.
 
 
@@ -778,8 +594,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD is_app_comp_in_scope.
     TRY.
-        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level = 0 ] ).
-        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level ] ).
+        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan->levels[ level = 0 ] ).
+        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan->levels[ level ] ).
         result = xsdbool( main_app_comp = curr_app_comp ).
       CATCH cx_sy_itab_line_not_found
             ycx_entry_not_found.
@@ -794,7 +610,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD condense_tokens.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type <> scan_token_type-comment
     AND type <> scan_token_type-pragma.
@@ -826,7 +642,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD handle_unit_test_statistics.
     DATA(code) = get_code( check_configuration-prio ).
 
-    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
+    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan = ref_scan
                                                                                scimessages = scimessages
                                                                                test = myname
                                                                                code = code
@@ -857,7 +673,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_tadir_keys.
-    DATA(level) = ref_scan_manager->levels[ statement-level ].
+    DATA(level) = ref_scan->levels[ statement-level ].
 
     CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
       EXPORTING

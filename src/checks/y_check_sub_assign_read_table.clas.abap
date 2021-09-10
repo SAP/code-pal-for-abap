@@ -46,7 +46,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
     DATA(position) = index.
 
-    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM index TO structure-stmnt_to.
 
       IF is_read_table( <statement> ) = abap_false.
@@ -81,7 +81,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
 
   METHOD extract_fieldname.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE str CP 'FIELD-SYMBOL(<*>)'.
       result = <token>-str.
@@ -93,7 +93,7 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
 
 
   METHOD has_subsequent_read.
-    DATA(tokens) = ref_scan_manager->tokens.
+    DATA(tokens) = ref_scan->tokens.
     LOOP AT tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF <token>-str <> 'INTO'.

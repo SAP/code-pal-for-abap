@@ -43,7 +43,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
           c_cyclo_comp = c_cyclo_comp + 1.
         ENDIF.
       WHEN 'DO'.
-        READ TABLE ref_scan_manager->tokens INDEX statement_wa-to INTO DATA(token).
+        READ TABLE ref_scan->tokens INDEX statement_wa-to INTO DATA(token).
         IF token-str = 'TIMES'.
           c_cyclo_comp = c_cyclo_comp + 1.
         ENDIF.

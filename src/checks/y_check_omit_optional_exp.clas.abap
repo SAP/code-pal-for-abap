@@ -40,7 +40,7 @@ CLASS y_check_omit_optional_exp IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD has_optional_exporting.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF <token>-str = 'EXPORTING'.
           result = abap_true.
