@@ -31,4 +31,9 @@ CLASS y_ref_scan_manager IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD y_if_scan_manager~get_ref_scan.
+    result = ref_scan.
+  ENDMETHOD.
+
+
 ENDCLASS.

@@ -47,10 +47,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
-    DATA is_testcode TYPE abap_bool.
     DATA ref_scan_manager TYPE REF TO y_if_scan_manager.
     DATA statistics TYPE REF TO y_if_scan_statistics.
-    DATA test_code_detector TYPE REF TO y_if_testcode_detector.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
     DATA attributes_maintained TYPE abap_bool.
 
@@ -127,23 +125,13 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS instantiate_objects.
 
-    METHODS is_skipped IMPORTING config        TYPE y_if_clean_code_manager=>check_configuration
-                                 error_count   TYPE int4
-                       RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_treshold_config_valid IMPORTING previous_threshold TYPE int4
-                                               config_threshold   TYPE int4
-                                     RETURNING VALUE(result)      TYPE abap_bool.
-
-    METHODS is_config_setup_valid IMPORTING previous_config TYPE y_if_clean_code_manager=>check_configuration
-                                            config          TYPE y_if_clean_code_manager=>check_configuration
-                                  RETURNING VALUE(result)   TYPE abap_bool.
-
-    METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
+    METHODS is_threshold_stricter IMPORTING previous TYPE int4
+                                            current TYPE int4
                                   RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS should_skip_type IMPORTING structure     TYPE sstruc
-                             RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_config_stricter IMPORTING previous TYPE y_if_clean_code_manager=>check_configuration
+                                         current TYPE y_if_clean_code_manager=>check_configuration
+                               RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_statement_type_relevant IMPORTING structure     TYPE sstruc
                                        RETURNING VALUE(result) TYPE abap_bool.
@@ -163,6 +151,12 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS handle_unit_test_statistics IMPORTING statement_index TYPE i
                                                   check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+
+    METHODS is_test_code IMPORTING statement TYPE sstmnt
+                         RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
+                           RETURNING VALUE(result) TYPE tadir.
 
 ENDCLASS.
 
@@ -212,33 +206,42 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
-    DATA tadir_keys TYPE tadir.
-
-    DATA(level) = ref_scan_manager->levels[ statement-level ].
-
-    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
-      EXPORTING
-        iv_trdir_name = level-name
-      IMPORTING
-        es_tadir_keys = tadir_keys.
+    DATA(tadir_keys) = get_tadir_keys( statement ).
 
     DATA(creation_date) = clean_code_manager->calculate_obj_creation_date( object_type = tadir_keys-object
                                                                            object_name = tadir_keys-obj_name  ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
     WHERE object_creation_date <= creation_date.
-
-      IF is_skipped( config      = <configuration>
-                     error_count = error_count ) = abap_true.
+      IF settings-is_threshold_reversed  = abap_true
+      AND <configuration>-threshold < error_count.
         CONTINUE.
       ENDIF.
 
-      IF result IS INITIAL
-         OR is_config_setup_valid( previous_config = result
-                                   config          = <configuration> ) = abap_true.
-        result = <configuration>.
+      IF settings-is_threshold_reversed = abap_false
+      AND <configuration>-threshold > error_count.
+        CONTINUE.
       ENDIF.
 
+      DATA(is_test_code) = is_test_code( statement ).
+
+      IF is_test_code = abap_true.
+        IF <configuration>-apply_on_testcode = abap_false.
+          CONTINUE.
+        ENDIF.
+      ELSE.
+        IF <configuration>-apply_on_productive_code = abap_false.
+          CONTINUE.
+        ENDIF.
+      ENDIF.
+
+      DATA(is_config_stricter) = is_config_stricter( previous = result
+                                                     current = <configuration> ).
+
+      IF is_config_stricter = abap_true.
+        no_aunit = xsdbool( <configuration>-apply_on_testcode = abap_false ).
+        result = <configuration>.
+      ENDIF.
     ENDLOOP.
 
     IF result IS INITIAL.
@@ -257,7 +260,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       CLEAR result.
       RETURN.
     ENDIF.
-
   ENDMETHOD.
 
 
@@ -279,12 +281,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD inspect_structures.
     LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF should_skip_type( <structure> ) = abap_true
-      OR should_skip_test_code( <structure> ) = abap_true.
-        CONTINUE.
+      IF is_statement_type_relevant( <structure> ) = abap_true
+      OR is_structure_type_relevant( <structure> ) = abap_true.
+        inspect_statements( <structure> ).
       ENDIF.
-
-      inspect_statements( <structure> ).
     ENDLOOP.
   ENDMETHOD.
 
@@ -613,6 +613,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         get( ).
       ENDIF.
     ENDIF.
+
+    ref_scan->determine_aunit_lines( ).
     ref_scan_manager->set_ref_scan( ref_scan ).
 
     IF clean_code_manager IS NOT BOUND.
@@ -622,12 +624,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     IF clean_code_exemption_handler IS NOT BOUND.
       clean_code_exemption_handler = NEW y_exemption_handler( ).
     ENDIF.
-
-    IF test_code_detector IS NOT BOUND.
-      test_code_detector = NEW y_test_code_detector( ).
-    ENDIF.
-    test_code_detector->clear( ).
-    test_code_detector->set_ref_scan_manager( ref_scan_manager ).
 
     IF lines( check_configurations ) = 1
     AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
@@ -755,45 +751,18 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_config_setup_valid.
-    result = xsdbool( ( previous_config-prio = config-prio
-                       AND is_treshold_config_valid( config_threshold = config-threshold
-                                                     previous_threshold = previous_config-threshold ) = abap_true )
-                     OR ( previous_config-prio <> c_error AND config-prio = c_error )
-                     OR ( previous_config-prio = c_note AND config-prio = c_warning )
-                     OR ( previous_config-ignore_pseudo_comments = abap_false
-                         AND config-ignore_pseudo_comments = abap_true ) ).
+  METHOD is_config_stricter.
+    result = xsdbool( ( previous IS INITIAL )
+                   OR ( previous-prio = current-prio AND is_threshold_stricter( current = current-threshold previous = previous-threshold ) = abap_true )
+                   OR ( previous-prio <> c_error AND current-prio = c_error )
+                   OR ( previous-prio = c_note AND current-prio = c_warning )
+                   OR ( previous-ignore_pseudo_comments = abap_false AND current-ignore_pseudo_comments = abap_true ) ).
   ENDMETHOD.
 
 
-  METHOD is_skipped.
-    result = xsdbool( ( config-threshold < error_count AND settings-is_threshold_reversed = abap_true )
-                     OR ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false )
-                     OR ( is_testcode = abap_true AND config-apply_on_testcode = abap_false )
-                     OR ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).
-  ENDMETHOD.
-
-
-  METHOD is_treshold_config_valid.
-    result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false )
-                     OR ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
-  ENDMETHOD.
-
-
-  METHOD should_skip_test_code.
-    " From Code Inspector (required)
-    is_testcode = test_code_detector->is_testcode( structure ).
-
-    DATA(has_customizing_for_prod_only) = xsdbool( NOT line_exists( check_configurations[ apply_on_testcode = abap_true ] ) ).
-
-    result = xsdbool(     has_customizing_for_prod_only = abap_true
-                      AND is_testcode = abap_true ).
-  ENDMETHOD.
-
-
-  METHOD should_skip_type.
-    result = xsdbool(     is_statement_type_relevant( structure ) = abap_false
-                      AND is_structure_type_relevant( structure ) = abap_false ).
+  METHOD is_threshold_stricter.
+    result = xsdbool( ( previous >= current AND settings-is_threshold_reversed = abap_false )
+                   OR ( previous < current AND settings-is_threshold_reversed = abap_true ) ).
   ENDMETHOD.
 
 
@@ -866,6 +835,35 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     statistics->collect( kind = check_configuration-prio
                          pc = pcom_detector ).
+  ENDMETHOD.
+
+
+  METHOD is_test_code.
+    " Copied from: CL_CI_TEST_SCAN->INFORM()
+    DATA: BEGIN OF aunit,
+            incl_name  TYPE program,
+            line_range TYPE RANGE OF i,
+          END OF aunit.
+
+    TRY.
+        DATA(include) = get_include( p_level = statement-level ).
+        aunit = ref_scan->aunit_tab[ incl_name = include ].
+        DATA(line) = get_line_abs( statement-from ).
+        result = xsdbool( line IN aunit-line_range ).
+      CATCH cx_sy_itab_line_not_found.
+        result = abap_false.
+    ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD get_tadir_keys.
+    DATA(level) = ref_scan_manager->levels[ statement-level ].
+
+    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
+      EXPORTING
+        iv_trdir_name = level-name
+      IMPORTING
+        es_tadir_keys = result.
   ENDMETHOD.
 
 ENDCLASS.

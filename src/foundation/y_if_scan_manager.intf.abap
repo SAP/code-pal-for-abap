@@ -8,5 +8,6 @@ INTERFACE y_if_scan_manager PUBLIC.
   METHODS is_scan_ok RETURNING VALUE(result) TYPE abap_bool.
 
   METHODS set_ref_scan IMPORTING io_ref_scan TYPE REF TO cl_ci_scan.
+  METHODS get_ref_scan RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
 ENDINTERFACE.

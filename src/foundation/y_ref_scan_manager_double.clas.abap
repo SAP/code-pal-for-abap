@@ -2,22 +2,19 @@ CLASS y_ref_scan_manager_double DEFINITION PUBLIC INHERITING FROM y_ref_scan_man
   PUBLIC SECTION.
     CONSTANTS unit_test_identifier TYPE trdir-name VALUE 'CODE_PAL_FOR_ABAP_UNIT_TEST' ##NO_TEXT.
 
-    METHODS y_if_scan_manager~set_ref_scan REDEFINITION.
-    METHODS inject_code IMPORTING source TYPE y_char255_tab.
+    CLASS-METHODS get IMPORTING source        TYPE y_char255_tab
+                      RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
   PROTECTED SECTION.
-    METHODS create_ref_scan IMPORTING include       TYPE REF TO cl_ci_source_include
-                            RETURNING VALUE(result) TYPE REF TO cl_ci_scan .
+    CLASS-METHODS create_ref_scan IMPORTING include       TYPE REF TO cl_ci_source_include
+                                  RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
-    METHODS syntax_check IMPORTING source TYPE y_char255_tab.
+    CLASS-METHODS syntax_check IMPORTING source TYPE y_char255_tab.
 
-    METHODS convert_code IMPORTING source        TYPE y_char255_tab
-                         RETURNING VALUE(result) TYPE sci_include.
+    CLASS-METHODS convert_code IMPORTING source        TYPE y_char255_tab
+                               RETURNING VALUE(result) TYPE sci_include.
 
-    METHODS create_trdir RETURNING VALUE(result) TYPE trdir.
-
-  PRIVATE SECTION.
-    DATA source_code TYPE sci_include.
+    CLASS-METHODS create_trdir RETURNING VALUE(result) TYPE trdir.
 
 ENDCLASS.
 
@@ -26,21 +23,17 @@ ENDCLASS.
 CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
 
 
-  METHOD y_if_scan_manager~set_ref_scan.
+  METHOD get.
     DATA(trdir) = create_trdir( ).
+
+    syntax_check( source ).
+    DATA(source_code) = convert_code( source ).
 
     DATA(include) = cl_ci_source_include=>feed( p_include = source_code
                                                 p_trdir = trdir ).
 
-    DATA(ref_scan) = create_ref_scan( include  ).
-
-    super->y_if_scan_manager~set_ref_scan( ref_scan ).
-  ENDMETHOD.
-
-
-  METHOD inject_code.
-    syntax_check( source ).
-    source_code = convert_code( source ).
+    result = create_ref_scan( include  ).
+    result->determine_aunit_lines( ).
   ENDMETHOD.
 
 
@@ -94,4 +87,6 @@ CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
   METHOD create_trdir.
     result = VALUE #( name = unit_test_identifier ).
   ENDMETHOD.
+
+
 ENDCLASS.

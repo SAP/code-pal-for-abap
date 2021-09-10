@@ -72,23 +72,25 @@ CLASS y_unit_test_base IMPLEMENTATION.
     cut->object_name = cl_abap_objectdescr=>describe_by_object_ref( cut )->get_relative_name( ).
     cut->object_type = 'CLAS'.
     cut->attributes_maintained = abap_true.
-    cut->ref_scan_manager ?= NEW y_ref_scan_manager_double(  ).
-    cut->ref_scan_manager->set_ref_scan( VALUE #(  ) ).
+    cut->ref_scan_manager = NEW y_ref_scan_manager( ).
     cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption(  ).
     cut->statistics = NEW y_scan_statistics( ).
   ENDMETHOD.
 
   METHOD given_code_without_issue.
-    CAST y_ref_scan_manager_double( cut->ref_scan_manager )->inject_code( get_code_without_issue(  ) ).
+    cut->ref_scan = y_ref_scan_manager_double=>get( get_code_without_issue(  ) ).
+    cut->ref_scan_manager->set_ref_scan( cut->ref_scan ).
   ENDMETHOD.
 
   METHOD given_code_with_exemption.
-    CAST y_ref_scan_manager_double( cut->ref_scan_manager )->inject_code( get_code_with_exemption(  ) ).
+    cut->ref_scan = y_ref_scan_manager_double=>get( get_code_with_exemption(  ) ).
+    cut->ref_scan_manager->set_ref_scan( cut->ref_scan ).
   ENDMETHOD.
 
   METHOD given_code_with_issue.
-    CAST y_ref_scan_manager_double( cut->ref_scan_manager )->inject_code( get_code_with_issue(  ) ).
+    cut->ref_scan = y_ref_scan_manager_double=>get( get_code_with_issue(  ) ).
+    cut->ref_scan_manager->set_ref_scan( cut->ref_scan ).
   ENDMETHOD.
 
   METHOD when_run.

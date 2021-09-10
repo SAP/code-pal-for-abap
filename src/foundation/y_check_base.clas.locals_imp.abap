@@ -17,25 +17,6 @@ CLASS ltd_clean_code_exemption IMPLEMENTATION.
 ENDCLASS.
 
 
-
-CLASS ltd_ref_scan_manager DEFINITION INHERITING FROM y_ref_scan_manager_double.
-  PUBLIC SECTION.
-    METHODS constructor.
-
-ENDCLASS.
-
-
-CLASS ltd_ref_scan_manager IMPLEMENTATION.
-
-  METHOD constructor.
-    super->constructor( ).
-    inject_code( VALUE #( ( 'REPORT y_example. ' ) ) ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-
-
 CLASS ltd_check_base DEFINITION INHERITING FROM y_check_base.
   PUBLIC SECTION.
     METHODS constructor.
@@ -51,10 +32,16 @@ CLASS ltd_check_base IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
-    ref_scan_manager = NEW ltd_ref_scan_manager( ).
-    ref_scan_manager->set_ref_scan( VALUE #( ) ).
+
+    ref_scan = y_ref_scan_manager_double=>get( VALUE #( ( 'REPORT y_example. ' ) ) ).
+    ref_scan->determine_aunit_lines( ).
+
+    ref_scan_manager = NEW y_ref_scan_manager( ).
+    ref_scan_manager->set_ref_scan( ref_scan ).
+
     clean_code_manager = NEW y_clean_code_manager_double( me ).
     clean_code_exemption_handler = NEW ltd_clean_code_exemption(  ).
+
   ENDMETHOD.
 
 
