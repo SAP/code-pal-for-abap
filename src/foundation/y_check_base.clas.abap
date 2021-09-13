@@ -142,11 +142,15 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_test_code IMPORTING statement TYPE sstmnt
                          RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS is_statement_in_aunit_tab IMPORTING statement TYPE sstmnt
+                                      RETURNING VALUE(result) TYPE abap_bool.
+
     METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
                            RETURNING VALUE(result) TYPE tadir.
 
-    METHODS get_class_include IMPORTING statement TYPE sstmnt
-                              RETURNING VALUE(result) TYPE program.
+    METHODS get_class_pool_statement IMPORTING statement TYPE sstmnt
+                                     RETURNING VALUE(result) TYPE sstmnt
+                                     RAISING cx_sy_itab_line_not_found.
 
 ENDCLASS.
 
@@ -656,13 +660,25 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD is_test_code.
-    " Copied from: CL_CI_TEST_SCAN->INFORM()
+     TRY.
+        result = xsdbool(    is_statement_in_aunit_tab( statement ) = abap_true
+                          OR is_statement_in_aunit_tab( get_class_pool_statement( statement ) ) = abap_true ).
+      CATCH cx_sy_itab_line_not_found.
+        result = abap_false.
+        RETURN.
+    ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD is_statement_in_aunit_tab.
+    " Based on: CL_CI_TEST_SCAN->INFORM()
     DATA: BEGIN OF aunit,
-            incl_name  TYPE program,
-            line_range TYPE RANGE OF i,
-          END OF aunit.
+        incl_name  TYPE program,
+        line_range TYPE RANGE OF i,
+      END OF aunit.
+
     TRY.
-        DATA(include) = get_class_include( statement ).
+        DATA(include) = get_include( p_level = statement-level ).
         aunit = ref_scan->aunit_tab[ incl_name = include ].
         DATA(line) = get_line_abs( statement-from ).
         result = xsdbool( line IN aunit-line_range ).
@@ -683,15 +699,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_class_include.
-    TRY.
-        DATA(class_pool_structure) = ref_scan->structures[ stmnt_type = scan_struc_stmnt_type-class_pool ].
-        DATA(class_pool_statement) = ref_scan->statements[ class_pool_structure-stmnt_from ].
-        result = get_include( p_level = class_pool_statement-level ).
-      CATCH cx_sy_itab_line_not_found.
-        result = get_include( p_level = statement-level ).
-        RETURN.
-    ENDTRY.
+  METHOD get_class_pool_statement.
+    DATA(class_pool_structure) = ref_scan->structures[ stmnt_type = scan_struc_stmnt_type-class_pool ].
+    result = ref_scan->statements[ class_pool_structure-stmnt_from ].
   ENDMETHOD.
 
 ENDCLASS.
