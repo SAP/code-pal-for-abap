@@ -145,6 +145,9 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
                            RETURNING VALUE(result) TYPE tadir.
 
+    METHODS get_class_include IMPORTING statement TYPE sstmnt
+                              RETURNING VALUE(result) TYPE program.
+
 ENDCLASS.
 
 
@@ -239,10 +242,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     IF is_app_comp_in_scope( statement-level ) = abap_false.
       CLEAR result.
       RETURN.
-    ENDIF.
-
-    IF no_aunit = abap_false.
-      ref_scan->determine_aunit_lines( ).
     ENDIF.
   ENDMETHOD.
 
@@ -445,6 +444,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD instantiate_objects.
     " Always load the ref_scan
     get( ).
+
+    ref_scan->determine_aunit_lines( ).
 
     IF clean_code_manager IS NOT BOUND.
       clean_code_manager = NEW y_clean_code_manager( ).
@@ -660,9 +661,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
             incl_name  TYPE program,
             line_range TYPE RANGE OF i,
           END OF aunit.
-
     TRY.
-        DATA(include) = get_include( p_level = statement-level ).
+        DATA(include) = get_class_include( statement ).
         aunit = ref_scan->aunit_tab[ incl_name = include ].
         DATA(line) = get_line_abs( statement-from ).
         result = xsdbool( line IN aunit-line_range ).
@@ -680,6 +680,18 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         iv_trdir_name = level-name
       IMPORTING
         es_tadir_keys = result.
+  ENDMETHOD.
+
+
+  METHOD get_class_include.
+    TRY.
+        DATA(class_pool_structure) = ref_scan->structures[ stmnt_type = scan_struc_stmnt_type-class_pool ].
+        DATA(class_pool_statement) = ref_scan->statements[ class_pool_structure-stmnt_from ].
+        result = get_include( p_level = class_pool_statement-level ).
+      CATCH cx_sy_itab_line_not_found.
+        result = get_include( p_level = statement-level ).
+        RETURN.
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.
