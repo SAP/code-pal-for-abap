@@ -654,7 +654,7 @@ CLASS ltc_test_code_negative DEFINITION FOR TESTING INHERITING FROM lth_test_cod
     METHODS program FOR TESTING.
   PRIVATE SECTION.
     METHODS setup.
-    METHODS cleanup.
+    METHODS teardown.
 
 ENDCLASS.
 
@@ -663,10 +663,6 @@ CLASS ltc_test_code_negative IMPLEMENTATION.
 
   METHOD setup.
     cut = NEW #( ).
-  ENDMETHOD.
-
-  METHOD cleanup.
-    CLEAR is_test_code.
   ENDMETHOD.
 
   METHOD global_class.
@@ -679,6 +675,10 @@ CLASS ltc_test_code_negative IMPLEMENTATION.
     given_program_without_test( ).
     when_scan_standard_statement( ).
     then_expect_false( ).
+  ENDMETHOD.
+
+  METHOD teardown.
+    CLEAR is_test_code.
   ENDMETHOD.
 
 ENDCLASS.
