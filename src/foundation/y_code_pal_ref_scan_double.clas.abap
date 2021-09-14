@@ -11,7 +11,7 @@ CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC. "#EC INTF_IN_CLASS
     CLASS-METHODS get_from_program IMPORTING name          TYPE trdir-name
                                    RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
-    CLASS-METHODS get_from_fuction_module IMPORTING name          TYPE trdir-name
+    CLASS-METHODS get_from_fuction_group IMPORTING name          TYPE trdir-name
                                           RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
   PROTECTED SECTION.
@@ -61,9 +61,8 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_from_fuction_module.
-    DATA(include) = get_include_from_trdir( |SAPL{ name }| ).
-    result = create_ref_scan( include ).
+  METHOD get_from_fuction_group.
+    result = get_from_program( name ).
   ENDMETHOD.
 
 
