@@ -5,6 +5,15 @@ CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC. "#EC INTF_IN_CLASS
     CLASS-METHODS get IMPORTING source        TYPE y_char255_tab
                       RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
+    CLASS-METHODS get_from_global_class IMPORTING name          TYPE trdir-name
+                                        RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
+
+    CLASS-METHODS get_from_program IMPORTING name          TYPE trdir-name
+                                   RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
+
+    CLASS-METHODS get_from_fuction_module IMPORTING name          TYPE trdir-name
+                                          RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
+
   PROTECTED SECTION.
     CLASS-METHODS create_ref_scan IMPORTING include       TYPE REF TO cl_ci_source_include
                                   RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
@@ -14,7 +23,10 @@ CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC. "#EC INTF_IN_CLASS
     CLASS-METHODS convert_code IMPORTING source        TYPE y_char255_tab
                                RETURNING VALUE(result) TYPE sci_include.
 
-    CLASS-METHODS create_trdir RETURNING VALUE(result) TYPE trdir.
+    CLASS-METHODS create_fake_trdir RETURNING VALUE(result) TYPE trdir.
+
+    CLASS-METHODS get_include_from_trdir IMPORTING name          TYPE trdir-name
+                                         RETURNING VALUE(result) TYPE REF TO cl_ci_source_include.
 
 ENDCLASS.
 
@@ -24,16 +36,34 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
 
 
   METHOD get.
-    DATA(trdir) = create_trdir( ).
+    DATA(trdir) = create_fake_trdir( ).
 
     syntax_check( source ).
+
     DATA(source_code) = convert_code( source ).
 
     DATA(include) = cl_ci_source_include=>feed( p_include = source_code
                                                 p_trdir = trdir ).
 
-    result = create_ref_scan( include  ).
-    result->determine_aunit_lines( ).
+    result = create_ref_scan( include ).
+  ENDMETHOD.
+
+
+  METHOD get_from_global_class.
+    DATA(include) = get_include_from_trdir( |{ name }%=CP| ).
+    result = create_ref_scan( include ).
+  ENDMETHOD.
+
+
+  METHOD get_from_program.
+    DATA(include) = get_include_from_trdir( name ).
+    result = create_ref_scan( include ).
+  ENDMETHOD.
+
+
+  METHOD get_from_fuction_module.
+    DATA(include) = get_include_from_trdir( |SAPL{ name }| ).
+    result = create_ref_scan( include ).
   ENDMETHOD.
 
 
@@ -51,7 +81,6 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
 
     cl_abap_unit_assert=>fail( msg = 'Syntax Error'
                                detail = | Message:{ message }, Line:{ line }, Word:{ word } | ).
-
   ENDMETHOD.
 
 
@@ -71,7 +100,7 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
                                                   value = REF #( abap_true ) )
                                                 ( name  = 'P_NOAUNIT'
                                                   kind  = cl_abap_objectdescr=>exporting
-                                                  value = REF #( abap_true ) ) ).
+                                                  value = REF #( abap_false ) ) ).
 
     CATCH SYSTEM-EXCEPTIONS dyn_call_meth_param_not_found = 1.
       CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
@@ -81,12 +110,23 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
       DELETE parameters WHERE name = 'P_NO_CLASSIFICATION'.
       CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
     ENDIF.
+
+    result->determine_aunit_lines( ).
   ENDMETHOD.
 
 
-  METHOD create_trdir.
+  METHOD create_fake_trdir.
     result = VALUE #( name = unit_test_identifier ).
   ENDMETHOD.
 
+
+  METHOD get_include_from_trdir.
+    SELECT SINGLE *
+    FROM trdir
+    INTO @DATA(trdir)
+    WHERE name LIKE @name.
+
+    result = cl_ci_source_include=>create( p_trdir = trdir ).
+  ENDMETHOD.
 
 ENDCLASS.

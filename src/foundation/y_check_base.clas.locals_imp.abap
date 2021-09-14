@@ -21,14 +21,20 @@ CLASS ltd_check_base DEFINITION INHERITING FROM y_check_base.
   PUBLIC SECTION.
     METHODS constructor.
 
+    METHODS get_ref_scan RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
+    METHODS set_ref_scan IMPORTING ref_scan TYPE REF TO cl_ci_scan.
+
+    METHODS get_is_test_code IMPORTING statement TYPE sstmnt
+                             RETURNING VALUE(result) TYPE abap_bool.
+
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+
 
 ENDCLASS.
 
 
 CLASS ltd_check_base IMPLEMENTATION.
-
 
   METHOD constructor.
     super->constructor( ).
@@ -39,10 +45,20 @@ CLASS ltd_check_base IMPLEMENTATION.
     clean_code_exemption_handler = NEW ltd_clean_code_exemption(  ).
   ENDMETHOD.
 
+  METHOD get_ref_scan.
+    result = ref_scan.
+  ENDMETHOD.
+
+  METHOD set_ref_scan.
+    me->ref_scan = ref_scan.
+  ENDMETHOD.
+
+  METHOD get_is_test_code.
+    result = is_test_code( statement ).
+  ENDMETHOD.
 
   METHOD inspect_tokens.
     RETURN.
   ENDMETHOD.
-
 
 ENDCLASS.

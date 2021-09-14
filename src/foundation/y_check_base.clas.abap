@@ -102,10 +102,13 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   check_configuration    TYPE y_if_clean_code_manager=>check_configuration. "#EC OPTL_PARAM
 
     METHODS set_check_message IMPORTING message TYPE itex132.
-    METHODS get_class_description  RETURNING VALUE(result) TYPE string.
+    METHODS get_class_description RETURNING VALUE(result) TYPE string.
 
     METHODS condense_tokens IMPORTING statement TYPE sstmnt
                             RETURNING VALUE(result) TYPE string.
+
+    METHODS is_test_code IMPORTING statement TYPE sstmnt
+                         RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
@@ -138,9 +141,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS handle_unit_test_statistics IMPORTING statement_index TYPE i
                                                   check_configuration TYPE y_if_clean_code_manager=>check_configuration.
-
-    METHODS is_test_code IMPORTING statement TYPE sstmnt
-                         RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_statement_in_aunit_tab IMPORTING statement TYPE sstmnt
                                       RETURNING VALUE(result) TYPE abap_bool
