@@ -619,7 +619,7 @@ CLASS ltc_test_code_positive DEFINITION FOR TESTING INHERITING FROM lth_test_cod
     METHODS local_test_class FOR TESTING.
   PRIVATE SECTION.
     METHODS setup.
-    METHODS cleanup.
+    METHODS teardown.
 ENDCLASS.
 
 
@@ -627,10 +627,6 @@ CLASS ltc_test_code_positive IMPLEMENTATION.
 
   METHOD setup.
     cut = NEW #( ).
-  ENDMETHOD.
-
-  METHOD cleanup.
-    CLEAR is_test_code.
   ENDMETHOD.
 
   METHOD global_test_class.
@@ -643,6 +639,10 @@ CLASS ltc_test_code_positive IMPLEMENTATION.
     given_local_test_class( ).
     when_scan_local_test_class( ).
     then_expect_true( ).
+  ENDMETHOD.
+
+  METHOD teardown.
+    CLEAR is_test_code.
   ENDMETHOD.
 
 ENDCLASS.

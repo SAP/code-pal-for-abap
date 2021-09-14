@@ -209,14 +209,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
       DATA(is_test_code) = is_test_code( statement ).
 
-      IF is_test_code = abap_true.
-        IF <configuration>-apply_on_testcode = abap_false.
-          CONTINUE.
-        ENDIF.
-      ELSE.
-        IF <configuration>-apply_on_productive_code = abap_false.
-          CONTINUE.
-        ENDIF.
+      IF is_test_code = abap_true
+      AND <configuration>-apply_on_testcode = abap_false.
+        CONTINUE.
+      ELSEIF is_test_code = abap_false
+      AND <configuration>-apply_on_productive_code = abap_false.
+        CONTINUE.
       ENDIF.
 
       DATA(is_config_stricter) = is_config_stricter( previous = result
@@ -657,7 +655,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD is_test_code.
-     TRY.
+    TRY.
         result = is_statement_in_aunit_tab( statement ).
       CATCH cx_sy_itab_line_not_found.
         result = abap_false.
