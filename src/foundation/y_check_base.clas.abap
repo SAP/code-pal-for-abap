@@ -143,14 +143,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                          RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_statement_in_aunit_tab IMPORTING statement TYPE sstmnt
-                                      RETURNING VALUE(result) TYPE abap_bool.
+                                      RETURNING VALUE(result) TYPE abap_bool
+                                     RAISING cx_sy_itab_line_not_found.
 
     METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
                            RETURNING VALUE(result) TYPE tadir.
-
-    METHODS get_class_pool_statement IMPORTING statement TYPE sstmnt
-                                     RETURNING VALUE(result) TYPE sstmnt
-                                     RAISING cx_sy_itab_line_not_found.
 
 ENDCLASS.
 
@@ -661,11 +658,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD is_test_code.
      TRY.
-        result = xsdbool(    is_statement_in_aunit_tab( statement ) = abap_true
-                          OR is_statement_in_aunit_tab( get_class_pool_statement( statement ) ) = abap_true ).
+        result = is_statement_in_aunit_tab( statement ).
       CATCH cx_sy_itab_line_not_found.
         result = abap_false.
-        RETURN.
     ENDTRY.
   ENDMETHOD.
 
@@ -677,14 +672,18 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         line_range TYPE RANGE OF i,
       END OF aunit.
 
+    DATA(include) = get_include( p_level = statement-level ).
+
     TRY.
-        DATA(include) = get_include( p_level = statement-level ).
+        " Local Test Class
         aunit = ref_scan->aunit_tab[ incl_name = include ].
-        DATA(line) = get_line_abs( statement-from ).
-        result = xsdbool( line IN aunit-line_range ).
       CATCH cx_sy_itab_line_not_found.
-        result = abap_false.
+        " Global Test Class
+        aunit = ref_scan->aunit_tab[ incl_name = program_name ].
     ENDTRY.
+
+    DATA(line) = get_line_abs( statement-from ).
+    result = xsdbool( line IN aunit-line_range ).
   ENDMETHOD.
 
 
@@ -698,10 +697,5 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         es_tadir_keys = result.
   ENDMETHOD.
 
-
-  METHOD get_class_pool_statement.
-    DATA(class_pool_structure) = ref_scan->structures[ stmnt_type = scan_struc_stmnt_type-class_pool ].
-    result = ref_scan->statements[ class_pool_structure-stmnt_from ].
-  ENDMETHOD.
 
 ENDCLASS.
