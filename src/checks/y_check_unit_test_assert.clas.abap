@@ -114,9 +114,9 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      IF token-str CP '*(*'.
+      IF token-str CP '*( *'.
         depth = depth + 1.
-      ELSEIF token-str CP '*)*'.
+      ELSEIF token-str CP '* )*'.
         depth = depth - 1.
       ENDIF.
 
@@ -149,8 +149,8 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
 
   METHOD contains_functional_operand.
-    result = xsdbool( matches( val = expression
-                               regex = `[a-z_][a-z0-9_]*\(` ) ).
+    FIND REGEX `[A-Z_][A-Z0-9_]*\(` IN expression.
+    result = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
 
 ENDCLASS.
