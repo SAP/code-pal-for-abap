@@ -95,15 +95,11 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
     DATA(check_configuration) = detect_check_configuration( error_count = public_method_counter
                                                             statement = statement_for_message ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement_for_message-level
-                 statement_index     = structure-stmnt_from
-                 statement_from      = statement_for_message-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ public_method_counter }| ).
+    raise_error( statement_level = statement_for_message-level
+                 statement_index = structure-stmnt_from
+                 statement_from = statement_for_message-from
+                 check_configuration = check_configuration
+                 parameter_01 = |{ public_method_counter }| ).
   ENDMETHOD.
 
 

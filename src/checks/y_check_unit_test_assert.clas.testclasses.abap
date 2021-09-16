@@ -590,6 +590,36 @@ CLASS ltc_assert_empty IMPLEMENTATION.
 ENDCLASS.
 
 
+
+CLASS ltc_internal_table DEFINITION INHERITING FROM ltc_hardcoded_string FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_internal_table IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example FOR TESTING. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD example. ' )
+      ( '     DATA itab TYPE TABLE OF tadir. ' )
+      ( '     cl_abap_unit_assert=>assert_equals( exp = itab[ 5 ]-devclass act = itab[ 6 ]-devclass ). ' )
+      ( '     cl_abap_unit_assert=>assert_equals( exp = itab[ 7 ]-devclass act = itab[ 8 ]-devclass ). ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
 CLASS ltc_functional_operand DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.

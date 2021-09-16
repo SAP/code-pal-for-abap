@@ -129,6 +129,7 @@ CLASS local_test_class IMPLEMENTATION.
     cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption_no( ).
     cut->attributes_maintained = abap_true.
+    cut->statistics = NEW y_scan_statistics( ).
   ENDMETHOD.
 
   METHOD is_bound.

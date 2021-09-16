@@ -64,17 +64,12 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
       LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
       FROM <statement>-from TO <statement>-to
       WHERE str = variable.
-
         DATA(check_configuration) = detect_check_configuration( <statement> ).
 
-        IF check_configuration IS INITIAL.
-          RETURN.
-        ENDIF.
-
-        raise_error( statement_level     = <statement>-level
-                     statement_index     = statement_index
-                     statement_from      = <statement>-from
-                     error_priority      = check_configuration-prio ).
+        raise_error( statement_level = <statement>-level
+                     statement_index = statement_index
+                     statement_from = <statement>-from
+                     check_configuration = check_configuration ).
       ENDLOOP.
 
     ENDLOOP.

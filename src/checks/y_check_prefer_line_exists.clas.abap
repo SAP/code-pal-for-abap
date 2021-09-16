@@ -42,16 +42,12 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(configuration) = detect_check_configuration( statement ).
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = configuration-prio ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 

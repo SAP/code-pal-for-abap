@@ -40,14 +40,10 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
 
     DATA(configuration) = detect_check_configuration( statement ).
 
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = configuration-prio ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = configuration ).
 
   ENDMETHOD.
 

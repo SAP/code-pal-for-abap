@@ -28,16 +28,15 @@ CLASS y_check_prefer_new_to_crt_obj IMPLEMENTATION.
     CHECK get_token_abs( statement-from ) = 'CREATE'
     AND get_token_abs( statement-from + 1 ) = 'OBJECT'.
 
-    DATA(check_configuration) = detect_check_configuration( statement ).
+    CHECK get_token_abs( statement-to ) <> 'TESTING'
+    AND get_token_abs( statement-to - 1 ) <> 'FOR'.
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = check_configuration-prio ).
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 
