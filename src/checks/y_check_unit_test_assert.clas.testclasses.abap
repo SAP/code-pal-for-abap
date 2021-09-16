@@ -642,7 +642,7 @@ CLASS ltc_functional_operand IMPLEMENTATION.
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS test FOR TESTING. ' )
       ( '   PRIVATE SECTION.' )
-      ( '     METHODS get_val RETURNING VALUE(result) type string' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string.' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
@@ -667,7 +667,7 @@ CLASS ltc_functional_operand IMPLEMENTATION.
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS test FOR TESTING. ' )
       ( '   PRIVATE SECTION.' )
-      ( '     METHODS get_val RETURNING VALUE(result) type string' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string.' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
@@ -692,7 +692,7 @@ CLASS ltc_functional_operand IMPLEMENTATION.
       ( '   PUBLIC SECTION. ' )
       ( '     METHODS test FOR TESTING. ' )
       ( '   PRIVATE SECTION.' )
-      ( '     METHODS get_val RETURNING VALUE(result) type string' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string.' )
       ( ' ENDCLASS. ' )
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
