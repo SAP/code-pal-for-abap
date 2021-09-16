@@ -147,7 +147,6 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
   ENDMETHOD.
 
 
-
   METHOD contains_functional_operand.
     FIND REGEX `[A-Z_][A-Z0-9_]*\(` IN expression.
     result = xsdbool( sy-subrc = 0 ).
