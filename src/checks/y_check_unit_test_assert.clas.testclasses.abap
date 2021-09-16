@@ -588,3 +588,104 @@ CLASS ltc_assert_empty IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+CLASS ltc_functional_operand DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    methods get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_functional_operand IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_unit_test_assert( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test FOR TESTING. ' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '     " given ' )
+      ( '     DATA(first) = 10. ' )
+      ( '     DATA(second) = 10. ' )
+      ( '     " when ' )
+      ( '     DATA(sum) = first + second. ' )
+      ( '     " then ' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && second+2(1)' )
+      ( '                                         exp = first && second+2(1) ).' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD get_val.' )
+      ( '     result = `Foo`.' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test FOR TESTING. ' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '     " given ' )
+      ( '     DATA(first) = 10. ' )
+      ( '     DATA(second) = 10. ' )
+      ( '     " when ' )
+      ( '     DATA(sum) = first + second. ' )
+      ( '     " then ' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && get_val( ) && second+2(1)' )
+      ( '                                         exp = first && get_val( ) && second+2(1) ).' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD get_val.' )
+      ( '     result = `Foo`.' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test FOR TESTING. ' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '     " given ' )
+      ( '     DATA(first) = 10. ' )
+      ( '     DATA(second) = 10. ' )
+      ( '     " when ' )
+      ( '     DATA(sum) = first + second. ' )
+      ( '     " then ' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && second+2(1)' )
+      ( '                                         exp = first && second+2(1) ). "#EC UT_ASSERT' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD get_val.' )
+      ( '     result = `Foo`.' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
