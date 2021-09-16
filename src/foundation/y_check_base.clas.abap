@@ -96,9 +96,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   parameter_02           TYPE csequence OPTIONAL
                                   parameter_03           TYPE csequence OPTIONAL
                                   parameter_04           TYPE csequence OPTIONAL
-                                  is_include_specific    TYPE sci_inclspec DEFAULT ' '
                                   additional_information TYPE xstring OPTIONAL
-                                  checksum               TYPE int4 OPTIONAL
                                   check_configuration    TYPE y_if_clean_code_manager=>check_configuration. "#EC OPTL_PARAM
 
     METHODS set_check_message IMPORTING message TYPE itex132.
@@ -504,9 +502,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
               p_param_2 = parameter_02
               p_param_3 = parameter_03
               p_param_4 = parameter_04
-              p_inclspec = is_include_specific
-              p_detail = additional_information
-              p_checksum_1 = checksum ).
+              p_detail = additional_information ).
     ENDIF.
   ENDMETHOD.
 
@@ -626,7 +622,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     WHERE test = myname
     AND code = code.
       IF check_configuration-ignore_pseudo_comments = abap_true.
-        <message>-pcom = c_exceptn_by_table_entry.
+        CLEAR <message>-pcom.
       ELSE.
         <message>-pcom = settings-pseudo_comment+5.
       ENDIF.
