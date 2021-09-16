@@ -99,7 +99,7 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
                                                   value = REF #( abap_true ) )
                                                 ( name  = 'P_NOAUNIT'
                                                   kind  = cl_abap_objectdescr=>exporting
-                                                  value = REF #( abap_false ) ) ).
+                                                  value = REF #( abap_true ) ) ).
 
     CATCH SYSTEM-EXCEPTIONS dyn_call_meth_param_not_found = 1.
       CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
@@ -109,8 +109,6 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
       DELETE parameters WHERE name = 'P_NO_CLASSIFICATION'.
       CREATE OBJECT result TYPE (class_type) PARAMETER-TABLE parameters.
     ENDIF.
-
-    result->determine_aunit_lines( ).
   ENDMETHOD.
 
 
