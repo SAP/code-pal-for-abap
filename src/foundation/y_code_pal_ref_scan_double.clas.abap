@@ -1,6 +1,5 @@
 CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC.  "#EC INTF_IN_CLASS
   PUBLIC SECTION.
-    
 
     CLASS-METHODS get IMPORTING source        TYPE y_char255_tab
                       RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
