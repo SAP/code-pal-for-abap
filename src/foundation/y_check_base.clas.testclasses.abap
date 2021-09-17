@@ -558,8 +558,9 @@ CLASS lth_test_code DEFINITION.
     METHODS given_local_test_class.
     METHODS given_class_without_test.
     METHODS given_program_without_test.
-    METHODS when_scan_standard_statement.
+    METHODS when_scan_class_definition.
     METHODS when_scan_local_test_class.
+    METHODS when_scan_form.
     METHODS then_expect_true.
     METHODS then_expect_false.
 
@@ -583,10 +584,18 @@ CLASS lth_test_code IMPLEMENTATION.
     cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_program( 'Y_DEMO_FAILURES' ) ).
   ENDMETHOD.
 
-  METHOD when_scan_standard_statement.
+  METHOD when_scan_class_definition.
     DATA(ref_scan) = cut->get_ref_scan( ).
-    DATA(standard_statement) = ref_scan->statements[ type = scan_stmnt_type-standard ].
-    is_test_code = cut->get_is_test_code( standard_statement ).
+    DATA(structure) = ref_scan->structures[ stmnt_type = scan_struc_stmnt_type-class_definition ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
+    is_test_code = cut->get_is_test_code( statement ).
+  ENDMETHOD.
+
+  METHOD when_scan_form.
+    DATA(ref_scan) = cut->get_ref_scan( ).
+    DATA(structure) = ref_scan->structures[ stmnt_type = scan_struc_stmnt_type-form ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
+    is_test_code = cut->get_is_test_code( statement ).
   ENDMETHOD.
 
   METHOD when_scan_local_test_class.
@@ -631,7 +640,7 @@ CLASS ltc_test_code_positive IMPLEMENTATION.
 
   METHOD global_test_class.
     given_global_test_class( ).
-    when_scan_standard_statement( ).
+    when_scan_class_definition( ).
     then_expect_true( ).
   ENDMETHOD.
 
@@ -667,13 +676,13 @@ CLASS ltc_test_code_negative IMPLEMENTATION.
 
   METHOD global_class.
     given_class_without_test( ).
-    when_scan_standard_statement( ).
+    when_scan_class_definition( ).
     then_expect_false( ).
   ENDMETHOD.
 
   METHOD program.
     given_program_without_test( ).
-    when_scan_standard_statement( ).
+    when_scan_form( ).
     then_expect_false( ).
   ENDMETHOD.
 
