@@ -491,50 +491,6 @@ ENDCLASS.
 
 
 
-CLASS ltc_call_static DEFINITION INHERITING FROM ltc_hardcoded_string FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_code_with_issue REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_call_static IMPLEMENTATION.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT y_example. ' )
-
-      ( ' CLASS y_fake DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     CLASS-METHODS get_fullname IMPORTING name TYPE string ' )
-      ( '                                          surname TYPE string ' )
-      ( '                                RETURNING VALUE(result) TYPE string. ' )
-      ( ' ENDCLASS. ' )
-
-      ( ' CLASS y_fake IMPLEMENTATION. ' )
-      ( '   METHOD get_fullname. ' )
-      ( '     result = |{ name } { surname }|. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-
-
-      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS. ' )
-
-      ( ' CLASS y_example IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( |     cl_aunit_assert=>assert_equals( act = y_fake=>get_fullname( name = 'code pal' surname = 'for ABAP' ) | )
-      ( |                                     exp = y_fake=>get_fullname( name = 'code pal' | )
-      ( |                                                                 surname = 'for ABAP' ) ). | )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-
-
 CLASS ltc_assert_fail DEFINITION INHERITING FROM ltc_hardcoded_string FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
@@ -612,6 +568,104 @@ CLASS ltc_internal_table IMPLEMENTATION.
       ( '     DATA itab TYPE TABLE OF tadir. ' )
       ( '     cl_abap_unit_assert=>assert_equals( exp = itab[ 5 ]-devclass act = itab[ 6 ]-devclass ). ' )
       ( '     cl_abap_unit_assert=>assert_equals( exp = itab[ 7 ]-devclass act = itab[ 8 ]-devclass ). ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_functional_operand DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    methods get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_functional_operand IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_unit_test_assert( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test FOR TESTING. ' )
+      ( '   PRIVATE SECTION.' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string.' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '     DATA(first) = `abc`.' )
+      ( '     DATA(second) = `def`.' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && second+2(1)' )
+      ( '                                         exp = first && second+2(1) ).' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD get_val.' )
+      ( '     result = `Foo`.' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test FOR TESTING. ' )
+      ( '   PRIVATE SECTION.' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string.' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '     DATA(first) = `abc`.' )
+      ( '     DATA(second) = `def`.' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && get_val( ) && second+2(1)' )
+      ( '                                         exp = first && get_val( ) && second+2(1) ).' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && get_val( ) && second+2(1)' )
+      ( '                                         exp = first && second+2(1) ).' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && second+2(1)' )
+      ( '                                         exp = first && get_val( ) && second+2(1) ).' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = get_val( )' )
+      ( '                                         exp = get_val( ) ).' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD get_val.' )
+      ( '     result = `Foo`.' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS test FOR TESTING. ' )
+      ( '   PRIVATE SECTION.' )
+      ( '     METHODS get_val RETURNING VALUE(result) type string.' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD test. ' )
+      ( '     DATA(first) = `abc`.' )
+      ( '     DATA(second) = `def`.' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && second+2(1)' )
+      ( '                                         exp = first && second+2(1) ). "#EC UT_ASSERT' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD get_val.' )
+      ( '     result = `Foo`.' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
     ).

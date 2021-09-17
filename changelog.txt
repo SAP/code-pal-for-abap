@@ -21,6 +21,7 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 + Prefer Pragmas to Pseudo Comments (#421)
 + COLLECT restriction (#441)
 * RAP needs CREATE OBJECT ... FOR TESTING (#444)
+* Filter functional operands in "Unit Test Assert" check (#460)
 
 2021-08-12 v.1.15.0
 ------------------

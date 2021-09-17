@@ -6,13 +6,16 @@ CLASS y_check_unit_test_assert DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS get_parameter_reference IMPORTING statement TYPE sstmnt
-                                              parameter TYPE string
+    METHODS get_parameter_reference IMPORTING statement     TYPE sstmnt
+                                              parameter     TYPE string
                                     RETURNING VALUE(result) TYPE string
-                                    RAISING cx_sy_itab_line_not_found.
+                                    RAISING   cx_sy_itab_line_not_found.
 
-    METHODS is_variable IMPORTING token TYPE stokesx
+    METHODS is_variable IMPORTING token         TYPE stokesx
                         RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS contains_functional_operand IMPORTING expression    TYPE string
+                                        RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_internal_table IMPORTING position TYPE i
                               RETURNING VALUE(result) TYPE abap_bool.
@@ -64,7 +67,7 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF act <> exp.
+    IF act <> exp OR contains_functional_operand( act ).
       RETURN.
     ENDIF.
 
@@ -110,9 +113,9 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      IF token-str CP '*(*'.
+      IF token-str CP '*( *'.
         depth = depth + 1.
-      ELSEIF token-str CP '*)*'.
+      ELSEIF token-str CP '* )*'.
         depth = depth - 1.
       ENDIF.
 
@@ -141,6 +144,12 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
   METHOD is_variable.
     CHECK token-type = scan_token_type-identifier.
     result = xsdbool( token-str CN '0123456789' ).
+  ENDMETHOD.
+
+
+  METHOD contains_functional_operand.
+    FIND REGEX `[A-Z_][A-Z0-9_]*\(` IN expression.
+    result = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
 
 
