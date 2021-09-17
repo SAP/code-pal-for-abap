@@ -1,4 +1,4 @@
-CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC. "#EC INTF_IN_CLASS
+CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC.  "#EC INTF_IN_CLASS
   PUBLIC SECTION.
     CONSTANTS unit_test_identifier TYPE trdir-name VALUE 'CODE_PAL_FOR_ABAP_UNIT_TEST' ##NO_TEXT.
 
@@ -12,7 +12,7 @@ CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC. "#EC INTF_IN_CLASS
                                    RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
     CLASS-METHODS get_from_fuction_group IMPORTING name          TYPE trdir-name
-                                          RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
+                                         RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
   PROTECTED SECTION.
     CLASS-METHODS create_ref_scan IMPORTING include       TYPE REF TO cl_ci_source_include
@@ -23,27 +23,19 @@ CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC. "#EC INTF_IN_CLASS
     CLASS-METHODS convert_code IMPORTING source        TYPE y_char255_tab
                                RETURNING VALUE(result) TYPE sci_include.
 
-    CLASS-METHODS create_fake_trdir RETURNING VALUE(result) TYPE trdir.
-
-    CLASS-METHODS get_include_from_trdir IMPORTING name          TYPE trdir-name
+    CLASS-METHODS get_include_from_trdir IMPORTING pattern       TYPE trdir-name
                                          RETURNING VALUE(result) TYPE REF TO cl_ci_source_include.
 
 ENDCLASS.
 
 
 
-CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
+CLASS y_code_pal_ref_scan_double IMPLEMENTATION.
 
 
   METHOD get.
-    DATA(trdir) = create_fake_trdir( ).
-
-    syntax_check( source ).
-
-    DATA(source_code) = convert_code( source ).
-
-    DATA(include) = cl_ci_source_include=>feed( p_include = source_code
-                                                p_trdir = trdir ).
+    DATA(include) = cl_ci_source_include=>feed( p_include = convert_code( source )
+                                                p_trdir = fake_tadir=>get( ) ).
 
     result = create_ref_scan( include ).
   ENDMETHOD.
@@ -84,6 +76,7 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
 
 
   METHOD convert_code.
+    syntax_check( source ).
     MOVE-CORRESPONDING source TO result.
   ENDMETHOD.
 
@@ -112,18 +105,20 @@ CLASS Y_CODE_PAL_REF_SCAN_DOUBLE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD create_fake_trdir.
-    result = VALUE #( name = unit_test_identifier ).
-  ENDMETHOD.
-
-
   METHOD get_include_from_trdir.
-    SELECT SINGLE *
-    FROM trdir
-    INTO @DATA(trdir)
-    WHERE name LIKE @name.
+    DATA name TYPE trdir-name.
 
-    result = cl_ci_source_include=>create( p_trdir = trdir ).
+    IF pattern CS '%'.
+      SELECT SINGLE name
+      FROM trdir
+      INTO @name
+      WHERE name LIKE @pattern.
+    ELSE.
+      name = pattern.
+    ENDIF.
+
+    result = cl_ci_source_include=>create( p_name = name ).
   ENDMETHOD.
+
 
 ENDCLASS.
