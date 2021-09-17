@@ -491,50 +491,6 @@ ENDCLASS.
 
 
 
-CLASS ltc_call_static DEFINITION INHERITING FROM ltc_hardcoded_string FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_code_with_issue REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_call_static IMPLEMENTATION.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( ' REPORT y_example. ' )
-
-      ( ' CLASS y_fake DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     CLASS-METHODS get_fullname IMPORTING name TYPE string ' )
-      ( '                                          surname TYPE string ' )
-      ( '                                RETURNING VALUE(result) TYPE string. ' )
-      ( ' ENDCLASS. ' )
-
-      ( ' CLASS y_fake IMPLEMENTATION. ' )
-      ( '   METHOD get_fullname. ' )
-      ( '     result = |{ name } { surname }|. ' )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-
-
-      ( ' CLASS y_example DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example FOR TESTING. ' )
-      ( ' ENDCLASS. ' )
-
-      ( ' CLASS y_example IMPLEMENTATION. ' )
-      ( '   METHOD example. ' )
-      ( |     cl_aunit_assert=>assert_equals( act = y_fake=>get_fullname( name = 'code pal' surname = 'for ABAP' ) | )
-      ( |                                     exp = y_fake=>get_fullname( name = 'code pal' | )
-      ( |                                                                 surname = 'for ABAP' ) ). | )
-      ( '   ENDMETHOD. ' )
-      ( ' ENDCLASS. ' )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-
-
 CLASS ltc_assert_fail DEFINITION INHERITING FROM ltc_hardcoded_string FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
@@ -676,6 +632,12 @@ CLASS ltc_functional_operand IMPLEMENTATION.
       ( '     DATA(second) = `def`.' )
       ( '     cl_abap_unit_assert=>assert_equals( act = first && get_val( ) && second+2(1)' )
       ( '                                         exp = first && get_val( ) && second+2(1) ).' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && get_val( ) && second+2(1)' )
+      ( '                                         exp = first && second+2(1) ).' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = first && second+2(1)' )
+      ( '                                         exp = first && get_val( ) && second+2(1) ).' )
+      ( '     cl_abap_unit_assert=>assert_equals( act = get_val( )' )
+      ( '                                         exp = get_val( ) ).' )
       ( '   ENDMETHOD. ' )
       ( '   METHOD get_val.' )
       ( '     result = `Foo`.' )
