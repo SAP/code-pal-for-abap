@@ -1,6 +1,6 @@
 CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC.  "#EC INTF_IN_CLASS
   PUBLIC SECTION.
-    CONSTANTS unit_test_identifier TYPE trdir-name VALUE 'CODE_PAL_FOR_ABAP_UNIT_TEST' ##NO_TEXT.
+    
 
     CLASS-METHODS get IMPORTING source        TYPE y_char255_tab
                       RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
