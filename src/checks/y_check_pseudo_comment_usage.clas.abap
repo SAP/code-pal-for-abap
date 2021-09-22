@@ -8,7 +8,6 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
 
   PRIVATE SECTION.
     CLASS-DATA pseudo_comments LIKE TABLE OF settings-pseudo_comment.
-
     DATA pseudo_comment_counter TYPE i.
 
     METHODS get_pseudo_comments RETURNING VALUE(result) LIKE pseudo_comments.
@@ -56,6 +55,16 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD inspect_tokens.
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to
+    WHERE type = 'C'
+    OR type = 'P'.
+      count_pseudo_comments( <token> ).
+    ENDLOOP.
+  ENDMETHOD.
+
+
   METHOD get_pseudo_comments.
     DATA(checks) = y_profile_manager=>get_checks_from_db( ).
 
@@ -63,16 +72,6 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
       DATA check TYPE REF TO y_check_base.
       CREATE OBJECT check TYPE (<check>-obj_name).
       APPEND check->settings-pseudo_comment TO result.
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD inspect_tokens.
-    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-from TO statement-to
-    WHERE type = 'C'
-    OR type = 'P'.
-      count_pseudo_comments( <token> ).
     ENDLOOP.
   ENDMETHOD.
 
