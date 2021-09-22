@@ -7,7 +7,7 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    CONSTANTS check_base_name TYPE tadir-obj_name VALUE 'Y_CHECK_BASE'.
+    
 
     CLASS-DATA class_names TYPE string_table.
 
