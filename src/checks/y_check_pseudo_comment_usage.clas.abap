@@ -7,34 +7,19 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
+    CLASS-DATA pseudo_comments LIKE TABLE OF settings-pseudo_comment.
 
-    CLASS-DATA class_names TYPE string_table.
+    DATA pseudo_comment_counter TYPE i.
 
-    DATA pseudo_comment_counter TYPE i VALUE 0 ##NO_TEXT.
-
-    METHODS count_cc_pseudo_comments IMPORTING token TYPE stokesx.
-
+    METHODS get_pseudo_comments RETURNING VALUE(result) LIKE pseudo_comments.
+    METHODS count_pseudo_comments IMPORTING token TYPE stokesx.
     METHODS check_result.
-
-    METHODS call_get_pseudo_comment IMPORTING obj_name TYPE stokesx-str
-                                    RETURNING VALUE(result) TYPE stokesx-str
-                                    RAISING cx_sy_create_object_error.
 
 ENDCLASS.
 
 
 
 CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
-
-
-  METHOD call_get_pseudo_comment.
-    DATA obj TYPE REF TO y_check_base.
-    CREATE OBJECT obj TYPE (obj_name).
-    result = obj->settings-pseudo_comment.
-    IF result IS INITIAL.
-      RAISE EXCEPTION TYPE cx_sy_create_object_error.
-    ENDIF.
-  ENDMETHOD.
 
 
   METHOD constructor.
@@ -58,33 +43,27 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD count_cc_pseudo_comments.
-    LOOP AT class_names ASSIGNING FIELD-SYMBOL(<object_name>).
-      TRY.
-          IF token-str CS call_get_pseudo_comment( <object_name> ).
-            pseudo_comment_counter = pseudo_comment_counter + 1.
-          ENDIF.
-        CATCH cx_sy_create_object_error.
-          CONTINUE.
-      ENDTRY.
-    ENDLOOP.
-  ENDMETHOD.
-
-
   METHOD inspect_structures.
     pseudo_comment_counter = 0.
 
-    TRY.
-        IF class_names IS INITIAL.
-          class_names = y_profile_manager=>get_checks_from_db( ).
-        ENDIF.
-      CATCH cx_failed.
-        APPEND INITIAL LINE TO class_names.
-    ENDTRY.
+    IF pseudo_comments IS INITIAL.
+      pseudo_comments = get_pseudo_comments( ).
+    ENDIF.
 
     super->inspect_structures( ).
 
     check_result( ).
+  ENDMETHOD.
+
+
+  METHOD get_pseudo_comments.
+    DATA(checks) = y_profile_manager=>get_checks_from_db( ).
+
+    LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>) WHERE object = 'CLAS'.
+      DATA check TYPE REF TO y_check_base.
+      CREATE OBJECT check TYPE (<check>-obj_name).
+      APPEND check->settings-pseudo_comment TO result.
+    ENDLOOP.
   ENDMETHOD.
 
 
@@ -93,7 +72,16 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     FROM statement-from TO statement-to
     WHERE type = 'C'
     OR type = 'P'.
-      count_cc_pseudo_comments( <token> ).
+      count_pseudo_comments( <token> ).
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD count_pseudo_comments.
+    LOOP AT pseudo_comments ASSIGNING FIELD-SYMBOL(<pseudo_comment>).
+      IF token-str CS <pseudo_comment>.
+        pseudo_comment_counter = pseudo_comment_counter + 1.
+      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
