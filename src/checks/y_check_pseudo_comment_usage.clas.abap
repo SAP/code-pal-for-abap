@@ -9,16 +9,14 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
   PRIVATE SECTION.
     CONSTANTS check_base_name TYPE tadir-obj_name VALUE 'Y_CHECK_BASE'.
 
+    CLASS-DATA class_names TYPE string_table.
+
     DATA name_tab TYPE STANDARD TABLE OF tadir-obj_name.
     DATA pseudo_comment_counter TYPE i VALUE 0 ##NO_TEXT.
-    DATA class_names TYPE string_table.
 
     METHODS count_cc_pseudo_comments IMPORTING token TYPE stokesx.
 
     METHODS check_result.
-
-    METHODS select_object_list RETURNING VALUE(result) LIKE name_tab
-                               RAISING cx_failed.
 
     METHODS call_get_pseudo_comment IMPORTING obj_name TYPE stokesx-str
                                     RETURNING VALUE(result) TYPE stokesx-str
@@ -59,12 +57,6 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
                                       ( scan_struc_stmnt_type-interface ) ).
 
     set_check_message( '&1 pseudo comments!' ).
-
-    TRY.
-        class_names = select_object_list( ).
-      CATCH cx_failed.
-        APPEND INITIAL LINE TO class_names.
-    ENDTRY.
   ENDMETHOD.
 
 
@@ -83,6 +75,14 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
 
   METHOD inspect_structures.
     pseudo_comment_counter = 0.
+
+    TRY.
+        IF class_names IS INITIAL.
+          class_names = y_profile_manager=>get_checks_from_db( ).
+        ENDIF.
+      CATCH cx_failed.
+        APPEND INITIAL LINE TO class_names.
+    ENDTRY.
 
     super->inspect_structures( ).
 
@@ -103,34 +103,16 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
   METHOD check_result.
     CHECK pseudo_comment_counter > 0.
 
-    DATA(check_configuration) = detect_check_configuration( VALUE #( level = 1 ) ).
+    DATA(statement) = ref_scan->statements[ 1 ].
 
-    raise_error( statement_level = 1
-                 statement_index = 1
-                 statement_from = 1
+    DATA(check_configuration) = detect_check_configuration( statement ).
+
+    raise_error( statement_level = statement-level
+                 statement_index = statement-from
+                 statement_from = statement-from
                  check_configuration = check_configuration
                  parameter_01 = |{ pseudo_comment_counter }| ).
   ENDMETHOD.
 
 
-  METHOD select_object_list.
-    SELECT SINGLE devclass
-    FROM tadir
-    WHERE obj_name = @myname
-    INTO @DATA(packagename).
-
-    IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE cx_failed.
-    ENDIF.
-
-    SELECT obj_name
-    FROM tadir
-    WHERE devclass = @packagename
-    AND obj_name <> @check_base_name
-    INTO TABLE @result.
-
-    IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE cx_failed.
-    ENDIF.
-  ENDMETHOD.
 ENDCLASS.
