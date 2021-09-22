@@ -439,10 +439,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD instantiate_objects.
-    " Always load the ref_scan
-    get( ).
-
-    ref_scan->determine_aunit_lines( ).
+    IF ref_scan IS INITIAL.
+      " Force ref_scan->aunit_tab
+      no_aunit = abap_true.
+      get( ).
+    ENDIF.
 
     IF clean_code_manager IS NOT BOUND.
       clean_code_manager = NEW y_clean_code_manager( ).
