@@ -11,7 +11,7 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
 
     CLASS-DATA class_names TYPE string_table.
 
-    DATA name_tab TYPE STANDARD TABLE OF tadir-obj_name.
+    
     DATA pseudo_comment_counter TYPE i VALUE 0 ##NO_TEXT.
 
     METHODS count_cc_pseudo_comments IMPORTING token TYPE stokesx.
