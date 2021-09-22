@@ -23,7 +23,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_collect IMPLEMENTATION.
+CLASS Y_CHECK_COLLECT IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -176,8 +176,11 @@ CLASS y_check_collect IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    result ?= rtti_type.
+    TRY.
+        result ?= rtti_type.
+      CATCH cx_sy_move_cast_error.
+        " Not a TableDescr type
+        RETURN.
+    ENDTRY.
   ENDMETHOD.
-
-
 ENDCLASS.
