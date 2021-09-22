@@ -109,6 +109,14 @@ CLASS Y_CHECK_COLLECT IMPLEMENTATION.
   METHOD find_itab_declaration.
     LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from TO structure-stmnt_to.
+      DATA(first_token) = get_token_abs( <statement>-from ).
+
+      IF first_token <> 'DATA'
+      AND first_token <> 'TYPES'
+      AND first_token <> 'CLASS-DATA'.
+        CONTINUE.
+      ENDIF.
+
       DATA(tokens) = condense_tokens( <statement> ).
 
       IF  tokens NP |DATA { name } TYPE *|
