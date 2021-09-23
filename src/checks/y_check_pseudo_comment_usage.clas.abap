@@ -71,7 +71,9 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>) WHERE object = 'CLAS'.
       DATA check TYPE REF TO y_check_base.
       CREATE OBJECT check TYPE (<check>-obj_name).
-      APPEND check->settings-pseudo_comment TO result.
+      IF check->settings-ignore_pseudo_comments = abap_false.
+        APPEND check->settings-pseudo_comment TO result.
+      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
