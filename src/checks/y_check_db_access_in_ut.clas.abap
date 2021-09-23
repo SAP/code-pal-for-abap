@@ -206,12 +206,10 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD get_forbidden_tokens.
-    DATA risk_lvl TYPE properties-risk_level.
-    TRY.
-        risk_lvl = defined_classes[ name = class_name ]-risk_level.
-      CATCH cx_sy_itab_line_not_found.
-        risk_lvl = space.
-    ENDTRY.
+    DATA(class) = VALUE #( defined_classes[ name = class_name ] OPTIONAL ).
+
+    DATA(risk_lvl) = COND #( WHEN class IS NOT INITIAL THEN class-risk_level
+                             ELSE space ).
 
     CASE risk_lvl.
       WHEN risk_level-dangerous OR risk_level-critical.
