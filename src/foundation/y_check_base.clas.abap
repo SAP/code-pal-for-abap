@@ -53,11 +53,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
-    DATA relevant_statement_types TYPE TABLE OF sstruc-stmnt_type.
+    DATA relevant_statement_types TYPE HASHED TABLE OF sstruc-stmnt_type WITH UNIQUE KEY table_line.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Structure Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_type' structure to enhance or change it.
-    DATA relevant_structure_types TYPE TABLE OF sstruc-type.
+    DATA relevant_structure_types TYPE HASHED TABLE OF sstruc-type WITH UNIQUE KEY table_line.
 
     METHODS execute_check.
 
@@ -260,11 +260,16 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD inspect_structures.
-    LOOP AT ref_scan->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF is_statement_type_relevant( <structure> ) = abap_true
-      OR is_structure_type_relevant( <structure> ) = abap_true.
-        inspect_statements( <structure> ).
-      ENDIF.
+    DATA(structures) = FILTER #( ref_scan->structures IN relevant_structure_types WHERE type = table_line ).
+
+    LOOP AT structures ASSIGNING FIELD-SYMBOL(<structure>).
+      inspect_statements( <structure> ).
+    ENDLOOP.
+
+    structures = FILTER #( ref_scan->structures IN relevant_statement_types WHERE stmnt_type = table_line ).
+
+    LOOP AT structures ASSIGNING <structure>.
+      inspect_statements( <structure> ).
     ENDLOOP.
   ENDMETHOD.
 
