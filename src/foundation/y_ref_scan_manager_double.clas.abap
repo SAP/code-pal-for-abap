@@ -1,7 +1,5 @@
 CLASS y_ref_scan_manager_double DEFINITION PUBLIC INHERITING FROM y_ref_scan_manager. "#EC INTF_IN_CLASS
   PUBLIC SECTION.
-    CONSTANTS unit_test_identifier TYPE trdir-name VALUE 'CODE_PAL_FOR_ABAP_UNIT_TEST' ##NO_TEXT.
-
     METHODS y_if_scan_manager~set_ref_scan REDEFINITION.
     METHODS inject_code IMPORTING source TYPE y_char255_tab.
 
@@ -14,7 +12,7 @@ CLASS y_ref_scan_manager_double DEFINITION PUBLIC INHERITING FROM y_ref_scan_man
     METHODS convert_code IMPORTING source        TYPE y_char255_tab
                          RETURNING VALUE(result) TYPE sci_include.
 
-    METHODS create_trdir RETURNING VALUE(result) TYPE trdir.
+    METHODS get_trdir RETURNING VALUE(result) TYPE trdir.
 
   PRIVATE SECTION.
     DATA source_code TYPE sci_include.
@@ -27,7 +25,7 @@ CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
 
 
   METHOD y_if_scan_manager~set_ref_scan.
-    DATA(trdir) = create_trdir( ).
+    DATA(trdir) = get_trdir( ).
 
     DATA(include) = cl_ci_source_include=>feed( p_include = source_code
                                                 p_trdir = trdir ).
@@ -58,7 +56,6 @@ CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
 
     cl_abap_unit_assert=>fail( msg = 'Syntax Error'
                                detail = | Message:{ message }, Line:{ line }, Word:{ word } | ).
-
   ENDMETHOD.
 
 
@@ -91,7 +88,9 @@ CLASS Y_REF_SCAN_MANAGER_DOUBLE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD create_trdir.
-    result = VALUE #( name = unit_test_identifier ).
+  METHOD get_trdir.
+    SELECT SINGLE * FROM trdir INTO @result WHERE name = @sy-repid.
   ENDMETHOD.
+
+
 ENDCLASS.
