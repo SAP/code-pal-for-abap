@@ -121,12 +121,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                          current TYPE y_if_clean_code_manager=>check_configuration
                                RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_statement_type_relevant IMPORTING structure     TYPE sstruc
-                                       RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
-                                       RETURNING VALUE(result) TYPE abap_bool.
-
     METHODS is_app_comp_in_scope IMPORTING level         TYPE stmnt_levl
                                  RETURNING VALUE(result) TYPE abap_bool.
 
@@ -581,16 +575,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD is_threshold_stricter.
     result = xsdbool( ( previous >= current AND settings-is_threshold_reversed = abap_false )
                    OR ( previous < current AND settings-is_threshold_reversed = abap_true ) ).
-  ENDMETHOD.
-
-
-  METHOD is_statement_type_relevant.
-    result = xsdbool( line_exists( relevant_statement_types[ table_line = structure-stmnt_type ] ) ).
-  ENDMETHOD.
-
-
-  METHOD is_structure_type_relevant.
-    result = xsdbool( line_exists( relevant_structure_types[ table_line = structure-type ] ) ).
   ENDMETHOD.
 
 
