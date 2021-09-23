@@ -55,7 +55,7 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
   METHOD inspect_message.
     CHECK get_token_abs( statement-from ) = 'MESSAGE'.
 
-    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+    LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'RAISING' AND type = 'I'.
       checkif_error( index = index

@@ -56,8 +56,8 @@ CLASS y_check_comment_position IMPLEMENTATION.
 
   METHOD has_wrong_position.
     TRY.
-        DATA(previous_token) = ref_scan_manager->tokens[ statement-to - 1 ].
-        DATA(current_token) = ref_scan_manager->tokens[ statement-to ].
+        DATA(previous_token) = ref_scan->tokens[ statement-to - 1 ].
+        DATA(current_token) = ref_scan->tokens[ statement-to ].
       CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.
@@ -114,7 +114,7 @@ CLASS y_check_comment_position IMPLEMENTATION.
 
   METHOD get_next_token.
     DATA(next_position) = current_position + 1.
-    result = ref_scan_manager->tokens[ next_position ].
+    result = ref_scan->tokens[ next_position ].
     IF is_pragma( result ) = abap_true.
       result = get_next_token( next_position ).
     ENDIF.

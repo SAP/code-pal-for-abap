@@ -14,6 +14,7 @@ Whenever you upgrade code pal for ABAP, it is highly recommended to execute the 
 
 2021-08-XX v.1.16.0
 ------------------
+* Refactoring (#436,#452,#458)
 * Cannot run unit tests on 752 (#461)
 * Profiles: Allow Exemptions (#447)
 * BAdI example class vs Percentage Comment (#443)

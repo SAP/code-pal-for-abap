@@ -57,14 +57,14 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
 
 
   METHOD inspect_statements.
-    DATA(if_statement) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(if_statement) = ref_scan->statements[ structure-stmnt_from ].
 
     IF has_multiple_conditions( if_statement ) = abap_true.
       RETURN.
     ENDIF.
 
     DATA(if_structure) = COND #( WHEN structure-stmnt_type = scan_struc_stmnt_type-if THEN structure
-                                 WHEN structure-stmnt_type = scan_struc_stmnt_type-elseif THEN ref_scan_manager->structures[ structure-back ] ).
+                                 WHEN structure-stmnt_type = scan_struc_stmnt_type-elseif THEN ref_scan->structures[ structure-back ] ).
 
     IF if_structure IS INITIAL.
       RETURN.
@@ -105,7 +105,7 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
 
 
   METHOD has_multiple_conditions.
-    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+    LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'AND' OR str = 'OR'.
       result = abap_true.

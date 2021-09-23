@@ -6,9 +6,12 @@ CLASS y_check_chain_decl_usage DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    DATA rows_with_colon TYPE STANDARD TABLE OF stmnt_crow.
+    TYPES: BEGIN OF ty_raised_issues,
+             include TYPE slevel-name,
+             line_number_colon TYPE sstmnt-colonrow,
+           END OF ty_raised_issues.
 
-    METHODS has_error_not_raised_yet IMPORTING statement TYPE sstmnt RETURNING VALUE(result) TYPE abap_bool.
+    DATA raised_issues TYPE TABLE OF ty_raised_issues.
 
 ENDCLASS.
 
@@ -30,13 +33,21 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-
     CHECK statement-colonrow IS NOT INITIAL.
     CHECK statement-terminator = ','.
     CHECK get_token_abs( statement-from ) = 'DATA'.
-    CHECK has_error_not_raised_yet( statement ).
 
-    APPEND statement-colonrow TO rows_with_colon.
+    DATA(include) = get_include( p_level = statement-level ).
+
+    DATA(raised_issue) = VALUE ty_raised_issues( include = include
+                                                 line_number_colon = statement-colonrow ).
+
+    IF line_exists( raised_issues[ include           = raised_issue-include
+                                   line_number_colon = raised_issue-line_number_colon ] ).
+      RETURN.
+    ENDIF.
+
+    APPEND raised_issue TO raised_issues.
 
     DATA(configuration) = detect_check_configuration( statement ).
 
@@ -44,12 +55,6 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
                  statement_index = index
                  statement_from = statement-from
                  check_configuration = configuration ).
-
-  ENDMETHOD.
-
-
-  METHOD has_error_not_raised_yet.
-    result = xsdbool( NOT line_exists( rows_with_colon[ table_line = statement-colonrow ] ) ).
   ENDMETHOD.
 
 

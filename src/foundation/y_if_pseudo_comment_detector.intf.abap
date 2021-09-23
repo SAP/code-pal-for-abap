@@ -6,7 +6,7 @@ INTERFACE y_if_pseudo_comment_detector PUBLIC.
   METHODS:
     is_pseudo_comment
       IMPORTING
-                !ref_scan_manager TYPE REF TO y_if_scan_manager
+                !ref_scan         TYPE REF TO cl_ci_scan
                 !scimessages      TYPE scimessages
                 !test             TYPE sci_chk
                 !code             TYPE sci_errc

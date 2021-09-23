@@ -52,7 +52,7 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
 
 
   METHOD get_statement_inline.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       result = |{ result } { <token>-str }|.
     ENDLOOP.
