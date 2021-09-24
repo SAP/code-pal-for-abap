@@ -49,7 +49,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
     DATA statistics TYPE REF TO y_if_scan_statistics.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
-    DATA attributes_maintained TYPE abap_bool.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
@@ -111,8 +110,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS instantiate_objects.
-
     METHODS is_threshold_stricter IMPORTING previous TYPE int4
                                             current TYPE int4
                                   RETURNING VALUE(result) TYPE abap_bool.
@@ -140,6 +137,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
                            RETURNING VALUE(result) TYPE tadir.
+    METHODS raise_generic_message.
 
 ENDCLASS.
 
@@ -150,6 +148,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
+
+    clean_code_manager = NEW y_clean_code_manager( ).
+    clean_code_exemption_handler = NEW y_exemption_handler( ).
 
     description = get_class_description(  ).
     category = 'Y_CATEGORY_CODE_PAL'.
@@ -434,32 +435,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD instantiate_objects.
-    IF ref_scan IS INITIAL.
-      " Force ref_scan->aunit_tab
-      no_aunit = abap_true.
-      get( ).
-    ENDIF.
-
-    IF clean_code_manager IS NOT BOUND.
-      clean_code_manager = NEW y_clean_code_manager( ).
-    ENDIF.
-
-    IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = NEW y_exemption_handler( ).
-    ENDIF.
-
-    IF lines( check_configurations ) = 1
-    AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
-      CLEAR check_configurations.
-    ENDIF.
-  ENDMETHOD.
-
-
   METHOD put_attributes.
     DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
 
-    attributes_maintained = abap_true.
     TRY.
         IMPORT
           object_creation_date = check_configuration-object_creation_date
@@ -470,8 +448,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
           ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
+        attributes_ok = abap_true.
       CATCH cx_root.                                  "#EC NEED_CX_ROOT
-        attributes_maintained = abap_false.
+        attributes_ok = abap_false.
     ENDTRY.
   ENDMETHOD.
 
@@ -505,39 +484,43 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD run.
-    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
+    TRY.
+        " Code Pal Profile (Y_CODE_PAL_PROFILE)
+        check_configurations = clean_code_manager->read_check_customizing( myname ).
+      CATCH ycx_no_check_customizing.
+        " SAP Code Inspector (SCI)
+        IF has_attributes = abap_true
+        AND attributes_ok = abap_false.
+          raise_generic_message( ).
+          RETURN.
+        ELSEIF attributes_ok = abap_false.
+          RETURN.
+       ENDIF.
+    ENDTRY.
 
-    instantiate_objects( ).
+    IF ref_scan IS INITIAL.
+      " Force ref_scan->aunit_tab
+      no_aunit = abap_true.
+
+      IF get( ) = abap_false.
+        RETURN.
+      ENDIF.
+    ENDIF.
 
     IF ref_scan IS INITIAL
     OR ref_scan->subrc IS NOT INITIAL.
       RETURN.
     ENDIF.
 
-    IF attributes_maintained = abap_false AND has_attributes = abap_true.
-      raise_error( statement_level = 1
-                   statement_index = 1
-                   statement_from  = 1
-                   check_configuration = VALUE #( prio = `E` ) ).
-      RETURN.
-    ENDIF.
-
-    TRY.
-        profile_configurations = clean_code_manager->read_check_customizing( myname ).
-      CATCH ycx_no_check_customizing.
-        IF profile_configurations IS INITIAL
-        AND attributes_ok = abap_false.
-          RETURN.
-        ELSEIF attributes_ok = abap_true.
-          profile_configurations = check_configurations.
-        ENDIF.
-    ENDTRY.
-
-    IF lines( profile_configurations ) > 0.
-      check_configurations = profile_configurations.
-    ENDIF.
-
     execute_check( ).
+  ENDMETHOD.
+
+
+  METHOD raise_generic_message.
+    raise_error( statement_level = 1
+                 statement_index = 1
+                 statement_from  = 1
+                 check_configuration = VALUE #( prio = `E` ) ).
   ENDMETHOD.
 
 
