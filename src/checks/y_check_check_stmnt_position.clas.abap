@@ -89,8 +89,10 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
 
 
   METHOD is_check_in_loop.
+    DATA(scope) = ref_scan->statements[ structure-stmnt_from ].
+
     LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM structure-stmnt_from TO check-from
+    FROM scope-from TO check-from
     WHERE str = 'LOOP'
     OR str = 'ENDLOOP'.
       result = xsdbool( <token>-str = 'LOOP' ).
