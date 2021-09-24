@@ -341,7 +341,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD if_ci_test~query_attributes.
     DATA sci_attributes TYPE sci_atttab.
-    DATA title(75) TYPE c.
     DATA message(72) TYPE c.
 
     READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
@@ -400,13 +399,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       ) INTO TABLE sci_attributes.
     ENDIF.
 
-    title = description.
-
     attributes_ok = abap_false.
     WHILE attributes_ok = abap_false.
       IF cl_ci_query_attributes=>generic(
                          p_name       = name
-                         p_title      = title
+                         p_title      = |{ description }|
                          p_attributes = sci_attributes
                          p_message    = message
                          p_display    = p_display ) = abap_true.

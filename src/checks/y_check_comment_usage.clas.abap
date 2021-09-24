@@ -149,9 +149,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
 
   METHOD get_percentage_of_comments.
-    DATA percentage TYPE decfloat16.
-
-    percentage = ( comment_number / abs_statement_number ) * 100.
+    DATA(percentage) = CONV decfloat16( comment_number / abs_statement_number ) * 100.
 
     result = round( val = percentage
                     dec = 0

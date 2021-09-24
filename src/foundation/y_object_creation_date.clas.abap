@@ -156,9 +156,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
 
 
   METHOD get_db_vers_hstry_crtd_on_clas.
-    DATA class_search_string TYPE string.
-
-    class_search_string = class_name.
+    DATA(class_search_string) = CONV string( class_name ).
     WHILE strlen( class_search_string ) < 30.
       CONCATENATE class_search_string ` ` INTO class_search_string.
     ENDWHILE.

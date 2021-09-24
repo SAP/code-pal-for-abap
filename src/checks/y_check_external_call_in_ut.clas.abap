@@ -47,7 +47,7 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA has_redirection TYPE abap_bool VALUE abap_false.
+    DATA(has_redirection) = abap_false.
 
     DATA(token1) = get_token_abs( statement-from ).
     DATA(token2) = get_token_abs( statement-from + 1 ).
