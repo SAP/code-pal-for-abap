@@ -135,7 +135,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
                            RETURNING VALUE(result) TYPE tadir.
 
-    METHODS raise_generic_message.
     METHODS handle_profiles.
 
 ENDCLASS.
@@ -494,14 +493,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
 
     execute_check( ).
-  ENDMETHOD.
-
-
-  METHOD raise_generic_message.
-    raise_error( statement_level = 1
-                 statement_index = 1
-                 statement_from  = 1
-                 check_configuration = VALUE #( prio = `E` ) ).
   ENDMETHOD.
 
 
