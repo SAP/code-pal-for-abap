@@ -444,4 +444,15 @@ CLASS y_profile_manager IMPLEMENTATION.
   METHOD y_if_profile_manager~create.
     result = NEW y_profile_manager( ).
   ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~is_in_use.
+    TRY.
+        y_if_profile_manager~select_profiles( username ).
+        result = abap_true.
+      CATCH ycx_entry_not_found.
+        result = abap_false.
+    ENDTRY.
+  ENDMETHOD.
+
 ENDCLASS.

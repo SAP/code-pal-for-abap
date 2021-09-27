@@ -48,7 +48,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
     DATA statistics TYPE REF TO y_if_scan_statistics.
-    DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
@@ -108,8 +107,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                          RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
-    METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
-
     METHODS is_threshold_stricter IMPORTING previous TYPE int4
                                             current TYPE int4
                                   RETURNING VALUE(result) TYPE abap_bool.
@@ -137,7 +134,9 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
                            RETURNING VALUE(result) TYPE tadir.
+
     METHODS raise_generic_message.
+    METHODS handle_profiles.
 
 ENDCLASS.
 
@@ -166,7 +165,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     settings-documentation = |{ c_docs_path-main }check_documentation.md|.
     settings-ignore_pseudo_comments = abap_false.
 
-    has_attributes = do_attributes_exist( ).
+    handle_profiles( ).
 
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-form )
                                         ( scan_struc_stmnt_type-method )
@@ -179,6 +178,34 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
                     code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
                     text = TEXT-106 ) INTO TABLE scimessages[].
+  ENDMETHOD.
+
+
+  METHOD handle_profiles.
+    IF y_profile_manager=>create( )->is_in_use( sy-uname ) = abap_true.
+      " Hides SCI attributes button
+      has_attributes = abap_false.
+
+      TRY.
+          " Configuration based on Profiles
+          check_configurations = clean_code_manager->read_check_customizing( myname ).
+        CATCH ycx_no_check_customizing.
+          CLEAR check_configurations.
+      ENDTRY.
+    ELSE.
+      " Displays SCI attributes button
+      has_attributes = abap_true.
+
+      " Default configuration
+      check_configurations = VALUE #( ( object_creation_date = settings-object_created_on
+                                        prio = settings-prio
+                                        apply_on_productive_code = settings-apply_on_productive_code
+                                        apply_on_testcode = settings-apply_on_test_code
+                                        threshold = settings-threshold
+                                        ignore_pseudo_comments = settings-ignore_pseudo_comments ) ).
+    ENDIF.
+
+    attributes_ok = xsdbool( check_configurations IS NOT INITIAL ).
   ENDMETHOD.
 
 
@@ -238,17 +265,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD do_attributes_exist.
-    TRY.
-        DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
-        attributes_ok = xsdbool( profiles IS INITIAL ).
-      CATCH ycx_entry_not_found.
-        attributes_ok = abap_true.
-    ENDTRY.
-    result = attributes_ok.
-  ENDMETHOD.
-
-
   METHOD execute_check.
     inspect_structures( ).
   ENDMETHOD.
@@ -285,16 +301,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD get_attributes.
-    READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
-    IF sy-subrc <> 0.
-      check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
-      check_configuration-apply_on_testcode = settings-apply_on_test_code.
-      check_configuration-object_creation_date = settings-object_created_on.
-      check_configuration-prio = settings-prio.
-      check_configuration-threshold = settings-threshold.
-      check_configuration-ignore_pseudo_comments = settings-ignore_pseudo_comments.
-      APPEND check_configuration TO check_configurations.
-    ENDIF.
+    DATA(check_configuration) = check_configurations[ 1 ].
+
     EXPORT
       object_creation_date = check_configuration-object_creation_date
       message_severity = check_configuration-prio
@@ -341,117 +349,101 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD if_ci_test~query_attributes.
-    DATA sci_attributes TYPE sci_atttab.
     DATA message(72) TYPE c.
 
-    READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
-    IF sy-subrc <> 0 AND use_default_attributes = abap_true.
-      check_configuration-object_creation_date = settings-object_created_on.
-      check_configuration-prio = settings-prio.
-      check_configuration-apply_on_productive_code = settings-apply_on_productive_code.
-      check_configuration-apply_on_testcode = settings-apply_on_test_code.
-      check_configuration-threshold = settings-threshold.
-      check_configuration-ignore_pseudo_comments = settings-ignore_pseudo_comments.
-    ENDIF.
+    DATA(check_configuration) = check_configurations[ 1 ].
 
-    INSERT VALUE #(
-      kind = ''
-      ref  = REF #( check_configuration-object_creation_date )
-      text =  'Consider Objects created after'(200)
-    ) INTO TABLE sci_attributes.
-
-    INSERT VALUE #(
-      kind = ''
-      ref  = REF #( check_configuration-prio )
-      text =  'Message Severity'(201)
-    ) INTO TABLE sci_attributes.
+    " Build screen fields
+    DATA(screen_attributes) = VALUE sci_atttab( ( kind = ''
+                                                  ref  = REF #( check_configuration-object_creation_date )
+                                                  text = 'Consider Objects created after'(200) )
+                                                ( kind = ''
+                                                  ref  = REF #( check_configuration-prio )
+                                                  text = 'Message Severity'(201) ) ).
 
     IF settings-disable_threshold_selection = abap_false.
-      INSERT VALUE #(
-        kind = ''
-        ref  = REF #( check_configuration-threshold )
-        text =  'Threshold'(203)
-      ) INTO TABLE sci_attributes.
+      screen_attributes = VALUE #( BASE screen_attributes
+                                 ( kind = ''
+                                   ref  = REF #( check_configuration-threshold )
+                                   text = 'Threshold'(203) ) ).
     ENDIF.
 
     IF settings-disable_on_prodcode_selection = abap_false.
-      INSERT VALUE #(
-        kind = ''
-        ref  = REF #( check_configuration-apply_on_productive_code )
-        text =  'Apply on Productive Code'(204)
-      ) INTO TABLE sci_attributes.
+      screen_attributes = VALUE #( BASE screen_attributes
+                                 ( kind = ''
+                                   ref  = REF #( check_configuration-apply_on_productive_code )
+                                   text = 'Apply on Productive Code'(204) ) ).
     ENDIF.
 
     IF settings-disable_on_testcode_selection = abap_false.
-      INSERT VALUE #(
-        kind = ''
-        ref  = REF #( check_configuration-apply_on_testcode )
-        text =  'Apply on Testcode'(202)
-      ) INTO TABLE sci_attributes.
+      screen_attributes = VALUE #( BASE screen_attributes
+                                 ( kind = ''
+                                   ref  = REF #( check_configuration-apply_on_testcode )
+                                   text = 'Apply on Testcode'(202) ) ).
     ENDIF.
 
     check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
 
     IF settings-pseudo_comment IS NOT INITIAL.
-      INSERT VALUE #(
-        kind = ''
-        ref  = REF #( check_configuration-ignore_pseudo_comments )
-        text = |Allow { settings-pseudo_comment }|
-      ) INTO TABLE sci_attributes.
+      screen_attributes = VALUE #( BASE screen_attributes
+                                 ( kind = ''
+                                   ref  = REF #( check_configuration-ignore_pseudo_comments )
+                                   text = |Allow { settings-pseudo_comment }| ) ).
     ENDIF.
 
-    attributes_ok = abap_false.
-    WHILE attributes_ok = abap_false.
-      IF cl_ci_query_attributes=>generic(
-                         p_name       = name
-                         p_title      = |{ description }|
-                         p_attributes = sci_attributes
-                         p_message    = message
-                         p_display    = p_display ) = abap_true.
+    " Call screen and validate fields
+    WHILE 1 = 1.
+      DATA(break) = cl_ci_query_attributes=>generic( p_name       = name
+                                                     p_title      = |{ description }|
+                                                     p_attributes = screen_attributes
+                                                     p_message    = message
+                                                     p_display    = p_display ).
+      IF break = abap_true.
         attributes_ok = abap_true.
-        check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
         RETURN.
       ENDIF.
 
-      IF check_configuration-apply_on_productive_code = abap_false AND
-         check_configuration-apply_on_testcode        = abap_false.
+      IF check_configuration-object_creation_date IS INITIAL.
+        check_configuration-object_creation_date = initial_date.
+      ENDIF.
+
+      IF check_configuration-apply_on_productive_code = abap_false
+      AND check_configuration-apply_on_testcode = abap_false.
+        attributes_ok = abap_false.
         message = 'Choose the Type of Code to be checked'(300).
       ELSEIF check_configuration-prio IS INITIAL.
+        attributes_ok = abap_false.
         message = 'Choose a Message Severity'(301).
       ELSE.
-        IF check_configuration-object_creation_date IS INITIAL.
-          check_configuration-object_creation_date = initial_date.
-        ENDIF.
-
         attributes_ok = abap_true.
+        EXIT.
       ENDIF.
     ENDWHILE.
 
     check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
-
-    CLEAR check_configurations.
-    APPEND check_configuration TO check_configurations.
-    use_default_attributes = abap_false.
+    check_configurations[ 1 ] = check_configuration.
   ENDMETHOD.
 
 
   METHOD put_attributes.
     DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
 
-    TRY.
-        IMPORT
-          object_creation_date = check_configuration-object_creation_date
-          message_severity = check_configuration-prio
-          threshold = check_configuration-threshold
-          apply_on_productive_code = check_configuration-apply_on_productive_code
-          apply_on_testcode = check_configuration-apply_on_testcode
-          ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
-        FROM DATA BUFFER p_attributes.
-        APPEND check_configuration TO check_configurations.
-        attributes_ok = abap_true.
-      CATCH cx_root.                                  "#EC NEED_CX_ROOT
-        attributes_ok = abap_false.
-    ENDTRY.
+    " Not required when using Profiles
+    CHECK has_attributes = abap_true.
+
+    IMPORT
+      object_creation_date = check_configuration-object_creation_date
+      message_severity = check_configuration-prio
+      threshold = check_configuration-threshold
+      apply_on_productive_code = check_configuration-apply_on_productive_code
+      apply_on_testcode = check_configuration-apply_on_testcode
+      ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
+    FROM DATA BUFFER p_attributes.
+
+    " Replace default configuration
+    check_configurations[ 1 ] = check_configuration.
+
+    attributes_ok = abap_true.
   ENDMETHOD.
 
 
@@ -484,19 +476,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD run.
-    TRY.
-        " Code Pal Profile (Y_CODE_PAL_PROFILE)
-        check_configurations = clean_code_manager->read_check_customizing( myname ).
-      CATCH ycx_no_check_customizing.
-        " SAP Code Inspector (SCI)
-        IF has_attributes = abap_true
-        AND attributes_ok = abap_false.
-          raise_generic_message( ).
-          RETURN.
-        ELSEIF attributes_ok = abap_false.
-          RETURN.
-       ENDIF.
-    ENDTRY.
+    CHECK attributes_ok = abap_true.
 
     IF ref_scan IS INITIAL.
       " Force ref_scan->aunit_tab
@@ -507,6 +487,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
+    " Object not supported?
     IF ref_scan IS INITIAL
     OR ref_scan->subrc IS NOT INITIAL.
       RETURN.

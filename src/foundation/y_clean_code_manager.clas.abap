@@ -90,11 +90,7 @@ CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
 
 
   METHOD read_check_customizing.
-    TRY.
-        DATA(profiles) = determine_profiles( ).
-      CATCH ycx_no_check_customizing.
-        RAISE EXCEPTION TYPE ycx_no_check_customizing.
-    ENDTRY.
+    DATA(profiles) = determine_profiles( ).
 
     LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
       TRY.
