@@ -129,6 +129,8 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD is_internal_table.
+    CONSTANTS max_name_size TYPE i VALUE 40.
+
     DATA(second_token) = get_token_abs( statement-from + 1 ).
     DATA(third_token) = get_token_abs( statement-from + 2 ).
     DATA(fourth_token) = get_token_abs( statement-from + 2 ).
@@ -141,7 +143,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
                                WHEN third_token = keys-into  THEN fourth_token
                                ELSE second_token ).
 
-    IF strlen( table_name ) > 40.
+    IF strlen( table_name ) > max_name_size.
       RETURN.
     ENDIF.
 
@@ -280,6 +282,4 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
                     OR token-str = check_for-delete
                     OR token-str = check_for-insert ).
   ENDMETHOD.
-
-
 ENDCLASS.
