@@ -112,10 +112,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     METHODS instantiate_objects.
 
-    METHODS is_threshold_stricter IMPORTING previous TYPE int4
-                                            current TYPE int4
-                                  RETURNING VALUE(result) TYPE abap_bool.
-
     METHODS is_config_stricter IMPORTING previous TYPE y_if_clean_code_manager=>check_configuration
                                          current TYPE y_if_clean_code_manager=>check_configuration
                                RETURNING VALUE(result) TYPE abap_bool.
@@ -553,17 +549,14 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD is_config_stricter.
+    DATA(threshold_stricter) = xsdbool( ( previous-threshold >= current-threshold AND settings-is_threshold_reversed = abap_false )
+                                     OR ( previous-threshold < current-threshold AND settings-is_threshold_reversed = abap_true ) ).
+
     result = xsdbool( ( previous IS INITIAL )
-                   OR ( previous-prio = current-prio AND is_threshold_stricter( current = current-threshold previous = previous-threshold ) = abap_true )
+                   OR ( previous-prio = current-prio AND threshold_stricter = abap_true )
                    OR ( previous-prio <> c_error AND current-prio = c_error )
                    OR ( previous-prio = c_note AND current-prio = c_warning )
                    OR ( previous-ignore_pseudo_comments = abap_false AND current-ignore_pseudo_comments = abap_true ) ).
-  ENDMETHOD.
-
-
-  METHOD is_threshold_stricter.
-    result = xsdbool( ( previous >= current AND settings-is_threshold_reversed = abap_false )
-                   OR ( previous < current AND settings-is_threshold_reversed = abap_true ) ).
   ENDMETHOD.
 
 
