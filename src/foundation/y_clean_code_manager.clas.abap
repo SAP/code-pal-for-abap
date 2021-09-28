@@ -1,10 +1,11 @@
 CLASS y_clean_code_manager DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     INTERFACES y_if_clean_code_manager.
-    ALIASES calculate_obj_creation_date FOR y_if_clean_code_manager~calculate_obj_creation_date.
-    ALIASES read_check_customizing FOR y_if_clean_code_manager~read_check_customizing.
+    METHODS constructor.
 
   PRIVATE SECTION.
+    DATA profile_manager TYPE REF TO y_if_profile_manager.
+
     METHODS determine_profiles RETURNING VALUE(result) TYPE string_table
                                RAISING   ycx_no_check_customizing.
 
@@ -16,12 +17,51 @@ ENDCLASS.
 
 
 
-CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
+CLASS y_clean_code_manager IMPLEMENTATION.
+
+
+  METHOD constructor.
+    profile_manager = y_profile_manager=>create( ).
+  ENDMETHOD.
+
+
+  METHOD y_if_clean_code_manager~calculate_obj_creation_date.
+    result = y_object_creation_date=>get_created_on( object_type = object_type
+                                                     object_name = object_name ).
+  ENDMETHOD.
+
+
+  METHOD y_if_clean_code_manager~read_check_customizing.
+    DATA(profiles) = determine_profiles( ).
+
+    LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
+      TRY.
+          APPEND LINES OF determine_checks( profile = CONV #( <profile> )
+                                            checkid = checkid ) TO result.
+        CATCH ycx_no_check_customizing.
+          CONTINUE.
+      ENDTRY.
+    ENDLOOP.
+
+    IF lines( result ) = 0.
+      RAISE EXCEPTION TYPE ycx_no_check_customizing.
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD y_if_clean_code_manager~is_profile_in_use.
+    TRY.
+        profile_manager->select_profiles( sy-uname ).
+        result = abap_true.
+      CATCH ycx_entry_not_found.
+        result = abap_false.
+    ENDTRY.
+  ENDMETHOD.
 
 
   METHOD determine_checks.
     TRY.
-        DATA(checks) = y_profile_manager=>create( )->select_checks( profile ).
+        DATA(checks) = profile_manager->select_checks( profile ).
       CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
@@ -71,7 +111,7 @@ CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
     ENDIF.
 
     TRY.
-        DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
+        DATA(profiles) = profile_manager->select_profiles( sy-uname ).
       CATCH ycx_entry_not_found.
         RAISE EXCEPTION TYPE ycx_no_check_customizing.
     ENDTRY.
@@ -79,30 +119,7 @@ CLASS Y_CLEAN_CODE_MANAGER IMPLEMENTATION.
     LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
       APPEND <profile>-profile TO result.
     ENDLOOP.
-
   ENDMETHOD.
 
 
-  METHOD calculate_obj_creation_date.
-    result = y_object_creation_date=>get_created_on( object_type = object_type
-                                                     object_name = object_name ).
-  ENDMETHOD.
-
-
-  METHOD read_check_customizing.
-    DATA(profiles) = determine_profiles( ).
-
-    LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
-      TRY.
-          APPEND LINES OF determine_checks( profile = CONV #( <profile> )
-                                            checkid = checkid ) TO result.
-        CATCH ycx_no_check_customizing.
-          CONTINUE.
-      ENDTRY.
-    ENDLOOP.
-
-    IF lines( result ) = 0.
-      RAISE EXCEPTION TYPE ycx_no_check_customizing.
-    ENDIF.
-  ENDMETHOD.
 ENDCLASS.

@@ -39,6 +39,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS if_ci_test~display_documentation  REDEFINITION.
     METHODS if_ci_test~query_attributes REDEFINITION.
     METHODS put_attributes  REDEFINITION.
+
+    METHODS run_begin REDEFINITION.
     METHODS run REDEFINITION.
 
   PROTECTED SECTION.
@@ -135,7 +137,10 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
                            RETURNING VALUE(result) TYPE tadir.
 
+    METHODS get_default_check_config RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configuration.
+
     METHODS handle_profiles.
+
 
 ENDCLASS.
 
@@ -164,7 +169,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     settings-documentation = |{ c_docs_path-main }check_documentation.md|.
     settings-ignore_pseudo_comments = abap_false.
 
-    handle_profiles( ).
+    " Shows/Hides SCI attribute buttons
+    has_attributes = xsdbool( clean_code_manager->is_profile_in_use( ) = abap_false ).
+    attributes_ok = abap_true.
 
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-form )
                                         ( scan_struc_stmnt_type-method )
@@ -177,34 +184,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
                     code = c_code_not_maintained
                     kind = cl_ci_test_root=>c_note
                     text = TEXT-106 ) INTO TABLE scimessages[].
-  ENDMETHOD.
-
-
-  METHOD handle_profiles.
-    IF y_profile_manager=>create( )->is_in_use( sy-uname ) = abap_true.
-      " Hides SCI attributes button
-      has_attributes = abap_false.
-
-      TRY.
-          " Configuration based on Profiles
-          check_configurations = clean_code_manager->read_check_customizing( myname ).
-        CATCH ycx_no_check_customizing.
-          CLEAR check_configurations.
-      ENDTRY.
-    ELSE.
-      " Displays SCI attributes button
-      has_attributes = abap_true.
-
-      " Default configuration
-      check_configurations = VALUE #( ( object_creation_date = settings-object_created_on
-                                        prio = settings-prio
-                                        apply_on_productive_code = settings-apply_on_productive_code
-                                        apply_on_testcode = settings-apply_on_test_code
-                                        threshold = settings-threshold
-                                        ignore_pseudo_comments = settings-ignore_pseudo_comments ) ).
-    ENDIF.
-
-    attributes_ok = xsdbool( check_configurations IS NOT INITIAL ).
   ENDMETHOD.
 
 
@@ -350,7 +329,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD if_ci_test~query_attributes.
     DATA message(72) TYPE c.
 
-    DATA(check_configuration) = check_configurations[ 1 ].
+    DATA(check_configuration) = COND #( WHEN line_exists( check_configurations[ 1 ] ) THEN check_configurations[ 1 ]
+                                        ELSE get_default_check_config( ) ).
 
     " Build screen fields
     DATA(screen_attributes) = VALUE sci_atttab( ( kind = ''
@@ -420,7 +400,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDWHILE.
 
     check_configuration-ignore_pseudo_comments = switch_bool( check_configuration-ignore_pseudo_comments ).
-    check_configurations[ 1 ] = check_configuration.
+
+    MODIFY check_configurations FROM check_configuration INDEX 1.
   ENDMETHOD.
 
 
@@ -439,8 +420,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
     FROM DATA BUFFER p_attributes.
 
-    " Replace default configuration
-    check_configurations[ 1 ] = check_configuration.
+    check_configurations = VALUE #( ( check_configuration ) ).
 
     attributes_ok = abap_true.
   ENDMETHOD.
@@ -471,6 +451,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
               p_param_4 = parameter_04
               p_detail = additional_information ).
     ENDIF.
+  ENDMETHOD.
+
+
+  METHOD run_begin.
+    super->run_begin( ).
+    handle_profiles( ).
   ENDMETHOD.
 
 
@@ -631,6 +617,30 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         iv_trdir_name = level-name
       IMPORTING
         es_tadir_keys = result.
+  ENDMETHOD.
+
+
+  METHOD get_default_check_config.
+    result = VALUE #( object_creation_date = settings-object_created_on
+                      prio = settings-prio
+                      apply_on_productive_code = settings-apply_on_productive_code
+                      apply_on_testcode = settings-apply_on_test_code
+                      threshold = settings-threshold
+                      ignore_pseudo_comments = settings-ignore_pseudo_comments ).
+  ENDMETHOD.
+
+
+  METHOD handle_profiles.
+    " Profiles in Use
+    CHECK has_attributes = abap_false.
+
+    TRY.
+        check_configurations = clean_code_manager->read_check_customizing( myname ).
+      CATCH ycx_no_check_customizing.
+        CLEAR check_configurations.
+    ENDTRY.
+
+    attributes_ok = xsdbool( check_configurations IS NOT INITIAL ).
   ENDMETHOD.
 
 

@@ -158,10 +158,5 @@ INTERFACE y_if_profile_manager
       name TYPE ytab_profiles-profile
     RETURNING
       VALUE(result) TYPE abap_bool.
-  METHODS is_in_use
-    IMPORTING
-      username TYPE ytab_profiles-username
-    RETURNING
-      VALUE(result) TYPE abap_bool.
 
 ENDINTERFACE.
