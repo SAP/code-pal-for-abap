@@ -120,7 +120,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                  RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS switch_bool IMPORTING boolean       TYPE abap_bool
-                        RETURNING VALUE(result) TYPE abap_bool.
+                        RETURNING VALUE(result) TYPE abap_bool. "#EC BOOL_PARAM
 
     METHODS handle_ignore_pseudo_comments IMPORTING  check_configuration TYPE y_if_clean_code_manager=>check_configuration.
 
