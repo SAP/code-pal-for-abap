@@ -17,7 +17,8 @@ CLASS ltd_check_function IMPLEMENTATION.
 
     object_name = 'LTD_CHECK_FUNCTION'.
     object_type = 'CLAS'.
-    attributes_maintained = abap_true.
+    has_attributes = abap_false.
+    attributes_ok = abap_true.
     clean_code_manager = NEW y_clean_code_manager_double( me ).
     statistics = NEW y_scan_statistics( ).
   ENDMETHOD.

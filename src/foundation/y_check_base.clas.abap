@@ -49,7 +49,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
     DATA statistics TYPE REF TO y_if_scan_statistics.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
-    DATA attributes_maintained TYPE abap_bool.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
@@ -459,7 +458,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD put_attributes.
     DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
 
-    attributes_maintained = abap_true.
     TRY.
         IMPORT
           object_creation_date = check_configuration-object_creation_date
@@ -471,7 +469,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
       CATCH cx_root.                                  "#EC NEED_CX_ROOT
-        attributes_maintained = abap_false.
+        attributes_ok = abap_false.
     ENDTRY.
   ENDMETHOD.
 
@@ -505,8 +503,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD run.
-    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
-
     instantiate_objects( ).
 
     IF ref_scan IS INITIAL
@@ -514,7 +510,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF attributes_maintained = abap_false AND has_attributes = abap_true.
+    " SCI variant
+    IF has_attributes = abap_true
+    AND attributes_ok = abap_false.
       raise_error( statement_level = 1
                    statement_index = 1
                    statement_from  = 1
@@ -522,19 +520,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    TRY.
-        profile_configurations = clean_code_manager->read_check_customizing( myname ).
-      CATCH ycx_no_check_customizing.
-        IF profile_configurations IS INITIAL
-        AND attributes_ok = abap_false.
+    " Profile
+    IF has_attributes = abap_false.
+      TRY.
+          check_configurations = clean_code_manager->read_check_customizing( myname ).
+        CATCH ycx_no_check_customizing.
           RETURN.
-        ELSEIF attributes_ok = abap_true.
-          profile_configurations = check_configurations.
-        ENDIF.
-    ENDTRY.
-
-    IF lines( profile_configurations ) > 0.
-      check_configurations = profile_configurations.
+      ENDTRY.
     ENDIF.
 
     execute_check( ).

@@ -71,7 +71,8 @@ CLASS y_unit_test_base IMPLEMENTATION.
     cut ?= get_cut( ).
     cut->object_name = cl_abap_objectdescr=>describe_by_object_ref( cut )->get_relative_name( ).
     cut->object_type = 'CLAS'.
-    cut->attributes_maintained = abap_true.
+    cut->has_attributes = abap_false.
+    cut->attributes_ok = abap_true.
     cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption(  ).
     cut->statistics = NEW y_scan_statistics( ).
