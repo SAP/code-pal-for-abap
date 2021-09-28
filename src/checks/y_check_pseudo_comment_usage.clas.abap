@@ -14,6 +14,9 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS count_pseudo_comments IMPORTING token TYPE stokesx.
     METHODS check_result.
 
+    METHODS create_check IMPORTING name TYPE tadir-obj_name
+                         RETURNING VALUE(result) TYPE REF TO y_check_base.
+
 ENDCLASS.
 
 
@@ -66,15 +69,18 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
 
 
   METHOD get_pseudo_comments.
-    DATA(checks) = y_profile_manager=>get_checks_from_db( ).
-
-    LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>) WHERE object = 'CLAS'.
-      DATA check TYPE REF TO y_check_base.
-      CREATE OBJECT check TYPE (<check>-obj_name).
+    LOOP AT y_profile_manager=>get_checks_from_db( ) ASSIGNING FIELD-SYMBOL(<check>)
+    WHERE object = 'CLAS'.
+      DATA(check) = create_check( <check>-obj_name ).
       IF check->settings-ignore_pseudo_comments = abap_false.
         APPEND check->settings-pseudo_comment TO result.
       ENDIF.
     ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD create_check.
+    CREATE OBJECT result TYPE (name).
   ENDMETHOD.
 
 
