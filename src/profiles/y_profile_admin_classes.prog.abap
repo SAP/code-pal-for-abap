@@ -189,8 +189,8 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
                   window_title          TYPE c OPTIONAL
                   dynpro_program        TYPE sy-repid DEFAULT sy-cprog
                   dynpro_number         TYPE sy-dynnr DEFAULT sy-dynnr
-        EXPORTING value_help            TYPE y_if_profile_manager=>value_help
         CHANGING  value_table           TYPE STANDARD TABLE
+        RETURNING VALUE(result)         TYPE y_if_profile_manager=>value_help
         RAISING   cx_failed.    "#EC PARAMETER_OUT "#EC NUM_OUTPUT_PARA
 
 
@@ -748,7 +748,7 @@ CLASS lcl_util IMPLEMENTATION.
         window_title = window_title
       TABLES
         value_tab    = value_table
-        return_tab   = value_help
+        return_tab   = result
       EXCEPTIONS
         OTHERS       = 4.
     IF sy-subrc <> 0.
@@ -760,15 +760,13 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(tmp_profiles) = profile_manager->get_registered_profiles( ).
 
-        call_f4help( EXPORTING
-                       referenced_field_name = 'PROFILE'
-                       window_title          = 'Available Profiles'(009)
-                       dynpro_program        = sy-cprog
-                       dynpro_number         = sy-dynnr
-                     IMPORTING
-                       value_help = DATA(tmp_retval)
-                     CHANGING
-                       value_table = tmp_profiles ).
+        DATA(tmp_retval) = call_f4help( EXPORTING
+                                          referenced_field_name = 'PROFILE'
+                                          window_title          = 'Available Profiles'(009)
+                                          dynpro_program        = sy-cprog
+                                          dynpro_number         = sy-dynnr
+                                        CHANGING
+                                          value_table = tmp_profiles ).
 
         IF tmp_retval IS NOT INITIAL.
           io_profilename = tmp_retval[ 1 ]-fieldval.
@@ -790,15 +788,13 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(tmp_profiles) = profile_manager->get_registered_profiles( ).
 
-        call_f4help( EXPORTING
-                       referenced_field_name = 'PROFILE'
-                       window_title          = 'Available Profiles'(009)
-                       dynpro_program        = sy-cprog
-                       dynpro_number         = sy-dynnr
-                     IMPORTING
-                       value_help = DATA(tmp_retval)
-                     CHANGING
-                       value_table = tmp_profiles ).
+        DATA(tmp_retval) = call_f4help( EXPORTING
+                                          referenced_field_name = 'PROFILE'
+                                          window_title          = 'Available Profiles'(009)
+                                          dynpro_program        = sy-cprog
+                                          dynpro_number         = sy-dynnr
+                                        CHANGING
+                                          value_table = tmp_profiles ).
 
         IF tmp_retval IS NOT INITIAL.
           io_profilename = tmp_retval[ 1 ]-fieldval.
@@ -820,15 +816,13 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(tmp_checks) = profile_manager->select_existing_checks( ).
 
-        call_f4help( EXPORTING
-                        referenced_field_name = 'CHECKID'
-                        window_title          = 'Available Checks'(019)
-                        dynpro_program        = sy-cprog
-                        dynpro_number         = sy-dynnr
-                      IMPORTING
-                        value_help = DATA(tmp_retval)
-                      CHANGING
-                        value_table = tmp_checks ).
+        DATA(tmp_retval) = call_f4help( EXPORTING
+                                          referenced_field_name = 'CHECKID'
+                                          window_title          = 'Available Checks'(019)
+                                          dynpro_program        = sy-cprog
+                                          dynpro_number         = sy-dynnr
+                                        CHANGING
+                                          value_table = tmp_checks ).
         IF tmp_retval IS NOT INITIAL.
           io_check_id = tmp_retval[ 1 ]-fieldval.
           has_edit_mode_started = abap_true.
