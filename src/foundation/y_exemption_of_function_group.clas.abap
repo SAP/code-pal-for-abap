@@ -39,7 +39,7 @@ CLASS y_exemption_of_function_group IMPLEMENTATION.
                           sub = 'SAPL'
                           off = l_offset ).
     ELSE.
-      fugr_name = 'SAPL' && name.
+      fugr_name =  |'SAPL'{ name }|.
     ENDIF.
 
     SELECT SINGLE COUNT(*)

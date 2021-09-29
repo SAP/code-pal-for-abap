@@ -110,8 +110,8 @@ CLASS y_check_comment_usage IMPLEMENTATION.
                                    start_with = |"#EC| )
         OR has_token_started_with( token = token
                                    start_with = |* INCLUDE| )
-        OR token CP '"' && object_name && '*.'
-        OR token CO '*'.
+        OR token CP |"{ object_name }*.|
+        OR token CO |*|.
 
       result = abap_true.
 
