@@ -86,7 +86,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
-      IF NOT is_comment_excluded( <token>-str ).
+      IF is_comment_excluded( <token>-str ) = abap_false.
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
