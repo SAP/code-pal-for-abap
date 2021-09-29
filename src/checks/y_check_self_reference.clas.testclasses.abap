@@ -29,7 +29,7 @@ CLASS ltc_method IMPLEMENTATION.
       ( '   METHOD meth1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ). "#EC SELF_REF
+    ).
   ENDMETHOD.
 
   METHOD get_code_without_issue.
@@ -49,7 +49,7 @@ CLASS ltc_method IMPLEMENTATION.
       ( '   METHOD meth1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ). "#EC SELF_REF
+    ).
   ENDMETHOD.
 
   METHOD get_code_with_exemption.
@@ -69,7 +69,7 @@ CLASS ltc_method IMPLEMENTATION.
       ( '   METHOD meth1. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
-    ). "#EC SELF_REF
+    ).
   ENDMETHOD.
 
 ENDCLASS.
