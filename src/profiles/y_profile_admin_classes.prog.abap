@@ -298,7 +298,7 @@ CLASS lcl_profile_events IMPLEMENTATION.
     lcl_util=>refresh_delegates( ).
     TRY.
         lcl_util=>switch_toolbar_activation( ).
-      CATCH cx_failed.
+      CATCH cx_failed. "#EC NEED_CX_ROOT
     ENDTRY.
   ENDMETHOD.
 
