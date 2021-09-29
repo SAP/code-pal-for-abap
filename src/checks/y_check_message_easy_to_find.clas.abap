@@ -127,7 +127,8 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
 
 
   METHOD is_static_short_form.
-    CHECK strlen( string ) = 4.
+    CONSTANTS size_of_short_form TYPE i VALUE 4.
+    CHECK strlen( string ) = size_of_short_form.
     CHECK string(1) CA 'AEISW'.
     CHECK string+1(3) NA sy-abcde.
     result = abap_true.
