@@ -53,7 +53,7 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
 
 
   METHOD check_result.
-    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = method_counter
                                                             statement = statement ).

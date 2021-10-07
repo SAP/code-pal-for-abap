@@ -47,7 +47,7 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
     CHECK get_token_abs( statement-from ) = 'MESSAGE'.
 
     "TODO: Recursive
-    IF ref_scan_manager->structures[ statement-struc ]-stmnt_type = scan_struc_stmnt_type-catch.
+    IF ref_scan->structures[ statement-struc ]-stmnt_type = scan_struc_stmnt_type-catch.
       RETURN.
     ENDIF.
 
@@ -65,10 +65,10 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
 
 
   METHOD is_message_dynamic.
-    DATA(token) = ref_scan_manager->tokens[ statement-from + 1 ].
+    DATA(token) = ref_scan->tokens[ statement-from + 1 ].
 
     IF token-str = 'ID'.
-      token = ref_scan_manager->tokens[ statement-from + 2 ].
+      token = ref_scan->tokens[ statement-from + 2 ].
 
       IF token-type = scan_token_type-literal.
         result = abap_true.
@@ -127,7 +127,8 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
 
 
   METHOD is_static_short_form.
-    CHECK strlen( string ) = 4.
+    CONSTANTS size_of_short_form TYPE i VALUE 4.
+    CHECK strlen( string ) = size_of_short_form.
     CHECK string(1) CA 'AEISW'.
     CHECK string+1(3) NA sy-abcde.
     result = abap_true.

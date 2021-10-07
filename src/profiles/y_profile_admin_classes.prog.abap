@@ -186,13 +186,10 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
     CLASS-METHODS:
       call_f4help
         IMPORTING referenced_field_name TYPE dfies-fieldname
-                  window_title          TYPE c OPTIONAL
-                  dynpro_program        TYPE sy-repid DEFAULT sy-cprog
-                  dynpro_number         TYPE sy-dynnr DEFAULT sy-dynnr
-        EXPORTING value_help            TYPE y_if_profile_manager=>value_help
-        CHANGING  value_table           TYPE STANDARD TABLE
-        RAISING   cx_failed.    "#EC PARAMETER_OUT "#EC NUM_OUTPUT_PARA
-
+                  window_title          TYPE c
+                  value_table           TYPE STANDARD TABLE
+        RETURNING VALUE(result) TYPE y_if_profile_manager=>value_help
+        RAISING   cx_failed.
 
     CLASS-METHODS:
       profile_f4help_200,
@@ -298,7 +295,7 @@ CLASS lcl_profile_events IMPLEMENTATION.
     lcl_util=>refresh_delegates( ).
     TRY.
         lcl_util=>switch_toolbar_activation( ).
-      CATCH cx_failed.
+      CATCH cx_failed. "#EC EMPTY_CATCH
     ENDTRY.
   ENDMETHOD.
 
@@ -738,17 +735,16 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD call_f4help.
-    DATA tmp_retval TYPE STANDARD TABLE OF ddshretval.
     CALL FUNCTION 'F4IF_INT_TABLE_VALUE_REQUEST'
       EXPORTING
         retfield     = referenced_field_name
         value_org    = 'S'
-        dynpprog     = dynpro_program
-        dynpnr       = dynpro_number
+        dynpprog     = sy-cprog
+        dynpnr       = sy-dynnr
         window_title = window_title
       TABLES
         value_tab    = value_table
-        return_tab   = value_help
+        return_tab   = result
       EXCEPTIONS
         OTHERS       = 4.
     IF sy-subrc <> 0.
@@ -758,20 +754,12 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD profile_f4help_200.
     TRY.
-        DATA(tmp_profiles) = profile_manager->get_registered_profiles( ).
+        DATA(f4values) = call_f4help( referenced_field_name = 'PROFILE'
+                                      window_title          = 'Available Profiles'(009)
+                                      value_table = profile_manager->get_registered_profiles( ) ).
 
-        call_f4help( EXPORTING
-                       referenced_field_name = 'PROFILE'
-                       window_title          = 'Available Profiles'(009)
-                       dynpro_program        = sy-cprog
-                       dynpro_number         = sy-dynnr
-                     IMPORTING
-                       value_help = DATA(tmp_retval)
-                     CHANGING
-                       value_table = tmp_profiles ).
-
-        IF tmp_retval IS NOT INITIAL.
-          io_profilename = tmp_retval[ 1 ]-fieldval.
+        IF f4values IS NOT INITIAL.
+          io_profilename = f4values[ 1 ]-fieldval.
         ENDIF.
 
         LEAVE TO SCREEN 200.
@@ -783,25 +771,16 @@ CLASS lcl_util IMPLEMENTATION.
         MESSAGE 'Profiles not registered!'(011) TYPE 'I'.
 
     ENDTRY.
-    FREE tmp_profiles.
   ENDMETHOD.
 
   METHOD profile_f4help_600.
     TRY.
-        DATA(tmp_profiles) = profile_manager->get_registered_profiles( ).
+        DATA(f4values) = call_f4help( referenced_field_name = 'PROFILE'
+                                      window_title          = 'Available Profiles'(009)
+                                      value_table = profile_manager->get_registered_profiles( ) ).
 
-        call_f4help( EXPORTING
-                       referenced_field_name = 'PROFILE'
-                       window_title          = 'Available Profiles'(009)
-                       dynpro_program        = sy-cprog
-                       dynpro_number         = sy-dynnr
-                     IMPORTING
-                       value_help = DATA(tmp_retval)
-                     CHANGING
-                       value_table = tmp_profiles ).
-
-        IF tmp_retval IS NOT INITIAL.
-          io_profilename = tmp_retval[ 1 ]-fieldval.
+        IF f4values IS NOT INITIAL.
+          io_profilename = f4values[ 1 ]-fieldval.
         ENDIF.
 
         LEAVE TO SCREEN 600.
@@ -813,24 +792,16 @@ CLASS lcl_util IMPLEMENTATION.
         MESSAGE 'Profiles not registered!'(011) TYPE 'I'.
 
     ENDTRY.
-    FREE tmp_profiles.
   ENDMETHOD.
 
   METHOD check_f4help.
     TRY.
-        DATA(tmp_checks) = profile_manager->select_existing_checks( ).
+        DATA(f4values) = call_f4help( referenced_field_name = 'CHECKID'
+                                      window_title = 'Available Checks'(019)
+                                      value_table = profile_manager->select_existing_checks( ) ).
 
-        call_f4help( EXPORTING
-                        referenced_field_name = 'CHECKID'
-                        window_title          = 'Available Checks'(019)
-                        dynpro_program        = sy-cprog
-                        dynpro_number         = sy-dynnr
-                      IMPORTING
-                        value_help = DATA(tmp_retval)
-                      CHANGING
-                        value_table = tmp_checks ).
-        IF tmp_retval IS NOT INITIAL.
-          io_check_id = tmp_retval[ 1 ]-fieldval.
+        IF f4values IS NOT INITIAL.
+          io_check_id = f4values[ 1 ]-fieldval.
           has_edit_mode_started = abap_true.
         ELSE.
           io_check_id = get_selected_check( )-checkid.
@@ -846,7 +817,6 @@ CLASS lcl_util IMPLEMENTATION.
         MESSAGE 'Checks not registered!'(021) TYPE 'S'.
 
     ENDTRY.
-    FREE: tmp_checks, tmp_retval.
   ENDMETHOD.
 
   METHOD init_check_fields_active.

@@ -53,7 +53,7 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
     DATA(skip) = abap_false.
     DATA(count) = 0.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from
     TO statement-to.
 
@@ -86,8 +86,8 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
 
   METHOD is_exception_case.
     TRY.
-        DATA(one_ahead) = ref_scan_manager->tokens[ position + 1 ]-str.
-        DATA(two_ahead) = ref_scan_manager->tokens[ position + 2 ]-str.
+        DATA(one_ahead) = ref_scan->tokens[ position + 1 ]-str.
+        DATA(two_ahead) = ref_scan->tokens[ position + 2 ]-str.
 
         result = xsdbool(     one_ahead = 'STANDARD'
                           AND two_ahead = 'TABLE' ).

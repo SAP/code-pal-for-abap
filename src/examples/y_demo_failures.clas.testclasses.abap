@@ -17,7 +17,7 @@ CLASS local_test_class IMPLEMENTATION.
 
   METHOD external_call_in_ut.
     DATA alv TYPE REF TO cl_gui_alv_grid.
-    cl_abap_unit_assert=>fail( 'No Gui Allowed' ).
+    cl_abap_unit_assert=>skip( 'No Gui Allowed' ).
   ENDMETHOD.
 
   METHOD unit_test_assert.

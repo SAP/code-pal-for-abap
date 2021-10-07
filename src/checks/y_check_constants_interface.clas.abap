@@ -68,7 +68,7 @@ CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
   METHOD check_result.
     CHECK has_something_else = abap_false.
 
-    DATA(statement_for_message) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement_for_message) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( statement_for_message ).
 

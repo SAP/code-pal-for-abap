@@ -29,7 +29,7 @@ CLASS y_check_text_assembly IMPLEMENTATION.
     DATA(has_literal) = abap_false.
     DATA(has_identifier) = abap_false.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF <token>-str = '&&'.
         has_ampersand = abap_true.

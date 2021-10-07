@@ -549,3 +549,145 @@ CLASS ltc_check_configuration_note IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS lth_test_code DEFINITION.
+  PROTECTED SECTION.
+    DATA cut TYPE REF TO ltd_check_base.
+    DATA is_test_code TYPE abap_bool.
+    METHODS given_global_test_class.
+    METHODS given_local_test_class.
+    METHODS given_class_without_test.
+    METHODS given_program_without_test.
+    METHODS when_scan_class_definition.
+    METHODS when_scan_local_test_class.
+    METHODS when_scan_form.
+    METHODS then_expect_true.
+    METHODS then_expect_false.
+
+ENDCLASS.
+
+CLASS lth_test_code IMPLEMENTATION.
+
+  METHOD given_global_test_class.
+    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_UNIT_TEST_BASE' ) ).
+  ENDMETHOD.
+
+  METHOD given_local_test_class.
+    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_CHECK_BASE' ) ).
+  ENDMETHOD.
+
+  METHOD given_class_without_test.
+    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_UNIT_TEST_COVERAGE' ) ).
+  ENDMETHOD.
+
+  METHOD given_program_without_test.
+    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_program( 'Y_DEMO_FAILURES' ) ).
+  ENDMETHOD.
+
+  METHOD when_scan_class_definition.
+    DATA(ref_scan) = cut->get_ref_scan( ).
+    DATA(structure) = ref_scan->structures[ stmnt_type = scan_struc_stmnt_type-class_definition ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
+    is_test_code = cut->get_is_test_code( statement ).
+  ENDMETHOD.
+
+  METHOD when_scan_form.
+    DATA(ref_scan) = cut->get_ref_scan( ).
+    DATA(structure) = ref_scan->structures[ stmnt_type = scan_struc_stmnt_type-form ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
+    is_test_code = cut->get_is_test_code( statement ).
+  ENDMETHOD.
+
+  METHOD when_scan_local_test_class.
+    DATA(ref_scan) = cut->get_ref_scan( ).
+    DATA(token_index) = line_index( ref_scan->tokens[ str = 'LTC_TEST_CODE_POSITIVE' ] ).
+
+    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    WHERE from <= token_index
+    AND to >= token_index.
+      is_test_code = cut->get_is_test_code( <statement> ).
+      RETURN.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD then_expect_true.
+    cl_abap_unit_assert=>assert_true( act = is_test_code
+                                      quit = if_aunit_constants=>quit-no ).
+  ENDMETHOD.
+
+  METHOD then_expect_false.
+    cl_abap_unit_assert=>assert_false( act = is_test_code
+                                       quit = if_aunit_constants=>quit-no ).
+  ENDMETHOD.
+ENDCLASS.
+
+
+CLASS ltc_test_code_positive DEFINITION FOR TESTING INHERITING FROM lth_test_code RISK LEVEL HARMLESS.
+  PUBLIC SECTION.
+    METHODS global_test_class FOR TESTING.
+    METHODS local_test_class FOR TESTING.
+  PRIVATE SECTION.
+    METHODS setup.
+    METHODS teardown.
+ENDCLASS.
+
+
+CLASS ltc_test_code_positive IMPLEMENTATION.
+
+  METHOD setup.
+    cut = NEW #( ).
+  ENDMETHOD.
+
+  METHOD global_test_class.
+    given_global_test_class( ).
+    when_scan_class_definition( ).
+    then_expect_true( ).
+  ENDMETHOD.
+
+  METHOD local_test_class.
+    given_local_test_class( ).
+    when_scan_local_test_class( ).
+    then_expect_true( ).
+  ENDMETHOD.
+
+  METHOD teardown.
+    CLEAR is_test_code.
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_test_code_negative DEFINITION FOR TESTING INHERITING FROM lth_test_code RISK LEVEL HARMLESS.
+  PUBLIC SECTION.
+    METHODS global_class FOR TESTING.
+    METHODS program FOR TESTING.
+  PRIVATE SECTION.
+    METHODS setup.
+    METHODS teardown.
+
+ENDCLASS.
+
+
+CLASS ltc_test_code_negative IMPLEMENTATION.
+
+  METHOD setup.
+    cut = NEW #( ).
+  ENDMETHOD.
+
+  METHOD global_class.
+    given_class_without_test( ).
+    when_scan_class_definition( ).
+    then_expect_false( ).
+  ENDMETHOD.
+
+  METHOD program.
+    given_program_without_test( ).
+    when_scan_form( ).
+    then_expect_false( ).
+  ENDMETHOD.
+
+  METHOD teardown.
+    CLEAR is_test_code.
+  ENDMETHOD.
+
+ENDCLASS.

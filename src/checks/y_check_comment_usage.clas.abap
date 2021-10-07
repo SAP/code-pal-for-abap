@@ -83,10 +83,10 @@ CLASS y_check_comment_usage IMPLEMENTATION.
       abs_statement_number = abs_statement_number + ( statement-to - statement-from ).
     ENDIF.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
-      IF NOT is_comment_excluded( <token>-str ).
+      IF is_comment_excluded( <token>-str ) = abap_false.
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
@@ -110,8 +110,8 @@ CLASS y_check_comment_usage IMPLEMENTATION.
                                    start_with = |"#EC| )
         OR has_token_started_with( token = token
                                    start_with = |* INCLUDE| )
-        OR token CP '"' && object_name && '*.'
-        OR token CO '*'.
+        OR token CP |"{ object_name }*.|
+        OR token CO |*|.
 
       result = abap_true.
 
@@ -133,7 +133,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
   METHOD check_result.
     DATA(percentage_of_comments) = get_percentage_of_comments( ).
 
-    DATA(statement_for_message) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement_for_message) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = percentage_of_comments
                                                             statement = statement_for_message ).
@@ -149,9 +149,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
 
   METHOD get_percentage_of_comments.
-    DATA percentage TYPE decfloat16.
-
-    percentage = ( comment_number / abs_statement_number ) * 100.
+    DATA(percentage) = CONV decfloat16( comment_number / abs_statement_number ) * 100.
 
     result = round( val = percentage
                     dec = 0

@@ -14,7 +14,7 @@ CLASS y_clean_code_manager_double IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
-    me->check_class = check_class. "#EC SELF_REF
+    me->check_class = check_class.
   ENDMETHOD.
 
 
@@ -29,4 +29,6 @@ CLASS y_clean_code_manager_double IMPLEMENTATION.
   METHOD calculate_obj_creation_date.
     result = check_class->settings-object_created_on.
   ENDMETHOD.
+
+
 ENDCLASS.

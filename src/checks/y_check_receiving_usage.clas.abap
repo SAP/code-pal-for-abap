@@ -32,7 +32,7 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
 
     DATA(token_index) = 0.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
       IF has_receiving = abap_false.
         has_receiving = xsdbool( <token>-str = 'RECEIVING' AND

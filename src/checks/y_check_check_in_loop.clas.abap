@@ -46,8 +46,8 @@ CLASS y_check_check_in_loop IMPLEMENTATION.
 
   METHOD get_back_statement.
     TRY.
-        DATA(back_structure) = ref_scan_manager->structures[ structure-back ].
-        result = ref_scan_manager->statements[ back_structure-stmnt_from ].
+        DATA(back_structure) = ref_scan->structures[ structure-back ].
+        result = ref_scan->statements[ back_structure-stmnt_from ].
       CATCH cx_sy_itab_line_not_found.
         CLEAR result.
     ENDTRY.

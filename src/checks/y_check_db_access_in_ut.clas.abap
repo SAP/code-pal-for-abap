@@ -129,6 +129,8 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD is_internal_table.
+    CONSTANTS max_name_size TYPE i VALUE 40.
+
     DATA(second_token) = get_token_abs( statement-from + 1 ).
     DATA(third_token) = get_token_abs( statement-from + 2 ).
     DATA(fourth_token) = get_token_abs( statement-from + 2 ).
@@ -141,7 +143,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
                                WHEN third_token = keys-into  THEN fourth_token
                                ELSE second_token ).
 
-    IF strlen( table_name ) > 40.
+    IF strlen( table_name ) > max_name_size.
       RETURN.
     ENDIF.
 
@@ -181,7 +183,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
     DATA(forbidden_tokens) = get_forbidden_tokens( class_name ).
 
-    DATA(token) = ref_scan_manager->tokens[ statement-from ].
+    DATA(token) = ref_scan->tokens[ statement-from ].
 
     IF NOT line_exists( forbidden_tokens[ table_line = token-str ] ).
       RETURN.
@@ -192,7 +194,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF ref_scan_manager->tokens[ statement-from + 1 ]-str = '='.
+    IF ref_scan->tokens[ statement-from + 1 ]-str = '='.
       RETURN.
     ENDIF.
 
@@ -206,12 +208,10 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD get_forbidden_tokens.
-    DATA risk_lvl TYPE properties-risk_level.
-    TRY.
-        risk_lvl = defined_classes[ name = class_name ]-risk_level.
-      CATCH cx_sy_itab_line_not_found.
-        risk_lvl = space.
-    ENDTRY.
+    DATA(class) = VALUE #( defined_classes[ name = class_name ] OPTIONAL ).
+
+    DATA(risk_lvl) = COND #( WHEN class IS NOT INITIAL THEN class-risk_level
+                             ELSE space ).
 
     CASE risk_lvl.
       WHEN risk_level-dangerous OR risk_level-critical.
@@ -233,9 +233,9 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD is_part_of_framework.
-    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from TO structure-stmnt_to.
-      LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
       FROM <statement>-from TO <statement>-to
       WHERE str = framework-qsql_if
       OR str = framework-qsql_cl
@@ -249,7 +249,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD get_class_name.
-    DATA(index) = ref_scan_manager->statements[ structure-stmnt_from ]-from.
+    DATA(index) = ref_scan->statements[ structure-stmnt_from ]-from.
     IF get_token_abs( index ) = keys-class.
       result = get_token_abs( index + 1 ).
     ENDIF.
@@ -257,7 +257,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD get_risk_level.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE str = risk_level-harmless
     OR str = risk_level-dangerous
@@ -282,6 +282,4 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
                     OR token-str = check_for-delete
                     OR token-str = check_for-insert ).
   ENDMETHOD.
-
-
 ENDCLASS.

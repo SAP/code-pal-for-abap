@@ -90,7 +90,7 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
 
 
   METHOD check_result.
-    DATA(statement_for_message) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement_for_message) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = public_method_counter
                                                             statement = statement_for_message ).

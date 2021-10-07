@@ -69,7 +69,7 @@ CLASS y_check_prefer_pragmas IMPLEMENTATION.
 
 
   METHOD extract_pseudo_comment.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
       IF <token>-str CS '"#EC'.

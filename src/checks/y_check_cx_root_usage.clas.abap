@@ -42,7 +42,7 @@ CLASS y_check_cx_root_usage IMPLEMENTATION.
 
 
   METHOD has_cx_root.
-    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+    LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'CX_ROOT'.
       result = abap_true.

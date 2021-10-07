@@ -85,7 +85,7 @@ CLASS y_check_num_public_attributes IMPLEMENTATION.
 
 
   METHOD check_result.
-    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( statement = statement
                                                             error_count = public_attribute_counter ).

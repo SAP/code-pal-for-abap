@@ -81,7 +81,7 @@ CLASS y_check_number_attributes IMPLEMENTATION.
 
 
   METHOD check_result.
-    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = attribute_counter
                                                             statement = statement ).

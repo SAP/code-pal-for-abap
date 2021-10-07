@@ -80,7 +80,7 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
       max_nesting = 0.
     ENDIF.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
       IF is_macro( <token> ).

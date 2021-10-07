@@ -1,19 +1,24 @@
 code-pal-for-abap changelog
 =================
 
-Legend
-------
-* : fixed
-! : changed
-+ : added
-- : removed
+Dependencies
+------------------
+1. SAP Note 2527903 - Remote analysis (for check system)
 
 Upgrade Note
 ------------------
 Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective Code Inspector Variant (SCI transaction)
 
+Legend
+------------------
+* : fixed
+! : changed
++ : added
+- : removed
+
 2021-08-XX v.1.16.0
 ------------------
+* Refactoring (#436,#452,#458)
 * Cannot run unit tests on 752 (#461)
 * Profiles: Allow Exemptions (#447)
 * BAdI example class vs Percentage Comment (#443)

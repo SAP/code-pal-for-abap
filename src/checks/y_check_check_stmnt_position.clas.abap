@@ -68,7 +68,7 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
 
 
   METHOD has_wrong_position.
-    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure-stmnt_from TO structure-stmnt_to.
       IF <statement>-type = scan_stmnt_type-empty
       OR <statement>-type = scan_stmnt_type-comment
@@ -89,8 +89,10 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
 
 
   METHOD is_check_in_loop.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM structure-stmnt_from TO check-from
+    DATA(scope) = ref_scan->statements[ structure-stmnt_from ].
+
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM scope-from TO check-from
     WHERE str = 'LOOP'
     OR str = 'ENDLOOP'.
       result = xsdbool( <token>-str = 'LOOP' ).

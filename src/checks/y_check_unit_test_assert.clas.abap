@@ -46,7 +46,7 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA(token) = ref_scan_manager->tokens[ statement-from ].
+    DATA(token) = ref_scan->tokens[ statement-from ].
 
     IF token-str NP '*ASSERT*'
     OR token-type = scan_token_type-comment.
@@ -94,7 +94,7 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
         ENDIF.
       ENDIF.
 
-      DATA(token) = ref_scan_manager->tokens[ position ].
+      DATA(token) = ref_scan->tokens[ position ].
 
       IF token-type = scan_token_type-comment.
         position = position + 1.
@@ -120,8 +120,8 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
       ENDIF.
 
       IF depth = 0
-      AND line_exists( ref_scan_manager->tokens[ position + 1 ] ).
-        DATA(next) = ref_scan_manager->tokens[ position + 1 ].
+      AND line_exists( ref_scan->tokens[ position + 1 ] ).
+        DATA(next) = ref_scan->tokens[ position + 1 ].
         IF next-str = '='.
           in = abap_false.
           RETURN.
@@ -155,8 +155,8 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
   METHOD is_internal_table.
     TRY.
-        DATA(previous_token) = ref_scan_manager->tokens[ position - 1 ].
-        DATA(next_token) = ref_scan_manager->tokens[ position + 1 ].
+        DATA(previous_token) = ref_scan->tokens[ position - 1 ].
+        DATA(next_token) = ref_scan->tokens[ position + 1 ].
         result = xsdbool( previous_token-str CP '*[' AND next_token-str CP ']*').
       CATCH cx_sy_itab_line_not_found.
         result = abap_false.
