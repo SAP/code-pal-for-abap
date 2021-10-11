@@ -9,12 +9,13 @@ CLASS y_check_magic_number DEFINITION PUBLIC INHERITING FROM y_check_base CREATE
     METHODS is_magic_number RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_index RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_lines RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_sy_subrc_in_case RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
+CLASS y_check_magic_number IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -42,7 +43,7 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
     ENDIF.
 
     IF keyword = if_kaizen_keywords_c=>gc_when
-    AND get_token_abs( ref_scan->statements[ index - 1 ]-to ) = 'SY-SUBRC'.
+    AND is_sy_subrc_in_case( ) = abap_true.
       RETURN.
     ELSEIF next1( 'SY-SUBRC' ) IS NOT INITIAL
     OR next1( 'SY-TABIX' ) IS NOT INITIAL.
@@ -51,11 +52,9 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
 
     LOOP AT ref_scan->tokens INTO token_wa
     FROM statement-from TO statement-to.
-      DATA(tabix) = sy-tabix.
-
       IF is_magic_number( ) = abap_false
-      OR is_index( ) = abap_true
-      OR is_lines( ) = abap_true.
+      OR is_lines( ) = abap_true
+      OR is_index( ) = abap_true.
         CONTINUE.
       ENDIF.
 
@@ -92,6 +91,18 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
 
   METHOD is_lines.
     result = xsdbool( next1( 'LINES(' ) ).
+  ENDMETHOD.
+
+
+  METHOD is_sy_subrc_in_case.
+    DATA(when_statement) = statement_wa.
+    DATA(when_structure) = ref_scan->structures[ when_statement-struc ].
+
+    DATA(case_structure) = ref_scan->structures[ when_structure-back ].
+    DATA(case_statement) = ref_scan->statements[ case_structure-stmnt_from ].
+    DATA(case_target) = ref_scan->tokens[ case_statement-to ].
+
+    result = xsdbool( case_target-str = 'SY-SUBRC' ).
   ENDMETHOD.
 
 

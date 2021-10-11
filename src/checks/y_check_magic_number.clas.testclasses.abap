@@ -258,8 +258,12 @@ CLASS ltc_sy_subrc IMPLEMENTATION.
       ( '   ENDIF. ' )
 
       ( |   CASE sy-subrc. | )
-      ( |     WHEN 8. | )
+      ( |     WHEN 0. | )
       ( |       WRITE 'ok'. | )
+      ( |     WHEN 4. | )
+      ( |       WRITE 'not found'. | )
+      ( |     WHEN 8. | )
+      ( |       WRITE 'other error'. | )
       ( |   ENDCASE. | )
     ).
   ENDMETHOD.
