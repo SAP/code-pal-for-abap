@@ -6,23 +6,16 @@ CLASS y_check_magic_number DEFINITION PUBLIC INHERITING FROM y_check_base CREATE
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    CONSTANTS second_token TYPE i VALUE 2 ##NO_TEXT.
+    METHODS is_magic_number RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_index RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_lines RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_sy_subrc_in_case RETURNING VALUE(result) TYPE abap_bool.
 
-    DATA magic_number TYPE string.
-    DATA has_case_with_subrc TYPE abap_bool.
-
-    METHODS is_exception IMPORTING token        TYPE string
-                         RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_keyword_valid RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_magic_number IMPORTING token_string TYPE string
-                            RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
+CLASS y_check_magic_number IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -38,62 +31,78 @@ CLASS Y_CHECK_MAGIC_NUMBER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_exception.
-    IF token = 'ENDCASE' AND has_case_with_subrc = abap_true.
-      has_case_with_subrc = abap_false.
-    ENDIF.
-
-    IF token = 'SY-SUBRC' OR has_case_with_subrc = abap_true.
-      result = abap_true.
-    ELSEIF token = 'CASE' AND get_token_rel( second_token ) = 'SY-SUBRC'.
-      has_case_with_subrc = abap_true.
-    ENDIF.
-  ENDMETHOD.
-
-
   METHOD inspect_tokens.
-    statement_wa = statement.
+    DATA(keyword) = keyword( ).
 
-    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    IF keyword <> if_kaizen_keywords_c=>gc_do
+    AND keyword <> if_kaizen_keywords_c=>gc_if
+    AND keyword <> if_kaizen_keywords_c=>gc_elseif
+    AND keyword <> if_kaizen_keywords_c=>gc_when
+    AND keyword <> if_kaizen_keywords_c=>gc_check.
+      RETURN.
+    ENDIF.
+
+    IF keyword = if_kaizen_keywords_c=>gc_when
+    AND is_sy_subrc_in_case( ) = abap_true.
+      RETURN.
+    ELSEIF next1( 'SY-SUBRC' ) IS NOT INITIAL
+    OR next1( 'SY-TABIX' ) IS NOT INITIAL.
+      RETURN.
+    ENDIF.
+
+    LOOP AT ref_scan->tokens INTO token_wa
     FROM statement-from TO statement-to.
-
-      IF is_exception( <token>-str ) = abap_true.
-        EXIT.
+      IF is_magic_number( ) = abap_false
+      OR is_lines( ) = abap_true
+      OR is_index( ) = abap_true.
+        CONTINUE.
       ENDIF.
 
-      IF is_magic_number( <token>-str ).
-        DATA(check_configuration) = detect_check_configuration( statement_wa ).
+      DATA(check_configuration) = detect_check_configuration( statement ).
 
-        raise_error( statement_level = statement_wa-level
-                     statement_index = index
-                     statement_from = statement_wa-from
-                     check_configuration = check_configuration
-                     parameter_01 = |{ magic_number }| ).
-      ENDIF.
+      raise_error( statement_level = statement-level
+                   statement_index = index
+                   statement_from = statement-from
+                   check_configuration = check_configuration
+                   parameter_01 = |{ token_wa-str }| ).
     ENDLOOP.
   ENDMETHOD.
 
 
-  METHOD is_keyword_valid.
-    DATA(keyword) = keyword( ).
-    result = xsdbool( keyword = 'DO' OR
-                      keyword = 'IF' OR
-                      keyword = 'ELSEIF' OR
-                      keyword = 'WHEN' OR
-                      keyword = 'CHECK' ).
+  METHOD is_magic_number.
+    DATA(string) = token_wa-str.
+    REPLACE ALL OCCURRENCES OF |'| IN string WITH ||.
+    result = xsdbool( string IS NOT INITIAL
+                  AND string CO '0123456789'
+                  AND string <> '0'
+                  AND string <> '1' ).
   ENDMETHOD.
 
 
-  METHOD is_magic_number.
-    IF is_keyword_valid( ) = abap_false.
-      RETURN.
-    ENDIF.
+  METHOD is_index.
+    DATA(current) = line_index( ref_scan->tokens[ table_line = token_wa ] ).
+    DATA(last) = VALUE #( ref_scan->tokens[ current - 1 ] OPTIONAL ).
+    DATA(next) = VALUE #( ref_scan->tokens[ current + 1 ] OPTIONAL ).
 
-    FIND REGEX `^(?!'?[01]'?$)'?\d+'?$` IN token_string.
-    IF sy-subrc = 0.
-      magic_number = token_string.
-      result = abap_true.
-    ENDIF.
+    result = xsdbool( last-str CA '[('
+                   OR next-str CA '])' ).
+  ENDMETHOD.
+
+
+  METHOD is_lines.
+    result = xsdbool( next1( 'LINES(' ) ).
+  ENDMETHOD.
+
+
+  METHOD is_sy_subrc_in_case.
+    DATA(when_statement) = statement_wa.
+    DATA(when_structure) = ref_scan->structures[ when_statement-struc ].
+
+    DATA(case_structure) = ref_scan->structures[ when_structure-back ].
+    DATA(case_statement) = ref_scan->statements[ case_structure-stmnt_from ].
+    DATA(case_target) = ref_scan->tokens[ case_statement-to ].
+
+    result = xsdbool( case_target-str = 'SY-SUBRC' ).
   ENDMETHOD.
 
 
