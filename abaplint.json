@@ -37,7 +37,7 @@
     "check_include": true,
     "check_no_handler_pragma": true,
     "check_subrc": false,
-    "check_syntax": true,
+    "check_syntax": false,
     "check_text_elements": false,
     "check_transformation_exists": false,
     "class_attribute_names": false,
