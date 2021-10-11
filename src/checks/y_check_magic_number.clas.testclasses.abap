@@ -336,3 +336,23 @@ CLASS ltc_empty_string IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+CLASS ltc_leading_zeros DEFINITION INHERITING FROM ltc_if FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_leading_zeros IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT ut_test.' )
+      ( ' START-OF-SELECTION.' )
+      ( |   DATA char TYPE c LENGTH 6. | )
+      ( |   IF char = '000000'. | )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
