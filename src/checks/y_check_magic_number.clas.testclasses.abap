@@ -241,12 +241,12 @@ CLASS ltc_case IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltc_sy_subrc DEFINITION INHERITING FROM ltc_if FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_sy DEFINITION INHERITING FROM ltc_if FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
 ENDCLASS.
 
-CLASS ltc_sy_subrc IMPLEMENTATION.
+CLASS ltc_sy IMPLEMENTATION.
 
   METHOD get_code_without_issue.
     result = VALUE #(
@@ -264,6 +264,15 @@ CLASS ltc_sy_subrc IMPLEMENTATION.
       ( |       WRITE 'not found'. | )
       ( |     WHEN 8. | )
       ( |       WRITE 'other error'. | )
+      ( |   ENDCASE. | )
+
+      ( |   CASE sy-tabix. | )
+      ( |     WHEN 1. | )
+      ( |       WRITE 'first'. | )
+      ( |     WHEN 2. | )
+      ( |       WRITE 'second'. | )
+      ( |     WHEN 3. | )
+      ( |       WRITE 'other'. | )
       ( |   ENDCASE. | )
     ).
   ENDMETHOD.
@@ -351,6 +360,26 @@ CLASS ltc_leading_zeros IMPLEMENTATION.
       ( ' START-OF-SELECTION.' )
       ( |   DATA char TYPE c LENGTH 6. | )
       ( |   IF char = '000000'. | )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_checking_numbers DEFINITION INHERITING FROM ltc_if FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_checking_numbers IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT ut_test.' )
+      ( ' START-OF-SELECTION.' )
+      ( |   DATA char TYPE c LENGTH 6. | )
+      ( |   IF char CO '0123456789'. | )
       ( '   ENDIF. ' )
     ).
   ENDMETHOD.
