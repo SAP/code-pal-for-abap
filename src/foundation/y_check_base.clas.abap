@@ -251,14 +251,14 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD inspect_structures.
     DATA(structures) = FILTER #( ref_scan->structures IN relevant_structure_types WHERE type = table_line ).
 
-    LOOP AT structures ASSIGNING FIELD-SYMBOL(<structure>).
-      inspect_statements( <structure> ).
+    LOOP AT structures INTO structure_wa.
+      inspect_statements( structure_wa ).
     ENDLOOP.
 
     structures = FILTER #( ref_scan->structures IN relevant_statement_types WHERE stmnt_type = table_line ).
 
-    LOOP AT structures ASSIGNING <structure>.
-      inspect_statements( <structure> ).
+    LOOP AT structures INTO structure_wa.
+      inspect_statements( structure_wa ).
     ENDLOOP.
   ENDMETHOD.
 
@@ -266,12 +266,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD inspect_statements.
     DATA(index) = structure-stmnt_from.
 
-    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
-    FROM structure-stmnt_from
-    TO structure-stmnt_to.
+    LOOP AT ref_scan->statements INTO statement_wa
+    FROM structure-stmnt_from TO structure-stmnt_to.
       inspect_tokens( index = index
                       structure = structure
-                      statement = <statement> ).
+                      statement = statement_wa ).
 
       index = index + 1.
     ENDLOOP.
