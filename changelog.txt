@@ -18,7 +18,7 @@ Legend
 
 2021-08-XX v.1.16.0
 ------------------
-* Use native *_wa variables (#474)
+* Use native *_wa variables(#474)
 * Refactoring (#436,#452,#458)
 * Cannot run unit tests on 752 (#461)
 * Profiles: Allow Exemptions (#447)
