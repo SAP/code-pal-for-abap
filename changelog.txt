@@ -18,6 +18,7 @@ Legend
 
 2021-08-XX v.1.16.0
 ------------------
+* Magic Number: Leading Zeros (#479)
 * Prefer New to Create Object: Dynamic Type (#469)
 * Magic Number: Table Index (#468)
 * Use native *_wa variables (#474)

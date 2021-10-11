@@ -72,9 +72,10 @@ CLASS y_check_magic_number IMPLEMENTATION.
   METHOD is_magic_number.
     DATA(string) = token_wa-str.
     REPLACE ALL OCCURRENCES OF |'| IN string WITH ||.
+
     result = xsdbool( string IS NOT INITIAL
                   AND string CO '0123456789'
-                  AND string <> '0'
+                  AND string CN '0'
                   AND string <> '1' ).
   ENDMETHOD.
 
