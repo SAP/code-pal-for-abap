@@ -18,6 +18,7 @@ Legend
 
 2021-08-XX v.1.16.0
 ------------------
+* Empty Catch: Test Double Framework (#483)
 * Y_CHECK_FORM: Screen Events (#454)
 * Magic Number: CASE SY-TABIX and CO NUMBERS (#480)
 * Magic Number: Leading Zeros (#479)
