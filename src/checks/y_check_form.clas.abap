@@ -5,6 +5,9 @@ CLASS y_check_form DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
 
+  PRIVATE SECTION.
+    METHODS is_screen_event RETURNING VALUE(result) TYPE abap_bool.
+
 ENDCLASS.
 
 
@@ -28,7 +31,8 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) = 'FORM'.
+    CHECK keyword( ) = if_kaizen_keywords_c=>gc_form.
+    CHECK is_screen_event( ) = abap_false.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
@@ -36,6 +40,29 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
                  statement_index = index
                  statement_from = statement-from
                  check_configuration = check_configuration ).
+  ENDMETHOD.
+
+
+  METHOD is_screen_event.
+    DATA(form) = get_token_abs( statement_wa-from + 1 ).
+
+    SELECT tabname
+    FROM tvimf
+    INTO TABLE @DATA(views)
+    WHERE formname = @form.
+
+    IF views IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    LOOP AT views ASSIGNING FIELD-SYMBOL(<view>).
+      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS WHERE str = <view>.
+        IF get_token_abs( sy-tabix - 1 ) = if_kaizen_keywords_c=>gc_tables.
+          result = abap_true.
+          RETURN.
+        ENDIF.
+      ENDLOOP.
+    ENDLOOP.
   ENDMETHOD.
 
 
