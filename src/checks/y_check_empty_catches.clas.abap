@@ -3,17 +3,17 @@ CLASS y_check_empty_catches DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
     METHODS constructor .
 
   PROTECTED SECTION.
-    METHODS inspect_tokens REDEFINITION .
+    METHODS inspect_tokens REDEFINITION.
+    METHODS get_token_abs REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS get_next_token_from_index IMPORTING index         TYPE i
-                                      RETURNING VALUE(result) TYPE stokesx.
+    METHODS is_test_double_framework RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
+CLASS y_check_empty_catches IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -28,21 +28,13 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_next_token_from_index.
-    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
-      FROM index WHERE type = 'I'.
-      IF result IS INITIAL.
-        result = <token>.
-        EXIT.
-      ENDIF.
-    ENDLOOP.
-  ENDMETHOD.
-
-
   METHOD inspect_tokens.
-    CHECK get_next_token_from_index( statement-from )-str = 'CATCH'
-    AND ( get_next_token_from_index( statement-to + 1 )-str = 'ENDTRY'
-          OR get_next_token_from_index( statement-to + 1 )-str = 'ENDCATCH' ).
+    CHECK keyword( ) = 'CATCH'.
+
+    CHECK get_token_abs( statement-to + 1 ) = if_kaizen_keywords_c=>gc_endtry
+       OR get_token_abs( statement-to + 1 ) = 'ENDCATCH'.
+
+    CHECK is_test_double_framework( ) = abap_false.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
@@ -51,4 +43,24 @@ CLASS Y_CHECK_EMPTY_CATCHES IMPLEMENTATION.
                  statement_from = statement-from
                  check_configuration = check_configuration ).
   ENDMETHOD.
+
+
+  METHOD get_token_abs.
+    p_result = super->get_token_abs( p_n ).
+    if token_wa-type = scan_token_type-comment.
+      p_result = get_token_abs( p_n + 1 ).
+    endif.
+  ENDMETHOD.
+
+
+  METHOD is_test_double_framework.
+    DATA(catch_structure) = ref_scan->structures[ statement_wa-struc ].
+    DATA(before_try_structure) = ref_scan->structures[ catch_structure-back - 1 ].
+    DATA(search_from_token) = ref_scan->statements[ before_try_structure-stmnt_from ]-from.
+    DATA(search_to_token) = ref_scan->statements[ before_try_structure-stmnt_to ]-to.
+    DATA(range_tokens) = VALUE stokesx_tab( FOR token IN ref_scan->tokens FROM search_from_token TO search_to_token ( token ) ).
+    result = xsdbool( line_exists( range_tokens[ str = 'CL_ABAP_TESTDOUBLE=>CONFIGURE_CALL(' ] ) ).
+  ENDMETHOD.
+
+
 ENDCLASS.
