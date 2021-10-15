@@ -139,3 +139,28 @@ CLASS ltc_loop_at_from_to IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_loop_in DEFINITION INHERITING FROM ltc_loop_at FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_loop_in IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA actual TYPE TABLE OF tadir. ' )
+      ( '   DATA expected TYPE RANGE OF tadir-obj_name. ' )
+
+      ( '   LOOP AT actual TRANSPORTING NO FIELDS WHERE obj_name IN expected. ' )
+      ( '   EXIT. ' )
+      ( '   ENDLOOP. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
