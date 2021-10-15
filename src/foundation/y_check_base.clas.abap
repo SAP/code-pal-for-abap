@@ -20,6 +20,9 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     DATA: BEGIN OF settings READ-ONLY,
             pseudo_comment                TYPE sci_pcom,
+            alternative_pseudo_comment    TYPE sci_pcom,
+            pragma                        TYPE sci_pragma,
+            alternative_pragma            TYPE sci_pragma,
             disable_on_prodcode_selection TYPE abap_bool,
             disable_on_testcode_selection TYPE abap_bool,
             disable_threshold_selection   TYPE abap_bool,
@@ -39,6 +42,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS if_ci_test~display_documentation  REDEFINITION.
     METHODS if_ci_test~query_attributes REDEFINITION.
     METHODS put_attributes  REDEFINITION.
+    METHODS run_begin REDEFINITION.
     METHODS run REDEFINITION.
 
   PROTECTED SECTION.
@@ -497,6 +501,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD run_begin.
+    uses_checksum = xsdbool( settings-ignore_pseudo_comments = abap_false ).
+  ENDMETHOD.
+
+
   METHOD run.
     instantiate_objects( ).
 
@@ -529,13 +538,30 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD set_check_message.
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = myname
-        text           = message
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = scimessages ).
+    DATA(base) = VALUE scimessage( test = myname
+                                   text = message
+                                   pcom = COND #( WHEN settings-pseudo_comment IS NOT INITIAL THEN settings-pseudo_comment+5 )
+                                   pcom_alt = COND #( WHEN settings-alternative_pseudo_comment IS NOT INITIAL THEN settings-alternative_pseudo_comment+5 )
+                                   pragma = COND #( WHEN settings-pragma IS NOT INITIAL THEN settings-pragma+2 )
+                                   pragma_alt = COND #( WHEN settings-alternative_pragma IS NOT INITIAL THEN settings-alternative_pragma+2 ) ).
+
+    DATA(error) = base.
+    DATA(warning) = base.
+    DATA(notification) = base.
+
+    error-code = y_check_base=>c_code-error.
+    error-kind = cl_ci_test_root=>c_error.
+
+    warning-code = y_check_base=>c_code-warning.
+    warning-kind = cl_ci_test_root=>c_warning.
+
+    notification-code = y_check_base=>c_code-notification.
+    notification-kind = cl_ci_test_root=>c_note.
+
+    scimessages = VALUE #( BASE scimessages
+                         ( error )
+                         ( warning )
+                         ( notification ) ).
   ENDMETHOD.
 
 
