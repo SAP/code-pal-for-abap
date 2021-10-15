@@ -549,13 +549,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     DATA(warning) = base.
     DATA(notification) = base.
 
-    error-code = y_check_base=>c_code-error.
+    error-code = c_code-error.
     error-kind = cl_ci_test_root=>c_error.
 
-    warning-code = y_check_base=>c_code-warning.
+    warning-code = c_code-warning.
     warning-kind = cl_ci_test_root=>c_warning.
 
-    notification-code = y_check_base=>c_code-notification.
+    notification-code = c_code-notification.
     notification-kind = cl_ci_test_root=>c_note.
 
     scimessages = VALUE #( BASE scimessages
