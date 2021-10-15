@@ -34,8 +34,6 @@ CLASS y_check_prefer_pragmas IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }prefer-pragmas-to-pseudo-comments.md|.
 
-    uses_checksum = abap_false.
-
     IF mappings IS INITIAL.
       SELECT pragma, pseudo_com FROM slin_desc INTO CORRESPONDING FIELDS OF TABLE @mappings.
     ENDIF.
