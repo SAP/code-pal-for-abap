@@ -138,7 +138,7 @@ CLASS ltc_system_based IMPLEMENTATION.
 
       ( ' CLASS classname IMPLEMENTATION. ' )
       ( '   METHOD system_based. ' )
-      ( '     CATCH SYSTEM-EXCEPTIONS OTHERS = 1. "#EC EMPTY_CATCH ' )
+      ( '     CATCH SYSTEM-EXCEPTIONS OTHERS = 1. "#EC NO_HANDLER ' )
       ( '     ENDCATCH. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
