@@ -542,26 +542,28 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     DATA(alternative_pseudo_comment) = COND #( WHEN settings-alternative_pseudo_comment IS NOT INITIAL
                                                THEN settings-alternative_pseudo_comment+5 ).
 
-    scid_fill_message_ext message_code-error
-                          category
-                          c_error
-                          message
-                          pseudo_comment
-                          alternative_pseudo_comment.
+    DATA(base) = VALUE scimessage( test = myname
+                                   category = category
+                                   text = message
+                                   pcom = pseudo_comment
+                                   pcom_alt = alternative_pseudo_comment ).
 
-    scid_fill_message_ext message_code-warning
-                          category
-                          c_warning
-                          message
-                          pseudo_comment
-                          alternative_pseudo_comment.
+    DATA(error) = base.
+    error-code = message_code-error.
+    error-kind = c_error.
 
-    scid_fill_message_ext message_code-notification
-                          category
-                          c_note
-                          message
-                          pseudo_comment
-                          alternative_pseudo_comment.
+    DATA(warning) = base.
+    warning-code = message_code-warning.
+    warning-kind = c_warning.
+
+    DATA(notification) = base.
+    notification-code = message_code-notification.
+    notification-kind = c_note.
+
+    scimessages = VALUE #( BASE scimessages
+                         ( error )
+                         ( warning )
+                         ( notification ) ).
   ENDMETHOD.
 
 
