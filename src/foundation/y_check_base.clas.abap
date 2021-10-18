@@ -170,11 +170,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     relevant_structure_types = VALUE #( ( scan_struc_type-event ) ).
 
-    scid_fill_message message_code-not_maintained
-                      category
-                      c_note
-                      TEXT-106
-                      ''.
+    INSERT VALUE #( test = myname
+                    code = message_code-not_maintained
+                    kind = c_note
+                    text = TEXT-106 ) INTO TABLE scimessages.
   ENDMETHOD.
 
 
@@ -542,28 +541,30 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     DATA(alternative_pseudo_comment) = COND #( WHEN settings-alternative_pseudo_comment IS NOT INITIAL
                                                THEN settings-alternative_pseudo_comment+5 ).
 
-    DATA(base) = VALUE scimessage( test = myname
-                                   category = category
-                                   text = message
-                                   pcom = pseudo_comment
-                                   pcom_alt = alternative_pseudo_comment ).
+    DATA(error) = VALUE scimessage( kind = c_error
+                                    code = get_code( c_error )
+                                    test = myname
+                                    text = message
+                                    pcom = pseudo_comment
+                                    pcom_alt = alternative_pseudo_comment ).
 
-    DATA(error) = base.
-    error-code = message_code-error.
-    error-kind = c_error.
+    DATA(warning) = VALUE scimessage( kind = c_warning
+                                      code = get_code( c_warning )
+                                      test = myname
+                                      text = message
+                                      pcom = pseudo_comment
+                                      pcom_alt = alternative_pseudo_comment ).
 
-    DATA(warning) = base.
-    warning-code = message_code-warning.
-    warning-kind = c_warning.
+    DATA(notification) = VALUE scimessage( kind = c_note
+                                           code = get_code( c_note )
+                                           test = myname
+                                           text = message
+                                           pcom = pseudo_comment
+                                           pcom_alt = alternative_pseudo_comment ).
 
-    DATA(notification) = base.
-    notification-code = message_code-notification.
-    notification-kind = c_note.
-
-    scimessages = VALUE #( BASE scimessages
-                         ( error )
-                         ( warning )
-                         ( notification ) ).
+    INSERT error INTO TABLE scimessages.
+    INSERT warning INTO TABLE scimessages.
+    INSERT notification INTO TABLE scimessages.
   ENDMETHOD.
 
 
