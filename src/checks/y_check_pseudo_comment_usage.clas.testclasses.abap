@@ -15,7 +15,7 @@ CLASS ltc_pseudo_comment IMPLEMENTATION.
   METHOD get_code_with_issue.
     result = VALUE #(
       ( 'REPORT y_example. ' )
-      ( '  START-OF-SELECTION. ')
+      ( '  START-OF-SELECTION. ' )
       ( '   TRY. ' )
       ( '   CATCH cx_sy_arg_out_of_domain. "#EC EMPTY_CATCH' )
       ( '   ENDTRY. ' )
@@ -25,7 +25,7 @@ CLASS ltc_pseudo_comment IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( 'REPORT y_example. ' )
-      ( '  START-OF-SELECTION. ')
+      ( '  START-OF-SELECTION. ' )
       ( '   TRY. ' )
       ( '   CATCH cx_sy_arg_out_of_domain. ' )
       ( '   ENDTRY. ' )
@@ -49,7 +49,7 @@ CLASS ltc_pragma IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( 'REPORT y_example. ' )
-      ( '  START-OF-SELECTION. ')
+      ( '  START-OF-SELECTION. ' )
       ( '   TRY. ' )
       ( '   CATCH cx_sy_arg_out_of_domain ##NO_HANDLER. ' )
       ( '   ENDTRY. ' )
@@ -69,7 +69,7 @@ CLASS ltc_alternative_pseudo_comment IMPLEMENTATION.
   METHOD get_code_with_issue.
     result = VALUE #(
       ( 'REPORT y_example. ' )
-      ( '  START-OF-SELECTION. ')
+      ( '  START-OF-SELECTION. ' )
       ( '   TRY. ' )
       ( '   CATCH cx_sy_arg_out_of_domain. "#EC NO_HANDLER' )
       ( '   ENDTRY. ' )
