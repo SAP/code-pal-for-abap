@@ -19,7 +19,8 @@ CLASS y_check_empty_catches IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    settings-pseudo_comment = '"#EC EMPTY_CATCH' ##NO_TEXT.
+    settings-pseudo_comment = '"#EC EMPTY_CATCH'.
+    settings-alternative_pseudo_comment = '"#EC NO_HANDLER'.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }empty-catch.md|.

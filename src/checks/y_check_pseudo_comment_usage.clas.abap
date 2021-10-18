@@ -72,8 +72,14 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     LOOP AT y_profile_manager=>get_checks_from_db( ) ASSIGNING FIELD-SYMBOL(<check>)
     WHERE object = 'CLAS'.
       DATA(check) = create_check( <check>-obj_name ).
-      IF check->settings-ignore_pseudo_comments = abap_false.
+      IF check->settings-ignore_pseudo_comments = abap_true.
+        CONTINUE.
+      ENDIF.
+      IF check->settings-pseudo_comment IS NOT INITIAL.
         APPEND check->settings-pseudo_comment TO result.
+      ENDIF.
+      IF check->settings-alternative_pseudo_comment IS NOT INITIAL.
+        APPEND check->settings-alternative_pseudo_comment TO result.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.

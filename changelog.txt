@@ -18,6 +18,8 @@ Legend
 
 2021-08-XX v.1.16.0
 ------------------
+* Empty Catch Alternative Pseudo Comment (#337)
++ Alternative Pseudo Comment (#486)
 * line_exists does not support the operator IN (#484)
 * Empty Catch: Test Double Framework (#483)
 * Y_CHECK_FORM: Screen Events (#454)

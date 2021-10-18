@@ -5,13 +5,12 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                  y_unit_test_coverage.
 
   PUBLIC SECTION.
-    CONSTANTS: BEGIN OF c_code,
-                 error        TYPE sci_errc VALUE '100',
-                 warning      TYPE sci_errc VALUE '101',
-                 notification TYPE sci_errc VALUE '102',
-               END OF c_code.
-
-    CONSTANTS c_code_not_maintained TYPE sci_errc VALUE '106' ##NO_TEXT.
+    CONSTANTS: BEGIN OF message_code,
+                 error          TYPE sci_errc VALUE '100',
+                 warning        TYPE sci_errc VALUE '101',
+                 notification   TYPE sci_errc VALUE '102',
+                 not_maintained TYPE sci_errc VALUE '106',
+               END OF message_code.
 
     CONSTANTS: BEGIN OF c_docs_path,
                  main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
@@ -20,6 +19,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     DATA: BEGIN OF settings READ-ONLY,
             pseudo_comment                TYPE sci_pcom,
+            alternative_pseudo_comment    TYPE sci_pcom,
             disable_on_prodcode_selection TYPE abap_bool,
             disable_on_testcode_selection TYPE abap_bool,
             disable_threshold_selection   TYPE abap_bool,
@@ -170,9 +170,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     relevant_structure_types = VALUE #( ( scan_struc_type-event ) ).
 
     INSERT VALUE #( test = myname
-                    code = c_code_not_maintained
-                    kind = cl_ci_test_root=>c_note
-                    text = TEXT-106 ) INTO TABLE scimessages[].
+                    code = message_code-not_maintained
+                    kind = c_note
+                    text = TEXT-106 ) INTO TABLE scimessages.
   ENDMETHOD.
 
 
@@ -302,13 +302,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD get_code.
     CASE message_prio.
       WHEN c_error.
-        result = c_code-error.
+        result = message_code-error.
       WHEN c_warning.
-        result = c_code-warning.
+        result = message_code-warning.
       WHEN c_note.
-        result = c_code-notification.
+        result = message_code-notification.
       WHEN OTHERS.
-        result = c_code_not_maintained.
+        result = message_code-not_maintained.
     ENDCASE.
   ENDMETHOD.
 
@@ -529,13 +529,36 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD set_check_message.
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = myname
-        text           = message
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = scimessages ).
+    DATA(pseudo_comment) = COND #( WHEN settings-pseudo_comment IS NOT INITIAL
+                                   THEN settings-pseudo_comment+5 ).
+
+    DATA(alternative_pseudo_comment) = COND #( WHEN settings-alternative_pseudo_comment IS NOT INITIAL
+                                               THEN settings-alternative_pseudo_comment+5 ).
+
+    DATA(error) = VALUE scimessage( kind = c_error
+                                    code = get_code( c_error )
+                                    test = myname
+                                    text = message
+                                    pcom = pseudo_comment
+                                    pcom_alt = alternative_pseudo_comment ).
+
+    DATA(warning) = VALUE scimessage( kind = c_warning
+                                      code = get_code( c_warning )
+                                      test = myname
+                                      text = message
+                                      pcom = pseudo_comment
+                                      pcom_alt = alternative_pseudo_comment ).
+
+    DATA(notification) = VALUE scimessage( kind = c_note
+                                           code = get_code( c_note )
+                                           test = myname
+                                           text = message
+                                           pcom = pseudo_comment
+                                           pcom_alt = alternative_pseudo_comment ).
+
+    INSERT error INTO TABLE scimessages.
+    INSERT warning INTO TABLE scimessages.
+    INSERT notification INTO TABLE scimessages.
   ENDMETHOD.
 
 
