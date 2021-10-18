@@ -39,7 +39,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS if_ci_test~display_documentation  REDEFINITION.
     METHODS if_ci_test~query_attributes REDEFINITION.
     METHODS put_attributes  REDEFINITION.
-    METHODS run_begin REDEFINITION.
     METHODS run REDEFINITION.
 
   PROTECTED SECTION.
@@ -495,11 +494,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
               p_param_4 = parameter_04
               p_detail = additional_information ).
     ENDIF.
-  ENDMETHOD.
-
-
-  METHOD run_begin.
-    uses_checksum = xsdbool( settings-ignore_pseudo_comments = abap_false ).
   ENDMETHOD.
 
 
