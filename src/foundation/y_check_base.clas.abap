@@ -5,13 +5,12 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                  y_unit_test_coverage.
 
   PUBLIC SECTION.
-    CONSTANTS: BEGIN OF c_code,
-                 error        TYPE sci_errc VALUE '100',
-                 warning      TYPE sci_errc VALUE '101',
-                 notification TYPE sci_errc VALUE '102',
-               END OF c_code.
-
-    CONSTANTS c_code_not_maintained TYPE sci_errc VALUE '106' ##NO_TEXT.
+    CONSTANTS: BEGIN OF message_code,
+                 error          TYPE sci_errc VALUE '100',
+                 warning        TYPE sci_errc VALUE '101',
+                 notification   TYPE sci_errc VALUE '102',
+                 not_maintained TYPE sci_errc VALUE '106',
+               END OF message_code.
 
     CONSTANTS: BEGIN OF c_docs_path,
                  main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
@@ -21,8 +20,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA: BEGIN OF settings READ-ONLY,
             pseudo_comment                TYPE sci_pcom,
             alternative_pseudo_comment    TYPE sci_pcom,
-            pragma                        TYPE sci_pragma,
-            alternative_pragma            TYPE sci_pragma,
             disable_on_prodcode_selection TYPE abap_bool,
             disable_on_testcode_selection TYPE abap_bool,
             disable_threshold_selection   TYPE abap_bool,
@@ -173,10 +170,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
     relevant_structure_types = VALUE #( ( scan_struc_type-event ) ).
 
-    INSERT VALUE #( test = myname
-                    code = c_code_not_maintained
-                    kind = cl_ci_test_root=>c_note
-                    text = TEXT-106 ) INTO TABLE scimessages[].
+    scid_fill_message message_code-not_maintained
+                      category
+                      c_note
+                      TEXT-106
+                      ''.
   ENDMETHOD.
 
 
@@ -306,13 +304,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD get_code.
     CASE message_prio.
       WHEN c_error.
-        result = c_code-error.
+        result = message_code-error.
       WHEN c_warning.
-        result = c_code-warning.
+        result = message_code-warning.
       WHEN c_note.
-        result = c_code-notification.
+        result = message_code-notification.
       WHEN OTHERS.
-        result = c_code_not_maintained.
+        result = message_code-not_maintained.
     ENDCASE.
   ENDMETHOD.
 
@@ -538,30 +536,32 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD set_check_message.
-    DATA(base) = VALUE scimessage( test = myname
-                                   text = message
-                                   pcom = COND #( WHEN settings-pseudo_comment IS NOT INITIAL THEN settings-pseudo_comment+5 )
-                                   pcom_alt = COND #( WHEN settings-alternative_pseudo_comment IS NOT INITIAL THEN settings-alternative_pseudo_comment+5 )
-                                   pragma = COND #( WHEN settings-pragma IS NOT INITIAL THEN settings-pragma+2 )
-                                   pragma_alt = COND #( WHEN settings-alternative_pragma IS NOT INITIAL THEN settings-alternative_pragma+2 ) ).
+    DATA(pseudo_comment) = COND #( WHEN settings-pseudo_comment IS NOT INITIAL
+                                   THEN settings-pseudo_comment+5 ).
 
-    DATA(error) = base.
-    DATA(warning) = base.
-    DATA(notification) = base.
+    DATA(alternative_pseudo_comment) = COND #( WHEN settings-alternative_pseudo_comment IS NOT INITIAL
+                                               THEN settings-alternative_pseudo_comment+5 ).
 
-    error-code = c_code-error.
-    error-kind = cl_ci_test_root=>c_error.
+    scid_fill_message_ext message_code-error
+                          category
+                          c_error
+                          message
+                          pseudo_comment
+                          alternative_pseudo_comment.
 
-    warning-code = c_code-warning.
-    warning-kind = cl_ci_test_root=>c_warning.
+    scid_fill_message_ext message_code-warning
+                          category
+                          c_warning
+                          message
+                          pseudo_comment
+                          alternative_pseudo_comment.
 
-    notification-code = c_code-notification.
-    notification-kind = cl_ci_test_root=>c_note.
-
-    scimessages = VALUE #( BASE scimessages
-                         ( error )
-                         ( warning )
-                         ( notification ) ).
+    scid_fill_message_ext message_code-notification
+                          category
+                          c_note
+                          message
+                          pseudo_comment
+                          alternative_pseudo_comment.
   ENDMETHOD.
 
 
