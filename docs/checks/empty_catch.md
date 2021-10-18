@@ -19,6 +19,7 @@ TRY.
 "some code
 CATCH cx_error. "#EC EMPTY_CATCH
 ENDTRY.
+```
 
 ```abap
 CATCH SYSTEM-EXCEPTIONS. "#EC EMPTY_CATCH
@@ -30,6 +31,7 @@ TRY.
 "some code
 CATCH cx_error. "#EC NO_HANDLER
 ENDTRY.
+```
 
 ```abap
 CATCH SYSTEM-EXCEPTIONS. "#EC NO_HANDLER
