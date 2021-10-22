@@ -109,7 +109,7 @@ CLASS y_unit_test_base IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD then_no_exemption.
-    cl_abap_unit_assert=>assert_initial( cut->statistics->get_number_pseudo_comments( ) ).
+    cl_abap_unit_assert=>assert_initial( cut->statistics->count-pseudo_comments ).
   ENDMETHOD.
 
   METHOD get_issue_count.
