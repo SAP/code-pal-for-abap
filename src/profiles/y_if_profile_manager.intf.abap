@@ -1,5 +1,10 @@
-INTERFACE y_if_profile_manager
-  PUBLIC .
+INTERFACE y_if_profile_manager PUBLIC.
+
+  CONSTANTS: BEGIN OF types,
+               checks TYPE tabname VALUE 'YTAB_CHECKS',
+               delegates TYPE tabname VALUE 'YTAB_DELEGATES',
+               profiles TYPE tabname VALUE 'YTAB_PROFILES',
+             END OF types.
 
   TYPES:
     profile_assignments TYPE STANDARD TABLE OF ytab_profiles WITH DEFAULT KEY .
@@ -31,15 +36,6 @@ INTERFACE y_if_profile_manager
   TYPES:
     value_help TYPE STANDARD TABLE OF ddshretval WITH DEFAULT KEY.
 
-  CLASS-METHODS get_profiles_type_name
-    RETURNING
-      VALUE(result) TYPE tabname .
-  CLASS-METHODS get_checks_type_name
-    RETURNING
-      VALUE(result) TYPE tabname .
-  CLASS-METHODS get_delegates_type_name
-    RETURNING
-      VALUE(result) TYPE tabname .
   CLASS-METHODS create
     RETURNING
       VALUE(result) TYPE REF TO y_if_profile_manager.
