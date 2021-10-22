@@ -3,21 +3,23 @@ CLASS y_check_chain_decl_usage DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS constructor.
 
   PROTECTED SECTION.
+    METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    TYPES: BEGIN OF ty_raised_issues,
-             include TYPE slevel-name,
-             line_number_colon TYPE sstmnt-colonrow,
-           END OF ty_raised_issues.
-
-    DATA raised_issues TYPE TABLE OF ty_raised_issues.
+    METHODS get_chained_statements RETURNING VALUE(result) TYPE sstmnt_tab.
+    METHODS get_chained_variables IMPORTING structure_index TYPE sy-tabix
+                                  RETURNING VALUE(result) TYPE sstmnt_tab.
+    METHODS get_chained_structures IMPORTING structure_index TYPE sy-tabix
+                                   RETURNING VALUE(result) TYPE sstmnt_tab.
+    METHODS is_chained_structure RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_complex_structure RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
+CLASS y_check_chain_decl_usage IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -28,33 +30,98 @@ CLASS Y_CHECK_CHAIN_DECL_USAGE IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }chain-declaration-usage.md|.
 
+    relevant_statement_types = VALUE #( BASE relevant_statement_types
+                                      ( scan_struc_stmnt_type-public_section )
+                                      ( scan_struc_stmnt_type-protected_section )
+                                      ( scan_struc_stmnt_type-private_section ) ).
+
     set_check_message( 'Do not chain up-front declarations!' ).
   ENDMETHOD.
 
 
+  METHOD inspect_statements.
+    DATA(statements) = get_chained_statements( ).
+
+    LOOP AT statements INTO statement_wa
+    GROUP BY statement_wa-colonrow.
+        IF keyword( ) <> if_kaizen_keywords_c=>gc_data
+        AND keyword( ) <> if_kaizen_keywords_c=>gc_class_data
+        AND keyword( ) <> if_kaizen_keywords_c=>gc_constants
+        AND keyword( ) <> if_kaizen_keywords_c=>gc_types.
+          CONTINUE.
+        ENDIF.
+
+        DATA(count) = REDUCE i( INIT x = 0
+                                FOR row IN statements
+                                WHERE ( colonrow = statement_wa-colonrow )
+                                NEXT x = x + 1 ).
+
+        IF count = 1.
+          CONTINUE.
+        ENDIF.
+
+        DATA(configuration) = detect_check_configuration( statement_wa ).
+
+        raise_error( statement_level = statement_wa-level
+                     statement_index = statement_wa-number
+                     statement_from = statement_wa-from
+                     check_configuration = configuration ).
+    ENDLOOP.
+  ENDMETHOD.
+
+
   METHOD inspect_tokens.
-    CHECK statement-colonrow IS NOT INITIAL.
-    CHECK statement-terminator = ','.
-    CHECK get_token_abs( statement-from ) = 'DATA'.
+    RETURN.
+  ENDMETHOD.
 
-    DATA(include) = get_include( p_level = statement-level ).
 
-    DATA(raised_issue) = VALUE ty_raised_issues( include = include
-                                                 line_number_colon = statement-colonrow ).
+  METHOD get_chained_statements.
+    DATA(index) = line_index( ref_scan->structures[ table_line = structure_wa ] ).
+    APPEND LINES OF get_chained_variables( index ) TO result.
+    APPEND LINES OF get_chained_structures( index ) TO result.
+  ENDMETHOD.
 
-    IF line_exists( raised_issues[ include           = raised_issue-include
-                                   line_number_colon = raised_issue-line_number_colon ] ).
-      RETURN.
-    ENDIF.
 
-    APPEND raised_issue TO raised_issues.
+  METHOD get_chained_variables.
+    result = VALUE sstmnt_tab( FOR statement IN ref_scan->statements
+                               FROM structure_wa-stmnt_from TO structure_wa-stmnt_to
+                               WHERE ( struc = structure_index AND prefixlen > 0 )
+                               ( statement ) ).
+  ENDMETHOD.
 
-    DATA(configuration) = detect_check_configuration( statement ).
 
-    raise_error( statement_level = statement-level
-                 statement_index = index
-                 statement_from = statement-from
-                 check_configuration = configuration ).
+  METHOD get_chained_structures.
+    DATA(chained_structures) = VALUE sstmnt_tab( FOR statement IN ref_scan->statements
+                                                 FROM structure_wa-stmnt_from TO structure_wa-stmnt_to
+                                                 WHERE ( struc <> structure_index AND prefixlen > 0 )
+                                                 ( statement ) ).
+
+    LOOP AT chained_structures ASSIGNING FIELD-SYMBOL(<chained_structure>)
+    GROUP BY <chained_structure>-struc.
+      structure_wa = ref_scan->structures[ <chained_structure>-struc ].
+
+      IF is_chained_structure( ) = abap_false
+      OR is_complex_structure( ) = abap_true.
+        CONTINUE.
+      ENDIF.
+
+      APPEND <chained_structure> TO result.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD is_chained_structure.
+    result = xsdbool( structure_wa-stmnt_type = scan_struc_stmnt_type-data
+                   OR structure_wa-stmnt_type = scan_struc_stmnt_type-sequence
+                   OR structure_wa-stmnt_type = scan_struc_stmnt_type-types ).
+  ENDMETHOD.
+
+
+  METHOD is_complex_structure.
+    DATA(statement_type) = ref_scan->structures[ structure_wa-back ]-stmnt_type.
+
+    result = xsdbool( statement_type = scan_struc_stmnt_type-data
+                   OR statement_type = scan_struc_stmnt_type-types ).
   ENDMETHOD.
 
 
