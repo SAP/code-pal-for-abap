@@ -3,7 +3,7 @@ CLASS ltc_statistics DEFINITION FOR TESTING
   DURATION SHORT.
 
   PRIVATE SECTION.
-    DATA: cut TYPE REF TO y_scan_statistics.
+    DATA: cut TYPE REF TO y_if_scan_statistics.
 
     METHODS:
       setup,
@@ -17,7 +17,7 @@ ENDCLASS.
 
 CLASS ltc_statistics IMPLEMENTATION.
   METHOD setup.
-    cut = NEW y_scan_statistics( ).
+    cut ?= NEW y_scan_statistics( ).
   ENDMETHOD.
 
   METHOD is_bound.
@@ -25,90 +25,91 @@ CLASS ltc_statistics IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD check_errors.
-    cut->y_if_scan_statistics~collect( kind = y_check_base=>c_error
-                                       pc   = '' ).
+    cut->collect( kind = y_check_base=>c_error
+                  pc   = '' ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_errors( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-errors
                                         exp = 1 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_warnings( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-warnings
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_notes( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-notes
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-pseudo_comments
                                         exp = 0 ).
   ENDMETHOD.
 
   METHOD check_warnings.
-    cut->y_if_scan_statistics~collect( kind = y_check_base=>c_warning
-                                       pc   = '' ).
+    cut->collect( kind = y_check_base=>c_warning
+                  pc   = '' ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_errors( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-errors
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_warnings( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-warnings
                                         exp = 1 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_notes( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-notes
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-pseudo_comments
                                         exp = 0 ).
   ENDMETHOD.
 
   METHOD check_notes.
-    cut->y_if_scan_statistics~collect( kind = y_check_base=>c_note
-                                       pc   = '' ).
+    cut->collect( kind = y_check_base=>c_note
+                  pc   = '' ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_errors( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-errors
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_warnings( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-warnings
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_notes( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-notes
                                         exp = 1 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-pseudo_comments
                                         exp = 0 ).
   ENDMETHOD.
 
   METHOD check_pseudo_comments.
-    cut->y_if_scan_statistics~collect( kind = y_check_base=>c_error
-                                       pc   = 'P' ).
+    cut->collect( kind = y_check_base=>c_error
+                  pc   = 'P' ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_errors( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-errors
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_warnings( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-warnings
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_notes( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-notes
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-pseudo_comments
                                         exp = 1 ).
   ENDMETHOD.
 
   METHOD increment_pseudo_comments.
-    cut->y_if_scan_statistics~collect( kind = y_check_base=>c_error
-                                       pc   = 'P' ).
+    cut->collect( kind = y_check_base=>c_error
+                  pc   = 'P' ).
 
-    cut->y_if_scan_statistics~collect( kind = y_check_base=>c_error
-                                       pc   = 'P' ).
+    cut->collect( kind = y_check_base=>c_error
+                  pc   = 'P' ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_errors( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-errors
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_warnings( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-warnings
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_notes( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-notes
                                         exp = 0 ).
 
-    cl_abap_unit_assert=>assert_equals( act = cut->y_if_scan_statistics~get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_equals( act = cut->count-pseudo_comments
                                         exp = 2 ).
   ENDMETHOD.
+
 ENDCLASS.
