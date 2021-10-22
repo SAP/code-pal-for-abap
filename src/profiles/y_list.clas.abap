@@ -1,26 +1,18 @@
-CLASS y_list DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
-
+CLASS y_list DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
-
     INTERFACES y_if_list .
+    METHODS constructor IMPORTING !type_name TYPE string
+                        RAISING cx_sy_create_data_error.
 
-    METHODS constructor
-      IMPORTING
-        !type_name TYPE string
-      RAISING
-        cx_sy_create_data_error .
-  PROTECTED SECTION.
   PRIVATE SECTION.
+    DATA table_component TYPE REF TO data.
+    DATA comp_type_name  TYPE string VALUE ''.
 
-    DATA: table_component TYPE REF TO data,
-          comp_type_name  TYPE string VALUE ''.
 ENDCLASS.
 
 
 
-CLASS Y_LIST IMPLEMENTATION.
+CLASS y_list IMPLEMENTATION.
 
 
   METHOD constructor.
