@@ -104,7 +104,7 @@ CLASS y_unit_test_base IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD then_exemption.
-    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->count-pseudo_comments
                                         exp = get_expected_count( ) ).
   ENDMETHOD.
 
@@ -113,9 +113,9 @@ CLASS y_unit_test_base IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_issue_count.
-    result = COND #( WHEN cut->settings-prio = cl_ci_test_root=>c_error   THEN cut->statistics->get_number_errors( )
-                     WHEN cut->settings-prio = cl_ci_test_root=>c_warning THEN cut->statistics->get_number_warnings( )
-                     WHEN cut->settings-prio = cl_ci_test_root=>c_note    THEN cut->statistics->get_number_notes( ) ).
+    result = COND #( WHEN cut->settings-prio = cl_ci_test_root=>c_error   THEN cut->statistics->count-errors
+                     WHEN cut->settings-prio = cl_ci_test_root=>c_warning THEN cut->statistics->count-warnings
+                     WHEN cut->settings-prio = cl_ci_test_root=>c_note    THEN cut->statistics->count-notes ).
   ENDMETHOD.
 
   METHOD has_pseudo_comment.

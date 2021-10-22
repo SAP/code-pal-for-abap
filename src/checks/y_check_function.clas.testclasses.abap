@@ -28,25 +28,25 @@ CLASS lth_function IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD then_no_issue.
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->get_number_errors( )
+    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-errors
                                          quit = if_aunit_constants=>quit-no ).
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->get_number_warnings( )
+    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-warnings
                                          quit = if_aunit_constants=>quit-no ).
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->get_number_notes( )
+    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-notes
                                          quit = if_aunit_constants=>quit-no ).
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-pseudo_comments
                                          quit = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 
   METHOD then_has_issue.
-    cl_abap_unit_assert=>assert_not_initial( act = cut->get_statistics( )->get_number_notes( )
+    cl_abap_unit_assert=>assert_not_initial( act = cut->get_statistics( )->count-notes
                                              quit = if_aunit_constants=>quit-no ).
 
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->get_number_errors( )
+    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-errors
                                          quit = if_aunit_constants=>quit-no ).
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->get_number_warnings( )
+    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-warnings
                                          quit = if_aunit_constants=>quit-no ).
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-pseudo_comments
                                          quit = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 

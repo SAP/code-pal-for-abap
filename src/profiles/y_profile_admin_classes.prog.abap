@@ -433,7 +433,7 @@ CLASS lcl_util IMPLEMENTATION.
                                                     dynpro_nr       = '0100'
                                                     docking_side    = cl_gui_docking_container=>align_at_left
                                                     ratio           = 21
-                                                    type_name       = profile_manager->get_profiles_type_name( )
+                                                    type_name       = CONV #( profile_manager->types-profiles )
                                                     sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'USERNAME' up = abap_true )
                                                                                         ( spos = 2 fieldname = 'PROFILE' up = abap_true ) )
                                                     sy_repid        = sy_repid
@@ -487,7 +487,7 @@ CLASS lcl_util IMPLEMENTATION.
                                                   dynpro_nr       = '0100'
                                                   docking_side    = cl_gui_docking_container=>align_at_right
                                                   ratio           = 60
-                                                  type_name       = profile_manager->get_checks_type_name( )
+                                                  type_name       = CONV #( profile_manager->types-checks )
                                                   sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'PROFILE' up = abap_true )
                                                                                       ( spos = 2 fieldname = 'CHECKID' up = abap_true ) )
                                                   sy_repid        = sy_repid
@@ -583,7 +583,7 @@ CLASS lcl_util IMPLEMENTATION.
                                                      dynpro_nr       = '0100'
                                                      docking_side    = cl_gui_docking_container=>align_at_right
                                                      ratio           = 40
-                                                     type_name       = profile_manager->get_delegates_type_name( )
+                                                     type_name       = CONV #( profile_manager->types-delegates )
                                                      sort_table      = VALUE lvc_t_sort( ( spos = 1 fieldname = 'PROFILE' up = abap_true )
                                                                                          ( spos = 2 fieldname = 'DELEGATE' up = abap_true ) )
                                                      sy_repid        = sy_repid
