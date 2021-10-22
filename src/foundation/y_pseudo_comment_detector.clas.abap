@@ -4,8 +4,8 @@ CLASS y_pseudo_comment_detector DEFINITION PUBLIC CREATE PUBLIC.
     ALIASES is_pseudo_comment FOR y_if_pseudo_comment_detector~is_pseudo_comment.
 
   PRIVATE SECTION.
-    DATA: pcom     TYPE sci_pcom,
-          pcom_alt TYPE sci_pcom.
+    DATA pcom     TYPE sci_pcom.
+    DATA pcom_alt TYPE sci_pcom.
 
     METHODS:
       determine_pseudo_comments
