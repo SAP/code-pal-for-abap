@@ -263,3 +263,33 @@ CLASS ltc_text_elements IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_method DEFINITION INHERITING FROM ltc_hardcoded_id FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_method IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS lcl_classname DEFINITION.' )
+      ( '   PUBLIC SECTION.' )
+      ( '     METHODS raise.' )
+      ( '   PROTECTED SECTION.' )
+      ( '     CLASS-DATA error TYPE REF TO cx_root. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS lcl_classname IMPLEMENTATION.' )
+      ( '   METHOD raise.' )
+      ( '     MESSAGE error->get_text( ) TYPE sy-msgty. ' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS.' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
