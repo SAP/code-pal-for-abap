@@ -13,17 +13,11 @@ CLASS y_check_message_easy_to_find DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS is_message_dynamic IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_message_class_explicitly IMPORTING string TYPE string
-                                        RETURNING VALUE(result) TYPE string.
-
-    METHODS is_text_element IMPORTING string TYPE string
-                            RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_sy_msgid IMPORTING string TYPE string
-                        RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_static_short_form IMPORTING string TYPE string
-                                 RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_message_class_explicitly RETURNING VALUE(result) TYPE string.
+    METHODS is_text_element RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_sy_msgid RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_static_short_form RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_method_call RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -65,25 +59,26 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
 
 
   METHOD is_message_dynamic.
-    DATA(token) = ref_scan->tokens[ statement-from + 1 ].
+    token_wa = ref_scan->tokens[ statement-from + 1 ].
 
-    IF token-str = 'ID'.
-      token = ref_scan->tokens[ statement-from + 2 ].
+    IF token_wa-str = 'ID'.
+      token_wa = ref_scan->tokens[ statement-from + 2 ].
 
-      IF token-type = scan_token_type-literal.
+      IF token_wa-type = scan_token_type-literal.
         result = abap_true.
         RETURN.
       ENDIF.
     ENDIF.
 
-    IF token-type = scan_token_type-literal.
+    IF token_wa-type = scan_token_type-literal.
       RETURN.
     ENDIF.
 
-    IF is_text_element( token-str ) = abap_true
-    OR is_sy_msgid( token-str ) = abap_true
-    OR is_static_short_form( token-str ) = abap_true
-    OR is_message_class_explicitly( token-str ) = abap_true.
+    IF is_method_call( ) = abap_true
+    OR is_text_element( ) = abap_true
+    OR is_sy_msgid( ) = abap_true
+    OR is_static_short_form( ) = abap_true
+    OR is_message_class_explicitly( ) = abap_true.
       RETURN.
     ENDIF.
 
@@ -92,10 +87,11 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
 
 
   METHOD is_message_class_explicitly.
-    DATA(message_class) = string.
+    DATA(message_class) = token_wa-str.
 
-    IF string CA ( '()' ).
-      SPLIT string AT '(' INTO TABLE DATA(parts).
+    IF token_wa-str CA ( '(' )
+    AND token_wa-str CA ( ')' ).
+      SPLIT token_wa-str AT '(' INTO TABLE DATA(parts).
       SPLIT parts[ 2 ] AT ')' INTO TABLE parts.
       message_class = parts[ 1 ].
     ENDIF.
@@ -107,7 +103,7 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
 
 
   METHOD is_text_element.
-    result = xsdbool( contains( val = string
+    result = xsdbool( contains( val = token_wa-str
                                 start = 'TEXT-' ) ).
   ENDMETHOD.
 
@@ -122,16 +118,23 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
 
 
   METHOD is_sy_msgid.
-    result = xsdbool( string = 'SY-MSGID' ).
+    result = xsdbool( token_wa-str = 'SY-MSGID' ).
   ENDMETHOD.
 
 
   METHOD is_static_short_form.
     CONSTANTS size_of_short_form TYPE i VALUE 4.
-    CHECK strlen( string ) = size_of_short_form.
-    CHECK string(1) CA 'AEISW'.
-    CHECK string+1(3) NA sy-abcde.
+    CONSTANTS message_types TYPE string VALUE 'AEISW'.
+    CHECK strlen( token_wa-str ) = size_of_short_form.
+    CHECK token_wa-str(1) CA message_types.
+    CHECK token_wa-str+1(3) NA sy-abcde.
     result = abap_true.
+  ENDMETHOD.
+
+
+  METHOD is_method_call.
+    result = xsdbool( token_wa-str CA '=>'
+                   OR token_wa-str CA '->' ).
   ENDMETHOD.
 
 ENDCLASS.
