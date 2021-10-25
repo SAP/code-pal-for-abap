@@ -62,6 +62,7 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
       OR <token>-str = 'RETURNING'
       OR <token>-str = 'RAISING'.
         skip = abap_true.
+        CLEAR count.
       ELSEIF <token>-str = 'EXPORTING'.
         skip = abap_false.
       ENDIF.

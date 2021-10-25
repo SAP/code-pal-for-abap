@@ -213,3 +213,35 @@ CLASS ltc_standard_table IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_export_and_returning DEFINITION INHERITING FROM ltc_one_exporting FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_export_and_returning IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION. ' )
+      ( '   CLASS example DEFINITION. ' )
+      ( '     PUBLIC SECTION. ' )
+      ( '       METHODS run ' )
+      ( '         EXPORTING ' )
+      ( '           !error        TYPE char1 ' )
+      ( '         RETURNING ' )
+      ( '           VALUE(result) TYPE string_table. "#EC NUM_OUTPUT_PARA ' )
+      ( '   ENDCLASS. ' )
+
+      ( '   CLASS example IMPLEMENTATION. ' )
+      ( '     METHOD run. ' )
+      ( '     ENDMETHOD. ' )
+      ( '   ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
