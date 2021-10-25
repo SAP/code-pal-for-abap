@@ -18,6 +18,7 @@ Legend
 
 2021-08-XX v.1.16.0
 ------------------
+* Prefer Pragmas to Pseudo Comments: Multiple Pseudo Comments (#489)
 * Y_CHECK_MESSAGE_EASY_TO_FIND dump (#492)
 * Chain Declaration for Complex Structures (#488)
 * Empty Catch Alternative Pseudo Comment (#337)
