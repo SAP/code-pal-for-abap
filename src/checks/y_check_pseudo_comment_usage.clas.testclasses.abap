@@ -39,6 +39,7 @@ CLASS ltc_pseudo_comment IMPLEMENTATION.
 ENDCLASS.
 
 
+
 CLASS ltc_pragma DEFINITION INHERITING FROM ltc_pseudo_comment FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
@@ -59,6 +60,7 @@ CLASS ltc_pragma IMPLEMENTATION.
 ENDCLASS.
 
 
+
 CLASS ltc_alternative_pseudo_comment DEFINITION INHERITING FROM ltc_pseudo_comment FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_with_issue REDEFINITION.
@@ -74,6 +76,48 @@ CLASS ltc_alternative_pseudo_comment IMPLEMENTATION.
       ( '   CATCH cx_sy_arg_out_of_domain. "#EC NO_HANDLER' )
       ( '   ENDTRY. ' )
     ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
+CLASS ltc_multiple_pseudo_comments DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_multiple_pseudo_comments IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_pseudo_comment_usage( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( '  START-OF-SELECTION. ' )
+      ( '   TRY. ' )
+      ( '   CATCH cx_sy_arg_out_of_domain. "#EC EMPTY_CATCH #EC NO_HANDLER' )
+      ( '   ENDTRY. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( '  START-OF-SELECTION. ' )
+      ( '   TRY. ' )
+      ( '   CATCH cx_sy_arg_out_of_domain. "#EC NEEDED ' )
+      ( '   ENDTRY. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #( ).
   ENDMETHOD.
 
 ENDCLASS.
