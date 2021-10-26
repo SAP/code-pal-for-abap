@@ -100,6 +100,74 @@ CLASS ltc_osql_framework IMPLEMENTATION.
 
 ENDCLASS.
 
+
+
+CLASS ltc_osql_framework_inherited DEFINITION INHERITING FROM ltc_osql_framework FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_osql_framework_inherited IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT ut_test. ' )
+
+      ( ' CLASS lcl_base DEFINITION FOR TESTING. ' )
+      ( '   PROTECTED SECTION. ' )
+      ( '     METHODS given_fake_value. ' )
+      ( '     METHODS when_select. ' )
+      ( '     METHODS then_has_entry. ' )
+      ( '   PRIVATE SECTION. ' )
+      ( '     CLASS-DATA osql_test_environment TYPE REF TO if_osql_test_environment. ' )
+      ( '     DATA cut TYPE tadir. ' )
+      ( '     CLASS-METHODS class_setup. ' )
+      ( '     CLASS-METHODS class_teardown. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS lcl_base IMPLEMENTATION. ' )
+
+      ( '   METHOD class_setup. ' )
+      ( |     osql_test_environment = cl_osql_test_environment=>create( VALUE #( ( 'tadir' ) ) ). | )
+      ( '   ENDMETHOD. ' )
+
+      ( '   METHOD class_teardown. ' )
+      ( '     osql_test_environment->destroy( ). ' )
+      ( '   ENDMETHOD. ' )
+
+      ( '   METHOD given_fake_value. ' )
+      ( '     "osql_test_environment->insert_test_data( data ). ' )
+      ( '   ENDMETHOD. ' )
+
+      ( '   METHOD when_select. ' )
+      ( '     SELECT SINGLE * FROM tadir INTO cut. ' )
+      ( '   ENDMETHOD. ' )
+
+      ( '   METHOD then_has_entry. ' )
+      ( '     cl_abap_unit_assert=>assert_not_initial( cut ). ' )
+      ( '   ENDMETHOD. ' )
+
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS lcl_test DEFINITION FOR TESTING INHERITING FROM lcl_base. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS scenario FOR TESTING. ' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS lcl_test IMPLEMENTATION. ' )
+      ( '   METHOD scenario. ' )
+      ( '     DATA entries TYPE tadir. ' )
+      ( '     given_fake_value( ). ' )
+      ( '     SELECT SINGLE * FROM tadir INTO entries. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
 CLASS ltc_risk_harmless DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
@@ -205,6 +273,8 @@ CLASS ltc_risk_harmless IMPLEMENTATION.
 
 ENDCLASS.
 
+
+
 CLASS ltc_risk_critical DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
@@ -292,6 +362,8 @@ CLASS ltc_risk_critical IMPLEMENTATION.
 
 ENDCLASS.
 
+
+
 CLASS ltc_risk_dangerous DEFINITION INHERITING FROM ltc_risk_critical FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
@@ -333,6 +405,8 @@ CLASS ltc_risk_dangerous IMPLEMENTATION.
 
 ENDCLASS.
 
+
+
 CLASS ltc_risk_not_set DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_with_issue REDEFINITION.
@@ -368,6 +442,7 @@ CLASS ltc_risk_not_set IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
 
 
 CLASS ltc_exec_sql DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
@@ -438,6 +513,7 @@ CLASS ltc_exec_sql IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
 
 
 CLASS ltc_itab DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
