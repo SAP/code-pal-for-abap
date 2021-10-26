@@ -82,7 +82,7 @@ CLASS y_check_prefer_pragmas IMPLEMENTATION.
       LOOP AT pseudo_comments ASSIGNING FIELD-SYMBOL(<pseudo_comment>)
       WHERE table_line CS '#EC'.
         REPLACE ALL OCCURRENCES OF '#EC' IN <pseudo_comment> WITH ''.
-        APPEND <pseudo_comment> TO result.
+        INSERT CONV #( <pseudo_comment> ) INTO TABLE result.
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
