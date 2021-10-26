@@ -39,8 +39,9 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
                END OF keys.
 
     TYPES: BEGIN OF properties,
-             name       TYPE string,
-             risk_level TYPE string,
+             name          TYPE string,
+             risk_level    TYPE string,
+             has_framework TYPE abap_bool,
            END OF properties.
 
     DATA defined_classes TYPE STANDARD TABLE OF properties.
@@ -59,8 +60,8 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
                                   statement TYPE sstmnt
                                   structure TYPE sstruc.
 
-    METHODS is_part_of_framework IMPORTING structure     TYPE sstruc
-                                 RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_it_using_framework RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_super_class_using_framework RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_persistent_object IMPORTING obj_name      TYPE tadir-obj_name
                                  RETURNING VALUE(result) TYPE abap_bool.
@@ -101,6 +102,15 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD inspect_structures.
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_definition ) ).
+    super->inspect_structures( ).
+
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_implementation ) ).
+    super->inspect_structures( ).
+  ENDMETHOD.
+
+
   METHOD inspect_tokens.
     CASE structure-stmnt_type.
       WHEN scan_struc_stmnt_type-class_definition.
@@ -113,41 +123,6 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
                      structure = structure ).
 
     ENDCASE.
-  ENDMETHOD.
-
-
-  METHOD is_persistent_object.
-    DATA(upper_name) = to_upper( obj_name ).
-
-    SELECT SINGLE @abap_true
-    FROM tadir
-    INTO @result
-    WHERE obj_name = @upper_name
-    AND object = @keys-table
-    AND delflag = @space.
-  ENDMETHOD.
-
-
-  METHOD is_internal_table.
-    CONSTANTS max_name_size TYPE i VALUE 40.
-
-    DATA(second_token) = get_token_abs( statement-from + 1 ).
-    DATA(third_token) = get_token_abs( statement-from + 2 ).
-    DATA(fourth_token) = get_token_abs( statement-from + 2 ).
-
-    IF second_token = keys-into.
-      RETURN.
-    ENDIF.
-
-    DATA(table_name) = COND #( WHEN second_token = keys-from THEN third_token
-                               WHEN third_token = keys-into  THEN fourth_token
-                               ELSE second_token ).
-
-    IF strlen( table_name ) > max_name_size.
-      RETURN.
-    ENDIF.
-
-    result = xsdbool( is_persistent_object( CONV #( table_name ) ) = abap_false ).
   ENDMETHOD.
 
 
@@ -164,9 +139,60 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
     class_config-risk_level = get_risk_level( statement ).
 
-    IF is_part_of_framework( structure ) = abap_false.
-      APPEND class_config TO defined_classes.
+    class_config-has_framework = xsdbool( is_it_using_framework( )
+                                       OR is_super_class_using_framework( ) ).
+
+    APPEND class_config TO defined_classes.
+  ENDMETHOD.
+
+
+  METHOD get_class_name.
+    DATA(index) = ref_scan->statements[ structure-stmnt_from ]-from.
+    IF get_token_abs( index ) = keys-class.
+      result = get_token_abs( index + 1 ).
     ENDIF.
+  ENDMETHOD.
+
+
+  METHOD get_risk_level.
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    FROM statement-from TO statement-to
+    WHERE str = risk_level-harmless
+    OR str = risk_level-dangerous
+    OR str = risk_level-critical.
+      result = <token>-str.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD is_it_using_framework.
+    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    FROM structure_wa-stmnt_from TO structure_wa-stmnt_to.
+      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
+      FROM <statement>-from TO <statement>-to
+      WHERE str = framework-qsql_if
+      OR str = framework-qsql_cl
+      OR str = framework-cds_if
+      OR str = framework-cds_cl.
+        result = abap_true.
+        RETURN.
+      ENDLOOP.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD is_super_class_using_framework.
+    statement_wa = ref_scan->statements[ structure_wa-stmnt_from ].
+
+    DATA(super_class) = next2( p_word1 = 'INHERITING'
+                                    p_word2 = 'FROM' ).
+
+    IF super_class IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    result = xsdbool( line_exists( defined_classes[ name = super_class
+                                                    has_framework = abap_true ] ) ).
   ENDMETHOD.
 
 
@@ -177,7 +203,8 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
         RETURN.
     ENDTRY.
 
-    IF NOT line_exists( defined_classes[ name = class_name ] ).
+    IF NOT line_exists( defined_classes[ name = class_name
+                                         has_framework = abap_false ] ).
       RETURN.
     ENDIF.
 
@@ -232,54 +259,47 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_part_of_framework.
-    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
-    FROM structure-stmnt_from TO structure-stmnt_to.
-      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
-      FROM <statement>-from TO <statement>-to
-      WHERE str = framework-qsql_if
-      OR str = framework-qsql_cl
-      OR str = framework-cds_if
-      OR str = framework-cds_cl.
-        result = abap_true.
-        RETURN.
-      ENDLOOP.
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD get_class_name.
-    DATA(index) = ref_scan->statements[ structure-stmnt_from ]-from.
-    IF get_token_abs( index ) = keys-class.
-      result = get_token_abs( index + 1 ).
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD get_risk_level.
-    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-from TO statement-to
-    WHERE str = risk_level-harmless
-    OR str = risk_level-dangerous
-    OR str = risk_level-critical.
-      result = <token>-str.
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD inspect_structures.
-    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_definition ) ).
-    super->inspect_structures( ).
-
-    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_implementation ) ).
-    super->inspect_structures( ).
-  ENDMETHOD.
-
-
   METHOD has_ddic_itab_same_syntax.
     result = xsdbool(  token-str = check_for-modify
                     OR token-str = check_for-update
                     OR token-str = check_for-delete
                     OR token-str = check_for-insert ).
   ENDMETHOD.
+
+
+  METHOD is_persistent_object.
+    DATA(upper_name) = to_upper( obj_name ).
+
+    SELECT SINGLE @abap_true
+    FROM tadir
+    INTO @result
+    WHERE obj_name = @upper_name
+    AND object = @keys-table
+    AND delflag = @space.
+  ENDMETHOD.
+
+
+  METHOD is_internal_table.
+    CONSTANTS max_name_size TYPE i VALUE 40.
+
+    DATA(second_token) = get_token_abs( statement-from + 1 ).
+    DATA(third_token) = get_token_abs( statement-from + 2 ).
+    DATA(fourth_token) = get_token_abs( statement-from + 2 ).
+
+    IF second_token = keys-into.
+      RETURN.
+    ENDIF.
+
+    DATA(table_name) = COND #( WHEN second_token = keys-from THEN third_token
+                               WHEN third_token = keys-into  THEN fourth_token
+                               ELSE second_token ).
+
+    IF strlen( table_name ) > max_name_size.
+      RETURN.
+    ENDIF.
+
+    result = xsdbool( is_persistent_object( CONV #( table_name ) ) = abap_false ).
+  ENDMETHOD.
+
+
 ENDCLASS.
