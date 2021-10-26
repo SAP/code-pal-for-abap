@@ -18,6 +18,7 @@ Legend
 
 2021-08-XX v.1.16.0
 ------------------
+* DB Access in UT: Local Inheritance (#498)
 * Skip 'Prefer RETURNING to EXPORTING' when both exist (#490)
 * Pseudo Comment Usage: Multiple Inline Entries (#494)
 * Prefer Pragmas to Pseudo Comments: Multiple Pseudo Comments (#489)
