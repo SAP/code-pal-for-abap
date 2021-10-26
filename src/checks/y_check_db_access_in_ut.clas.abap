@@ -191,8 +191,11 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    result = xsdbool( line_exists( defined_classes[ name = superclass
-                                                    has_framework = abap_true ] ) ).
+    DATA(defined_superclass) = VALUE #( defined_classes[ name = superclass ] OPTIONAL ).
+
+    " Avoiding false-positives (inheriting from global class which is out of scan scope)
+    result = xsdbool( defined_superclass-has_framework = abap_true
+                   OR defined_superclass IS INITIAL ).
   ENDMETHOD.
 
 
