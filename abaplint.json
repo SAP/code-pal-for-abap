@@ -47,7 +47,19 @@
     "constructor_visibility_public": true,
     "contains_tab": false,
     "cyclomatic_complexity": true,
-    "dangerous_statement": true,
+    "dangerous_statement": {
+      "execSQL": true,
+      "kernelCall": true,
+      "systemCall": true,
+      "insertReport": true,
+      "generateDynpro": true,
+      "generateReport": true,
+      "generateSubroutine": true,
+      "deleteReport": true,
+      "deleteTextpool": true,
+      "deleteDynpro": true,
+      "importDynpro": true
+    },
     "db_operation_in_loop": false,
     "definitions_top": true,
     "description_empty": true,
@@ -89,7 +101,6 @@
     "local_testclass_location": true,
     "local_variable_names": false,
     "main_file_contents": true,
-    "many_parenthesis": true,
     "max_one_method_parameter_per_line": true,
     "method_implemented_twice": true,
     "max_one_statement": true,
@@ -105,7 +116,7 @@
     "newline_between_methods": true,
     "no_public_attributes": false,
     "no_yoda_conditions": {
-      "onlyConstants": true 
+      "onlyConstants": true
     },
     "object_naming": false,
     "obsolete_statement": true,
