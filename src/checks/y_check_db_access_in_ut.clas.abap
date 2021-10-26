@@ -61,7 +61,7 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
                                   structure TYPE sstruc.
 
     METHODS is_it_using_framework RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_super_class_using_framework RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_superclass_using_framework RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_persistent_object IMPORTING obj_name      TYPE tadir-obj_name
                                  RETURNING VALUE(result) TYPE abap_bool.
@@ -140,7 +140,7 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     class_config-risk_level = get_risk_level( statement ).
 
     class_config-has_framework = xsdbool( is_it_using_framework( )
-                                       OR is_super_class_using_framework( ) ).
+                                       OR is_superclass_using_framework( ) ).
 
     APPEND class_config TO defined_classes.
   ENDMETHOD.
@@ -181,17 +181,17 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_super_class_using_framework.
+  METHOD is_superclass_using_framework.
     statement_wa = ref_scan->statements[ structure_wa-stmnt_from ].
 
-    DATA(super_class) = next2( p_word1 = 'INHERITING'
-                                    p_word2 = 'FROM' ).
+    DATA(superclass) = next2( p_word1 = 'INHERITING'
+                              p_word2 = 'FROM' ).
 
-    IF super_class IS INITIAL.
+    IF superclass IS INITIAL.
       RETURN.
     ENDIF.
 
-    result = xsdbool( line_exists( defined_classes[ name = super_class
+    result = xsdbool( line_exists( defined_classes[ name = superclass
                                                     has_framework = abap_true ] ) ).
   ENDMETHOD.
 
