@@ -68,6 +68,29 @@ CLASS ltc_create_object IMPLEMENTATION.
 ENDCLASS.
 
 
+
+CLASS ltc_dynamic_object_with_param DEFINITION INHERITING FROM ltc_create_object FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_dynamic_object_with_param IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT ut_test.' )
+      ( ' START-OF-SELECTION.' )
+      ( |   DATA check TYPE REF TO y_check_base. | )
+      ( |   DATA params TYPE abap_parmbind_tab. | )
+      ( |   DATA(prefer_new) = 'y_check_prefer_new_to_crt_obj'. | )
+      ( |   CREATE OBJECT check TYPE (prefer_new) PARAMETER-TABLE params. | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
 CLASS ltc_dynamic_object DEFINITION INHERITING FROM ltc_create_object FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.

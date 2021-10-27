@@ -18,6 +18,7 @@ Legend
 
 2021-08-XX v.1.16.0
 ------------------
+* Prefer New: Dynamic Call with Parameters (#502)
 * DB Access in UT: Global Inheritance (#500)
 * DB Access in UT: Local Inheritance (#498)
 * Skip 'Prefer RETURNING to EXPORTING' when both exist (#490)
