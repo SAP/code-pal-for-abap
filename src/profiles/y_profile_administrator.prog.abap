@@ -6,6 +6,7 @@ CONSTANTS assign_delegate_screen TYPE screen-group1 VALUE '300'.
 CONSTANTS check_customizing_screen TYPE screen-group1 VALUE '400'.
 CONSTANTS new_profile_template_screen TYPE screen-group1 VALUE '500'.
 CONSTANTS copy_profile_screen TYPE screen-group1 VALUE '600'.
+CONSTANTS mass_update TYPE screen-group1 VALUE '700'.
 
 INCLUDE y_profile_admin_data.
 INCLUDE y_profile_admin_classes.
@@ -51,16 +52,20 @@ MODULE status_0600 OUTPUT.
   SET TITLEBAR copy_profile_screen.
 ENDMODULE.
 
+MODULE status_0700 OUTPUT.
+  SET PF-STATUS mass_update.
+  SET TITLEBAR mass_update.
+ENDMODULE.
+
 MODULE user_command INPUT.
+  IF user_command CP 'ENTR_*'.
+    LEAVE TO SCREEN 0.
+  ENDIF.
+
   CASE user_command.
     WHEN 'BACK' OR
          'EXIT' OR
-         'ESC' OR
-         'ENTR_200' OR
-         'ENTR_300' OR
-         'ENTR_400' OR
-         'ENTR_500' OR
-         'ENTR_600'.
+         'ESC'.
       LEAVE TO SCREEN 0.
 
     WHEN 'PICK'.

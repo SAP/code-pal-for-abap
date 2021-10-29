@@ -4,6 +4,7 @@ CLASS y_profile_manager DEFINITION PUBLIC CREATE PUBLIC .
     ALIASES create FOR y_if_profile_manager~create.
     ALIASES get_checks_from_db FOR y_if_profile_manager~get_checks_from_db.
     ALIASES types FOR y_if_profile_manager~types.
+    ALIASES mass_change FOR y_if_profile_manager~mass_change.
 
   PROTECTED SECTION.
     METHODS has_time_collision
@@ -28,7 +29,7 @@ ENDCLASS.
 
 
 
-CLASS y_profile_manager IMPLEMENTATION.
+CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
 
 
   METHOD has_time_collision.
@@ -409,7 +410,6 @@ CLASS y_profile_manager IMPLEMENTATION.
 
   METHOD y_if_profile_manager~profile_exists.
     TRY.
-        "Based on Delegates because the profile might be inactive
         result = xsdbool( y_if_profile_manager~select_delegates( name ) IS NOT INITIAL ).
       CATCH ycx_entry_not_found.
         result = abap_false.
@@ -429,6 +429,7 @@ CLASS y_profile_manager IMPLEMENTATION.
     SELECT *
     FROM tadir
     WHERE devclass = @package
+      AND NOT obj_name = @package
     INTO TABLE @result.
   ENDMETHOD.
 
@@ -443,5 +444,40 @@ CLASS y_profile_manager IMPLEMENTATION.
 
   METHOD y_if_profile_manager~create.
     result = NEW y_profile_manager( ).
+  ENDMETHOD.
+
+
+  METHOD mass_change.
+    TRY.
+        DATA(checks) = y_if_profile_manager~select_checks( name ).
+
+        LOOP AT checks INTO DATA(check).
+          DATA(temp_check) = check.
+
+          IF change_validation_period = abap_true.
+            temp_check-start_date = start_date.
+            temp_check-end_date = end_date.
+          ENDIF.
+
+          IF change_created_since = abap_true.
+            temp_check-objects_created_on = created_since.
+          ENDIF.
+
+          TRY.
+              y_if_profile_manager~delete_check( check ).
+              y_if_profile_manager~insert_check( temp_check ).
+
+            CATCH ycx_failed_to_remove_a_line.
+
+            CATCH ycx_failed_to_add_a_line
+                  ycx_time_overlap.
+
+              y_if_profile_manager~insert_check( check ).
+          ENDTRY.
+        ENDLOOP.
+
+      CATCH ycx_entry_not_found.
+        RAISE EXCEPTION TYPE cx_failed.
+    ENDTRY.
   ENDMETHOD.
 ENDCLASS.

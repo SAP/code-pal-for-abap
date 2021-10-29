@@ -819,11 +819,181 @@
       </RPY_DYFLOW>
      </FLOW_LOGIC>
     </item>
+    <item>
+     <HEADER>
+      <PROGRAM>Y_PROFILE_ADMINISTRATOR</PROGRAM>
+      <SCREEN>0700</SCREEN>
+      <LANGUAGE>E</LANGUAGE>
+      <DESCRIPT>Mass Update of Checks</DESCRIPT>
+      <TYPE>N</TYPE>
+      <NEXTSCREEN>0700</NEXTSCREEN>
+      <LINES>022</LINES>
+      <COLUMNS>110</COLUMNS>
+     </HEADER>
+     <CONTAINERS>
+      <RPY_DYCATT>
+       <TYPE>SCREEN</TYPE>
+       <NAME>SCREEN</NAME>
+      </RPY_DYCATT>
+     </CONTAINERS>
+     <FIELDS>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>CHECK</TYPE>
+       <NAME>CHBX_CHANGE_VP</NAME>
+       <TEXT>Change?_</TEXT>
+       <LINE>001</LINE>
+       <COLUMN>001</COLUMN>
+       <LENGTH>010</LENGTH>
+       <VISLENGTH>010</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+       <OUTPUT_FLD>X</OUTPUT_FLD>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEXT</TYPE>
+       <NAME>LBL_TEXT_START_DATE</NAME>
+       <TEXT>Validity_Period___________FROM:_</TEXT>
+       <LINE>001</LINE>
+       <COLUMN>012</COLUMN>
+       <LENGTH>032</LENGTH>
+       <VISLENGTH>032</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <REQU_ENTRY>N</REQU_ENTRY>
+       <LABELLEFT>X</LABELLEFT>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEMPLATE</TYPE>
+       <NAME>IO_START_DATE</NAME>
+       <TEXT>__________</TEXT>
+       <LINE>001</LINE>
+       <COLUMN>045</COLUMN>
+       <LENGTH>010</LENGTH>
+       <VISLENGTH>010</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>DATS</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+       <OUTPUT_FLD>X</OUTPUT_FLD>
+       <POSS_ENTRY>1</POSS_ENTRY>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEXT</TYPE>
+       <NAME>LBL_TEXT_END_DATE</NAME>
+       <TEXT>TO:</TEXT>
+       <LINE>001</LINE>
+       <COLUMN>056</COLUMN>
+       <LENGTH>003</LENGTH>
+       <VISLENGTH>003</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <REQU_ENTRY>N</REQU_ENTRY>
+       <LABELLEFT>X</LABELLEFT>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEMPLATE</TYPE>
+       <NAME>IO_END_DATE</NAME>
+       <TEXT>__________</TEXT>
+       <LINE>001</LINE>
+       <COLUMN>060</COLUMN>
+       <LENGTH>010</LENGTH>
+       <VISLENGTH>010</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>DATS</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+       <OUTPUT_FLD>X</OUTPUT_FLD>
+       <POSS_ENTRY>1</POSS_ENTRY>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>CHECK</TYPE>
+       <NAME>CHBX_CHANGE_SINCE</NAME>
+       <TEXT>Change?_</TEXT>
+       <LINE>002</LINE>
+       <COLUMN>001</COLUMN>
+       <LENGTH>010</LENGTH>
+       <VISLENGTH>010</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+       <OUTPUT_FLD>X</OUTPUT_FLD>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEXT</TYPE>
+       <NAME>LBL_TEXT_CREATION_DATE</NAME>
+       <TEXT>Apply_on_Objects_Created_Since:_</TEXT>
+       <LINE>002</LINE>
+       <COLUMN>012</COLUMN>
+       <LENGTH>032</LENGTH>
+       <VISLENGTH>032</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <REQU_ENTRY>N</REQU_ENTRY>
+       <LABELLEFT>X</LABELLEFT>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEMPLATE</TYPE>
+       <NAME>IO_CREATION_DATE</NAME>
+       <TEXT>__________</TEXT>
+       <LINE>002</LINE>
+       <COLUMN>045</COLUMN>
+       <LENGTH>010</LENGTH>
+       <VISLENGTH>010</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>DATS</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+       <OUTPUT_FLD>X</OUTPUT_FLD>
+       <POSS_ENTRY>1</POSS_ENTRY>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>OKCODE</TYPE>
+       <NAME>USER_COMMAND</NAME>
+       <TEXT>____________________</TEXT>
+       <LENGTH>020</LENGTH>
+       <VISLENGTH>020</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+      </RPY_DYFATC>
+     </FIELDS>
+     <FLOW_LOGIC>
+      <RPY_DYFLOW>
+       <LINE>PROCESS BEFORE OUTPUT.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>  MODULE status_0700.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW/>
+      <RPY_DYFLOW>
+       <LINE>PROCESS AFTER INPUT.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>  MODULE user_command.</LINE>
+      </RPY_DYFLOW>
+     </FLOW_LOGIC>
+    </item>
    </DYNPROS>
    <CUA>
     <ADM>
      <ACTCODE>000001</ACTCODE>
-     <PFKCODE>000006</PFKCODE>
+     <PFKCODE>000007</PFKCODE>
     </ADM>
     <STA>
      <RSMPE_STAT>
@@ -869,6 +1039,13 @@
       <BUTCODE>0001</BUTCODE>
       <INT_NOTE>Status 600</INT_NOTE>
      </RSMPE_STAT>
+     <RSMPE_STAT>
+      <CODE>700</CODE>
+      <MODAL>P</MODAL>
+      <PFKCODE>000007</PFKCODE>
+      <BUTCODE>0001</BUTCODE>
+      <INT_NOTE>Status 700</INT_NOTE>
+     </RSMPE_STAT>
     </STA>
     <FUN>
      <RSMPE_FUNT>
@@ -903,6 +1080,12 @@
      </RSMPE_FUNT>
      <RSMPE_FUNT>
       <CODE>ENTR_600</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <FUN_TEXT>Ok</FUN_TEXT>
+     </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>ENTR_700</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
       <FUN_TEXT>Ok</FUN_TEXT>
@@ -988,6 +1171,18 @@
       <NO>02</NO>
       <PFNO>12</PFNO>
      </RSMPE_BUT>
+     <RSMPE_BUT>
+      <PFK_CODE>000007</PFK_CODE>
+      <CODE>0001</CODE>
+      <NO>01</NO>
+      <PFNO>00</PFNO>
+     </RSMPE_BUT>
+     <RSMPE_BUT>
+      <PFK_CODE>000007</PFK_CODE>
+      <CODE>0001</CODE>
+      <NO>02</NO>
+      <PFNO>12</PFNO>
+     </RSMPE_BUT>
     </BUT>
     <PFK>
      <RSMPE_PFK>
@@ -1046,12 +1241,6 @@
      </RSMPE_PFK>
      <RSMPE_PFK>
       <CODE>000004</CODE>
-      <PFNO>02</PFNO>
-      <FUNCODE>PICK</FUNCODE>
-      <FUNNO>001</FUNNO>
-     </RSMPE_PFK>
-     <RSMPE_PFK>
-      <CODE>000004</CODE>
       <PFNO>12</PFNO>
       <FUNCODE>ESC</FUNCODE>
       <FUNNO>001</FUNNO>
@@ -1082,6 +1271,18 @@
      </RSMPE_PFK>
      <RSMPE_PFK>
       <CODE>000006</CODE>
+      <PFNO>12</PFNO>
+      <FUNCODE>ESC</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
+     <RSMPE_PFK>
+      <CODE>000007</CODE>
+      <PFNO>00</PFNO>
+      <FUNCODE>ENTR_700</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
+     <RSMPE_PFK>
+      <CODE>000007</CODE>
       <PFNO>12</PFNO>
       <FUNCODE>ESC</FUNCODE>
       <FUNNO>001</FUNNO>
@@ -1129,10 +1330,6 @@
       <FUNCTION>ESC</FUNCTION>
      </RSMPE_STAF>
      <RSMPE_STAF>
-      <STATUS>400</STATUS>
-      <FUNCTION>PICK</FUNCTION>
-     </RSMPE_STAF>
-     <RSMPE_STAF>
       <STATUS>500</STATUS>
       <FUNCTION>ENTR_500</FUNCTION>
      </RSMPE_STAF>
@@ -1151,6 +1348,18 @@
      <RSMPE_STAF>
       <STATUS>600</STATUS>
       <FUNCTION>PICK</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>700</STATUS>
+      <FUNCTION>ENTR_600</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>700</STATUS>
+      <FUNCTION>ENTR_700</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>700</STATUS>
+      <FUNCTION>ESC</FUNCTION>
      </RSMPE_STAF>
     </SET>
     <DOC>
@@ -1238,6 +1447,19 @@
       <MODAL>P</MODAL>
       <INT_NOTE>Status 600</INT_NOTE>
      </RSMPE_ATRT>
+     <RSMPE_ATRT>
+      <OBJ_TYPE>P</OBJ_TYPE>
+      <OBJ_CODE>000007</OBJ_CODE>
+      <MODAL>P</MODAL>
+      <INT_NOTE>Status 700</INT_NOTE>
+     </RSMPE_ATRT>
+     <RSMPE_ATRT>
+      <OBJ_TYPE>B</OBJ_TYPE>
+      <OBJ_CODE>000007</OBJ_CODE>
+      <SUB_CODE>0001</SUB_CODE>
+      <MODAL>P</MODAL>
+      <INT_NOTE>Status 700</INT_NOTE>
+     </RSMPE_ATRT>
     </DOC>
     <TIT>
      <RSMPE_TITT>
@@ -1263,6 +1485,10 @@
      <RSMPE_TITT>
       <CODE>600</CODE>
       <TEXT>Create a Copy of an existing Profile</TEXT>
+     </RSMPE_TITT>
+     <RSMPE_TITT>
+      <CODE>700</CODE>
+      <TEXT>Change all Checks</TEXT>
      </RSMPE_TITT>
     </TIT>
    </CUA>
