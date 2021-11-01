@@ -3,6 +3,7 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
     METHODS constructor.
 
   PROTECTED SECTION.
+    METHODS execute_check REDEFINITION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
@@ -26,6 +27,8 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
                                              start_with TYPE string
                                    RETURNING VALUE(result) TYPE abap_bool
                                    RAISING cx_sy_range_out_of_bounds.
+
+    METHODS is_badi_example_class RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
 
@@ -48,6 +51,12 @@ CLASS y_check_comment_usage IMPLEMENTATION.
                                         ( scan_struc_stmnt_type-module ) ).
 
     set_check_message( 'Percentage of comments must be lower than &3% of the productive code! (&2%>=&3%) (&1 lines found)' ).
+  ENDMETHOD.
+
+
+  METHOD execute_check.
+    CHECK is_badi_example_class( ) = abap_false.
+    super->execute_check( ).
   ENDMETHOD.
 
 
@@ -74,10 +83,10 @@ CLASS y_check_comment_usage IMPLEMENTATION.
       abs_statement_number = abs_statement_number + ( statement-to - statement-from ).
     ENDIF.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
-      IF NOT is_comment_excluded( <token>-str ).
+      IF is_comment_excluded( <token>-str ) = abap_false.
         comment_number = comment_number + 1.
       ENDIF.
     ENDLOOP.
@@ -101,8 +110,8 @@ CLASS y_check_comment_usage IMPLEMENTATION.
                                    start_with = |"#EC| )
         OR has_token_started_with( token = token
                                    start_with = |* INCLUDE| )
-        OR token CP '"' && object_name && '*.'
-        OR token CO '*'.
+        OR token CP |"{ object_name }*.|
+        OR token CO |*|.
 
       result = abap_true.
 
@@ -124,19 +133,15 @@ CLASS y_check_comment_usage IMPLEMENTATION.
   METHOD check_result.
     DATA(percentage_of_comments) = get_percentage_of_comments( ).
 
-    DATA(statement_for_message) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement_for_message) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = percentage_of_comments
                                                             statement = statement_for_message ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = statement_for_message-level
                  statement_index = structure-stmnt_from
                  statement_from = statement_for_message-from
-                 error_priority = check_configuration-prio
+                 check_configuration = check_configuration
                  parameter_01 = |{ comment_number }|
                  parameter_02 = |{ percentage_of_comments }|
                  parameter_03 = |{ check_configuration-threshold }| ).
@@ -144,9 +149,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
 
   METHOD get_percentage_of_comments.
-    DATA percentage TYPE decfloat16.
-
-    percentage = ( comment_number / abs_statement_number ) * 100.
+    DATA(percentage) = CONV decfloat16( comment_number / abs_statement_number ) * 100.
 
     result = round( val = percentage
                     dec = 0
@@ -165,4 +168,20 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
     result = xsdbool( is_function_module = abap_false ).
   ENDMETHOD.
+
+
+  METHOD is_badi_example_class.
+    CHECK object_type = 'CLAS'.
+
+    SELECT SINGLE enhspot
+    FROM enhspotobj
+    INTO @DATA(enhancement)
+    WHERE obj_type = @object_type
+    AND obj_name = @object_name
+    AND VERSION = 'A'.
+
+    result = xsdbool( enhancement IS NOT INITIAL ).
+  ENDMETHOD.
+
+
 ENDCLASS.

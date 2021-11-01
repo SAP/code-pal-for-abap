@@ -5,13 +5,12 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                  y_unit_test_coverage.
 
   PUBLIC SECTION.
-    CONSTANTS: BEGIN OF c_code,
-                 error        TYPE sci_errc VALUE '100',
-                 warning      TYPE sci_errc VALUE '101',
-                 notification TYPE sci_errc VALUE '102',
-               END OF c_code.
-
-    CONSTANTS c_code_not_maintained TYPE sci_errc VALUE '106' ##NO_TEXT.
+    CONSTANTS: BEGIN OF message_code,
+                 error          TYPE sci_errc VALUE '100',
+                 warning        TYPE sci_errc VALUE '101',
+                 notification   TYPE sci_errc VALUE '102',
+                 not_maintained TYPE sci_errc VALUE '106',
+               END OF message_code.
 
     CONSTANTS: BEGIN OF c_docs_path,
                  main   TYPE string VALUE 'https://github.com/SAP/code-pal-for-abap/blob/master/docs/' ##NO_TEXT,
@@ -20,6 +19,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     DATA: BEGIN OF settings READ-ONLY,
             pseudo_comment                TYPE sci_pcom,
+            alternative_pseudo_comment    TYPE sci_pcom,
             disable_on_prodcode_selection TYPE abap_bool,
             disable_on_testcode_selection TYPE abap_bool,
             disable_threshold_selection   TYPE abap_bool,
@@ -47,24 +47,18 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
-    DATA is_testcode TYPE abap_bool.
-    DATA ref_scan_manager TYPE REF TO y_if_scan_manager.
     DATA statistics TYPE REF TO y_if_scan_statistics.
-    DATA test_code_detector TYPE REF TO y_if_testcode_detector.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
-    DATA attributes_maintained TYPE abap_bool.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
-    DATA relevant_statement_types TYPE TABLE OF sstruc-stmnt_type.
+    DATA relevant_statement_types TYPE HASHED TABLE OF sstruc-stmnt_type WITH UNIQUE KEY table_line.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Structure Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_type' structure to enhance or change it.
-    DATA relevant_structure_types TYPE TABLE OF sstruc-type.
+    DATA relevant_structure_types TYPE HASHED TABLE OF sstruc-type WITH UNIQUE KEY table_line.
 
     METHODS execute_check.
-
-    METHODS check_start_conditions RAISING ycx_object_not_processed.
 
     "! <p class="shorttext synchronized" lang="en">Validates the Customizing</p>
     "! @parameter statement | Received from inspect_tokens method.
@@ -97,78 +91,56 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   statement_index        TYPE int4
                                   statement_from         TYPE int4
                                   error_counter          TYPE sci_errcnt OPTIONAL
-                                  error_priority         TYPE sychar01
                                   parameter_01           TYPE csequence OPTIONAL
                                   parameter_02           TYPE csequence OPTIONAL
                                   parameter_03           TYPE csequence OPTIONAL
                                   parameter_04           TYPE csequence OPTIONAL
-                                  is_include_specific    TYPE sci_inclspec DEFAULT ' '
                                   additional_information TYPE xstring OPTIONAL
-                                  checksum               TYPE int4 OPTIONAL. "#EC OPTL_PARAM
+                                  check_configuration    TYPE y_if_clean_code_manager=>check_configuration. "#EC OPTL_PARAM
 
-    METHODS get_column_abs  REDEFINITION.
-    METHODS get_column_rel REDEFINITION.
-    METHODS get_include  REDEFINITION.
-    METHODS get_line_abs REDEFINITION.
-    METHODS get_line_column_abs REDEFINITION.
-    METHODS get_line_column_rel  REDEFINITION.
-    METHODS get_line_rel REDEFINITION.
-    METHODS get_token_abs REDEFINITION.
-    METHODS get_token_rel REDEFINITION.
-    METHODS keyword REDEFINITION.
     METHODS set_check_message IMPORTING message TYPE itex132.
-    METHODS get_class_description  RETURNING VALUE(result) TYPE string.
+    METHODS get_class_description RETURNING VALUE(result) TYPE string.
 
     METHODS condense_tokens IMPORTING statement TYPE sstmnt
                             RETURNING VALUE(result) TYPE string.
+
+    METHODS is_test_code IMPORTING statement TYPE sstmnt
+                         RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS instantiate_objects.
 
-    METHODS is_skipped IMPORTING config        TYPE y_if_clean_code_manager=>check_configuration
-                                 error_count   TYPE int4
-                       RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_treshold_config_valid IMPORTING previous_threshold TYPE int4
-                                               config_threshold   TYPE int4
-                                     RETURNING VALUE(result)      TYPE abap_bool.
-
-    METHODS is_config_setup_valid IMPORTING previous_config TYPE y_if_clean_code_manager=>check_configuration
-                                            config          TYPE y_if_clean_code_manager=>check_configuration
-                                  RETURNING VALUE(result)   TYPE abap_bool.
-
-    METHODS should_skip_test_code IMPORTING structure     TYPE sstruc
-                                  RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS should_skip_type IMPORTING structure     TYPE sstruc
-                             RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_statement_type_relevant IMPORTING structure     TYPE sstruc
-                                       RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS is_structure_type_relevant IMPORTING structure     TYPE sstruc
-                                       RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_config_stricter IMPORTING previous TYPE y_if_clean_code_manager=>check_configuration
+                                         current TYPE y_if_clean_code_manager=>check_configuration
+                               RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_app_comp_in_scope IMPORTING level         TYPE stmnt_levl
                                  RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS switch_bool IMPORTING boolean       TYPE abap_bool
-                        RETURNING VALUE(result) TYPE abap_bool.
+                        RETURNING VALUE(result) TYPE abap_bool. "#EC BOOL_PARAM
+
+    METHODS handle_ignore_pseudo_comments IMPORTING  check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+
+    METHODS is_running_unit_test RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS handle_unit_test_statistics IMPORTING statement_index TYPE i
+                                                  check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+
+    METHODS is_statement_in_aunit_tab IMPORTING statement TYPE sstmnt
+                                      RETURNING VALUE(result) TYPE abap_bool
+                                     RAISING cx_sy_itab_line_not_found.
+
+    METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
+                           RETURNING VALUE(result) TYPE tadir.
 
 ENDCLASS.
 
 
 
 CLASS Y_CHECK_BASE IMPLEMENTATION.
-
-
-  METHOD check_start_conditions.
-    IF ref_scan_manager->is_scan_ok( ) = abap_false.
-      RAISE EXCEPTION TYPE ycx_object_not_processed.
-    ENDIF.
-  ENDMETHOD.
 
 
   METHOD constructor.
@@ -198,40 +170,47 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     relevant_structure_types = VALUE #( ( scan_struc_type-event ) ).
 
     INSERT VALUE #( test = myname
-                    code = c_code_not_maintained
-                    kind = cl_ci_test_root=>c_note
-                    text = TEXT-106 ) INTO TABLE scimessages[].
+                    code = message_code-not_maintained
+                    kind = c_note
+                    text = TEXT-106 ) INTO TABLE scimessages.
   ENDMETHOD.
 
 
   METHOD detect_check_configuration.
-    DATA tadir_keys TYPE tadir.
-
-    DATA(level) = ref_scan_manager->levels[ statement-level ].
-
-    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
-      EXPORTING
-        iv_trdir_name = level-name
-      IMPORTING
-        es_tadir_keys = tadir_keys.
+    DATA(tadir_keys) = get_tadir_keys( statement ).
 
     DATA(creation_date) = clean_code_manager->calculate_obj_creation_date( object_type = tadir_keys-object
                                                                            object_name = tadir_keys-obj_name  ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
     WHERE object_creation_date <= creation_date.
-
-      IF is_skipped( config      = <configuration>
-                     error_count = error_count ) = abap_true.
+      IF settings-is_threshold_reversed  = abap_true
+      AND <configuration>-threshold < error_count.
         CONTINUE.
       ENDIF.
 
-      IF result IS INITIAL
-         OR is_config_setup_valid( previous_config = result
-                                   config          = <configuration> ) = abap_true.
-        result = <configuration>.
+      IF settings-is_threshold_reversed = abap_false
+      AND <configuration>-threshold > error_count.
+        CONTINUE.
       ENDIF.
 
+      DATA(is_test_code) = is_test_code( statement ).
+
+      IF is_test_code = abap_true
+      AND <configuration>-apply_on_testcode = abap_false.
+        CONTINUE.
+      ELSEIF is_test_code = abap_false
+      AND <configuration>-apply_on_productive_code = abap_false.
+        CONTINUE.
+      ENDIF.
+
+      DATA(is_config_stricter) = is_config_stricter( previous = result
+                                                     current = <configuration> ).
+
+      IF is_config_stricter = abap_true.
+        no_aunit = xsdbool( <configuration>-apply_on_testcode = abap_false ).
+        result = <configuration>.
+      ENDIF.
     ENDLOOP.
 
     IF result IS INITIAL.
@@ -250,7 +229,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       CLEAR result.
       RETURN.
     ENDIF.
-
   ENDMETHOD.
 
 
@@ -271,13 +249,16 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD inspect_structures.
-    LOOP AT ref_scan_manager->structures ASSIGNING FIELD-SYMBOL(<structure>).
-      IF should_skip_type( <structure> ) = abap_true
-      OR should_skip_test_code( <structure> ) = abap_true.
-        CONTINUE.
-      ENDIF.
+    DATA(structures) = FILTER #( ref_scan->structures IN relevant_structure_types WHERE type = table_line ).
 
-      inspect_statements( <structure> ).
+    LOOP AT structures INTO structure_wa.
+      inspect_statements( structure_wa ).
+    ENDLOOP.
+
+    structures = FILTER #( ref_scan->structures IN relevant_statement_types WHERE stmnt_type = table_line ).
+
+    LOOP AT structures INTO structure_wa.
+      inspect_statements( structure_wa ).
     ENDLOOP.
   ENDMETHOD.
 
@@ -285,12 +266,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD inspect_statements.
     DATA(index) = structure-stmnt_from.
 
-    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
-    FROM structure-stmnt_from
-    TO structure-stmnt_to.
+    LOOP AT ref_scan->statements INTO statement_wa
+    FROM structure-stmnt_from TO structure-stmnt_to.
       inspect_tokens( index = index
                       structure = structure
-                      statement = <statement> ).
+                      statement = statement_wa ).
 
       index = index + 1.
     ENDLOOP.
@@ -322,162 +302,14 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD get_code.
     CASE message_prio.
       WHEN c_error.
-        result = c_code-error.
+        result = message_code-error.
       WHEN c_warning.
-        result = c_code-warning.
+        result = message_code-warning.
       WHEN c_note.
-        result = c_code-notification.
+        result = message_code-notification.
       WHEN OTHERS.
-        result = c_code_not_maintained.
+        result = message_code-not_maintained.
     ENDCASE.
-  ENDMETHOD.
-
-
-  METHOD get_column_abs.
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_result = <token>-col.
-        RETURN.
-      ENDIF.
-      p_n = p_n - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_column_rel.
-    DATA(index) = statement_wa-from + p_n - 1.
-    CHECK index <= statement_wa-to.
-
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_result = <token>-col.
-        RETURN.
-      ENDIF.
-      index = index - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_include.
-    DATA(l_level) = COND #( WHEN p_level IS SUPPLIED THEN p_level
-                            ELSE statement_wa-level ).
-
-    DO.
-      READ TABLE ref_scan_manager->levels INDEX l_level INTO DATA(l_levels_wa).
-      IF sy-subrc <> 0.
-        RETURN.
-      ENDIF.
-      IF l_levels_wa-type = 'P'.
-        p_result = l_levels_wa-name.
-        RETURN.
-      ENDIF.
-      l_level = l_levels_wa-level.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_line_abs.
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_result = <token>-row.
-        RETURN.
-      ENDIF.
-      p_n = p_n - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_line_column_abs.
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_column = <token>-col.
-        p_line   = <token>-row.
-        RETURN.
-      ENDIF.
-      p_n = p_n - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_line_column_rel.
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    p_n = statement_wa-from + p_n - 1.
-
-    DO.
-      READ TABLE tokens INDEX p_n ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_column = <token>-col.
-        p_line   = <token>-row.
-        RETURN.
-      ENDIF.
-      p_n = p_n - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_line_rel.
-    DATA(index) = statement_wa-from + p_n - 1.
-    CHECK index <= statement_wa-to.
-
-    DATA(tokens) = ref_scan_manager->tokens.
-    IF lines( tokens ) = 0.
-      RETURN.
-    ENDIF.
-
-    DO.
-      READ TABLE tokens INDEX index ASSIGNING FIELD-SYMBOL(<token>).
-      IF sy-subrc = 0 AND <token>-row <> 0.
-        p_result = <token>-row.
-        RETURN.
-      ENDIF.
-      index = index - 1.
-    ENDDO.
-  ENDMETHOD.
-
-
-  METHOD get_token_abs.
-    READ TABLE ref_scan_manager->tokens INDEX p_n INTO token_wa.
-    IF sy-subrc = 0.
-      p_result = token_wa-str.
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD get_token_rel.
-    DATA(l_index) = statement_wa-from + p_n - 1.
-    IF l_index > statement_wa-to.
-      RETURN.
-    ENDIF.
-    READ TABLE ref_scan_manager->tokens INDEX l_index INTO token_wa.
-    p_result = token_wa-str.
   ENDMETHOD.
 
 
@@ -503,7 +335,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD if_ci_test~query_attributes.
     DATA sci_attributes TYPE sci_atttab.
-    DATA title(75) TYPE c.
     DATA message(72) TYPE c.
 
     READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
@@ -562,13 +393,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       ) INTO TABLE sci_attributes.
     ENDIF.
 
-    title = description.
-
     attributes_ok = abap_false.
     WHILE attributes_ok = abap_false.
       IF cl_ci_query_attributes=>generic(
                          p_name       = name
-                         p_title      = title
+                         p_title      = |{ description }|
                          p_attributes = sci_attributes
                          p_message    = message
                          p_display    = p_display ) = abap_true.
@@ -600,13 +429,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD instantiate_objects.
-    IF ref_scan_manager IS NOT BOUND.
-      ref_scan_manager = NEW y_ref_scan_manager( ).
-      IF ref_scan IS INITIAL.
-        get( ).
-      ENDIF.
+    IF ref_scan IS INITIAL.
+      " Force ref_scan->aunit_tab
+      no_aunit = abap_true.
+      get( ).
     ENDIF.
-    ref_scan_manager->set_ref_scan( ref_scan ).
 
     IF clean_code_manager IS NOT BOUND.
       clean_code_manager = NEW y_clean_code_manager( ).
@@ -616,16 +443,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       clean_code_exemption_handler = NEW y_exemption_handler( ).
     ENDIF.
 
-    IF test_code_detector IS NOT BOUND.
-      test_code_detector = NEW y_test_code_detector( ).
-    ENDIF.
-    test_code_detector->clear( ).
-    test_code_detector->set_ref_scan_manager( ref_scan_manager ).
-
-    IF statistics IS NOT BOUND.
-      statistics = NEW y_scan_statistics( ).
-    ENDIF.
-
     IF lines( check_configurations ) = 1
     AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
       CLEAR check_configurations.
@@ -633,20 +450,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD keyword.
-    IF statement_wa-type = 'C'.
-      p_result = 'COMPUTE'.
-      RETURN.
-    ENDIF.
-    READ TABLE ref_scan_manager->tokens INDEX statement_wa-from INTO token_wa.
-    p_result = token_wa-str.
-  ENDMETHOD.
-
-
   METHOD put_attributes.
     DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
 
-    attributes_maintained = abap_true.
     TRY.
         IMPORT
           object_creation_date = check_configuration-object_creation_date
@@ -658,92 +464,101 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
       CATCH cx_root.                                  "#EC NEED_CX_ROOT
-        attributes_maintained = abap_false.
+        attributes_ok = abap_false.
     ENDTRY.
   ENDMETHOD.
 
 
   METHOD raise_error.
-    DATA(pseudo_comment) = COND #( WHEN settings-ignore_pseudo_comments = abap_false THEN settings-pseudo_comment ).
-    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan_manager = ref_scan_manager
-                                                                               scimessages = scimessages
-                                                                               test = myname
-                                                                               code = get_code( error_priority )
-                                                                               suppress = pseudo_comment
-                                                                               position = statement_index ).
-    statistics->collect( kind = error_priority
-                         pc = pcom_detector ).
+    " Probably, the Profile is not relevant (threshold, dates, etc)
+    CHECK check_configuration IS NOT INITIAL.
 
-    IF cl_abap_typedescr=>describe_by_object_ref( ref_scan_manager )->get_relative_name( ) = 'Y_REF_SCAN_MANAGER'.
+    handle_ignore_pseudo_comments( check_configuration ).
+
+    IF is_running_unit_test( ) = abap_true.
+      handle_unit_test_statistics( statement_index =  statement_index
+                                   check_configuration = check_configuration ).
+    ELSE.
       inform( p_sub_obj_type = object_type
               p_sub_obj_name = get_include( p_level = statement_level )
               p_position = statement_index
               p_line = get_line_abs( statement_from )
               p_column = get_column_abs( statement_from )
               p_errcnt = error_counter
-              p_kind = error_priority
+              p_kind = check_configuration-prio
               p_test = myname
-              p_code = get_code( error_priority )
-              p_suppress = pseudo_comment
+              p_code = get_code( check_configuration-prio )
               p_param_1 = parameter_01
               p_param_2 = parameter_02
               p_param_3 = parameter_03
               p_param_4 = parameter_04
-              p_inclspec = is_include_specific
-              p_detail = additional_information
-              p_checksum_1 = checksum ).
+              p_detail = additional_information ).
     ENDIF.
   ENDMETHOD.
 
 
   METHOD run.
-    DATA profile_configurations TYPE y_if_clean_code_manager=>check_configurations.
-
     instantiate_objects( ).
 
-    IF attributes_maintained = abap_false AND has_attributes = abap_true.
-      raise_error( statement_level = 1
-                   statement_index = 1
-                   statement_from  = 1
-                   error_priority  = '' ).
-      FREE ref_scan_manager.
+    IF ref_scan IS INITIAL
+    OR ref_scan->subrc IS NOT INITIAL.
       RETURN.
     ENDIF.
 
-    TRY.
-        check_start_conditions( ).
-        profile_configurations = clean_code_manager->read_check_customizing( myname ).
-      CATCH ycx_no_check_customizing.
-        IF profile_configurations IS INITIAL AND attributes_ok = abap_false.
-          FREE ref_scan_manager.
+    " SCI variant
+    IF has_attributes = abap_true
+    AND attributes_ok = abap_false.
+      raise_error( statement_level = 1
+                   statement_index = 1
+                   statement_from  = 1
+                   check_configuration = VALUE #( prio = `E` ) ).
+      RETURN.
+    ENDIF.
+
+    " Profile
+    IF has_attributes = abap_false.
+      TRY.
+          check_configurations = clean_code_manager->read_check_customizing( myname ).
+        CATCH ycx_no_check_customizing.
           RETURN.
-        ELSEIF attributes_ok = abap_true.
-          profile_configurations = check_configurations.
-        ENDIF.
-      CATCH ycx_object_not_processed.
-        FREE ref_scan_manager.
-        RETURN.
-
-    ENDTRY.
-
-    IF lines( profile_configurations ) > 0.
-      check_configurations = profile_configurations.
+      ENDTRY.
     ENDIF.
 
     execute_check( ).
-
-    FREE ref_scan_manager.
   ENDMETHOD.
 
 
   METHOD set_check_message.
-    y_message_registration=>add_message(
-      EXPORTING
-        check_name     = myname
-        text           = message
-        pseudo_comment = settings-pseudo_comment
-      CHANGING
-        messages       = scimessages ).
+    DATA(pseudo_comment) = COND #( WHEN settings-pseudo_comment IS NOT INITIAL
+                                   THEN settings-pseudo_comment+5 ).
+
+    DATA(alternative_pseudo_comment) = COND #( WHEN settings-alternative_pseudo_comment IS NOT INITIAL
+                                               THEN settings-alternative_pseudo_comment+5 ).
+
+    DATA(error) = VALUE scimessage( kind = c_error
+                                    code = get_code( c_error )
+                                    test = myname
+                                    text = message
+                                    pcom = pseudo_comment
+                                    pcom_alt = alternative_pseudo_comment ).
+
+    DATA(warning) = VALUE scimessage( kind = c_warning
+                                      code = get_code( c_warning )
+                                      test = myname
+                                      text = message
+                                      pcom = pseudo_comment
+                                      pcom_alt = alternative_pseudo_comment ).
+
+    DATA(notification) = VALUE scimessage( kind = c_note
+                                           code = get_code( c_note )
+                                           test = myname
+                                           text = message
+                                           pcom = pseudo_comment
+                                           pcom_alt = alternative_pseudo_comment ).
+
+    INSERT error INTO TABLE scimessages.
+    INSERT warning INTO TABLE scimessages.
+    INSERT notification INTO TABLE scimessages.
   ENDMETHOD.
 
 
@@ -755,62 +570,22 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_config_setup_valid.
-    result = xsdbool( ( previous_config-prio = config-prio
-                       AND is_treshold_config_valid( config_threshold = config-threshold
-                                                     previous_threshold = previous_config-threshold ) = abap_true )
-                     OR ( previous_config-prio <> c_error AND config-prio = c_error )
-                     OR ( previous_config-prio = c_note AND config-prio = c_warning )
-                     OR ( previous_config-ignore_pseudo_comments = abap_false
-                         AND config-ignore_pseudo_comments = abap_true ) ).
-  ENDMETHOD.
+  METHOD is_config_stricter.
+    DATA(threshold_stricter) = xsdbool( ( previous-threshold >= current-threshold AND settings-is_threshold_reversed = abap_false )
+                                     OR ( previous-threshold < current-threshold AND settings-is_threshold_reversed = abap_true ) ).
 
-
-  METHOD is_skipped.
-    result = xsdbool( ( config-threshold < error_count AND settings-is_threshold_reversed = abap_true )
-                     OR ( config-threshold > error_count AND settings-is_threshold_reversed = abap_false )
-                     OR ( is_testcode = abap_true AND config-apply_on_testcode = abap_false )
-                     OR ( is_testcode = abap_false AND config-apply_on_productive_code = abap_false ) ).
-  ENDMETHOD.
-
-
-  METHOD is_treshold_config_valid.
-    result = xsdbool( ( previous_threshold >= config_threshold AND settings-is_threshold_reversed = abap_false )
-                     OR ( previous_threshold < config_threshold AND settings-is_threshold_reversed = abap_true ) ).
-  ENDMETHOD.
-
-
-  METHOD should_skip_test_code.
-    " From Code Inspector (required)
-    is_testcode = test_code_detector->is_testcode( structure ).
-
-    DATA(has_customizing_for_prod_only) = xsdbool( NOT line_exists( check_configurations[ apply_on_testcode = abap_true ] ) ).
-
-    result = xsdbool(     has_customizing_for_prod_only = abap_true
-                      AND is_testcode = abap_true ).
-  ENDMETHOD.
-
-
-  METHOD should_skip_type.
-    result = xsdbool(     is_statement_type_relevant( structure ) = abap_false
-                      AND is_structure_type_relevant( structure ) = abap_false ).
-  ENDMETHOD.
-
-
-  METHOD is_statement_type_relevant.
-    result = xsdbool( line_exists( relevant_statement_types[ table_line = structure-stmnt_type ] ) ).
-  ENDMETHOD.
-
-
-  METHOD is_structure_type_relevant.
-    result = xsdbool( line_exists( relevant_structure_types[ table_line = structure-type ] ) ).
+    result = xsdbool( ( previous IS INITIAL )
+                   OR ( previous-prio = current-prio AND threshold_stricter = abap_true )
+                   OR ( previous-prio <> c_error AND current-prio = c_error )
+                   OR ( previous-prio = c_note AND current-prio = c_warning )
+                   OR ( previous-ignore_pseudo_comments = abap_false AND current-ignore_pseudo_comments = abap_true ) ).
   ENDMETHOD.
 
 
   METHOD is_app_comp_in_scope.
     TRY.
-        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level = 0 ] ).
-        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan_manager->levels[ level ] ).
+        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan->levels[ level = 0 ] ).
+        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan->levels[ level ] ).
         result = xsdbool( main_app_comp = curr_app_comp ).
       CATCH cx_sy_itab_line_not_found
             ycx_entry_not_found.
@@ -825,12 +600,90 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD condense_tokens.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type <> scan_token_type-comment
     AND type <> scan_token_type-pragma.
       result = |{ result }{ <token>-str } |.
     ENDLOOP.
   ENDMETHOD.
+
+
+  METHOD handle_ignore_pseudo_comments.
+    DATA(code) = get_code( check_configuration-prio ).
+
+    LOOP AT scimessages ASSIGNING FIELD-SYMBOL(<message>)
+    WHERE test = myname
+    AND code = code.
+      IF check_configuration-ignore_pseudo_comments = abap_true.
+        CLEAR <message>-pcom.
+      ELSE.
+        <message>-pcom = settings-pseudo_comment+5.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD is_running_unit_test.
+    result = xsdbool( statistics IS BOUND ).
+  ENDMETHOD.
+
+
+  METHOD handle_unit_test_statistics.
+    DATA(code) = get_code( check_configuration-prio ).
+
+    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan = ref_scan
+                                                                               scimessages = scimessages
+                                                                               test = myname
+                                                                               code = code
+                                                                               suppress = settings-pseudo_comment
+                                                                               position = statement_index ).
+
+    statistics->collect( kind = check_configuration-prio
+                         pc = pcom_detector ).
+  ENDMETHOD.
+
+
+  METHOD is_test_code.
+    TRY.
+        result = is_statement_in_aunit_tab( statement ).
+      CATCH cx_sy_itab_line_not_found.
+        result = abap_false.
+    ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD is_statement_in_aunit_tab.
+    " Based on: CL_CI_TEST_SCAN->INFORM()
+    DATA: BEGIN OF aunit,
+        incl_name  TYPE program,
+        line_range TYPE RANGE OF i,
+      END OF aunit.
+
+    DATA(include) = get_include( p_level = statement-level ).
+
+    TRY.
+        " Local Test Class
+        aunit = ref_scan->aunit_tab[ incl_name = include ].
+      CATCH cx_sy_itab_line_not_found.
+        " Global Test Class
+        aunit = ref_scan->aunit_tab[ incl_name = program_name ].
+    ENDTRY.
+
+    DATA(line) = get_line_abs( statement-from ).
+    result = xsdbool( line IN aunit-line_range ).
+  ENDMETHOD.
+
+
+  METHOD get_tadir_keys.
+    DATA(level) = ref_scan->levels[ statement-level ].
+
+    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
+      EXPORTING
+        iv_trdir_name = level-name
+      IMPORTING
+        es_tadir_keys = result.
+  ENDMETHOD.
+
 
 ENDCLASS.

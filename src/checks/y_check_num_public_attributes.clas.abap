@@ -85,20 +85,17 @@ CLASS y_check_num_public_attributes IMPLEMENTATION.
 
 
   METHOD check_result.
-    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( statement = statement
                                                             error_count = public_attribute_counter ).
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
 
     raise_error( statement_level     = statement-level
                  statement_index     = structure-stmnt_from
                  statement_from      = statement-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ public_attribute_counter }|
-                 parameter_02        = |{ check_configuration-threshold }| ).
+                 check_configuration = check_configuration
+                 parameter_01 = |{ public_attribute_counter }|
+                 parameter_02 = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 

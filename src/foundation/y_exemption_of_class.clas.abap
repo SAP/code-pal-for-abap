@@ -70,10 +70,10 @@ CLASS y_exemption_of_class IMPLEMENTATION.
 
     "Multi Inheritance
     DO.
-      LOOP AT it_bsp_classes TRANSPORTING NO FIELDS WHERE table_line = inherited_by.
+      IF line_exists( it_bsp_classes[ table_line = inherited_by ] ).
         result = abap_true.
         RETURN.
-      ENDLOOP.
+      ENDIF.
 
       SELECT SINGLE refclsname FROM seometarel
         WHERE clsname = @inherited_by AND refclsname IS NOT NULL
@@ -130,11 +130,8 @@ CLASS y_exemption_of_class IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    LOOP AT lt_interfaces TRANSPORTING NO FIELDS
-      WHERE refclsname = 'IF_CFD_ODATA_MPC_FLX' OR refclsname = 'IF_CFD_ODATA_DPC_FLX'.
-      result = abap_true.
-      RETURN.
-    ENDLOOP.
+    result = xsdbool( line_exists( lt_interfaces[ refclsname = 'IF_CFD_ODATA_MPC_FLX' ] )
+                   OR line_exists( lt_interfaces[ refclsname = 'IF_CFD_ODATA_DPC_FLX' ] ) ).
   ENDMETHOD.
 
 
@@ -200,11 +197,9 @@ CLASS y_exemption_of_class IMPLEMENTATION.
     IF sy-subrc <> 0.
       RETURN.
     ENDIF.
-    LOOP AT lt_interfaces TRANSPORTING NO FIELDS
-      WHERE refclsname = '/FTI/IF_FTI_MODEL' OR refclsname = '/FTI/IF_NATIVE_SQL_GENERATOR'.
-      result = abap_true.
-      RETURN.
-    ENDLOOP.
+
+    result = xsdbool( line_exists( lt_interfaces[ refclsname = '/FTI/IF_FTI_MODEL' ] )
+                   OR line_exists( lt_interfaces[ refclsname = '/FTI/IF_NATIVE_SQL_GENERATOR' ] ) ).
   ENDMETHOD.
 
 

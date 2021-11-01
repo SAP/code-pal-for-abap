@@ -68,18 +68,14 @@ CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
   METHOD check_result.
     CHECK has_something_else = abap_false.
 
-    DATA(statement_for_message) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement_for_message) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( statement_for_message ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement_for_message-level
-                 statement_index     = structure-stmnt_from
-                 statement_from      = statement_for_message-from
-                 error_priority      = check_configuration-prio ).
+    raise_error( statement_level = statement_for_message-level
+                 statement_index = structure-stmnt_from
+                 statement_from = statement_for_message-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 

@@ -3,42 +3,30 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS inspect_structures REDEFINITION.
+    METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    CONSTANTS check_base_name TYPE tadir-obj_name VALUE 'Y_CHECK_BASE'.
+    TYPES ty_pseudo_comments LIKE SORTED TABLE OF settings-pseudo_comment WITH NON-UNIQUE KEY table_line.
+    TYPES ty_string_table TYPE TABLE OF string.
 
-    DATA name_tab TYPE STANDARD TABLE OF tadir-obj_name.
-    DATA pseudo_comment_counter TYPE i VALUE 0 ##NO_TEXT.
-    DATA class_names TYPE string_table.
+    CLASS-DATA relevant_pseudo_comments TYPE ty_pseudo_comments.
 
-    METHODS count_cc_pseudo_comments IMPORTING token TYPE stokesx.
+    DATA counter TYPE i.
 
-    METHODS check_result.
+    METHODS get_relevant_pseudo_comments RETURNING VALUE(result) TYPE ty_pseudo_comments.
 
-    METHODS select_object_list RETURNING VALUE(result) LIKE name_tab
-                               RAISING cx_failed.
+    METHODS get_count IMPORTING pseudo_comments TYPE ty_string_table
+                      RETURNING VALUE(result) TYPE i.
 
-    METHODS call_get_pseudo_comment IMPORTING obj_name TYPE stokesx-str
-                                    RETURNING VALUE(result) TYPE stokesx-str
-                                    RAISING cx_sy_create_object_error.
+    METHODS create_check IMPORTING name TYPE tadir-obj_name
+                         RETURNING VALUE(result) TYPE REF TO y_check_base.
 
 ENDCLASS.
 
 
 
 CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
-
-
-  METHOD call_get_pseudo_comment.
-    DATA obj TYPE REF TO y_check_base.
-    CREATE OBJECT obj TYPE (obj_name).
-    result = obj->settings-pseudo_comment.
-    IF result IS INITIAL.
-      RAISE EXCEPTION TYPE cx_sy_create_object_error.
-    ENDIF.
-  ENDMETHOD.
 
 
   METHOD constructor.
@@ -59,82 +47,80 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
                                       ( scan_struc_stmnt_type-interface ) ).
 
     set_check_message( '&1 pseudo comments!' ).
-
-    TRY.
-        class_names = select_object_list( ).
-      CATCH cx_failed.
-        APPEND INITIAL LINE TO class_names.
-    ENDTRY.
   ENDMETHOD.
 
 
-  METHOD count_cc_pseudo_comments.
-    LOOP AT class_names ASSIGNING FIELD-SYMBOL(<object_name>).
-      TRY.
-          IF token-str CS call_get_pseudo_comment( <object_name> ).
-            pseudo_comment_counter = pseudo_comment_counter + 1.
-          ENDIF.
-        CATCH cx_sy_create_object_error.
-          CONTINUE.
-      ENDTRY.
-    ENDLOOP.
-  ENDMETHOD.
+  METHOD execute_check.
+    CLEAR counter.
 
+    super->execute_check( ).
 
-  METHOD inspect_structures.
-    pseudo_comment_counter = 0.
+    IF counter = 0.
+      RETURN.
+    ENDIF.
 
-    super->inspect_structures( ).
+    DATA(statement) = ref_scan->statements[ 1 ].
 
-    check_result( ).
+    DATA(check_configuration) = detect_check_configuration( statement ).
+
+    raise_error( statement_level = statement-level
+                 statement_index = statement-from
+                 statement_from = statement-from
+                 check_configuration = check_configuration
+                 parameter_01 = |{ counter }| ).
   ENDMETHOD.
 
 
   METHOD inspect_tokens.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens INTO token_wa
     FROM statement-from TO statement-to
-    WHERE type = 'C'
-    OR type = 'P'.
-      count_cc_pseudo_comments( <token> ).
+    WHERE type = scan_token_type-comment
+    AND str CS '#EC '.
+      REPLACE ALL OCCURRENCES OF `"#EC` IN token_wa-str WITH '#EC'.
+      REPLACE ALL OCCURRENCES OF `#EC ` IN token_wa-str WITH '#EC'.
+      SPLIT token_wa-str AT space INTO TABLE DATA(pseudo_comments).
+      counter = counter + get_count( pseudo_comments ).
     ENDLOOP.
   ENDMETHOD.
 
 
-  METHOD check_result.
-    CHECK pseudo_comment_counter > 0.
-
-    DATA(check_configuration) = detect_check_configuration( VALUE #( level = 1 ) ).
-
-    IF check_configuration IS INITIAL.
-      RETURN.
+  METHOD get_count.
+    IF relevant_pseudo_comments IS INITIAL.
+      relevant_pseudo_comments = get_relevant_pseudo_comments( ).
     ENDIF.
 
-    raise_error( statement_level = 1
-                 statement_index = 1
-                 statement_from  = 1
-                 error_priority = check_configuration-prio
-                 parameter_01 = |{ pseudo_comment_counter }| ).
+    LOOP AT pseudo_comments INTO DATA(pseudo_comment)
+    WHERE table_line CS '#EC'.
+      REPLACE ALL OCCURRENCES OF '#EC' IN pseudo_comment WITH ''.
+      IF line_exists( relevant_pseudo_comments[ table_line = pseudo_comment ] ).
+        result = result + 1.
+      ENDIF.
+    ENDLOOP.
   ENDMETHOD.
 
 
-  METHOD select_object_list.
-    SELECT SINGLE devclass
-    FROM tadir
-    WHERE obj_name = @myname
-    INTO @DATA(packagename).
-
-    IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE cx_failed.
-    ENDIF.
-
-    SELECT obj_name
-    FROM tadir
-    WHERE devclass = @packagename
-    AND obj_name <> @check_base_name
-    INTO TABLE @result.
-
-    IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE cx_failed.
-    ENDIF.
+  METHOD get_relevant_pseudo_comments.
+    LOOP AT y_profile_manager=>get_checks_from_db( ) ASSIGNING FIELD-SYMBOL(<check>)
+    WHERE object = 'CLAS'.
+      DATA(check) = create_check( <check>-obj_name ).
+      IF check->settings-ignore_pseudo_comments = abap_true.
+        CONTINUE.
+      ENDIF.
+      IF check->settings-pseudo_comment IS NOT INITIAL.
+        REPLACE ALL OCCURRENCES OF `"#EC ` IN check->settings-pseudo_comment WITH ''.
+        INSERT check->settings-pseudo_comment INTO TABLE result.
+      ENDIF.
+      IF check->settings-alternative_pseudo_comment IS NOT INITIAL.
+        REPLACE ALL OCCURRENCES OF `"#EC ` IN check->settings-alternative_pseudo_comment WITH ''.
+        INSERT check->settings-alternative_pseudo_comment INTO TABLE result.
+      ENDIF.
+    ENDLOOP.
   ENDMETHOD.
+
+
+  METHOD create_check.
+    CREATE OBJECT result TYPE (name).
+  ENDMETHOD.
+
+
 ENDCLASS.

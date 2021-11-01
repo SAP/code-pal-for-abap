@@ -43,7 +43,7 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
           c_cyclo_comp = c_cyclo_comp + 1.
         ENDIF.
       WHEN 'DO'.
-        READ TABLE ref_scan_manager->tokens INDEX statement_wa-to INTO DATA(token).
+        READ TABLE ref_scan->tokens INDEX statement_wa-to INTO DATA(token).
         IF token-str = 'TIMES'.
           c_cyclo_comp = c_cyclo_comp + 1.
         ENDIF.
@@ -82,18 +82,17 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
 
     IF index = structure-stmnt_to.
       DATA(check_configuration) = detect_check_configuration( error_count = cyclo_comp
-                                                              statement = statement_for_message ). "#EC DECL_IN_IF
+                                                              statement = statement_for_message ).
 
-      IF check_configuration IS INITIAL.
-        RETURN.
-      ENDIF.
+      DATA(position) = determine_position( type = structure-type
+                                           index = index ).
 
-      raise_error( statement_level     = statement_for_message-level
-                   statement_index     = determine_position( type = structure-type index = index )
-                   statement_from      = statement_for_message-from
-                   error_priority      = check_configuration-prio
-                   parameter_01        = |{ cyclo_comp }|
-                   parameter_02        = |{ check_configuration-threshold }| ).
+      raise_error( statement_level = statement_for_message-level
+                   statement_index = position
+                   statement_from = statement_for_message-from
+                   check_configuration = check_configuration
+                   parameter_01 = |{ cyclo_comp }|
+                   parameter_02 = |{ check_configuration-threshold }| ).
     ENDIF.
   ENDMETHOD.
 ENDCLASS.

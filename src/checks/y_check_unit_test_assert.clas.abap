@@ -6,13 +6,19 @@ CLASS y_check_unit_test_assert DEFINITION PUBLIC INHERITING FROM y_check_base CR
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    METHODS get_parameter_reference IMPORTING statement TYPE sstmnt
-                                              parameter TYPE string
+    METHODS get_parameter_reference IMPORTING statement     TYPE sstmnt
+                                              parameter     TYPE string
                                     RETURNING VALUE(result) TYPE string
-                                    RAISING cx_sy_itab_line_not_found.
+                                    RAISING   cx_sy_itab_line_not_found.
 
-    METHODS is_variable IMPORTING token TYPE stokesx
+    METHODS is_variable IMPORTING token         TYPE stokesx
                         RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS contains_functional_operand IMPORTING expression    TYPE string
+                                        RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_internal_table IMPORTING position TYPE i
+                              RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -40,7 +46,7 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA(token) = ref_scan_manager->tokens[ statement-from ].
+    DATA(token) = ref_scan->tokens[ statement-from ].
 
     IF token-str NP '*ASSERT*'
     OR token-type = scan_token_type-comment.
@@ -61,20 +67,16 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF act <> exp.
+    IF act <> exp OR contains_functional_operand( act ).
       RETURN.
     ENDIF.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = check_configuration-prio ).
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 
@@ -92,7 +94,7 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
         ENDIF.
       ENDIF.
 
-      DATA(token) = ref_scan_manager->tokens[ position ].
+      DATA(token) = ref_scan->tokens[ position ].
 
       IF token-type = scan_token_type-comment.
         position = position + 1.
@@ -111,22 +113,23 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      IF token-str CP '*(*'.
+      IF token-str CP '*( *'.
         depth = depth + 1.
-      ELSEIF token-str CP '*)*'.
+      ELSEIF token-str CP '* )*'.
         depth = depth - 1.
       ENDIF.
 
       IF depth = 0
-      AND line_exists( ref_scan_manager->tokens[ position + 1 ] ).
-        DATA(next) = ref_scan_manager->tokens[ position + 1 ].
+      AND line_exists( ref_scan->tokens[ position + 1 ] ).
+        DATA(next) = ref_scan->tokens[ position + 1 ].
         IF next-str = '='.
           in = abap_false.
           RETURN.
         ENDIF.
       ENDIF.
 
-      IF is_variable( token ) = abap_false.
+      IF is_variable( token ) = abap_false
+      AND is_internal_table( position ) = abap_false.
         token-str = '*'.
       ENDIF.
 
@@ -141,6 +144,24 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
   METHOD is_variable.
     CHECK token-type = scan_token_type-identifier.
     result = xsdbool( token-str CN '0123456789' ).
+  ENDMETHOD.
+
+
+  METHOD contains_functional_operand.
+    FIND REGEX `[A-Z_][A-Z0-9_]*\(` IN expression.
+    result = xsdbool( sy-subrc = 0 ).
+  ENDMETHOD.
+
+
+  METHOD is_internal_table.
+    TRY.
+        DATA(previous_token) = ref_scan->tokens[ position - 1 ].
+        DATA(next_token) = ref_scan->tokens[ position + 1 ].
+        result = xsdbool( previous_token-str CP '*[' AND next_token-str CP ']*').
+      CATCH cx_sy_itab_line_not_found.
+        result = abap_false.
+        RETURN.
+    ENDTRY.
   ENDMETHOD.
 
 

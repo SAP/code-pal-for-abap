@@ -1,22 +1,13 @@
-INTERFACE y_if_scan_statistics
-  PUBLIC .
+INTERFACE y_if_scan_statistics PUBLIC.
 
+  DATA: BEGIN OF count READ-ONLY,
+          errors TYPE i,
+          warnings TYPE i,
+          notes TYPE i,
+          pseudo_comments TYPE i,
+        END OF count.
 
-  METHODS collect
-    IMPORTING
-      !kind TYPE sychar01
-      !pc   TYPE sychar01 .
-  METHODS get_number_errors
-    RETURNING
-      VALUE(result) TYPE i .
-  METHODS get_number_warnings
-    RETURNING
-      VALUE(result) TYPE i .
-  METHODS get_number_notes
-    RETURNING
-      VALUE(result) TYPE i .
-  METHODS get_number_pseudo_comments
-    RETURNING
-      VALUE(result) TYPE i .
-  METHODS increment_pseudo_comment_cnt .
+  METHODS collect IMPORTING kind TYPE sychar01
+                            pc   TYPE sychar01.
+
 ENDINTERFACE.

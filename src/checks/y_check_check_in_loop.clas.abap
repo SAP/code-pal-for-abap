@@ -37,21 +37,17 @@ CLASS y_check_check_in_loop IMPLEMENTATION.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 
   METHOD get_back_statement.
     TRY.
-        DATA(back_structure) = ref_scan_manager->structures[ structure-back ].
-        result = ref_scan_manager->statements[ back_structure-stmnt_from ].
+        DATA(back_structure) = ref_scan->structures[ structure-back ].
+        result = ref_scan->statements[ back_structure-stmnt_from ].
       CATCH cx_sy_itab_line_not_found.
         CLEAR result.
     ENDTRY.

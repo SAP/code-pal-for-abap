@@ -3,6 +3,8 @@ CLASS y_profile_manager DEFINITION PUBLIC CREATE PUBLIC .
     INTERFACES y_if_profile_manager.
     ALIASES create FOR y_if_profile_manager~create.
     ALIASES get_checks_from_db FOR y_if_profile_manager~get_checks_from_db.
+    ALIASES types FOR y_if_profile_manager~types.
+
   PROTECTED SECTION.
     METHODS has_time_collision
       IMPORTING timeline_one_start TYPE dats
@@ -18,12 +20,10 @@ CLASS y_profile_manager DEFINITION PUBLIC CREATE PUBLIC .
       RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
-    CONSTANTS: checks_type    TYPE tabname VALUE 'YTAB_CHECKS',
-               delegates_type TYPE tabname VALUE 'YTAB_DELEGATES',
-               profiles_type  TYPE tabname VALUE 'YTAB_PROFILES'.
     CONSTANTS standardprofile TYPE ytab_profiles-profile VALUE 'SYSTEM-WIDE STANDARD'.
     CLASS-METHODS get_check_base_package RETURNING VALUE(result) TYPE devclass.
     CLASS-METHODS get_checks_package RETURNING VALUE(result) TYPE devclass.
+
 ENDCLASS.
 
 
@@ -175,7 +175,7 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~get_checks_type_name.
-    result = checks_type.
+    result = types-checks.
   ENDMETHOD.
 
 
@@ -191,12 +191,12 @@ CLASS y_profile_manager IMPLEMENTATION.
 
 
   METHOD y_if_profile_manager~get_delegates_type_name.
-    result = delegates_type.
+    result = types-delegates.
   ENDMETHOD.
 
 
   METHOD y_if_profile_manager~get_profiles_type_name.
-    result = profiles_type.
+    result = types-profiles.
   ENDMETHOD.
 
 

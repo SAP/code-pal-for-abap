@@ -19,14 +19,10 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
   METHOD check_if_error.
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = statement-level
                  statement_index = index
                  statement_from  = statement-from
-                 error_priority  = check_configuration-prio
+                 check_configuration  = check_configuration
                  parameter_01    = get_token_abs( statement-from ) ).
   ENDMETHOD.
 
@@ -51,7 +47,7 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA has_redirection TYPE abap_bool VALUE abap_false.
+    DATA(has_redirection) = abap_false.
 
     DATA(token1) = get_token_abs( statement-from ).
     DATA(token2) = get_token_abs( statement-from + 1 ).
@@ -75,7 +71,7 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
           has_redirection = abap_true.
         ENDIF.
       WHEN OTHERS.
-        LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+        LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
         FROM statement-from TO statement-to
         WHERE type = 'I'.
           IF <token>-str CS 'CL_GUI_'

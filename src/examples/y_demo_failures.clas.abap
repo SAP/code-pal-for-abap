@@ -61,7 +61,6 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS chain_declaration_usage.
     METHODS check_statement_position.
     METHODS check_in_loop.
-    METHODS function.
     METHODS comment_position.
     METHODS comment_type.
     METHODS cx_root_usage.
@@ -77,8 +76,8 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
       EXPORTING
         !error        TYPE char1
       RETURNING
-        VALUE(result) TYPE string_table.          "#EC NUM_OUTPUT_PARA
-    METHODS method_return_bool                     "#EC NUM_OUTPUT_PARA
+        VALUE(result) TYPE string_table. "#EC NUM_OUTPUT_PARA
+    METHODS method_return_bool
       RETURNING
         VALUE(result) TYPE abap_bool.
     METHODS max_nesting_depth.
@@ -90,7 +89,6 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
       EXPORTING
         !output_1 TYPE string
         !output_2 TYPE string.
-    METHODS pseudo_comment_usage.
     METHODS receiving_usage.
     METHODS external_call_in_prod_code_ok.
     METHODS boolean_input_parameter
@@ -100,7 +98,7 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS optional_parameters
       IMPORTING
         !name TYPE string OPTIONAL.
-    METHODS returning_name                         "#EC NUM_OUTPUT_PARA
+    METHODS returning_name
       RETURNING
         VALUE(name) TYPE string.
     METHODS self_reference.
@@ -121,6 +119,8 @@ CLASS y_demo_failures DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS default_key.
     METHODS prefer_returning EXPORTING result TYPE string.
     METHODS text_assembly.
+    METHODS collect.
+    METHODS prefer_pragmas.
 
   PRIVATE SECTION.
     DATA attribute_7 TYPE string.
@@ -138,7 +138,8 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
   METHOD boolean_input_parameter.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+    RETURN.
+  ENDMETHOD.
 
 
   METHOD call_method_usage.
@@ -259,13 +260,8 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD function.
-    CALL FUNCTION 'ZSH_CC_CYCLOMATIC_COMPLEXITY'.
-  ENDMETHOD.
-
-
   METHOD is_interface_in_class.
-    attribute_1 = `DKOM`.
+    RETURN.
   ENDMETHOD.
 
 
@@ -293,17 +289,18 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
   METHOD method_output_parameter.
-    attribute_1 = `DSAG`.
+    RETURN.
   ENDMETHOD.
 
 
   METHOD method_return_bool.
-    attribute_1 = `DKOM`.
+    RETURN.
   ENDMETHOD.
 
 
   METHOD multiple_pseudo_comments.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+    RETURN.
+  ENDMETHOD.
 
 
   METHOD non_class_based_exception.
@@ -374,8 +371,7 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
   METHOD number_output_parameters.
-    output_1 = attribute_1.
-    output_2 = attribute_2.
+    RETURN.
   ENDMETHOD.
 
 
@@ -385,7 +381,8 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
   METHOD optional_parameters.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+    RETURN.
+  ENDMETHOD.
 
 
   METHOD prefer_case_to_elseif.
@@ -430,10 +427,6 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD pseudo_comment_usage.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
-
-
   METHOD receiving_usage.
     method_output_parameter(
       IMPORTING error = DATA(error)
@@ -442,7 +435,8 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
 
   METHOD returning_name.
-  ENDMETHOD.                                       "#EC EMPTY_PROCEDURE
+    RETURN.
+  ENDMETHOD.
 
 
   METHOD scope_of_variable.
@@ -494,6 +488,28 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
     DATA(third) = 'C'.
 
     WRITE first && ': ' && second && ' - ' && third.
+  ENDMETHOD.
+
+
+  METHOD collect.
+     DATA: BEGIN OF seats,
+             carrid   TYPE sflight-carrid,
+             connid   TYPE sflight-connid,
+             seatsocc TYPE sflight-seatsocc,
+           END OF seats.
+
+     DATA seats_tab LIKE SORTED TABLE OF seats WITH NON-UNIQUE KEY carrid connid.
+
+     seats = VALUE #( carrid = '01' connid = '02' seatsocc = 30 ).
+     COLLECT seats INTO seats_tab.
+  ENDMETHOD.
+
+
+  METHOD prefer_pragmas.
+    TRY.
+        DATA(div_by_zero) = 1 / 0.
+      CATCH cx_root.               "#EC NO_HANDLER "#EC NEED_CX_ROOT
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.

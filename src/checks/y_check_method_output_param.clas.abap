@@ -61,7 +61,7 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
     has_changing_parameter = abap_false.
     has_returning_parameter = abap_false.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
       CASE <token>-str.
@@ -81,13 +81,9 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 ENDCLASS.

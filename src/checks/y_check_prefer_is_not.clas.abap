@@ -31,7 +31,7 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+    LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'IF'
     OR str = 'ELSEIF'
@@ -42,7 +42,7 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
       DATA(position) = sy-tabix.
 
       TRY.
-          IF ref_scan_manager->tokens[ position + 1 ]-str <> 'NOT'.
+          IF ref_scan->tokens[ position + 1 ]-str <> 'NOT'.
             CONTINUE.
           ENDIF.
         CATCH cx_sy_itab_line_not_found.
@@ -50,23 +50,19 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
       ENDTRY.
 
       TRY.
-          IF is_standard_function( ref_scan_manager->tokens[ position + 2 ] ) = abap_true.
+          IF is_standard_function( ref_scan->tokens[ position + 2 ] ) = abap_true.
             CONTINUE.
           ENDIF.
         CATCH cx_sy_itab_line_not_found.
           CONTINUE.
       ENDTRY.
 
-      DATA(configuration) = detect_check_configuration( statement ).
+      DATA(check_configuration) = detect_check_configuration( statement ).
 
-      IF configuration IS INITIAL.
-        RETURN.
-      ENDIF.
-
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = configuration-prio ).
+      raise_error( statement_level = statement-level
+                   statement_index = index
+                   statement_from = statement-from
+                   check_configuration = check_configuration ).
 
     ENDLOOP.
   ENDMETHOD.

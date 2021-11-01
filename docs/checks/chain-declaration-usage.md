@@ -12,13 +12,25 @@ Change the chain up-front declarations to inline declarations.
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CHAIN_DECL_USAG` which should be placed after the `DATA:` statement:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CHAIN_DECL_USAG` which should be placed after the declaration statement:
 
 ```abap
   DATA: "#EC CHAIN_DECL_USAG
     string TYPE string,
     json TYPE REF TO cl_abap_json,
     client LIKE sy-mandt.
+```
+
+```abap
+  TYPES: "#EC CHAIN_DECL_USAG
+    name TYPE string,
+    json TYPE REF TO cl_abap_json.
+```
+
+```abap
+  CONSTANTS: "#EC CHAIN_DECL_USAG
+    min_age TYPE i VALUE 18,
+    min_name_size TYPE i VALUE 3.
 ```
 
 ### Example

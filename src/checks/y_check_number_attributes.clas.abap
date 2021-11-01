@@ -81,20 +81,17 @@ CLASS y_check_number_attributes IMPLEMENTATION.
 
 
   METHOD check_result.
-    DATA(statement) = ref_scan_manager->statements[ structure-stmnt_from ].
+    DATA(statement) = ref_scan->statements[ structure-stmnt_from ].
 
     DATA(check_configuration) = detect_check_configuration( error_count = attribute_counter
                                                             statement = statement ).
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
 
-    raise_error( statement_level     = statement-level
-                 statement_index     = structure-stmnt_from
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ attribute_counter }|
-                 parameter_02        = |{ check_configuration-threshold }| ).
+    raise_error( statement_level = statement-level
+                 statement_index = structure-stmnt_from
+                 statement_from = statement-from
+                 check_configuration = check_configuration
+                 parameter_01 = |{ attribute_counter }|
+                 parameter_02 = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
 

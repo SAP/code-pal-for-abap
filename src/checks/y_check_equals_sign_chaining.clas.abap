@@ -16,7 +16,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_equals_sign_chaining IMPLEMENTATION.
+CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -32,28 +32,26 @@ CLASS y_check_equals_sign_chaining IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-
     CHECK get_second_token( statement ) = '='.
     CHECK get_fourth_token( statement ) = '='.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio ).
-
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
+
   METHOD get_fourth_token.
+    CHECK statement-from + 3 < statement-to. "#EC CI_MAGIC
     result = get_token_abs( statement-from + 3 ).
   ENDMETHOD.
 
+
   METHOD get_second_token.
+    CHECK statement-from + 1 < statement-to.
     result = get_token_abs( statement-from + 1 ).
   ENDMETHOD.
 ENDCLASS.

@@ -71,23 +71,23 @@ CLASS y_unit_test_base IMPLEMENTATION.
     cut ?= get_cut( ).
     cut->object_name = cl_abap_objectdescr=>describe_by_object_ref( cut )->get_relative_name( ).
     cut->object_type = 'CLAS'.
-    cut->attributes_maintained = abap_true.
-    cut->ref_scan_manager ?= NEW y_ref_scan_manager_double(  ).
-    cut->ref_scan_manager->set_ref_scan( VALUE #(  ) ).
+    cut->has_attributes = abap_false.
+    cut->attributes_ok = abap_true.
     cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
     cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption(  ).
+    cut->statistics = NEW y_scan_statistics( ).
   ENDMETHOD.
 
   METHOD given_code_without_issue.
-    CAST y_ref_scan_manager_double( cut->ref_scan_manager )->inject_code( get_code_without_issue(  ) ).
+    cut->ref_scan = y_code_pal_ref_scan_double=>get( get_code_without_issue(  ) ).
   ENDMETHOD.
 
   METHOD given_code_with_exemption.
-    CAST y_ref_scan_manager_double( cut->ref_scan_manager )->inject_code( get_code_with_exemption(  ) ).
+    cut->ref_scan = y_code_pal_ref_scan_double=>get( get_code_with_exemption(  ) ).
   ENDMETHOD.
 
   METHOD given_code_with_issue.
-    CAST y_ref_scan_manager_double( cut->ref_scan_manager )->inject_code( get_code_with_issue(  ) ).
+    cut->ref_scan = y_code_pal_ref_scan_double=>get( get_code_with_issue(  ) ).
   ENDMETHOD.
 
   METHOD when_run.
@@ -104,18 +104,18 @@ CLASS y_unit_test_base IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD then_exemption.
-    cl_abap_unit_assert=>assert_equals( act = cut->statistics->get_number_pseudo_comments( )
+    cl_abap_unit_assert=>assert_equals( act = cut->statistics->count-pseudo_comments
                                         exp = get_expected_count( ) ).
   ENDMETHOD.
 
   METHOD then_no_exemption.
-    cl_abap_unit_assert=>assert_initial( cut->statistics->get_number_pseudo_comments( ) ).
+    cl_abap_unit_assert=>assert_initial( cut->statistics->count-pseudo_comments ).
   ENDMETHOD.
 
   METHOD get_issue_count.
-    result = COND #( WHEN cut->settings-prio = cl_ci_test_root=>c_error   THEN cut->statistics->get_number_errors( )
-                     WHEN cut->settings-prio = cl_ci_test_root=>c_warning THEN cut->statistics->get_number_warnings( )
-                     WHEN cut->settings-prio = cl_ci_test_root=>c_note    THEN cut->statistics->get_number_notes( ) ).
+    result = COND #( WHEN cut->settings-prio = cl_ci_test_root=>c_error   THEN cut->statistics->count-errors
+                     WHEN cut->settings-prio = cl_ci_test_root=>c_warning THEN cut->statistics->count-warnings
+                     WHEN cut->settings-prio = cl_ci_test_root=>c_note    THEN cut->statistics->count-notes ).
   ENDMETHOD.
 
   METHOD has_pseudo_comment.

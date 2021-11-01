@@ -34,19 +34,15 @@ CLASS y_check_cx_root_usage IMPLEMENTATION.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 
   METHOD has_cx_root.
-    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+    LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'CX_ROOT'.
       result = abap_true.

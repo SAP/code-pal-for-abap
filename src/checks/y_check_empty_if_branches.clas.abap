@@ -57,6 +57,7 @@ CLASS y_check_empty_if_branches IMPLEMENTATION.
 
   METHOD branch_search_in_next_stmnt.
     CHECK branch_counter = first_if AND found_statement = abap_false.
+
     CASE get_first_token_from_index( statement-to + 1 )-str.
       WHEN 'ELSEIF'
         OR 'ELSE'
@@ -64,14 +65,10 @@ CLASS y_check_empty_if_branches IMPLEMENTATION.
 
         DATA(check_configuration) = detect_check_configuration( statement_wa ).
 
-        IF check_configuration IS INITIAL.
-          RETURN.
-        ENDIF.
-
-        raise_error( statement_level     = statement_wa-level
-                     statement_index     = index
-                     statement_from      = statement_wa-from
-                     error_priority      = check_configuration-prio ).
+        raise_error( statement_level = statement_wa-level
+                     statement_index = index
+                     statement_from = statement_wa-from
+                     check_configuration  = check_configuration ).
     ENDCASE.
   ENDMETHOD.
 
@@ -92,7 +89,7 @@ CLASS y_check_empty_if_branches IMPLEMENTATION.
 
 
   METHOD get_first_token_from_index.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM index
     WHERE type = 'I'.
       IF result IS INITIAL.

@@ -4,8 +4,8 @@ CLASS y_pseudo_comment_detector DEFINITION PUBLIC CREATE PUBLIC.
     ALIASES is_pseudo_comment FOR y_if_pseudo_comment_detector~is_pseudo_comment.
 
   PRIVATE SECTION.
-    DATA: pcom     TYPE sci_pcom,
-          pcom_alt TYPE sci_pcom.
+    DATA pcom     TYPE sci_pcom.
+    DATA pcom_alt TYPE sci_pcom.
 
     METHODS:
       determine_pseudo_comments
@@ -16,16 +16,16 @@ CLASS y_pseudo_comment_detector DEFINITION PUBLIC CREATE PUBLIC.
           !suppress    TYPE sci_pcom,
       has_comment
         IMPORTING
-          !ref_scan_manager TYPE REF TO y_if_scan_manager
-          !position         TYPE int4
+          !ref_scan    TYPE REF TO cl_ci_scan
+          !position    TYPE int4
         RETURNING
-          VALUE(result)     TYPE sci_pcom,
+          VALUE(result) TYPE sci_pcom,
       has_inline_comment
         IMPORTING
-          !ref_scan_manager TYPE REF TO y_if_scan_manager
-          !position         TYPE int4
+          !ref_scan     TYPE REF TO cl_ci_scan
+          !position     TYPE int4
         RETURNING
-          VALUE(result)     TYPE sci_pcom.
+          VALUE(result) TYPE sci_pcom.
 ENDCLASS.
 
 
@@ -62,12 +62,12 @@ CLASS y_pseudo_comment_detector IMPLEMENTATION.
     DATA(l_position) = position + 1.
 
     DO.
-      READ TABLE ref_scan_manager->statements INTO DATA(l_statement_wa) INDEX l_position.
+      READ TABLE ref_scan->statements INTO DATA(l_statement_wa) INDEX l_position.
       IF sy-subrc <> 0 OR l_statement_wa-type <> 'P'.
         EXIT.
       ENDIF.
 
-      LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<l_token_wa>)
+      LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<l_token_wa>)
         FROM l_statement_wa-from TO l_statement_wa-to.
 
         IF <l_token_wa>-str CS y_if_pseudo_comment_detector=>ec_comment AND (
@@ -92,13 +92,13 @@ CLASS y_pseudo_comment_detector IMPLEMENTATION.
     DATA(l_position) = position - 1.
 
     DO.
-      READ TABLE ref_scan_manager->statements INTO DATA(l_statement_wa) INDEX l_position.
+      READ TABLE ref_scan->statements INTO DATA(l_statement_wa) INDEX l_position.
       IF sy-subrc <> 0 OR ( l_statement_wa-type <> 'S' AND l_statement_wa-type <> 'G' ).
         EXIT.
       ENDIF.
 
       IF l_statement_wa-type = 'S'.
-        LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<l_token_wa>)
+        LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<l_token_wa>)
           FROM l_statement_wa-from TO l_statement_wa-to.
 
           IF <l_token_wa>-str CS y_if_pseudo_comment_detector=>ec_comment AND (
@@ -135,11 +135,11 @@ CLASS y_pseudo_comment_detector IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    result = has_comment( ref_scan_manager = ref_scan_manager
+    result = has_comment( ref_scan = ref_scan
                           position = position ).
 
     IF result <> cl_ci_test_root=>c_pc_exceptn_exists.
-      result = has_inline_comment( ref_scan_manager = ref_scan_manager
+      result = has_inline_comment( ref_scan = ref_scan
                                    position = position ).
     ENDIF.
 

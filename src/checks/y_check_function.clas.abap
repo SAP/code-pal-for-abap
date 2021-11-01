@@ -6,7 +6,8 @@ CLASS y_check_function DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUB
     METHODS inspect_tokens REDEFINITION.
 
   PRIVATE SECTION.
-    DATA db_reader TYPE REF TO lif_db_reader.
+    METHODS is_rfc_enabled IMPORTING name TYPE rs38l_fnam
+                           RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -27,10 +28,6 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
     relevant_structure_types = VALUE #( ).
 
     set_check_message( 'Function-Module should not be created!' ).
-
-    IF db_reader IS NOT BOUND.
-      db_reader = NEW lcl_db_reader( ).
-    ENDIF.
   ENDMETHOD.
 
 
@@ -43,20 +40,25 @@ CLASS Y_CHECK_FUNCTION IMPLEMENTATION.
 
     DATA(fm_name) = get_token_abs( statement-from + 1 ).
 
-    IF db_reader->is_fm_rfc_enabled( CONV #( fm_name ) ) = abap_false.
-
-      DATA(check_configuration) = detect_check_configuration( statement ).
-
-      IF check_configuration IS INITIAL.
-        RETURN.
-      ENDIF.
-
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio ).
-
+    IF is_rfc_enabled( CONV #( fm_name ) ) = abap_true.
+      RETURN.
     ENDIF.
+
+    DATA(check_configuration) = detect_check_configuration( statement ).
+
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
+  ENDMETHOD.
+
+
+  METHOD is_rfc_enabled.
+    SELECT SINGLE @abap_true
+    FROM tfdir
+    INTO @result
+    WHERE funcname = @name
+    AND fmode = 'R'.
   ENDMETHOD.
 
 ENDCLASS.

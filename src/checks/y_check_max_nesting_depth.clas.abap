@@ -80,7 +80,7 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
       max_nesting = 0.
     ENDIF.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
 
       IF is_macro( <token> ).
@@ -91,17 +91,14 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
 
       IF index = structure-stmnt_to.
         DATA(check_configuration) = detect_check_configuration( error_count = max_nesting
-                                                                statement = statement_for_message ). "#EC DECL_IN_IF
-        IF check_configuration IS INITIAL.
-          CONTINUE.
-        ENDIF.
+                                                                statement = statement_for_message ).
 
-        raise_error( statement_level     = statement_for_message-level
-                     statement_index     = determine_position( type = structure-type index = index )
-                     statement_from      = statement_for_message-from
-                     error_priority      = check_configuration-prio
-                     parameter_01        = |{ max_nesting }|
-                     parameter_02        = |{ check_configuration-threshold }| ).
+        raise_error( statement_level = statement_for_message-level
+                     statement_index = determine_position( type = structure-type index = index )
+                     statement_from = statement_for_message-from
+                     check_configuration = check_configuration
+                     parameter_01 = |{ max_nesting }|
+                     parameter_02 = |{ check_configuration-threshold }| ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.

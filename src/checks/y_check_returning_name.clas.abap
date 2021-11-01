@@ -36,16 +36,12 @@ CLASS y_check_returning_name IMPLEMENTATION.
     CHECK get_token_abs( statement-from ) = 'METHODS'.
     CHECK has_returning_with_wrong_name( statement ).
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     raise_error( statement_level = statement-level
                  statement_index = index
                  statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 check_configuration = check_configuration ).
 
   ENDMETHOD.
 
@@ -53,7 +49,7 @@ CLASS y_check_returning_name IMPLEMENTATION.
   METHOD has_returning_with_wrong_name.
     DATA(skip) = abap_true.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
 
       IF <token>-str = 'RETURNING'.

@@ -5,9 +5,6 @@ CLASS y_check_prefer_line_exists DEFINITION PUBLIC INHERITING FROM y_check_base 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
 
-    METHODS get_statement_inline IMPORTING statement TYPE sstmnt
-                                 RETURNING VALUE(result) TYPE string.
-
 ENDCLASS.
 
 
@@ -28,38 +25,36 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) = 'READ'
-    OR get_token_abs( statement-from ) = 'LOOP'.
+    DATA(keyword) = keyword( ).
 
-    DATA(inline) = get_statement_inline( statement ).
-
-    IF inline NP '* TRANSPORTING NO FIELDS *'.
+    IF keyword <> if_kaizen_keywords_c=>gc_loop
+    AND keyword <> 'READ'.
       RETURN.
     ENDIF.
 
-    IF inline CP '* FROM *'
-    OR inline CP '* TO *'.
+    DATA(transporting_no_fields) = next2( p_word1 = 'TRANSPORTING'
+                                          p_word2 = 'NO' ).
+
+    IF transporting_no_fields IS INITIAL.
       RETURN.
     ENDIF.
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
+    IF next1( 'FROM' ) IS NOT INITIAL
+    OR next1( 'TO' ) IS NOT INITIAL.
       RETURN.
     ENDIF.
 
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = configuration-prio ).
+    IF next1( 'IN' ) IS NOT INITIAL.
+      RETURN.
+    ENDIF.
+
+    DATA(check_configuration) = detect_check_configuration( statement ).
+
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
-
-  METHOD get_statement_inline.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-from TO statement-to.
-      result = |{ result } { <token>-str }|.
-    ENDLOOP.
-  ENDMETHOD.
 
 ENDCLASS.

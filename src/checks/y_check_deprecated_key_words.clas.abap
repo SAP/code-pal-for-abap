@@ -42,14 +42,10 @@ CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
   METHOD check_if_error.
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = check_configuration-prio
-                 parameter_01        = |{ keyword }| ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration
+                 parameter_01 = |{ keyword }| ).
   ENDMETHOD.
 ENDCLASS.

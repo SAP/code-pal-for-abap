@@ -30,21 +30,17 @@ CLASS y_check_omit_optional_exp IMPLEMENTATION.
 
     CHECK has_optional_exporting( statement ).
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     raise_error( statement_level = statement-level
                  statement_index = index
                  statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 check_configuration  = check_configuration ).
 
   ENDMETHOD.
 
   METHOD has_optional_exporting.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF <token>-str = 'EXPORTING'.
           result = abap_true.

@@ -30,22 +30,17 @@ CLASS y_check_comment_type IMPLEMENTATION.
     CHECK statement-type = 'P'.
     CHECK has_wrong_comment_type( statement ).
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     raise_error( statement_level = statement-level
                  statement_index = index
                  statement_from = statement-from
-                 error_priority = configuration-prio ).
-
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 
   METHOD has_wrong_comment_type.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
       IF get_first_character( <token> ) = '*'
       AND get_second_character( <token> ) <> '&'.

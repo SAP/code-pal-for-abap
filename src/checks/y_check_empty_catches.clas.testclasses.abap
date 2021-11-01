@@ -74,6 +74,8 @@ CLASS ltc_class_based IMPLEMENTATION.
 
 ENDCLASS.
 
+
+
 CLASS ltc_system_based DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
@@ -136,10 +138,43 @@ CLASS ltc_system_based IMPLEMENTATION.
 
       ( ' CLASS classname IMPLEMENTATION. ' )
       ( '   METHOD system_based. ' )
-      ( '     CATCH SYSTEM-EXCEPTIONS OTHERS = 1. "#EC EMPTY_CATCH ' )
+      ( '     CATCH SYSTEM-EXCEPTIONS OTHERS = 1. "#EC NO_HANDLER ' )
       ( '     ENDCATCH. ' )
       ( '   ENDMETHOD. ' )
       ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
+CLASS ltc_test_double_framework DEFINITION INHERITING FROM ltc_class_based FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_test_double_framework IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT ut_test. ' )
+
+      ( ' CLASS classname DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS framwork FOR TESTING. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS classname IMPLEMENTATION. ' )
+      ( '   METHOD framwork. ' )
+      ( '     DATA cut TYPE REF TO y_check_empty_catches. ' )
+      ( '     cl_abap_testdouble=>configure_call( cut )->returning( 55 ). ' )
+      ( '     TRY. ' )
+      ( '       cut->get_attributes( ). ' )
+      ( '     CATCH cx_sy_no_handler. ' )
+      ( '     ENDTRY. ' )
+      ( '   ENDMETHOD. ' )
+      ( 'ENDCLASS. ' )
     ).
   ENDMETHOD.
 

@@ -40,16 +40,12 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
 
     CHECK has_only_one_exporting( statement ).
 
-    DATA(configuration) = detect_check_configuration( statement ).
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
-                 error_priority      = configuration-prio ).
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 
@@ -57,7 +53,7 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
     DATA(skip) = abap_false.
     DATA(count) = 0.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from
     TO statement-to.
 
@@ -66,6 +62,7 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
       OR <token>-str = 'RETURNING'
       OR <token>-str = 'RAISING'.
         skip = abap_true.
+        CLEAR count.
       ELSEIF <token>-str = 'EXPORTING'.
         skip = abap_false.
       ENDIF.
@@ -90,8 +87,8 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
 
   METHOD is_exception_case.
     TRY.
-        DATA(one_ahead) = ref_scan_manager->tokens[ position + 1 ]-str.
-        DATA(two_ahead) = ref_scan_manager->tokens[ position + 2 ]-str.
+        DATA(one_ahead) = ref_scan->tokens[ position + 1 ]-str.
+        DATA(two_ahead) = ref_scan->tokens[ position + 2 ]-str.
 
         result = xsdbool(     one_ahead = 'STANDARD'
                           AND two_ahead = 'TABLE' ).

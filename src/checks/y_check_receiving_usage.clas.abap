@@ -32,7 +32,7 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
 
     DATA(token_index) = 0.
 
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
       FROM statement-from TO statement-to.
       IF has_receiving = abap_false.
         has_receiving = xsdbool( <token>-str = 'RECEIVING' AND
@@ -48,16 +48,12 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     IF has_receiving = abap_true
     AND has_classic_exception = abap_false.
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio ).
+      raise_error( statement_level = statement-level
+                   statement_index = index
+                   statement_from = statement-from
+                   check_configuration = check_configuration ).
     ENDIF.
   ENDMETHOD.
 ENDCLASS.

@@ -35,7 +35,7 @@ CLASS y_check_empty_procedures IMPLEMENTATION.
 
 
   METHOD get_next_token_from_index.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM index WHERE type = 'I'.
       IF result IS INITIAL.
         result = <token>.
@@ -62,14 +62,10 @@ CLASS y_check_empty_procedures IMPLEMENTATION.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    IF check_configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
-    raise_error( statement_level     = statement-level
-                 statement_index     = structure-stmnt_to
-                 statement_from      = statement-to
-                 error_priority      = check_configuration-prio ).
+    raise_error( statement_level = statement-level
+                 statement_index = structure-stmnt_to
+                 statement_from = statement-to
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 

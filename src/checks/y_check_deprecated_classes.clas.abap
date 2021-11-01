@@ -45,7 +45,7 @@ CLASS y_check_deprecated_classes IMPLEMENTATION.
   METHOD inspect_tokens.
     CONSTANTS skip_ref_to TYPE i VALUE 2.
 
-    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+    LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str = 'TYPE'.
 
@@ -65,17 +65,12 @@ CLASS y_check_deprecated_classes IMPLEMENTATION.
 
       DATA(check_configuration) = detect_check_configuration( statement ).
 
-      IF check_configuration IS INITIAL.
-        RETURN.
-      ENDIF.
-
-      raise_error( statement_level     = statement-level
-                   statement_index     = index
-                   statement_from      = statement-from
-                   error_priority      = check_configuration-prio
-                   parameter_01        = deprecated-original
-                   parameter_02        = deprecated-replacement ).
-
+      raise_error( statement_level = statement-level
+                   statement_index = index
+                   statement_from = statement-from
+                   check_configuration = check_configuration
+                   parameter_01 = deprecated-original
+                   parameter_02 = deprecated-replacement ).
     ENDLOOP.
 
   ENDMETHOD.
@@ -83,7 +78,7 @@ CLASS y_check_deprecated_classes IMPLEMENTATION.
 
   METHOD get_refereced_type.
     TRY.
-        result = ref_scan_manager->tokens[ position + 1 ]-str.
+        result = ref_scan->tokens[ position + 1 ]-str.
       CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.

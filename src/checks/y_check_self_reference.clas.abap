@@ -34,22 +34,18 @@ CLASS y_check_self_reference IMPLEMENTATION.
     CHECK statement-type = method_call.
     CHECK has_self_reference( statement ) = abap_true.
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 check_configuration  = check_configuration ).
 
   ENDMETHOD.
 
 
   METHOD has_self_reference.
-    LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+    LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
     WHERE str CP 'ME->*'.
       result = abap_true.

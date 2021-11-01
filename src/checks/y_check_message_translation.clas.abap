@@ -25,18 +25,14 @@ CLASS y_check_message_translation IMPLEMENTATION.
   METHOD inspect_tokens.
     CHECK statement-type = scan_stmnt_type-standard.
     CHECK get_token_abs( statement-from ) = 'MESSAGE'.
-    CHECK ref_scan_manager->tokens[ statement-from + 1 ]-type = scan_token_type-literal.
+    CHECK ref_scan->tokens[ statement-from + 1 ]-type = scan_token_type-literal.
 
-    DATA(configuration) = detect_check_configuration( statement ).
-
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
+    DATA(check_configuration) = detect_check_configuration( statement ).
 
     raise_error( statement_level = statement-level
                  statement_index = index
                  statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
 ENDCLASS.

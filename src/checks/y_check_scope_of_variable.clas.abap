@@ -51,7 +51,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
     DATA(scope) = get_scope_structure( statement-struc ).
     DATA(statement_index) = index.
 
-    LOOP AT ref_scan_manager->statements ASSIGNING FIELD-SYMBOL(<statement>)
+    LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM scope-stmnt_from TO scope-stmnt_to
     WHERE number > statement-number.
 
@@ -61,20 +61,15 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      LOOP AT ref_scan_manager->tokens TRANSPORTING NO FIELDS
+      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
       FROM <statement>-from TO <statement>-to
       WHERE str = variable.
-
         DATA(check_configuration) = detect_check_configuration( <statement> ).
 
-        IF check_configuration IS INITIAL.
-          RETURN.
-        ENDIF.
-
-        raise_error( statement_level     = <statement>-level
-                     statement_index     = statement_index
-                     statement_from      = <statement>-from
-                     error_priority      = check_configuration-prio ).
+        raise_error( statement_level = <statement>-level
+                     statement_index = statement_index
+                     statement_from = <statement>-from
+                     check_configuration = check_configuration ).
       ENDLOOP.
 
     ENDLOOP.
@@ -82,7 +77,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
 
 
   METHOD is_isolated.
-    DATA(structure) = ref_scan_manager->structures[ strucutre_row ].
+    DATA(structure) = ref_scan->structures[ strucutre_row ].
 
     result = xsdbool(    structure-stmnt_type = scan_struc_stmnt_type-if
                       OR structure-stmnt_type = scan_struc_stmnt_type-then
@@ -105,7 +100,7 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
 
 
   METHOD get_scope_structure.
-    DATA(structure) = ref_scan_manager->structures[ strucutre_row ].
+    DATA(structure) = ref_scan->structures[ strucutre_row ].
 
     DATA(is_root) = xsdbool(    structure-stmnt_type = scan_struc_stmnt_type-form
                              OR structure-stmnt_type = scan_struc_stmnt_type-method

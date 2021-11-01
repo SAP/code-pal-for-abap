@@ -1,16 +1,50 @@
 code-pal-for-abap changelog
 =================
 
+Dependencies
+------------------
+1. SAP Note 2527903 - Remote analysis (for check system)
+
+Upgrade Note
+------------------
+Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective Code Inspector Variant (SCI transaction)
+
 Legend
-------
+------------------
 * : fixed
 ! : changed
 + : added
 - : removed
 
-Upgrade Note
+2021-11-01 v.1.16.0
 ------------------
-Whenever you upgrade code pal for ABAP, it is highly recommended to execute the Y_CI_CHECK_REGISTRATION report to activate/reactivate the Checks (SE38 transaction) and regenerate the respective Code Inspector Variant (SCI transaction)
+* Prefer New: Dynamic Call with Parameters (#502)
+* DB Access in UT: Global Inheritance (#500)
+* DB Access in UT: Local Inheritance (#498)
+* Skip 'Prefer RETURNING to EXPORTING' when both exist (#490)
+* Pseudo Comment Usage: Multiple Inline Entries (#494)
+* Prefer Pragmas to Pseudo Comments: Multiple Pseudo Comments (#489)
+* Y_CHECK_MESSAGE_EASY_TO_FIND dump (#492)
+* Chain Declaration for Complex Structures (#488)
+* Empty Catch Alternative Pseudo Comment (#337)
++ Alternative Pseudo Comment (#486)
+* line_exists does not support the operator IN (#484)
+* Empty Catch: Test Double Framework (#483)
+* Y_CHECK_FORM: Screen Events (#454)
+* Magic Number: CASE SY-TABIX and CO NUMBERS (#480)
+* Magic Number: Leading Zeros (#479)
+* Prefer New to Create Object: Dynamic Type (#469)
+* Magic Number: Table Index (#468)
+* Use native *_wa variables (#474)
+* Refactoring (#436,#452,#458)
+* Cannot run unit tests on 752 (#461)
+* Profiles: Allow Exemptions (#447)
+* BAdI example class vs Percentage Comment (#443)
+* Unit-Test Assert Validator (#450)
++ Prefer Pragmas to Pseudo Comments (#421)
++ COLLECT restriction (#441)
+* RAP needs CREATE OBJECT ... FOR TESTING (#444)
+* Filter functional operands in "Unit Test Assert" check (#460)
 
 2021-08-12 v.1.15.0
 ------------------

@@ -114,7 +114,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
 
 
   METHOD convert_class_for_repos_access.
-    result = name && '%'.
+    result = |{ name }%|.
   ENDMETHOD.
 
 
@@ -122,9 +122,9 @@ CLASS y_object_creation_date IMPLEMENTATION.
     IF name(1) = '/'.
       SEARCH name FOR '/' STARTING AT 2.
       DATA(l_textcount) = sy-fdpos + 2.
-      result = name(l_textcount) && 'SAPL' && name+l_textcount.
+      result = |{ name(l_textcount) }SAPL{ name+l_textcount }|.
     ELSE.
-      result = 'SAPL' && name.
+      result = |SAPL{ name }|.
     ENDIF.
   ENDMETHOD.
 
@@ -156,13 +156,7 @@ CLASS y_object_creation_date IMPLEMENTATION.
 
 
   METHOD get_db_vers_hstry_crtd_on_clas.
-    DATA class_search_string TYPE string.
-
-    class_search_string = class_name.
-    WHILE strlen( class_search_string ) < 30.
-      CONCATENATE class_search_string ` ` INTO class_search_string.
-    ENDWHILE.
-    class_search_string = class_search_string && '%'.
+    DATA(class_search_string) = |{ class_name ALIGN = LEFT WIDTH = 30 PAD = space }%|.
 
     SELECT SINGLE MIN( datum ) FROM vrsd WHERE
       objtype = 'METH' AND

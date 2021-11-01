@@ -40,14 +40,10 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
 
     DATA(configuration) = detect_check_configuration( statement ).
 
-    IF configuration IS INITIAL.
-      RETURN.
-    ENDIF.
-
     raise_error( statement_level = statement-level
                  statement_index = index
-                 statement_from  = statement-from
-                 error_priority  = configuration-prio ).
+                 statement_from = statement-from
+                 check_configuration = configuration ).
 
   ENDMETHOD.
 
@@ -60,7 +56,7 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
 
   METHOD has_boolean_input_param.
     DATA(skip) = abap_true.
-    LOOP AT ref_scan_manager->tokens ASSIGNING FIELD-SYMBOL(<token>)
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to.
 
       IF <token>-str = 'IMPORTING'.
