@@ -1,6 +1,6 @@
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [COLLECT restriction](collect.md)
 
-## CX_ROOT Usage Check
+## COLLECT restriction
 
 ### What is the Intent of the Check?
 

@@ -16,7 +16,7 @@ Legend
 + : added
 - : removed
 
-2021-08-XX v.1.16.0
+2021-11-01 v.1.16.0
 ------------------
 * Prefer New: Dynamic Call with Parameters (#502)
 * DB Access in UT: Global Inheritance (#500)
