@@ -480,7 +480,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     handle_ignore_pseudo_comments( check_configuration ).
 
     add_pseudo_comment_quickfix( check_configuration = check_configuration
-                                    statement_index     = statement_index ).
+                                 statement_index     = statement_index ).
 
     IF is_running_unit_test( ) = abap_true.
       handle_unit_test_statistics( statement_index =  statement_index
@@ -691,7 +691,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       IMPORTING
         es_tadir_keys = result.
   ENDMETHOD.
-
 
 
   METHOD add_pseudo_comment_quickfix.
