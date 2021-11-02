@@ -19,6 +19,7 @@ Legend
 2021-XX-XX v.1.17.0
 ------------------
 + Quickfix: Pseudo Comment (#509)
++ Change All Checks Button
 
 2021-11-01 v.1.16.0
 ------------------
