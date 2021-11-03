@@ -47,7 +47,7 @@
 - [Prefer IS NOT to NOT IS](checks/prefer-is-not-to-not-is.md)
 - [Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT](checks/prefer-line-exists.md)
 - [Prefer NEW to CREATE OBJECT](checks/prefer-new-to-create-object.md)
-- [Prefer Pragma to Pseudo Comment](checks/prefer-pragmas-to-pseudo-comments.md)
+- [Prefer Pragmas to Pseudo Comments](checks/prefer-pragmas-to-pseudo-comments.md)
 - [Pseudo Comment Usage](checks/pseudo-comment-usage.md)
 - [Omit Optional EXPORTING](checks/omit-optional-exporting.md)
 - [Optional Parameters](checks/optional-parameters.md)
