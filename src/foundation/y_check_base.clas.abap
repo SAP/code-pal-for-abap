@@ -697,8 +697,12 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     CHECK settings-pseudo_comment IS NOT INITIAL.
     CHECK check_configuration-ignore_pseudo_comments = abap_false.
 
-    DATA(context) = cl_ci_quickfix_abap_context=>create_from_scan_stmt( p_ci_scan        = ref_scan
-                                                                        p_stmt_idx       = statement_index ).
+    TRY.
+        DATA(context) = cl_ci_quickfix_abap_context=>create_from_scan_stmt( p_ci_scan        = ref_scan
+                                                                            p_stmt_idx       = statement_index ).
+      CATCH cx_ci_quickfix_failed.
+        RETURN.
+    ENDTRY.
 
     DATA(quickfix) = quickfix_factory->create_quickfix( ).
 
