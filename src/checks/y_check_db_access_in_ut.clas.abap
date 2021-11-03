@@ -39,7 +39,8 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
                END OF keys.
 
     TYPES: BEGIN OF properties,
-             name          TYPE string,
+             program_name  TYPE string,
+             class_name    TYPE string,
              risk_level    TYPE string,
              has_framework TYPE abap_bool,
            END OF properties.
@@ -128,12 +129,14 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
   METHOD add_line_to_defined_classes.
     TRY.
-        DATA(class_config) = VALUE properties( name = get_class_name( structure ) ).
+        DATA(class_config) = VALUE properties( program_name = program_name
+                                               class_name = get_class_name( structure ) ).
       CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.
 
-    IF line_exists( defined_classes[ name = class_config-name ] ).
+    IF line_exists( defined_classes[ program_name = program_name
+                                     class_name = class_config-class_name ] ).
       RETURN.
     ENDIF.
 
@@ -191,7 +194,8 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(defined_superclass) = VALUE #( defined_classes[ name = superclass ] OPTIONAL ).
+    DATA(defined_superclass) = VALUE #( defined_classes[ program_name = program_name
+                                                         class_name = superclass ] OPTIONAL ).
 
     " Avoiding false-positives (inheriting from global class which is out of scan scope)
     result = xsdbool( defined_superclass-has_framework = abap_true
@@ -206,7 +210,8 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
         RETURN.
     ENDTRY.
 
-    IF NOT line_exists( defined_classes[ name = class_name
+    IF NOT line_exists( defined_classes[ program_name = program_name
+                                         class_name = class_name
                                          has_framework = abap_false ] ).
       RETURN.
     ENDIF.
@@ -238,7 +243,8 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD get_forbidden_tokens.
-    DATA(class) = VALUE #( defined_classes[ name = class_name ] OPTIONAL ).
+    DATA(class) = VALUE #( defined_classes[ program_name = program_name
+                                            class_name = class_name ] OPTIONAL ).
 
     DATA(risk_lvl) = COND #( WHEN class IS NOT INITIAL THEN class-risk_level
                              ELSE space ).
