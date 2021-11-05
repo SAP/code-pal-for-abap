@@ -115,7 +115,8 @@ CLASS y_check_comment_position IMPLEMENTATION.
   METHOD get_next_token.
     DATA(next_position) = current_position + 1.
     result = ref_scan->tokens[ next_position ].
-    IF is_pragma( result ) = abap_true.
+    IF is_pragma( result ) = abap_true
+    OR is_pseudo_comment( result ) = abap_true.
       result = get_next_token( next_position ).
     ENDIF.
   ENDMETHOD.
@@ -128,4 +129,5 @@ CLASS y_check_comment_position IMPLEMENTATION.
         result = abap_false.
     ENDTRY.
   ENDMETHOD.
+
 ENDCLASS.
