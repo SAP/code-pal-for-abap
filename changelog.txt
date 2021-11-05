@@ -16,6 +16,9 @@ Legend
 + : added
 - : removed
 
+2021-11-05 v.1.16.2
+------------------
+
 2021-11-03 v.1.16.1
 ------------------
 * DB Access in UT: False Positive (#513)
