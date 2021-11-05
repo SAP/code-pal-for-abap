@@ -283,7 +283,7 @@ CLASS ltc_pseudo_comment IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA lt_callstack TYPE sys_callst. ')
+      ( '     DATA lt_callstack TYPE sys_callst. ' )
 
       ( '       " Reading stack for program ' )
       ( '     READ TABLE lt_callstack "#EC CI_STDSEQ ' )
@@ -305,7 +305,7 @@ CLASS ltc_pseudo_comment IMPLEMENTATION.
 
       ( ' CLASS y_example_class IMPLEMENTATION. ' )
       ( '   METHOD example. ' )
-      ( '     DATA lt_callstack TYPE sys_callst. ')
+      ( '     DATA lt_callstack TYPE sys_callst. ' )
 
       ( '     " Reading stack for program ' )
       ( '     READ TABLE lt_callstack "#EC CI_STDSEQ ' )
