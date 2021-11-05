@@ -18,6 +18,7 @@ Legend
 
 2021-11-05 v.1.16.2
 ------------------
+* Comment Position when Line Contains Pseudo Comment (#516)
 
 2021-11-03 v.1.16.1
 ------------------
