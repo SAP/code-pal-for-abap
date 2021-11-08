@@ -858,13 +858,26 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD init_ui_700.
-    set_dynpro_field_active( fieldname = 'IO_START_DATE' is_active = chbx_change_vp ).
-    set_dynpro_field_active( fieldname = 'IO_END_DATE' is_active = chbx_change_vp ).
-    set_dynpro_field_active( fieldname = 'IO_CREATION_DATE' is_active = chbx_change_since ).
-    set_dynpro_field_active( fieldname = 'IO_PRIO' is_active = chbx_message_prio ).
-    set_dynpro_field_active( fieldname = 'CHBX_ON_PRODCODE' is_active = chbx_select_prodcode ).
-    set_dynpro_field_active( fieldname = 'CHBX_ON_TESTCODE' is_active = chbx_apply_testcode ).
-    set_dynpro_field_active( fieldname = 'CHBX_ALLOW_PCOM' is_active = chbx_apply_pcom ).
+    set_dynpro_field_active( fieldname = 'IO_START_DATE'
+                             is_active = chbx_change_vp ).
+
+    set_dynpro_field_active( fieldname = 'IO_END_DATE'
+                             is_active = chbx_change_vp ).
+
+    set_dynpro_field_active( fieldname = 'IO_CREATION_DATE'
+                             is_active = chbx_change_since ).
+
+    set_dynpro_field_active( fieldname = 'IO_PRIO'
+                             is_active = chbx_message_prio ).
+
+    set_dynpro_field_active( fieldname = 'CHBX_ON_PRODCODE'
+                             is_active = chbx_select_prodcode ).
+
+    set_dynpro_field_active( fieldname = 'CHBX_ON_TESTCODE'
+                             is_active = chbx_apply_testcode ).
+
+    set_dynpro_field_active( fieldname = 'CHBX_ALLOW_PCOM'
+                             is_active = chbx_apply_pcom ).
   ENDMETHOD.
 
   METHOD get_check.
