@@ -1465,7 +1465,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
 
     TRY.
-        DATA(checks) = profile_manager->select_checks( profile ).
+        profile_manager->select_checks( profile ).
       CATCH ycx_entry_not_found.
         RETURN.
     ENDTRY.
