@@ -448,8 +448,8 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
 
 
   METHOD mass_change.
+    DATA check TYPE REF TO y_check_base.
     TRY.
-        DATA check TYPE REF TO y_check_base.
         DATA(checks) = y_if_profile_manager~select_checks( name ).
 
         LOOP AT checks INTO DATA(temp_config).
