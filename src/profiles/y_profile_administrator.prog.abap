@@ -39,7 +39,7 @@ ENDMODULE.
 MODULE status_0400 OUTPUT.
   SET PF-STATUS check_customizing_screen.
   SET TITLEBAR check_customizing_screen.
-  lcl_util=>init_check_fields_active( ).
+  lcl_util=>init_ui_400( ).
 ENDMODULE.
 
 MODULE status_0500 OUTPUT.
@@ -55,6 +55,7 @@ ENDMODULE.
 MODULE status_0700 OUTPUT.
   SET PF-STATUS mass_update.
   SET TITLEBAR mass_update.
+  lcl_util=>init_ui_700( ).
 ENDMODULE.
 
 MODULE user_command INPUT.
@@ -89,6 +90,9 @@ MODULE user_command INPUT.
 
     WHEN 'BTN_INFO'.
       lcl_util=>call_check_info( ).
+
+    WHEN 'CHBX'.
+      lcl_util=>init_ui_700( ).
 
   ENDCASE.
 ENDMODULE.

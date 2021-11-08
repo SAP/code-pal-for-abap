@@ -157,11 +157,13 @@ INTERFACE y_if_profile_manager PUBLIC.
   METHODS mass_change
     IMPORTING
       name                     TYPE ytab_profiles-profile
+      config                   TYPE ytab_checks
       change_validation_period TYPE abap_bool
-      start_date               TYPE ytab_checks-start_date
-      end_date                 TYPE ytab_checks-end_date
       change_created_since     TYPE abap_bool
-      created_since            TYPE ytab_checks-objects_created_on
+      change_prio              TYPE abap_bool
+      change_apply_prod_code   TYPE abap_bool
+      change_apply_testcode    TYPE abap_bool
+      change_allow_exemptios   TYPE abap_bool
     RAISING
       cx_failed.
 

@@ -449,22 +449,45 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
 
   METHOD mass_change.
     TRY.
+        DATA check TYPE REF TO y_check_base.
         DATA(checks) = y_if_profile_manager~select_checks( name ).
 
-        LOOP AT checks INTO DATA(check).
-          DATA(temp_check) = check.
+        LOOP AT checks INTO DATA(temp_config).
+          TRY.
+              CREATE OBJECT check TYPE (temp_config-checkid).
+            CATCH cx_sy_create_object_error.
+              CONTINUE.
+          ENDTRY.
+
+          DATA(temp_check) = temp_config.
 
           IF change_validation_period = abap_true.
-            temp_check-start_date = start_date.
-            temp_check-end_date = end_date.
+            temp_check-start_date = config-start_date.
+            temp_check-end_date = config-end_date.
           ENDIF.
 
           IF change_created_since = abap_true.
-            temp_check-objects_created_on = created_since.
+            temp_check-objects_created_on = config-objects_created_on.
+          ENDIF.
+
+          IF change_prio = abap_true AND config-prio <> space.
+            temp_check-prio = config-prio.
+          ENDIF.
+
+          IF change_apply_prod_code = abap_true AND check->settings-disable_on_prodcode_selection = abap_false.
+            temp_check-apply_on_productive_code = config-apply_on_productive_code.
+          ENDIF.
+
+          IF change_apply_testcode = abap_true AND check->settings-disable_on_testcode_selection = abap_false.
+            temp_check-apply_on_testcode = config-apply_on_testcode.
+          ENDIF.
+
+          IF change_allow_exemptios = abap_true AND check->settings-pseudo_comment <> space.
+            temp_check-ignore_pseudo_comments = config-ignore_pseudo_comments.
           ENDIF.
 
           TRY.
-              y_if_profile_manager~delete_check( check ).
+              y_if_profile_manager~delete_check( temp_config ).
               y_if_profile_manager~insert_check( temp_check ).
 
             CATCH ycx_failed_to_remove_a_line.
@@ -472,7 +495,12 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
             CATCH ycx_failed_to_add_a_line
                   ycx_time_overlap.
 
-              y_if_profile_manager~insert_check( check ).
+              TRY.
+                  y_if_profile_manager~insert_check( temp_config ).
+                CATCH ycx_failed_to_add_a_line
+                      ycx_time_overlap.
+              ENDTRY.
+
           ENDTRY.
         ENDLOOP.
 
