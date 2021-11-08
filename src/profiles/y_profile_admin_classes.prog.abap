@@ -1212,7 +1212,7 @@ CLASS lcl_util IMPLEMENTATION.
         RETURN.
       ELSEIF chbx_select_prodcode = abap_false AND chbx_apply_testcode = abap_false
           OR chbx_select_prodcode = abap_true AND chbx_on_prodcode = abap_true
-          OR chbx_apply_testcode = abap_true AND chbx_on_testcode = abap_true .
+          OR chbx_apply_testcode = abap_true AND chbx_on_testcode = abap_true.
         EXIT.
       ELSE.
         MESSAGE 'Please choose Productive Code and/or Testcode for check execution!'(051) TYPE 'I'.
