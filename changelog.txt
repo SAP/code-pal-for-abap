@@ -18,6 +18,7 @@ Legend
 
 2021-11-XX v.1.16.3
 ------------------
+- Remove static dependency to developer version of abapGit (#524)
 
 2021-11-05 v.1.16.2
 ------------------

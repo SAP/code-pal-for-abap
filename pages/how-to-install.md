@@ -30,11 +30,3 @@ It requires you to set the ABAP Test Cockpit (ATC) to run in Code Inspector mode
 Start the transaction `SU3`, and add/set the user parameter `SATC_CI_MODE` to `X`:
 
 ![user parameter](imgs/user-parameter.png)
-
-### 5. Service
-
-> :warning: Optional Feature!
-
-Start the transaction `SICF`, and create a service using the `Y_CODE_PAL_SERVICE` handler. Use procedure `Standard`, set the security session to `Completely Restricted` and check the `Use all logon procedures`.
-
-The client, user, and password will be empty as to will provide the authentication when you consume the API.
