@@ -461,28 +461,23 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
 
           DATA(temp_check) = temp_config.
 
-          IF change_validation_period = abap_true.
-            temp_check-start_date = config-start_date.
-            temp_check-end_date = config-end_date.
-          ENDIF.
+          temp_check-start_date = config-start_date.
+          temp_check-end_date = config-end_date.
+          temp_check-objects_created_on = config-objects_created_on.
 
-          IF change_created_since = abap_true.
-            temp_check-objects_created_on = config-objects_created_on.
-          ENDIF.
-
-          IF change_prio = abap_true AND config-prio <> space.
+          IF config-prio <> space.
             temp_check-prio = config-prio.
           ENDIF.
 
-          IF change_apply_prod_code = abap_true AND check->settings-disable_on_prodcode_selection = abap_false.
+          IF check->settings-disable_on_prodcode_selection = abap_false.
             temp_check-apply_on_productive_code = config-apply_on_productive_code.
           ENDIF.
 
-          IF change_apply_testcode = abap_true AND check->settings-disable_on_testcode_selection = abap_false.
+          IF check->settings-disable_on_testcode_selection = abap_false.
             temp_check-apply_on_testcode = config-apply_on_testcode.
           ENDIF.
 
-          IF change_allow_exemptios = abap_true AND check->settings-pseudo_comment <> space.
+          IF check->settings-pseudo_comment <> space.
             temp_check-ignore_pseudo_comments = config-ignore_pseudo_comments.
           ENDIF.
 

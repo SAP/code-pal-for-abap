@@ -244,8 +244,7 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
         RETURNING VALUE(result) TYPE abap_bool.
 
     CLASS-METHODS:
-      mass_change,
-      init_ui_700.
+      mass_change.
 
     CLASS-METHODS:
       get_cursor_field
@@ -857,29 +856,6 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-  METHOD init_ui_700.
-    set_dynpro_field_active( fieldname = 'IO_START_DATE'
-                             is_active = chbx_change_vp ).
-
-    set_dynpro_field_active( fieldname = 'IO_END_DATE'
-                             is_active = chbx_change_vp ).
-
-    set_dynpro_field_active( fieldname = 'IO_CREATION_DATE'
-                             is_active = chbx_change_since ).
-
-    set_dynpro_field_active( fieldname = 'IO_PRIO'
-                             is_active = chbx_message_prio ).
-
-    set_dynpro_field_active( fieldname = 'CHBX_ON_PRODCODE'
-                             is_active = chbx_select_prodcode ).
-
-    set_dynpro_field_active( fieldname = 'CHBX_ON_TESTCODE'
-                             is_active = chbx_apply_testcode ).
-
-    set_dynpro_field_active( fieldname = 'CHBX_ALLOW_PCOM'
-                             is_active = chbx_apply_pcom ).
-  ENDMETHOD.
-
   METHOD get_check.
     CREATE OBJECT result TYPE (checkid).
   ENDMETHOD.
@@ -1179,15 +1155,9 @@ CLASS lcl_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD mass_change.
-    chbx_change_vp = abap_false.
-    chbx_change_since = abap_false.
-    chbx_message_prio = space.
-    chbx_select_prodcode = abap_false.
-    chbx_apply_testcode = abap_false.
-    chbx_apply_pcom = abap_false.
-
     TRY.
         DATA(config) = get_selected_check( ).
+
         io_start_date = config-start_date.
         io_end_date = config-end_date.
         io_creation_date = config-objects_created_on.
@@ -1197,28 +1167,14 @@ CLASS lcl_util IMPLEMENTATION.
         chbx_allow_pcom = switch_bool( config-ignore_pseudo_comments ).
 
       CATCH ycx_entry_not_found.
-        io_start_date = space.
-        io_end_date = space.
-        io_creation_date = space.
-        io_prio = space.
-        chbx_on_prodcode = space.
-        chbx_on_testcode = space.
-        chbx_allow_pcom = space.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+        RETURN.
     ENDTRY.
 
-    DO.
-      CALL SCREEN 700 STARTING AT 10 10.
-      IF user_command <> 'ENTR_700'.
-        RETURN.
-      ELSEIF chbx_select_prodcode = abap_false AND chbx_apply_testcode = abap_false
-          OR chbx_select_prodcode = abap_true AND chbx_on_prodcode = abap_true
-          OR chbx_apply_testcode = abap_true AND chbx_on_testcode = abap_true.
-        EXIT.
-      ELSE.
-        MESSAGE 'Please choose Productive Code and/or Testcode for check execution!'(051) TYPE 'I'.
-      ENDIF.
-    ENDDO.
-
+    CALL SCREEN 700 STARTING AT 10 10.
+    IF user_command <> 'ENTR_700'.
+      RETURN.
+    ENDIF.
 
     CLEAR config.
     config-start_date = io_start_date.
@@ -1230,19 +1186,12 @@ CLASS lcl_util IMPLEMENTATION.
     config-ignore_pseudo_comments = switch_bool( chbx_allow_pcom ).
 
     TRY.
-        profile_manager->mass_change( name                     = get_selected_profile( )-profile
-                                      config                   = config
-                                      change_validation_period = chbx_change_vp
-                                      change_created_since     = chbx_change_since
-                                      change_prio              = chbx_message_prio
-                                      change_apply_prod_code   = chbx_select_prodcode
-                                      change_apply_testcode    = chbx_apply_testcode
-                                      change_allow_exemptios   = chbx_apply_pcom ).
-
-      CATCH ycx_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        profile_manager->mass_change( name   = get_selected_profile( )-profile
+                                      config = config ).
       CATCH cx_failed.
         MESSAGE 'The profile needs to have checks!' TYPE 'I'.
+      CATCH ycx_entry_not_found.
+        RETURN.
     ENDTRY.
   ENDMETHOD.
 
