@@ -82,18 +82,6 @@ You can import and export a Profile with its Delegates and Checks using a `JSON`
 
 ![import and export feature](imgs/import-export-feature.png)
 
-### Import via API
-
-Once you export a profile to a `JSON` file, you can import it using the service created in the [How To Install](how-to-install.md) guide.
-
-To consume the API, you have to `POST` the `JSON` file to the service with the respective authentication you configured to the service (usually basic, user/pass) and with the headers `Content-Type` as `application/json` and `action` as `import_profile`.
-
-Possible returns:
-
-- `HTTP 400 - Bad Request` if the file format is not valid, or if the request has a wrong `Content-Type`;
-- `HTTP 403 - Forbidden` if the profile already exists in the system and the authentication user is not listed as a delegate;
-- `HTTP 500 - Internal Server Error` if the functionality is not working as expected.
-
 ### Add / Remove All Checks
 
 You can add all and remove all the Checks from a Profile, here:
