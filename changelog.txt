@@ -18,6 +18,7 @@ Legend
 
 2021-11-XX v.1.16.3
 ------------------
+* Unit test WITHOUT_ISSUE in Y_CHECK_COMMENT_USAGE fails (#527)
 * Refactoring Function Check (#531)
 * Unit test RFC_ENABLED in Y_CHECK_FUNCTION fails (#526)
 - Remove static dependency to developer version of abapGit (#524)
