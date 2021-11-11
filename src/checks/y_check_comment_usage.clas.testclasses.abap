@@ -225,7 +225,7 @@ CLASS ltc_pragma IMPLEMENTATION.
       ( 'REPORT y_example. ' )
       ( '  START-OF-SELECTION.' )
       ( '  FORM example.' )
-      ( |    CONSTANTS mc_last_counter_values_synch TYPE sut_settings-name VALUE 'LAST_VALUES_SYNCH' ##NO_TEXT. | )
+      ( |    CONSTANTS mc_last_counter_values_synch TYPE string VALUE 'LAST_VALUES_SYNCH' ##NO_TEXT. | )
       ( |    CONSTANTS pragma_identifier VALUE '##'. | )
       ( '  ENDFORM.' )
     ).
