@@ -19,7 +19,7 @@ DATA io_prio TYPE ytab_checks-prio.
 DATA chbx_on_testcode TYPE abap_bool.
 DATA chbx_on_prodcode TYPE abap_bool.
 DATA chbx_allow_pcom TYPE abap_bool.
-DATA lbl_pcom_name TYPE sci_pcom.
+DATA io_pcom_name TYPE sci_pcom.
 
 DATA chbx_change_vp TYPE abap_bool.
 DATA chbx_change_since TYPE abap_bool.
@@ -27,3 +27,5 @@ DATA chbx_message_prio TYPE abap_bool.
 DATA chbx_select_prodcode TYPE abap_bool.
 DATA chbx_apply_testcode TYPE abap_bool.
 DATA chbx_apply_pcom TYPE abap_bool.
+
+DATA io_issue_prio TYPE char12.

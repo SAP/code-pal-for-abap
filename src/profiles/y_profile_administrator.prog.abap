@@ -55,7 +55,6 @@ ENDMODULE.
 MODULE status_0700 OUTPUT.
   SET PF-STATUS mass_update.
   SET TITLEBAR mass_update.
-  lcl_util=>init_ui_700( ).
 ENDMODULE.
 
 MODULE user_command INPUT.
@@ -90,9 +89,6 @@ MODULE user_command INPUT.
 
     WHEN 'BTN_INFO'.
       lcl_util=>call_check_info( ).
-
-    WHEN 'CHBX'.
-      lcl_util=>init_ui_700( ).
 
   ENDCASE.
 ENDMODULE.

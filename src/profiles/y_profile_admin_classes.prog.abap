@@ -245,7 +245,9 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
 
     CLASS-METHODS:
       mass_change,
-      init_ui_700.
+      set_text_field_text
+        IMPORTING fieldname TYPE string
+                  text      TYPE string.
 
     CLASS-METHODS:
       get_cursor_field
@@ -839,7 +841,7 @@ CLASS lcl_util IMPLEMENTATION.
         set_dynpro_field_active( fieldname = 'CHBX_ALLOW_PCOM'
                                  is_active = xsdbool( obj->settings-pseudo_comment IS NOT INITIAL ) ).
 
-        lbl_pcom_name = obj->settings-pseudo_comment.
+        io_pcom_name = obj->settings-pseudo_comment.
 
         IF has_edit_mode_started = abap_true.
           io_threshold = obj->settings-threshold.
@@ -848,36 +850,13 @@ CLASS lcl_util IMPLEMENTATION.
           chbx_on_prodcode = obj->settings-apply_on_productive_code.
           chbx_on_testcode = obj->settings-apply_on_test_code.
           chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
-          lbl_pcom_name = obj->settings-pseudo_comment.
+          io_pcom_name = obj->settings-pseudo_comment.
           has_edit_mode_started = abap_false.
         ENDIF.
 
       CATCH cx_sy_create_object_error.
         RETURN.
     ENDTRY.
-  ENDMETHOD.
-
-  METHOD init_ui_700.
-    set_dynpro_field_active( fieldname = 'IO_START_DATE'
-                             is_active = chbx_change_vp ).
-
-    set_dynpro_field_active( fieldname = 'IO_END_DATE'
-                             is_active = chbx_change_vp ).
-
-    set_dynpro_field_active( fieldname = 'IO_CREATION_DATE'
-                             is_active = chbx_change_since ).
-
-    set_dynpro_field_active( fieldname = 'IO_PRIO'
-                             is_active = chbx_message_prio ).
-
-    set_dynpro_field_active( fieldname = 'CHBX_ON_PRODCODE'
-                             is_active = chbx_select_prodcode ).
-
-    set_dynpro_field_active( fieldname = 'CHBX_ON_TESTCODE'
-                             is_active = chbx_apply_testcode ).
-
-    set_dynpro_field_active( fieldname = 'CHBX_ALLOW_PCOM'
-                             is_active = chbx_apply_pcom ).
   ENDMETHOD.
 
   METHOD get_check.
@@ -899,6 +878,16 @@ CLASS lcl_util IMPLEMENTATION.
 
       ENDIF.
 
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD set_text_field_text.
+    LOOP AT SCREEN INTO DATA(line).
+      IF line-name = to_upper( fieldname ).
+        line-output = text.
+        MODIFY SCREEN FROM line.
+        EXIT.
+      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
@@ -1181,53 +1170,39 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD mass_change.
     chbx_change_vp = abap_false.
     chbx_change_since = abap_false.
-    chbx_message_prio = space.
+    chbx_message_prio = abap_false.
     chbx_select_prodcode = abap_false.
     chbx_apply_testcode = abap_false.
     chbx_apply_pcom = abap_false.
 
     TRY.
         DATA(config) = get_selected_check( ).
+
         io_start_date = config-start_date.
         io_end_date = config-end_date.
         io_creation_date = config-objects_created_on.
-        io_prio = config-prio.
         chbx_on_prodcode = config-apply_on_productive_code.
         chbx_on_testcode = config-apply_on_testcode.
         chbx_allow_pcom = switch_bool( config-ignore_pseudo_comments ).
 
+        CASE config-prio..
+          WHEN 'E'.
+            io_issue_prio = 'Error'.
+          WHEN 'W'.
+            io_issue_prio = 'Warning'.
+          WHEN 'N'.
+            io_issue_prio = 'Notification'.
+        ENDCASE.
+
       CATCH ycx_entry_not_found.
-        io_start_date = space.
-        io_end_date = space.
-        io_creation_date = space.
-        io_prio = space.
-        chbx_on_prodcode = space.
-        chbx_on_testcode = space.
-        chbx_allow_pcom = space.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+        RETURN.
     ENDTRY.
 
-    DO.
-      CALL SCREEN 700 STARTING AT 10 10.
-      IF user_command <> 'ENTR_700'.
-        RETURN.
-      ELSEIF chbx_select_prodcode = abap_false AND chbx_apply_testcode = abap_false
-          OR chbx_select_prodcode = abap_true AND chbx_on_prodcode = abap_true
-          OR chbx_apply_testcode = abap_true AND chbx_on_testcode = abap_true.
-        EXIT.
-      ELSE.
-        MESSAGE 'Please choose Productive Code and/or Testcode for check execution!'(051) TYPE 'I'.
-      ENDIF.
-    ENDDO.
-
-
-    CLEAR config.
-    config-start_date = io_start_date.
-    config-end_date   = io_end_date.
-    config-objects_created_on = io_creation_date.
-    config-prio = io_prio.
-    config-apply_on_productive_code = chbx_on_prodcode.
-    config-apply_on_testcode = chbx_on_testcode.
-    config-ignore_pseudo_comments = switch_bool( chbx_allow_pcom ).
+    CALL SCREEN 700 STARTING AT 10 10.
+    IF user_command <> 'ENTR_700'.
+      RETURN.
+    ENDIF.
 
     TRY.
         profile_manager->mass_change( name                     = get_selected_profile( )-profile
@@ -1240,7 +1215,7 @@ CLASS lcl_util IMPLEMENTATION.
                                       change_allow_exemptios   = chbx_apply_pcom ).
 
       CATCH ycx_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        RETURN.
       CATCH cx_failed.
         MESSAGE 'The profile needs to have checks!' TYPE 'I'.
     ENDTRY.
@@ -1258,7 +1233,7 @@ CLASS lcl_util IMPLEMENTATION.
     chbx_on_prodcode = abap_true.
     chbx_on_testcode = abap_true.
     chbx_allow_pcom = abap_true.
-    lbl_pcom_name = space.
+    io_pcom_name = space.
 
     TRY.
         CREATE OBJECT obj TYPE (io_check_id).
@@ -1268,7 +1243,7 @@ CLASS lcl_util IMPLEMENTATION.
         chbx_on_prodcode = obj->settings-apply_on_productive_code.
         chbx_on_testcode = obj->settings-apply_on_test_code.
         chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
-        lbl_pcom_name = obj->settings-pseudo_comment.
+        io_pcom_name = obj->settings-pseudo_comment.
       CATCH cx_sy_create_object_error.
         RETURN.
     ENDTRY.
