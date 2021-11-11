@@ -7,7 +7,7 @@ CLASS lth_function DEFINITION.
     METHODS then_finds.
 
   PRIVATE SECTION.
-   DATA expected_issues TYPE i.
+    DATA expected_issues TYPE i.
 
 ENDCLASS.
 
