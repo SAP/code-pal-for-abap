@@ -29,6 +29,14 @@ Legend
 * Unit test RFC_ENABLED in Y_CHECK_FUNCTION fails (#526)
 - Remove static dependency to developer version of abapGit (#524)
 
+2021-11-11 v.1.16.3
+------------------
+* Incompatibility with abapGit after commit dc4b3705216757c7533f5802d51 (#528)
+* Unit test WITHOUT_ISSUE in Y_CHECK_COMMENT_USAGE fails (#527)
+* Refactoring Function Check (#531)
+* Unit test RFC_ENABLED in Y_CHECK_FUNCTION fails (#526)
+- Remove static dependency to developer version of abapGit (#524)
+
 2021-11-05 v.1.16.2
 ------------------
 * Comment Position when Line Contains Pseudo Comment (#516)
