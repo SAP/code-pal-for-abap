@@ -29,8 +29,7 @@ CLASS ltd_check_base DEFINITION INHERITING FROM y_check_base.
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS: add_check_quickfix REDEFINITION.
-
+    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 
