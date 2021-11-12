@@ -230,7 +230,7 @@
       <TYPE>N</TYPE>
       <NEXTSCREEN>0400</NEXTSCREEN>
       <LINES>027</LINES>
-      <COLUMNS>125</COLUMNS>
+      <COLUMNS>126</COLUMNS>
      </HEADER>
      <CONTAINERS>
       <RPY_DYCATT>
@@ -326,7 +326,7 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_TEXT_START_DATE</NAME>
-       <TEXT>*Validity_Period___________FROM:_</TEXT>
+       <TEXT>*Validity_Period_________________</TEXT>
        <LINE>003</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>033</LENGTH>
@@ -339,11 +339,25 @@
       <RPY_DYFATC>
        <CONT_TYPE>SCREEN</CONT_TYPE>
        <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEXT</TYPE>
+       <NAME>LBL_TEXT_FROM_DATE</NAME>
+       <TEXT>FROM:</TEXT>
+       <LINE>003</LINE>
+       <COLUMN>035</COLUMN>
+       <LENGTH>005</LENGTH>
+       <VISLENGTH>005</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <REQU_ENTRY>N</REQU_ENTRY>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
        <NAME>IO_START_DATE</NAME>
        <TEXT>?_________</TEXT>
        <LINE>003</LINE>
-       <COLUMN>035</COLUMN>
+       <COLUMN>041</COLUMN>
        <LENGTH>010</LENGTH>
        <VISLENGTH>010</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -360,7 +374,7 @@
        <NAME>LBL_TEXT_END_DATE</NAME>
        <TEXT>TO:</TEXT>
        <LINE>003</LINE>
-       <COLUMN>046</COLUMN>
+       <COLUMN>052</COLUMN>
        <LENGTH>003</LENGTH>
        <VISLENGTH>003</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -375,7 +389,7 @@
        <NAME>IO_END_DATE</NAME>
        <TEXT>?_________</TEXT>
        <LINE>003</LINE>
-       <COLUMN>050</COLUMN>
+       <COLUMN>056</COLUMN>
        <LENGTH>010</LENGTH>
        <VISLENGTH>010</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -827,8 +841,8 @@
       <DESCRIPT>Mass Update of Checks</DESCRIPT>
       <TYPE>N</TYPE>
       <NEXTSCREEN>0700</NEXTSCREEN>
-      <LINES>022</LINES>
-      <COLUMNS>114</COLUMNS>
+      <LINES>008</LINES>
+      <COLUMNS>073</COLUMNS>
      </HEADER>
      <CONTAINERS>
       <RPY_DYCATT>
@@ -842,11 +856,11 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_INFO</NAME>
-       <TEXT>Please_select_which_fields_you_would_like_to_replicate.</TEXT>
+       <TEXT>Choose_the_relevant_fields_for_replication:</TEXT>
        <LINE>001</LINE>
        <COLUMN>001</COLUMN>
-       <LENGTH>055</LENGTH>
-       <VISLENGTH>055</VISLENGTH>
+       <LENGTH>043</LENGTH>
+       <VISLENGTH>043</VISLENGTH>
        <HEIGHT>001</HEIGHT>
        <FORMAT>CHAR</FORMAT>
        <REQU_ENTRY>N</REQU_ENTRY>
@@ -857,7 +871,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_CHANGE_VP</NAME>
        <LINE>002</LINE>
-       <COLUMN>001</COLUMN>
+       <COLUMN>003</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -870,11 +884,25 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_TEXT_START_DATE</NAME>
-       <TEXT>Validity_Period___________FROM:_</TEXT>
+       <TEXT>Validity_Period:________________</TEXT>
        <LINE>002</LINE>
-       <COLUMN>003</COLUMN>
+       <COLUMN>007</COLUMN>
        <LENGTH>032</LENGTH>
        <VISLENGTH>032</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <REQU_ENTRY>N</REQU_ENTRY>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEXT</TYPE>
+       <NAME>LBL_TEXT_FROM_DATE</NAME>
+       <TEXT>FROM:</TEXT>
+       <LINE>002</LINE>
+       <COLUMN>040</COLUMN>
+       <LENGTH>005</LENGTH>
+       <VISLENGTH>005</VISLENGTH>
        <HEIGHT>001</HEIGHT>
        <FORMAT>CHAR</FORMAT>
        <REQU_ENTRY>N</REQU_ENTRY>
@@ -886,7 +914,7 @@
        <NAME>IO_START_DATE</NAME>
        <TEXT>__________</TEXT>
        <LINE>002</LINE>
-       <COLUMN>036</COLUMN>
+       <COLUMN>046</COLUMN>
        <LENGTH>010</LENGTH>
        <VISLENGTH>010</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -902,7 +930,7 @@
        <NAME>LBL_TEXT_END_DATE</NAME>
        <TEXT>TO:</TEXT>
        <LINE>002</LINE>
-       <COLUMN>047</COLUMN>
+       <COLUMN>057</COLUMN>
        <LENGTH>003</LENGTH>
        <VISLENGTH>003</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -916,7 +944,7 @@
        <NAME>IO_END_DATE</NAME>
        <TEXT>__________</TEXT>
        <LINE>002</LINE>
-       <COLUMN>051</COLUMN>
+       <COLUMN>061</COLUMN>
        <LENGTH>010</LENGTH>
        <VISLENGTH>010</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -931,7 +959,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_CHANGE_SINCE</NAME>
        <LINE>003</LINE>
-       <COLUMN>001</COLUMN>
+       <COLUMN>003</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -946,7 +974,7 @@
        <NAME>LBL_TEXT_CREATION_DATE</NAME>
        <TEXT>Apply_on_Objects_Created_Since:_</TEXT>
        <LINE>003</LINE>
-       <COLUMN>003</COLUMN>
+       <COLUMN>007</COLUMN>
        <LENGTH>032</LENGTH>
        <VISLENGTH>032</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -960,7 +988,7 @@
        <NAME>IO_CREATION_DATE</NAME>
        <TEXT>__________</TEXT>
        <LINE>003</LINE>
-       <COLUMN>036</COLUMN>
+       <COLUMN>040</COLUMN>
        <LENGTH>010</LENGTH>
        <VISLENGTH>010</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -975,7 +1003,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_MESSAGE_PRIO</NAME>
        <LINE>004</LINE>
-       <COLUMN>001</COLUMN>
+       <COLUMN>003</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -990,7 +1018,7 @@
        <NAME>LBL_TEXT_PRIO</NAME>
        <TEXT>Message_Priority:_______________</TEXT>
        <LINE>004</LINE>
-       <COLUMN>003</COLUMN>
+       <COLUMN>007</COLUMN>
        <LENGTH>032</LENGTH>
        <VISLENGTH>032</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1004,7 +1032,7 @@
        <NAME>IO_ISSUE_PRIO</NAME>
        <TEXT>____________</TEXT>
        <LINE>004</LINE>
-       <COLUMN>036</COLUMN>
+       <COLUMN>040</COLUMN>
        <LENGTH>012</LENGTH>
        <VISLENGTH>012</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1019,7 +1047,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_SELECT_PRODCODE</NAME>
        <LINE>005</LINE>
-       <COLUMN>001</COLUMN>
+       <COLUMN>003</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1034,7 +1062,7 @@
        <NAME>LBL_ON_PRODCODE</NAME>
        <TEXT>Apply_on_Productive_Code:_</TEXT>
        <LINE>005</LINE>
-       <COLUMN>003</COLUMN>
+       <COLUMN>007</COLUMN>
        <LENGTH>026</LENGTH>
        <VISLENGTH>032</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1047,7 +1075,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_ON_PRODCODE</NAME>
        <LINE>005</LINE>
-       <COLUMN>036</COLUMN>
+       <COLUMN>040</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1061,7 +1089,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_APPLY_TESTCODE</NAME>
        <LINE>006</LINE>
-       <COLUMN>001</COLUMN>
+       <COLUMN>003</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1076,7 +1104,7 @@
        <NAME>LBL_ON_TESTCODE</NAME>
        <TEXT>Apply_on_Testcode:______________</TEXT>
        <LINE>006</LINE>
-       <COLUMN>003</COLUMN>
+       <COLUMN>007</COLUMN>
        <LENGTH>032</LENGTH>
        <VISLENGTH>032</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1089,7 +1117,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_ON_TESTCODE</NAME>
        <LINE>006</LINE>
-       <COLUMN>036</COLUMN>
+       <COLUMN>040</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1103,7 +1131,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_APPLY_PCOM</NAME>
        <LINE>007</LINE>
-       <COLUMN>001</COLUMN>
+       <COLUMN>003</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1118,7 +1146,7 @@
        <NAME>LBL_ALLOW_PCOM</NAME>
        <TEXT>Allow_Exemptions:_______________</TEXT>
        <LINE>007</LINE>
-       <COLUMN>003</COLUMN>
+       <COLUMN>007</COLUMN>
        <LENGTH>032</LENGTH>
        <VISLENGTH>032</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -1131,7 +1159,7 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_ALLOW_PCOM</NAME>
        <LINE>007</LINE>
-       <COLUMN>036</COLUMN>
+       <COLUMN>040</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
        <HEIGHT>001</HEIGHT>

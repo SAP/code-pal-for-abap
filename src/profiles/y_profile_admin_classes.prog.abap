@@ -1185,7 +1185,7 @@ CLASS lcl_util IMPLEMENTATION.
         chbx_on_testcode = config-apply_on_testcode.
         chbx_allow_pcom = switch_bool( config-ignore_pseudo_comments ).
 
-        CASE config-prio..
+        CASE config-prio.
           WHEN 'E'.
             io_issue_prio = 'Error'.
           WHEN 'W'.
