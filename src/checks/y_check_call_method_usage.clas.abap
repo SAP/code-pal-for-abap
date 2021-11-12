@@ -4,7 +4,7 @@ CLASS y_check_call_method_usage DEFINITION PUBLIC INHERITING FROM y_check_base C
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS: add_check_quickfix REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 
@@ -51,27 +51,8 @@ CLASS y_check_call_method_usage IMPLEMENTATION.
 
 
   METHOD add_check_quickfix.
-    DATA(quickfix) = new_quickfix( ).
-
-    TRY.
-*        quickfix->replace_by( p_new_code = ``
-*                              p_context  = cl_ci_quickfix_abap_context=>create_from_scan_tokens( p_ci_scan    = ref_scan
-*                                                                                                 p_stmt_idx   = statement_index
-*                                                                                                 p_from_token = 1
-*                                                                                                 p_to_token   = 2 ) ).
-*
-*        quickfix->insert_after( p_new_code = `(`
-*                                p_context  = cl_ci_quickfix_abap_context=>create_from_scan_tokens( p_ci_scan    = ref_scan
-*                                                                                                   p_stmt_idx   = statement_index
-*                                                                                                   p_from_token = 3 ) ).
-
-*        quickfix->insert_after( p_new_code = `)`
-*                                p_context  = cl_ci_quickfix_abap_context=>create_from_scan_stmt( p_ci_scan        = ref_scan
-*                                                                                                 p_stmt_idx       = statement_index
-*                                                                                                 p_with_end_point = abap_false ) ).
-      CATCH cx_ci_quickfix_failed.
-        RETURN.
-    ENDTRY.
+    " There is a native feature to remove it
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.

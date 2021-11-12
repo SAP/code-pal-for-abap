@@ -11,6 +11,8 @@ CLASS y_check_omit_optional_exp DEFINITION PUBLIC INHERITING FROM y_check_base C
 
 ENDCLASS.
 
+
+
 CLASS y_check_omit_optional_exp IMPLEMENTATION.
 
   METHOD constructor.

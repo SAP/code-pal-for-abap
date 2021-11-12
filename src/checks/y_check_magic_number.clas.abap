@@ -4,6 +4,7 @@ CLASS y_check_magic_number DEFINITION PUBLIC INHERITING FROM y_check_base CREATE
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_magic_number RETURNING VALUE(result) TYPE abap_bool.
@@ -108,5 +109,9 @@ CLASS y_check_magic_number IMPLEMENTATION.
                    OR case_target-str = 'SY-TABIX' ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

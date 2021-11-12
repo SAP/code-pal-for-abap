@@ -4,6 +4,7 @@ CLASS y_check_cx_root_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS: add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS has_cx_root IMPORTING statement     TYPE sstmnt
@@ -49,5 +50,9 @@ CLASS y_check_cx_root_usage IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

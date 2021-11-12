@@ -4,6 +4,7 @@ CLASS y_check_max_nesting_depth DEFINITION PUBLIC INHERITING FROM y_check_base C
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA statement_for_message TYPE sstmnt.
@@ -106,6 +107,11 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
 
   METHOD is_macro.
     result = xsdbool( token-row = 0 ).
+  ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.

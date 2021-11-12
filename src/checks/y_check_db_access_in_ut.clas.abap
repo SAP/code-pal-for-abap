@@ -5,6 +5,7 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
   PROTECTED SECTION.
     METHODS inspect_structures REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS: BEGIN OF risk_level,
@@ -310,5 +311,9 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     result = xsdbool( is_persistent_object( CONV #( table_name ) ) = abap_false ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.
