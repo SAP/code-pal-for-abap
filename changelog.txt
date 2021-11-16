@@ -18,6 +18,7 @@ Legend
 
 2021-XX-XX v.1.17.0
 ------------------
+* Refactoring Quick Fixes (#523)
 + Quickfix: Pseudo Comment (#509)
 
 2021-11-11 v.1.16.3
