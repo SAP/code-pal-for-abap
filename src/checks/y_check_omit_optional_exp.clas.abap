@@ -59,14 +59,8 @@ CLASS y_check_omit_optional_exp IMPLEMENTATION.
 
 
   METHOD add_check_quickfix.
-    TRY.
-        new_quickfix( )->replace_by( p_new_code = ``
-                                     p_context = cl_ci_quickfix_abap_context=>create_from_scan_tokens( p_ci_scan = ref_scan
-                                                                                                       p_stmt_idx = statement_index
-                                                                                                       p_from_token = 2 ) ).
-      CATCH cx_ci_quickfix_failed.
-        RETURN.
-    ENDTRY.
+    " Already Exists
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.
