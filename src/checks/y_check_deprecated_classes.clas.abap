@@ -4,7 +4,7 @@ CLASS y_check_deprecated_classes DEFINITION PUBLIC INHERITING FROM y_check_base 
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS: add_check_quickfix REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     TYPES: BEGIN OF deprecated_classes_type,

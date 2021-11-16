@@ -4,7 +4,7 @@ CLASS y_check_test_seam_usage DEFINITION PUBLIC INHERITING FROM y_check_base CRE
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS: add_check_quickfix REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 

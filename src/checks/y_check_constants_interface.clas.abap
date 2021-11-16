@@ -5,7 +5,7 @@ CLASS y_check_constants_interface DEFINITION PUBLIC INHERITING FROM y_check_base
   PROTECTED SECTION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS: add_check_quickfix REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA has_something_else TYPE abap_bool VALUE abap_false.

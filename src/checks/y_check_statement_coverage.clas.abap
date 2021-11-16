@@ -5,7 +5,7 @@ CLASS y_check_statement_coverage DEFINITION PUBLIC INHERITING FROM y_check_base 
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS: add_check_quickfix REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 
