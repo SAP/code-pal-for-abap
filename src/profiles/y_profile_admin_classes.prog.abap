@@ -18,8 +18,8 @@ CLASS lcl_file IMPLEMENTATION.
 
     CONCATENATE 'CODE_PAL_PROFILE-' sy-sysid sy-mandt '-' profile-profile INTO DATA(file_name).
 
-    DATA(structure) = NEW y_if_profile_manager=>file( profile = profile
-                                                      checks = checks
+    DATA(structure) = NEW y_if_profile_manager=>file( profile   = profile
+                                                      checks    = checks
                                                       delegates = delegates ).
 
     APPEND /ui2/cl_json=>serialize( structure ) TO file_content.
@@ -46,34 +46,34 @@ CLASS lcl_file IMPLEMENTATION.
 
     cl_gui_frontend_services=>gui_download(
       EXPORTING
-        filename                  = file_fullpath
+        filename                = file_fullpath
       CHANGING
-        data_tab                  = file_content
+        data_tab                = file_content
       EXCEPTIONS
-        file_write_error          = 1
-        no_batch                  = 2
-        gui_refuse_filetransfer   = 3
-        invalid_type              = 4
-        no_authority              = 5
-        unknown_error             = 6
-        header_not_allowed        = 7
-        separator_not_allowed     = 8
-        filesize_not_allowed      = 9
-        header_too_long           = 10
-        dp_error_create           = 11
-        dp_error_send             = 12
-        dp_error_write            = 13
-        unknown_dp_error          = 14
-        access_denied             = 15
-        dp_out_of_memory          = 16
-        disk_full                 = 17
-        dp_timeout                = 18
-        file_not_found            = 19
-        dataprovider_exception    = 20
-        control_flush_error       = 21
-        not_supported_by_gui      = 22
-        error_no_gui              = 23
-        OTHERS                    = 24
+        file_write_error        = 1
+        no_batch                = 2
+        gui_refuse_filetransfer = 3
+        invalid_type            = 4
+        no_authority            = 5
+        unknown_error           = 6
+        header_not_allowed      = 7
+        separator_not_allowed   = 8
+        filesize_not_allowed    = 9
+        header_too_long         = 10
+        dp_error_create         = 11
+        dp_error_send           = 12
+        dp_error_write          = 13
+        unknown_dp_error        = 14
+        access_denied           = 15
+        dp_out_of_memory        = 16
+        disk_full               = 17
+        dp_timeout              = 18
+        file_not_found          = 19
+        dataprovider_exception  = 20
+        control_flush_error     = 21
+        not_supported_by_gui    = 22
+        error_no_gui            = 23
+        OTHERS                  = 24
     ).
 
     IF sy-subrc <> 0.
@@ -144,7 +144,7 @@ CLASS lcl_file IMPLEMENTATION.
     ENDLOOP.
 
     /ui2/cl_json=>deserialize( EXPORTING json = json
-                               CHANGING data = result ).
+                               CHANGING  data = result ).
 
     IF result IS INITIAL.
       RAISE EXCEPTION TYPE cx_abap_invalid_value.
@@ -188,7 +188,7 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
         IMPORTING referenced_field_name TYPE dfies-fieldname
                   window_title          TYPE c
                   value_table           TYPE STANDARD TABLE
-        RETURNING VALUE(result) TYPE y_if_profile_manager=>value_help
+        RETURNING VALUE(result)         TYPE y_if_profile_manager=>value_help
         RAISING   cx_failed.
 
     CLASS-METHODS:
@@ -197,19 +197,11 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
       check_f4help.
 
     CLASS-METHODS:
-      init_check_fields_active,
+      init_ui_400,
       get_check
         IMPORTING checkid       TYPE vseoclass-clsname
         RETURNING VALUE(result) TYPE REF TO y_check_base
         RAISING   cx_sy_create_object_error,
-      set_threshold_active
-        IMPORTING is_active TYPE abap_bool DEFAULT abap_true,
-      set_on_prodcode_active
-        IMPORTING is_active TYPE abap_bool DEFAULT abap_true,
-      set_on_testcode_active
-        IMPORTING is_active TYPE abap_bool DEFAULT abap_true,
-      set_allow_pcom_active
-        IMPORTING is_active TYPE abap_bool DEFAULT abap_true,
       set_dynpro_field_active
         IMPORTING fieldname TYPE string
                   is_active TYPE abap_bool.
@@ -250,6 +242,12 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
         RETURNING VALUE(result) TYPE abap_bool,
       check_selected_check_rights
         RETURNING VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS:
+      mass_change,
+      set_text_field_text
+        IMPORTING fieldname TYPE string
+                  text      TYPE string.
 
     CLASS-METHODS:
       get_cursor_field
@@ -295,7 +293,7 @@ CLASS lcl_profile_events IMPLEMENTATION.
     lcl_util=>refresh_delegates( ).
     TRY.
         lcl_util=>switch_toolbar_activation( ).
-      CATCH cx_failed. "#EC EMPTY_CATCH
+      CATCH cx_failed.                                 "#EC EMPTY_CATCH
     ENDTRY.
   ENDMETHOD.
 
@@ -388,6 +386,9 @@ CLASS lcl_check_events IMPLEMENTATION.
 
       WHEN 'BTN_MISSING_CK'.
         lcl_util=>add_missing_checks( ).
+
+      WHEN 'BTN_MASS_CHANGE'.
+        lcl_util=>mass_change( ).
 
     ENDCASE.
 
@@ -503,6 +504,11 @@ CLASS lcl_util IMPLEMENTATION.
                                                      butn_type = cntb_btype_button
                                                      quickinfo = 'Edit'(026) ).
 
+        checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_MASS_CHANGE'
+                                                     icon      = '@EP@'
+                                                     butn_type = cntb_btype_button
+                                                     quickinfo = 'Replicate Configuration' ).
+
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_REMOVE'
                                                      icon      = '@05@'
                                                      butn_type = cntb_btype_button
@@ -528,21 +534,21 @@ CLASS lcl_util IMPLEMENTATION.
                                                      butn_type = cntb_btype_button
                                                      quickinfo = 'Add Missing Checks'(000) ).
 
-        checks_tree->set_field_visibility( fieldname = 'START_DATE'
+        checks_tree->set_field_visibility( fieldname  = 'START_DATE'
                                            is_visible = abap_true ).
-        checks_tree->set_field_visibility( fieldname = 'END_DATE'
+        checks_tree->set_field_visibility( fieldname  = 'END_DATE'
                                            is_visible = abap_true ).
-        checks_tree->set_field_visibility( fieldname = 'OBJECTS_CREATED_ON'
+        checks_tree->set_field_visibility( fieldname  = 'OBJECTS_CREATED_ON'
                                            is_visible = abap_true ).
-        checks_tree->set_field_visibility( fieldname = 'THRESHOLD'
+        checks_tree->set_field_visibility( fieldname  = 'THRESHOLD'
                                            is_visible = abap_true ).
-        checks_tree->set_field_visibility( fieldname = 'PRIO'
+        checks_tree->set_field_visibility( fieldname  = 'PRIO'
                                            is_visible = abap_true ).
-        checks_tree->set_field_visibility( fieldname = 'APPLY_ON_PRODUCTIVE_CODE'
+        checks_tree->set_field_visibility( fieldname  = 'APPLY_ON_PRODUCTIVE_CODE'
                                            is_visible = abap_true ).
-        checks_tree->set_field_visibility( fieldname = 'APPLY_ON_TESTCODE'
+        checks_tree->set_field_visibility( fieldname  = 'APPLY_ON_TESTCODE'
                                            is_visible = abap_true ).
-        checks_tree->set_field_visibility( fieldname = 'IGNORE_PSEUDO_COMMENTS'
+        checks_tree->set_field_visibility( fieldname  = 'IGNORE_PSEUDO_COMMENTS'
                                            is_visible = abap_true ).
 
         checks_tree->set_field_header_text( fieldname   = 'PROFILE'
@@ -756,7 +762,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(f4values) = call_f4help( referenced_field_name = 'PROFILE'
                                       window_title          = 'Available Profiles'(009)
-                                      value_table = profile_manager->get_registered_profiles( ) ).
+                                      value_table           = profile_manager->get_registered_profiles( ) ).
 
         IF f4values IS NOT INITIAL.
           io_profilename = f4values[ 1 ]-fieldval.
@@ -777,7 +783,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(f4values) = call_f4help( referenced_field_name = 'PROFILE'
                                       window_title          = 'Available Profiles'(009)
-                                      value_table = profile_manager->get_registered_profiles( ) ).
+                                      value_table           = profile_manager->get_registered_profiles( ) ).
 
         IF f4values IS NOT INITIAL.
           io_profilename = f4values[ 1 ]-fieldval.
@@ -797,8 +803,8 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD check_f4help.
     TRY.
         DATA(f4values) = call_f4help( referenced_field_name = 'CHECKID'
-                                      window_title = 'Available Checks'(019)
-                                      value_table = profile_manager->select_existing_checks( ) ).
+                                      window_title          = 'Available Checks'(019)
+                                      value_table           = profile_manager->select_existing_checks( ) ).
 
         IF f4values IS NOT INITIAL.
           io_check_id = f4values[ 1 ]-fieldval.
@@ -819,35 +825,23 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-  METHOD init_check_fields_active.
+  METHOD init_ui_400.
     TRY.
         DATA(obj) = get_check( io_check_id ).
 
-        IF obj->settings-disable_threshold_selection = abap_true.
-          set_threshold_active( abap_false ).
-        ELSE.
-          set_threshold_active( abap_true ).
-        ENDIF.
+        set_dynpro_field_active( fieldname = 'IO_THRESHOLD'
+                                 is_active = xsdbool( obj->settings-disable_threshold_selection = abap_false ) ).
 
-        IF obj->settings-disable_on_prodcode_selection = abap_true.
-          set_on_prodcode_active( abap_false ).
-        ELSE.
-          set_on_prodcode_active( abap_true ).
-        ENDIF.
+        set_dynpro_field_active( fieldname = 'CHBX_ON_PRODCODE'
+                                 is_active = xsdbool( obj->settings-disable_on_prodcode_selection = abap_false ) ).
 
-        IF obj->settings-disable_on_testcode_selection = abap_true.
-          set_on_testcode_active( abap_false ).
-        ELSE.
-          set_on_testcode_active( abap_true ).
-        ENDIF.
+        set_dynpro_field_active( fieldname = 'CHBX_ON_TESTCODE'
+                                 is_active = xsdbool( obj->settings-disable_on_testcode_selection = abap_false ) ).
 
-        IF obj->settings-pseudo_comment IS INITIAL.
-          set_allow_pcom_active( abap_false ).
-        ELSE.
-          set_allow_pcom_active( abap_true ).
-        ENDIF.
+        set_dynpro_field_active( fieldname = 'CHBX_ALLOW_PCOM'
+                                 is_active = xsdbool( obj->settings-pseudo_comment IS NOT INITIAL ) ).
 
-        lbl_pcom_name = obj->settings-pseudo_comment.
+        io_pcom_name = obj->settings-pseudo_comment.
 
         IF has_edit_mode_started = abap_true.
           io_threshold = obj->settings-threshold.
@@ -856,7 +850,7 @@ CLASS lcl_util IMPLEMENTATION.
           chbx_on_prodcode = obj->settings-apply_on_productive_code.
           chbx_on_testcode = obj->settings-apply_on_test_code.
           chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
-          lbl_pcom_name = obj->settings-pseudo_comment.
+          io_pcom_name = obj->settings-pseudo_comment.
           has_edit_mode_started = abap_false.
         ENDIF.
 
@@ -867,34 +861,6 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD get_check.
     CREATE OBJECT result TYPE (checkid).
-  ENDMETHOD.
-
-  METHOD set_on_prodcode_active.
-    set_dynpro_field_active( fieldname = 'LBL_ON_PRODCODE'
-                             is_active = is_active ).
-    set_dynpro_field_active( fieldname = 'CHBX_ON_PRODCODE'
-                             is_active = is_active ).
-  ENDMETHOD.
-
-  METHOD set_on_testcode_active.
-    set_dynpro_field_active( fieldname = 'LBL_ON_TESTCODE'
-                             is_active = is_active ).
-    set_dynpro_field_active( fieldname = 'CHBX_ON_TESTCODE'
-                             is_active = is_active ).
-  ENDMETHOD.
-
-  METHOD set_threshold_active.
-    set_dynpro_field_active( fieldname = 'LBL_TEXT_THRESHOLD'
-                             is_active = is_active ).
-    set_dynpro_field_active( fieldname = 'IO_THRESHOLD'
-                             is_active = is_active ).
-  ENDMETHOD.
-
-  METHOD set_allow_pcom_active.
-    set_dynpro_field_active( fieldname = 'LBL_ALLOW_PCOM'
-                             is_active = is_active ).
-    set_dynpro_field_active( fieldname = 'CHBX_ALLOW_PCOM'
-                             is_active = is_active ).
   ENDMETHOD.
 
   METHOD set_dynpro_field_active.
@@ -912,6 +878,16 @@ CLASS lcl_util IMPLEMENTATION.
 
       ENDIF.
 
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD set_text_field_text.
+    LOOP AT SCREEN INTO DATA(line).
+      IF line-name = to_upper( fieldname ).
+        line-output = text.
+        MODIFY SCREEN FROM line.
+        EXIT.
+      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
@@ -1079,8 +1055,8 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
 
     TRY.
-        lcl_file=>download( profile = profile
-                            checks = checks
+        lcl_file=>download( profile   = profile
+                            checks    = checks
                             delegates = delegates ).
       CATCH ycx_object_not_processed.
         MESSAGE 'Failed to Export!'(053) TYPE 'E'.
@@ -1191,6 +1167,60 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+  METHOD mass_change.
+    chbx_change_vp = abap_false.
+    chbx_change_since = abap_false.
+    chbx_message_prio = abap_false.
+    chbx_select_prodcode = abap_false.
+    chbx_apply_testcode = abap_false.
+    chbx_apply_pcom = abap_false.
+
+    TRY.
+        DATA(config) = get_selected_check( ).
+
+        io_start_date = config-start_date.
+        io_end_date = config-end_date.
+        io_creation_date = config-objects_created_on.
+        chbx_on_prodcode = config-apply_on_productive_code.
+        chbx_on_testcode = config-apply_on_testcode.
+        chbx_allow_pcom = switch_bool( config-ignore_pseudo_comments ).
+
+        CASE config-prio.
+          WHEN 'E'.
+            io_issue_prio = 'Error'.
+          WHEN 'W'.
+            io_issue_prio = 'Warning'.
+          WHEN 'N'.
+            io_issue_prio = 'Notification'.
+        ENDCASE.
+
+      CATCH ycx_entry_not_found.
+        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+        RETURN.
+    ENDTRY.
+
+    CALL SCREEN 700 STARTING AT 10 10.
+    IF user_command <> 'ENTR_700'.
+      RETURN.
+    ENDIF.
+
+    TRY.
+        profile_manager->mass_change( name                     = get_selected_profile( )-profile
+                                      config                   = config
+                                      change_validation_period = chbx_change_vp
+                                      change_created_since     = chbx_change_since
+                                      change_prio              = chbx_message_prio
+                                      change_apply_prod_code   = chbx_select_prodcode
+                                      change_apply_testcode    = chbx_apply_testcode
+                                      change_allow_exemptios   = chbx_apply_pcom ).
+
+      CATCH ycx_entry_not_found.
+        RETURN.
+      CATCH cx_failed.
+        MESSAGE 'The profile needs to have checks!' TYPE 'I'.
+    ENDTRY.
+  ENDMETHOD.
+
   METHOD init_add_check.
     DATA obj TYPE REF TO y_check_base.
 
@@ -1203,7 +1233,7 @@ CLASS lcl_util IMPLEMENTATION.
     chbx_on_prodcode = abap_true.
     chbx_on_testcode = abap_true.
     chbx_allow_pcom = abap_true.
-    lbl_pcom_name = space.
+    io_pcom_name = space.
 
     TRY.
         CREATE OBJECT obj TYPE (io_check_id).
@@ -1213,7 +1243,7 @@ CLASS lcl_util IMPLEMENTATION.
         chbx_on_prodcode = obj->settings-apply_on_productive_code.
         chbx_on_testcode = obj->settings-apply_on_test_code.
         chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
-        lbl_pcom_name = obj->settings-pseudo_comment.
+        io_pcom_name = obj->settings-pseudo_comment.
       CATCH cx_sy_create_object_error.
         RETURN.
     ENDTRY.
@@ -1286,7 +1316,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     TRY.
         IF edit_mode = abap_true.
-          profile_manager->check_time_overlap( check = check
+          profile_manager->check_time_overlap( check          = check
                                                selected_check = get_selected_check( ) ).
 
           profile_manager->delete_check( get_selected_check( ) ).

@@ -20,6 +20,8 @@ Legend
 ------------------
 * Refactoring Quick Fixes (#523)
 + Quickfix: Pseudo Comment (#509)
++ Check Button: Replicate Configuration
+! Check Button: Edit
 
 2021-11-11 v.1.16.3
 ------------------
