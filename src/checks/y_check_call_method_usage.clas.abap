@@ -4,6 +4,7 @@ CLASS y_check_call_method_usage DEFINITION PUBLIC INHERITING FROM y_check_base C
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 
@@ -25,26 +26,33 @@ CLASS y_check_call_method_usage IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    DATA(has_keyword) = xsdbool( get_token_abs( statement-from ) = 'CALL'
-                             AND get_token_abs( statement-from + 1 ) = 'METHOD' ).
+    CHECK next1( 'CALL' ) = 'METHOD'.
 
-    DATA(token) = get_token_abs( statement-from + 2 ).
+    DATA(token) = next2( p_word1 = 'CALL'
+                         p_word2 = 'METHOD' ).
+
     DATA(is_dynamic) = xsdbool( token CP '*->(*)*'
                              OR token CP '*=>(*)*'
                              OR token CP '*)=>(*)*'
                              OR token CP '*)=>*'
                              OR token CP '(*)' ).
 
-    IF has_keyword = abap_true
-    AND is_dynamic = abap_false.
-      DATA(check_configuration) = detect_check_configuration( statement ).
-
-      raise_error( statement_level  = statement-level
-                   statement_index = index
-                   statement_from = statement-from
-                   check_configuration = check_configuration ).
+    IF is_dynamic = abap_true.
+      RETURN.
     ENDIF.
+
+    DATA(check_configuration) = detect_check_configuration( statement ).
+
+    raise_error( statement_level  = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = check_configuration ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    " There is a native feature to remove it
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

@@ -5,6 +5,7 @@ CLASS y_check_empty_catches DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
     METHODS get_token_abs REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_test_double_framework RETURNING VALUE(result) TYPE abap_bool.
@@ -63,5 +64,9 @@ CLASS y_check_empty_catches IMPLEMENTATION.
     result = xsdbool( line_exists( range_tokens[ str = 'CL_ABAP_TESTDOUBLE=>CONFIGURE_CALL(' ] ) ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

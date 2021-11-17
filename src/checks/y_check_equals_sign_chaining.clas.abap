@@ -4,6 +4,7 @@ CLASS y_check_equals_sign_chaining DEFINITION PUBLIC INHERITING FROM y_check_bas
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS get_second_token IMPORTING statement     TYPE sstmnt
@@ -54,4 +55,10 @@ CLASS Y_CHECK_EQUALS_SIGN_CHAINING IMPLEMENTATION.
     CHECK statement-from + 1 < statement-to.
     result = get_token_abs( statement-from + 1 ).
   ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
+
 ENDCLASS.

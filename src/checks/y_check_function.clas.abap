@@ -4,6 +4,7 @@ CLASS y_check_function DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUB
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_normal_mode RETURNING VALUE(result) TYPE abap_bool.
@@ -46,6 +47,11 @@ CLASS y_check_function IMPLEMENTATION.
     DATA(function_module) = next1( CONV #( if_kaizen_keywords_c=>gc_function ) ).
     SELECT SINGLE pname INTO @DATA(function_group) FROM tfdir WHERE funcname = @function_module AND fmode = @space.
     result = xsdbool( sy-subrc = 0 ).
+  ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.

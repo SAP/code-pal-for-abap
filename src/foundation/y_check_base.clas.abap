@@ -106,6 +106,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_test_code IMPORTING statement TYPE sstmnt
                          RETURNING VALUE(result) TYPE abap_bool.
 
+    METHODS add_check_quickfix ABSTRACT IMPORTING check_configuration TYPE y_if_clean_code_manager=>check_configuration
+                                                  statement_index     TYPE int4.
+
+    METHODS new_quickfix RETURNING VALUE(result) TYPE REF TO if_ci_quickfix_abap_actions.
+
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
@@ -136,7 +141,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                            RETURNING VALUE(result) TYPE tadir.
 
     METHODS add_pseudo_comment_quickfix IMPORTING check_configuration TYPE y_if_clean_code_manager=>check_configuration
-                                                     statement_index     TYPE int4.
+                                                  statement_index     TYPE int4.
 
 ENDCLASS.
 
@@ -482,6 +487,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     add_pseudo_comment_quickfix( check_configuration = check_configuration
                                  statement_index     = statement_index ).
 
+    add_check_quickfix( check_configuration = check_configuration
+                        statement_index     = statement_index ).
+
     IF is_running_unit_test( ) = abap_true.
       handle_unit_test_statistics( statement_index =  statement_index
                                    check_configuration = check_configuration ).
@@ -698,20 +706,27 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     CHECK check_configuration-ignore_pseudo_comments = abap_false.
 
     TRY.
-        DATA(context) = cl_ci_quickfix_abap_context=>create_from_scan_stmt( p_ci_scan        = ref_scan
-                                                                            p_stmt_idx       = statement_index ).
+        DATA(quickfix) = CAST if_ci_quickfix_abap_actions( quickfix_factory->create_quickfix( ) ).
+
+        quickfix->add_pseudo_comment( p_pseudo_comment = settings-pseudo_comment+5
+                                      p_context        = cl_ci_quickfix_abap_context=>create_from_scan_stmt( p_ci_scan = ref_scan
+                                                                                                             p_stmt_idx = statement_index ) ).
       CATCH cx_ci_quickfix_failed.
         RETURN.
     ENDTRY.
+  ENDMETHOD.
 
+
+  METHOD new_quickfix.
     DATA(quickfix) = quickfix_factory->create_quickfix( ).
 
-    quickfix->add_docu_from_msgclass( p_msg_class      = 'Y_CODE_PAL_MESSAGES'
-                                      p_msg_number     = '001'
-                                      p_msg_parameter1 = settings-pseudo_comment ).
+    quickfix->add_docu_from_msgclass( p_msg_class = 'Y_CODE_PAL_MESSAGES'
+                                      p_msg_number = '001'
+                                      p_msg_parameter1 = description ).
 
-    quickfix->if_ci_quickfix_abap_actions~insert_after( p_new_code     = settings-pseudo_comment
-                                                        p_context      = context ).
+    quickfix->enable_automatic_execution( ).
+
+    result = CAST #( quickfix ).
   ENDMETHOD.
 
 
