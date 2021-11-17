@@ -19,15 +19,8 @@ Legend
 2021-XX-XX v.1.17.0
 ------------------
 + Quickfix: Pseudo Comment (#509)
-+ Change All Checks Button
-
-2021-11-11 v.1.16.3
-------------------
-* Incompatibility with abapGit after commit dc4b3705216757c7533f5802d51 (#528)
-* Unit test WITHOUT_ISSUE in Y_CHECK_COMMENT_USAGE fails (#527)
-* Refactoring Function Check (#531)
-* Unit test RFC_ENABLED in Y_CHECK_FUNCTION fails (#526)
-- Remove static dependency to developer version of abapGit (#524)
++ Check Button: Replicate Configuration
+! Check Button: Edit
 
 2021-11-11 v.1.16.3
 ------------------
