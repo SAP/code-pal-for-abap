@@ -158,6 +158,7 @@
     "types_naming": false,
     "uncaught_exception": true,
     "unknown_types": true,
+    "unnecessary_chaining": true,
     "unreachable_code": true,
     "unsecure_fae": false,
     "unused_methods": true,
