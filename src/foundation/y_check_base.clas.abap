@@ -45,10 +45,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     CONSTANTS initial_date TYPE datum VALUE '19000101'.
 
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
-    DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
+    DATA exemption TYPE REF TO y_if_code_pal_exemption.
     DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
     DATA statistics TYPE REF TO y_if_scan_statistics.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
+    DATA database_access TYPE REF TO y_code_pal_database_access.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
@@ -98,7 +99,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   check_configuration    TYPE y_if_clean_code_manager=>check_configuration. "#EC OPTL_PARAM
 
     METHODS set_check_message IMPORTING message TYPE itex132.
-    METHODS get_class_description RETURNING VALUE(result) TYPE string.
 
     METHODS condense_tokens IMPORTING statement TYPE sstmnt
                             RETURNING VALUE(result) TYPE string.
@@ -153,7 +153,9 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    description = get_class_description(  ).
+    database_access = NEW #( srcid ).
+
+    description = database_access->repository_access->get_class_description( myname ).
     category = 'Y_CATEGORY_CODE_PAL'.
     position = y_code_pal_sorter=>get_position( myname ).
     version = '0000'.
@@ -224,8 +226,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(exempt) = clean_code_exemption_handler->is_object_exempted( object_type = tadir_keys-object
-                                                                     object_name = tadir_keys-obj_name  ).
+    DATA(exempt) = exemption->is_exempt( object_type = tadir_keys-object
+                                         object_name = tadir_keys-obj_name  ).
 
     IF exempt = abap_true.
       CLEAR result.
@@ -446,8 +448,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       clean_code_manager = NEW y_clean_code_manager( ).
     ENDIF.
 
-    IF clean_code_exemption_handler IS NOT BOUND.
-      clean_code_exemption_handler = NEW y_exemption_handler( ).
+    IF exemption IS NOT BOUND.
+      exemption = NEW y_code_pal_exemption( database_access ).
     ENDIF.
 
     IF lines( check_configurations ) = 1
@@ -574,14 +576,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     INSERT error INTO TABLE scimessages.
     INSERT warning INTO TABLE scimessages.
     INSERT notification INTO TABLE scimessages.
-  ENDMETHOD.
-
-
-  METHOD get_class_description.
-    SELECT SINGLE descript INTO @result FROM seoclasstx WHERE clsname = @myname.
-    IF sy-subrc <> 0.
-      result = 'Description Not Available'.
-    ENDIF.
   ENDMETHOD.
 
 

@@ -18,6 +18,8 @@ CLASS y_check_function IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
+    remote_rfc_enabled = abap_false.
+
     settings-pseudo_comment = '"#EC CI_FUNCTION' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.

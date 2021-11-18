@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>Y_EXEMPTION_OF_PROGRAM</CLSNAME>
+    <CLSNAME>Y_CODE_PAL_DATABASE_ACCESS</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Check if Program exempted</DESCRIPT>
+    <DESCRIPT>External Dependencies</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

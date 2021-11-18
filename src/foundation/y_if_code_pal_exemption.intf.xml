@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>Y_IF_EXEMPTION_OF_OBJECT</CLSNAME>
+    <CLSNAME>Y_IF_CODE_PAL_EXEMPTION</CLSNAME>
     <LANGU>E</LANGU>
     <DESCRIPT>Exemption</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>

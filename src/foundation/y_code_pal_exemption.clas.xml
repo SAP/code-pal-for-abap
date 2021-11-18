@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>Y_EXEMPTION_OF_CLASS</CLSNAME>
+    <CLSNAME>Y_CODE_PAL_EXEMPTION</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Check if Class exempted</DESCRIPT>
+    <DESCRIPT>Exemption Handler</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

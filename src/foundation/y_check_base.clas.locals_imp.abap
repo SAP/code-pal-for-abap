@@ -1,17 +1,17 @@
 *"* use this source file for the definition and implementation of
 *"* local helper classes, interface definitions and type
 *"* declarations
-CLASS ltd_clean_code_exemption DEFINITION.
+CLASS ltd_exemption DEFINITION.
   PUBLIC SECTION.
-    INTERFACES y_if_exemption.
+    INTERFACES y_if_code_pal_exemption.
 
 ENDCLASS.
 
 
-CLASS ltd_clean_code_exemption IMPLEMENTATION.
+CLASS ltd_exemption IMPLEMENTATION.
 
-  METHOD y_if_exemption~is_object_exempted.
-    RETURN.
+  METHOD y_if_code_pal_exemption~is_exempt.
+    result = abap_false.
   ENDMETHOD.
 
 ENDCLASS.
@@ -42,7 +42,7 @@ CLASS ltd_check_base IMPLEMENTATION.
     ref_scan = y_code_pal_ref_scan_double=>get( VALUE #( ( 'REPORT y_example. ' ) ) ).
 
     clean_code_manager = NEW y_clean_code_manager_double( me ).
-    clean_code_exemption_handler = NEW ltd_clean_code_exemption(  ).
+    exemption = NEW ltd_exemption(  ).
   ENDMETHOD.
 
   METHOD get_ref_scan.
