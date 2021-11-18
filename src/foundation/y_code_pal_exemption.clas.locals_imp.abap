@@ -491,12 +491,8 @@ CLASS lcl_exemption_general IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_tadir_generated.
-    SELECT SINGLE genflag
-    FROM tadir
-    INTO @result
-    WHERE pgmid = 'R3TR'
-    AND object = @object_type
-    AND obj_name = @object_name.
+    result = database_access->get_object_generated( object_type = object_type
+                                                    object_name = object_name ).
   ENDMETHOD.
 
 ENDCLASS.

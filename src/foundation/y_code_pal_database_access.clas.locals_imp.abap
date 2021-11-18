@@ -103,7 +103,7 @@ CLASS lcl_select IMPLEMENTATION.
   METHOD get_column.
     DATA(entry) = query_result[ 1 ]-line.
     SPLIT entry AT delimiter INTO TABLE DATA(columns).
-    result = columns[ line_index( fields[ table_line = name ] ) ].
+    result = columns[ line_index( fields[ fieldname = name ] ) ].
   ENDMETHOD.
 
 ENDCLASS.
