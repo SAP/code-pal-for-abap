@@ -1,29 +1,23 @@
 *"* use this source file for the definition and implementation of
 *"* local helper classes, interface definitions and type
 *"* declarations
-CLASS lcl_select DEFINITION CREATE PRIVATE.
+CLASS lcl_select DEFINITION.
   PUBLIC SECTION.
-    CLASS-METHODS create IMPORTING destination   TYPE rfcdest
-                         RETURNING VALUE(result) TYPE REF TO lcl_select.
+    METHODS constructor IMPORTING destination TYPE rfcdest.
+    METHODS set_table IMPORTING name TYPE string.
+    METHODS set_sorted.
+    METHODS add_column IMPORTING name TYPE string.
 
-    METHODS set_table IMPORTING name          TYPE string
-                      RETURNING VALUE(result) TYPE REF TO lcl_select.
+    METHODS add_where IMPORTING clause TYPE string.
 
-    METHODS set_sorted RETURNING VALUE(result) TYPE REF TO lcl_select.
+    "! Run Query
+    "! @parameter result | true - if record(s) found
+    METHODS run RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS add_column IMPORTING name          TYPE string
-                       RETURNING VALUE(result) TYPE REF TO lcl_select.
-
-    METHODS add_where IMPORTING clause        TYPE string
-                      RETURNING VALUE(result) TYPE REF TO lcl_select.
-
-    METHODS run RETURNING VALUE(result) TYPE REF TO lcl_select
-                RAISING cx_sy_itab_error.
-
-    METHODS get_table RETURNING VALUE(result) TYPE sdti_result_tab.
-
-    METHODS get_column IMPORTING name          TYPE string
-                       RETURNING VALUE(result) TYPE string.
+    METHODS get_results EXPORTING result TYPE STANDARD TABLE.
+    METHODS get_result EXPORTING result TYPE any.
+    METHODS get_column IMPORTING name TYPE any
+                       EXPORTING result TYPE any.
 
   PROTECTED SECTION.
     CONSTANTS delimiter VALUE ';'.
@@ -41,29 +35,24 @@ ENDCLASS.
 
 CLASS lcl_select IMPLEMENTATION.
 
-  METHOD create.
-    result = NEW #( ).
-    result->destination = destination.
+  METHOD constructor.
+    me->destination = destination.
   ENDMETHOD.
 
   METHOD set_table.
     query_table = name.
-    result = me.
   ENDMETHOD.
 
   METHOD set_sorted.
     get_sorted = abap_true.
-    result = me.
   ENDMETHOD.
 
   METHOD add_column.
     fields = VALUE #( BASE options ( CONV #( name ) ) ).
-    result = me.
   ENDMETHOD.
 
   METHOD add_where.
     options = VALUE #( BASE options ( CONV #( clause ) ) ).
-    result = me.
   ENDMETHOD.
 
   METHOD run.
@@ -89,21 +78,90 @@ CLASS lcl_select IMPLEMENTATION.
         data_buffer_exceeded = 6
         OTHERS               = 7.
 
-    IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE cx_sy_itab_error.
-    ENDIF.
-
-    result = me.
+    result = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
 
-  METHOD get_table.
-    result = query_result.
+  METHOD get_results.
+    DATA object TYPE REF TO data.
+    CREATE DATA object TYPE TABLE OF (query_table).
+    ASSIGN object->* TO FIELD-SYMBOL(<table>).
+    result = <table>.
+  ENDMETHOD.
+
+  METHOD get_result.
+    DATA object TYPE REF TO data.
+    CREATE DATA object TYPE (query_table).
+    ASSIGN object->* TO FIELD-SYMBOL(<entry>).
+    result = <entry>.
   ENDMETHOD.
 
   METHOD get_column.
-    DATA(entry) = query_result[ 1 ]-line.
-    SPLIT entry AT delimiter INTO TABLE DATA(columns).
-    result = columns[ line_index( fields[ fieldname = name ] ) ].
+    DATA object TYPE REF TO data.
+    get_result( IMPORTING result = object ).
+
+    READ TABLE fields INTO DATA(field) INDEX sy-index.
+
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS lcl_report_source DEFINITION.
+  PUBLIC SECTION.
+    METHODS constructor IMPORTING destination TYPE rfcdest
+                                  object_type TYPE tadir-object
+                                  object_name TYPE tadir-obj_name.
+
+    "! Run Query
+    "! @parameter result | true - if record(s) found
+    METHODS run RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS get_source_code RETURNING VALUE(result) TYPE y_code_pal_database_access=>ty_source_code.
+    METHODS get_trdir RETURNING VALUE(result) TYPE y_code_pal_database_access=>ty_trdir.
+
+  PROTECTED SECTION.
+    DATA destination TYPE rfcdest.
+    DATA object_type TYPE tadir-object.
+    DATA object_name TYPE tadir-obj_name.
+
+  PRIVATE SECTION.
+    DATA source_code TYPE y_code_pal_database_access=>ty_source_code.
+    DATA trdir TYPE y_code_pal_database_access=>ty_trdir.
+
+ENDCLASS.
+
+
+CLASS lcl_report_source IMPLEMENTATION.
+
+  METHOD constructor.
+    me->destination = destination.
+    me->object_type = object_type.
+    me->object_name = object_name.
+  ENDMETHOD.
+
+  METHOD run.
+    CALL FUNCTION 'SVRS_GET_REPS_FROM_OBJECT'
+      EXPORTING
+        object_name = object_name
+        object_type = object_type
+        versno      = 0
+      TABLES
+        repos_tab   = source_code
+        trdir_tab   = trdir
+      EXCEPTIONS
+        no_version  = 1
+        OTHERS      = 2.
+
+    result = xsdbool( sy-subrc = 0 ).
+  ENDMETHOD.
+
+  METHOD get_source_code.
+    result = source_code.
+  ENDMETHOD.
+
+  METHOD get_trdir.
+    result = trdir.
   ENDMETHOD.
 
 ENDCLASS.

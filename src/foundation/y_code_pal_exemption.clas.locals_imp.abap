@@ -334,7 +334,6 @@ CLASS lcl_exemption_of_prog DEFINITION INHERITING FROM lcl_exemption_base.
     METHODS is_enterprise_search_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_downport_assist_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_fin_infotyp_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_irf_model_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_object_sw01_generate RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
@@ -350,7 +349,6 @@ CLASS lcl_exemption_of_prog IMPLEMENTATION.
     result = xsdbool( is_enterprise_search_generate( )
                    OR is_downport_assist_generate( )
                    OR is_fin_infotyp_generate( )
-                   OR is_irf_model_generate( )
                    OR is_object_sw01_generate( ) ).
   ENDMETHOD.
 
@@ -376,58 +374,11 @@ CLASS lcl_exemption_of_prog IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_fin_infotyp_generate.
-    SELECT SINGLE @abap_true
-    FROM t777d
-    INTO @result
-    WHERE repid = @object_name
-    OR btci_prog = @object_name.
-  ENDMETHOD.
-
-  METHOD is_irf_model_generate.
-    DATA lv_object_name TYPE vrsd-objname.
-    DATA lt_repos_tab TYPE STANDARD TABLE OF abaptxt255.
-    DATA lt_trdir_tab TYPE STANDARD TABLE OF trdir.
-
-    CHECK object_name(10) = 'DTINF_ADJ_' OR object_name CO '/DTINF_ADJ_CO'.
-
-    CALL FUNCTION 'SVRS_GET_REPS_FROM_OBJECT'
-      EXPORTING
-        object_name = lv_object_name
-        object_type = 'REPS'
-        versno      = 0
-      TABLES
-        repos_tab   = lt_repos_tab
-        trdir_tab   = lt_trdir_tab
-      EXCEPTIONS
-        no_version  = 1
-        OTHERS      = 2.
-
-    IF sy-subrc IS NOT INITIAL.
-      RETURN.
-    ENDIF.
-
-    IF lines( lt_repos_tab ) <= 10.
-      RETURN.
-    ENDIF.
-
-    READ TABLE lt_repos_tab INTO DATA(repos_tab) INDEX 2.
-
-    IF repos_tab <> '*& Report DTINF_CORR_REPORT'.
-      RETURN.
-    ENDIF.
-
-    READ TABLE lt_repos_tab INTO repos_tab INDEX 4.
-
-    IF repos_tab <> '*& !!!AUTO-GENERATED CODE: DO NOT CHANGE!!!'.
-      result = abap_true.
-    ENDIF.
+    result = database_access->is_infotype( object_name ).
   ENDMETHOD.
 
   METHOD is_object_sw01_generate.
-    SELECT SINGLE @abap_true
-    FROM tojtb
-    INTO @result
-    WHERE progname = @object_name.  "#EC CI_GENBUFF
+    result = database_access->is_business_object( object_name ).
   ENDMETHOD.
 
 ENDCLASS.
@@ -466,6 +417,7 @@ CLASS lcl_exemption_general IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_object_existing.
+    "TODO: Review it. It is not supported in the RFC scenario.
     CONSTANTS object_exists TYPE char1 VALUE 'X'.
 
     DATA existence_flag TYPE strl_pari-flag.
