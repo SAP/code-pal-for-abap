@@ -74,7 +74,7 @@ CLASS y_unit_test_base IMPLEMENTATION.
     cut->has_attributes = abap_false.
     cut->attributes_ok = abap_true.
     cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
-    cut->clean_code_exemption_handler = NEW ltd_clean_code_exemption(  ).
+    cut->exemption = NEW ltd_exemption( ).
     cut->statistics = NEW y_scan_statistics( ).
   ENDMETHOD.
 

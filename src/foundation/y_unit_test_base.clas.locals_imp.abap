@@ -1,16 +1,16 @@
 *"* use this source file for the definition and implementation of
 *"* local helper classes, interface definitions and type
 *"* declarations
-CLASS ltd_clean_code_exemption DEFINITION.
+CLASS ltd_exemption DEFINITION.
   PUBLIC SECTION.
-    INTERFACES y_if_exemption.
+    INTERFACES y_if_code_pal_exemption.
 
 ENDCLASS.
 
-CLASS ltd_clean_code_exemption IMPLEMENTATION.
+CLASS ltd_exemption IMPLEMENTATION.
 
-  METHOD y_if_exemption~is_object_exempted.
-    RETURN.
+  METHOD y_if_code_pal_exemption~is_exempt.
+    result = abap_false.
   ENDMETHOD.
 
 ENDCLASS.

@@ -92,6 +92,8 @@ CLASS lcl_select IMPLEMENTATION.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE cx_sy_itab_error.
     ENDIF.
+
+    result = me.
   ENDMETHOD.
 
   METHOD get_table.
