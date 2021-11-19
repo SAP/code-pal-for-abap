@@ -46,7 +46,8 @@ CLASS lcl_exemption_of_clas DEFINITION INHERITING FROM lcl_exemption_base.
     METHODS is_sadl_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_exit_class RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_exception_class RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_bcp_application RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_bsp_application IMPORTING class LIKE object_name
+                               RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     DATA class_header_data TYPE seoclassdf.
@@ -63,28 +64,25 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
 
     result = abap_true.
 
-    SELECT SINGLE *
-    FROM seoclassdf
-    INTO @class_header_data
-    WHERE clsname = @object_name
-    AND version = 1.
+    DATA(definitions) = database_access->get_class_definition( CONV #( object_name ) ).
 
-    IF sy-subrc = 0.
-      result = xsdbool( is_srv_maint_ui_generate( )
-                     OR is_odata_generate( )
-                     OR is_ecatt_odata_test_generate( )
-                     OR is_fin_infotype_generate( )
-                     OR is_extensibility_generate( )
-                     OR is_shma_generate( )
-                     OR is_proxy_generate( )
-                     OR is_sadl_generate( )
-                     OR is_exit_class( )
-                     OR is_exception_class( )
-                     OR is_bcp_application( ) ).
-    ENDIF.
+    SORT definitions BY version.
+    class_header_data = definitions[ 1 ].
+
+    result = xsdbool( is_srv_maint_ui_generate( )
+                   OR is_odata_generate( )
+                   OR is_ecatt_odata_test_generate( )
+                   OR is_fin_infotype_generate( )
+                   OR is_extensibility_generate( )
+                   OR is_shma_generate( )
+                   OR is_proxy_generate( )
+                   OR is_sadl_generate( )
+                   OR is_exit_class( )
+                   OR is_exception_class( )
+                   OR is_bsp_application( object_name ) ).
   ENDMETHOD.
 
-  METHOD is_bcp_application.
+  METHOD is_bsp_application.
     DATA it_bsp_classes TYPE STANDARD TABLE OF seoclsname.
 
     it_bsp_classes = VALUE #( ( 'CL_BSP_WD_COMPONENT_CONTROLLER' )
@@ -96,51 +94,41 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
                               ( 'CL_BSP_WD_ADVSEARCH_CONTROLLER' )
                               ( 'CL_BSP_WD_CONTEXT_NODE_ASP' ) ).
 
-    SELECT SINGLE refclsname FROM seometarel
-      WHERE clsname = @class_header_data-clsname AND refclsname IS NOT NULL
-      INTO @DATA(inherited_by).
-    IF sy-subrc <> 0.
+    DATA(metadatas) = database_access->get_class_metadata( CONV #( object_name ) ).
+
+    IF lines( metadatas ) = 0.
       RETURN.
     ENDIF.
 
-    DO.
-      IF line_exists( it_bsp_classes[ table_line = inherited_by ] ).
-        result = abap_true.
-        RETURN.
-      ENDIF.
+    LOOP AT metadatas ASSIGNING FIELD-SYMBOL(<metadata>).
+      result = xsdbool( line_exists( it_bsp_classes[ table_line = <metadata>-refclsname ] )
+                     OR is_bsp_application( CONV #( <metadata>-refclsname ) ) ).
 
-      SELECT SINGLE refclsname FROM seometarel
-        WHERE clsname = @inherited_by AND refclsname IS NOT NULL
-        INTO @inherited_by.
-      IF sy-subrc = 4.
+      IF result = abap_true.
         RETURN.
       ENDIF.
-    ENDDO.
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD is_ecatt_odata_test_generate.
-    SELECT SINGLE @abap_true
-    FROM seoclassdf
-    INTO @result
-    WHERE clsname = @class_header_data-clsname
-    AND author = 'eCATTClassGe'.
+    database_access->repository_access->get_object_info( EXPORTING i_object_key     = VALUE #( obj_type = object_type
+                                                                                               obj_name = object_name )
+                                                         IMPORTING e_contact_person = DATA(author) ).
+    result = xsdbool( author = 'eCATTClassGe' ).
   ENDMETHOD.
 
   METHOD is_exception_class.
     CONSTANTS exception_clase_type LIKE class_header_data-category VALUE '40'.
-    IF class_header_data-category = exception_clase_type.
-      result = abap_true.
-    ENDIF.
+    result = xsdbool( class_header_data-category = exception_clase_type ).
   ENDMETHOD.
 
   METHOD is_exit_class.
     CONSTANTS exit_class_type LIKE class_header_data-category VALUE '01'.
-    IF class_header_data-category = exit_class_type.
-      result = abap_true.
-    ENDIF.
+    result = xsdbool( class_header_data-category = exit_class_type ).
   ENDMETHOD.
 
   METHOD is_extensibility_generate.
+    "TODO: RFC?
     DATA lt_interfaces TYPE seor_implementing_keys.
     DATA lv_seoclskey TYPE  seoclskey.
 
@@ -165,21 +153,16 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_fin_infotype_generate.
-    SELECT SINGLE @abap_true
-    FROM t777ditclass
-    INTO @result
-    WHERE idclass = @class_header_data-clsname
-    OR cont_db = @class_header_data-clsname
-    OR bl_class = @class_header_data-clsname.
+    DATA(t777ditclass) = database_access->get_hrbas_infotype( CONV #( object_name ) ).
+    result = xsdbool( lines( t777ditclass ) > 0 ).
   ENDMETHOD.
 
   METHOD is_odata_generate.
-    SELECT SINGLE @abap_true
-    FROM /iwbep/i_sbd_ga
-    INTO @result
-    WHERE ( gen_art_type = 'DPCB' OR gen_art_type = 'MPCB' )
-    AND trobj_type = 'CLAS'
-    AND trobj_name = @class_header_data-clsname. "#EC CI_NOFIELD
+    DATA(sbd_ga) = database_access->get_service_builder_artifact( object_type = object_type
+                                                                  object_name = object_name ).
+
+    result = xsdbool( line_exists( sbd_ga[ gen_art_type = 'DPCB' ] )
+                   OR line_exists( sbd_ga[ gen_art_type = 'MPCB' ] ) ).
   ENDMETHOD.
 
   METHOD is_proxy_generate.
@@ -187,23 +170,17 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_sadl_generate.
-    SELECT SINGLE @abap_true
-    FROM seoclasstx
-    INTO @result
-    WHERE clsname = @class_header_data-clsname
-    AND descript = 'Generated by SADL Generation Toolkit' ##NO_TEXT.
+    DATA(description) = database_access->repository_access->get_class_description( CONV #( object_name ) ).
+    result = xsdbool( description = 'Generated by SADL Generation Toolkit' ).
   ENDMETHOD.
 
   METHOD is_shma_generate.
-    SELECT SINGLE @abap_true
-    FROM tadir
-    INTO @result
-    WHERE pgmid = 'R3TR'
-    AND object = 'SHMA'
-    AND obj_name = @class_header_data-clsname.
+   result = database_access->repository_access->exists_object( VALUE #( obj_type = 'SHMA'
+                                                                        obj_name = object_name ) ).
   ENDMETHOD.
 
   METHOD is_srv_maint_ui_generate.
+    "TODO: RFC?
     DATA: lt_interfaces TYPE seor_implementing_keys.
     DATA: lv_seoclskey TYPE seoclskey.
     lv_seoclskey = class_header_data-clsname.
@@ -270,27 +247,17 @@ CLASS lcl_exemption_of_fugr IMPLEMENTATION.
       fugr_name =  |'SAPL'{ object_name }|.
     ENDIF.
 
-    SELECT SINGLE COUNT(*)
-    FROM tfdir
-    INTO @fugr_func_viewframe
-    WHERE pname = @fugr_name
-    AND (    funcname LIKE 'VIEWFRAME%'
-          OR funcname LIKE 'VIEWPROC%'
-          OR funcname LIKE 'TABLEPROC%'
-          OR funcname LIKE 'TABLEFRAME%' ). "#EC CI_BYPASS  "#EC CI_GENBUFF
+    DATA(functions) = database_access->repository_access->get_functions_of_function_pool( CONV #( fugr_name ) ).
+    result = abap_true.
 
-    IF fugr_func_viewframe = 0 OR sy-subrc = 4.
+    LOOP AT functions TRANSPORTING NO FIELDS
+    WHERE funcname NP 'VIEWFRAME*'
+    OR funcname NP 'VIEWPROC*'
+    OR funcname NP 'TABLEPROC*'
+    OR funcname NP 'TABLEFRAME*'.
+      result = abap_false.
       RETURN.
-    ENDIF.
-
-    SELECT SINGLE COUNT(*)
-    FROM tfdir
-    INTO @fugr_func
-    WHERE pname = @fugr_name.          "#EC CI_BYPASS. "#EC CI_GENBUFF
-
-    IF fugr_func = fugr_func_viewframe.
-      result = abap_true.
-    ENDIF.
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD is_rai_generate.
@@ -302,25 +269,21 @@ CLASS lcl_exemption_of_fugr IMPLEMENTATION.
                               sub = 'SAPL'
                               off = l_offset ).
 
-    SELECT SINGLE funcname
-    FROM tfdir
-    INTO @DATA(rai_fugr_func)
-    WHERE pname = @fugr_name
-    AND NOT ( ( funcname LIKE '%_UPDATE' )
-              OR ( funcname LIKE '%_INSERT' )
-              OR ( funcname LIKE '%_RAI_CREATE_API' ) ). "#EC CI_GENBUFF.
+    DATA(functions) = database_access->repository_access->get_functions_of_function_pool( CONV #( fugr_name ) ).
+    result = abap_true.
 
-    IF rai_fugr_func IS INITIAL.
-      result = abap_true.
-    ENDIF.
+    LOOP AT functions TRANSPORTING NO FIELDS
+    WHERE funcname NP '*_UPDATE'
+    OR funcname NP '*_INSERT'
+    OR funcname NP '*_RAI_CREATE_API'.
+      result = abap_false.
+      RETURN.
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD is_table_maintenance_generate.
-    SELECT SINGLE @abap_true
-    FROM tlibt
-    INTO @result
-    WHERE area = @object_name
-    AND areat = 'Extended Table Maintenance (Generated)' ##NO_TEXT. "#EC CI_GENBUFF
+    DATA(description) = database_access->repository_access->get_function_description( CONV #( object_name ) ).
+    result = xsdbool( description = 'Extended Table Maintenance (Generated)' ).
   ENDMETHOD.
 
 ENDCLASS.
@@ -364,21 +327,24 @@ CLASS lcl_exemption_of_prog IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_enterprise_search_generate.
-    SELECT SINGLE @abap_true
-    FROM trdir
-    INTO @result
-    WHERE name LIKE '%\_001' ESCAPE '\'
-    AND ( secu = 'ESH' OR name LIKE 'ESHS%' )
-    AND ( subc = 'S' OR subc = '1' )     "include programs ('I') are not supported
-    AND name = @object_name.
+    DATA(trdir) = database_access->get_trdir( object_type = object_type
+                                              object_name = object_name ).
+
+    LOOP AT trdir TRANSPORTING NO FIELDS
+    WHERE name CP '*\_001'
+    AND ( secu = 'ESH' OR name CP 'ESHS*' )
+    AND ( subc = 'S' OR subc = '1' ).
+      result = abap_true.
+      RETURN.
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD is_fin_infotyp_generate.
-    result = database_access->is_infotype( object_name ).
+    result = xsdbool( database_access->get_infotype( object_name ) IS NOT INITIAL ).
   ENDMETHOD.
 
   METHOD is_object_sw01_generate.
-    result = database_access->is_business_object( object_name ).
+    result = xsdbool( database_access->get_table_object_repository( object_name ) IS NOT INITIAL ).
   ENDMETHOD.
 
 ENDCLASS.
@@ -390,8 +356,7 @@ CLASS lcl_exemption_general DEFINITION INHERITING FROM lcl_exemption_base.
     METHODS is_exempt REDEFINITION.
 
   PROTECTED SECTION.
-    METHODS is_tadir_generated RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_object_existing RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_generated RETURNING VALUE(result) TYPE abap_bool.
     METHODS get_exemption_object RETURNING VALUE(result) TYPE REF TO y_if_code_pal_exemption.
 
 ENDCLASS.
@@ -404,8 +369,7 @@ CLASS lcl_exemption_general IMPLEMENTATION.
     super->is_exempt( object_type = object_type
                       object_name = object_name ).
 
-    result = xsdbool( is_object_existing( )
-                   OR is_tadir_generated( )
+    result = xsdbool( is_generated( )
                    OR get_exemption_object( )->is_exempt( object_type = object_type
                                                           object_name = object_name ) ).
   ENDMETHOD.
@@ -416,35 +380,11 @@ CLASS lcl_exemption_general IMPLEMENTATION.
                      WHEN object_type = 'FUGR' THEN NEW lcl_exemption_of_fugr( database_access ) ).
   ENDMETHOD.
 
-  METHOD is_object_existing.
-    "TODO: Review it. It is not supported in the RFC scenario.
-    CONSTANTS object_exists TYPE char1 VALUE 'X'.
+  METHOD is_generated.
+    DATA(tadir) = database_access->get_tadir( object_type = object_type
+                                              object_name = object_name ).
 
-    DATA existence_flag TYPE strl_pari-flag.
-    DATA l_object_type  TYPE e071-object.
-    DATA l_object_name  TYPE e071-obj_name.
-
-    l_object_type = object_type.
-    l_object_name = object_name.
-
-    CALL FUNCTION 'TR_CHECK_EXIST'
-      EXPORTING
-        iv_pgmid             = 'R3TR'
-        iv_object            = l_object_type
-        iv_obj_name          = l_object_name
-      IMPORTING
-        e_exist              = existence_flag
-      EXCEPTIONS
-        tr_no_check_function = 1.
-
-    IF sy-subrc = 0 AND existence_flag <> object_exists.
-      result = abap_true.
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD is_tadir_generated.
-    result = database_access->get_object_generated( object_type = object_type
-                                                    object_name = object_name ).
+    result = xsdbool( line_exists( tadir[ genflag = abap_true ] ) ).
   ENDMETHOD.
 
 ENDCLASS.
