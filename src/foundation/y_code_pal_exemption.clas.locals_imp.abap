@@ -111,7 +111,8 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_ecatt_odata_test_generate.
-    database_access->repository_access->get_object_info( EXPORTING i_object_key     = VALUE #( obj_type = object_type
+    database_access->repository_access->get_object_info( EXPORTING i_object_key     = VALUE #( pgmid = 'R3TR'
+                                                                                               obj_type = object_type
                                                                                                obj_name = object_name )
                                                          IMPORTING e_contact_person = DATA(author) ).
     result = xsdbool( author = 'eCATTClassGe' ).
