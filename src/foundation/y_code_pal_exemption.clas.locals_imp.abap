@@ -233,7 +233,6 @@ CLASS lcl_exemption_of_fugr IMPLEMENTATION.
 
   METHOD is_configuration_tablegenerate.
     DATA fugr_name TYPE tfdir-pname.
-    
 
     "Handling of ABAP Namespaces
     IF object_name(1) = '/'.
