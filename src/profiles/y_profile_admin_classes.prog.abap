@@ -170,15 +170,15 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
     CLASS-METHODS:
       get_selected_profile
         RETURNING VALUE(result) TYPE ytab_profiles
-        RAISING   ycx_entry_not_found,
+        RAISING   ycx_code_pal_entry_not_found,
       set_selected_profile
         IMPORTING profile TYPE data,
       get_selected_delegate
         RETURNING VALUE(result) TYPE ytab_delegates
-        RAISING   ycx_entry_not_found,
+        RAISING   ycx_code_pal_entry_not_found,
       get_selected_check
         RETURNING VALUE(result) TYPE ytab_checks
-        RAISING   ycx_entry_not_found.
+        RAISING   ycx_code_pal_entry_not_found.
 
     CLASS-METHODS switch_toolbar_activation
       RAISING cx_failed.
@@ -399,7 +399,7 @@ CLASS lcl_check_events IMPLEMENTATION.
     TRY.
         lcl_util=>init_edit_check( lcl_util=>get_selected_check( ) ).
         lcl_util=>auto_re_start_check( abap_true ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a check!'(015) TYPE 'I'.
     ENDTRY.
   ENDMETHOD.
@@ -408,7 +408,7 @@ CLASS lcl_check_events IMPLEMENTATION.
     TRY.
         lcl_util=>init_add_check( ).
         lcl_util=>auto_re_start_check( ).
-      CATCH ycx_entry_not_found
+      CATCH ycx_code_pal_entry_not_found
             cx_sy_create_object_error.
         MESSAGE 'Please select a check!'(015) TYPE 'I'.
     ENDTRY.
@@ -418,7 +418,7 @@ CLASS lcl_check_events IMPLEMENTATION.
     TRY.
         io_check_id = lcl_util=>get_selected_check( )-checkid.
         lcl_util=>call_check_info(  ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a check!'(015) TYPE 'I'.
     ENDTRY.
   ENDMETHOD.
@@ -643,7 +643,7 @@ CLASS lcl_util IMPLEMENTATION.
     DATA(line) = profiles_tree->get_selected_line( ).
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
     result = <line>.
     UNASSIGN <line>.
@@ -659,7 +659,7 @@ CLASS lcl_util IMPLEMENTATION.
     DATA(line) = delegates_tree->get_selected_line( ).
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
     result = <line>.
     UNASSIGN <line>.
@@ -670,7 +670,7 @@ CLASS lcl_util IMPLEMENTATION.
     DATA(line) = checks_tree->get_selected_line( ).
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
     result = <line>.
     result-ignore_pseudo_comments = switch_bool( result-ignore_pseudo_comments ).
@@ -682,7 +682,7 @@ CLASS lcl_util IMPLEMENTATION.
         get_selected_profile( ).
         checks_tree->activate_toolbar( ).
         delegates_tree->activate_toolbar( ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         checks_tree->deactivate_toolbar( ).
         delegates_tree->deactivate_toolbar( ).
     ENDTRY.
@@ -695,7 +695,7 @@ CLASS lcl_util IMPLEMENTATION.
         checks = ux_usability_switch( checks ).
         checks_tree->list_control( )->set_table( checks ).
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         checks_tree->list_control( )->delete_all( ).
 
     ENDTRY.
@@ -715,7 +715,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         delegates_tree->list_control( )->set_table( profile_manager->select_delegates( get_selected_profile( )-profile ) ).
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         delegates_tree->list_control( )->delete_all( ).
 
     ENDTRY.
@@ -727,7 +727,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         profiles_tree->list_control( )->set_table( profile_manager->select_profiles( sy-uname ) ).
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         profiles_tree->list_control( )->delete_all( ).
 
     ENDTRY.
@@ -773,7 +773,7 @@ CLASS lcl_util IMPLEMENTATION.
       CATCH cx_failed.
         MESSAGE 'Profiles not found!'(010) TYPE 'I'.
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Profiles not registered!'(011) TYPE 'I'.
 
     ENDTRY.
@@ -794,7 +794,7 @@ CLASS lcl_util IMPLEMENTATION.
       CATCH cx_failed.
         MESSAGE 'Profiles not found!'(010) TYPE 'I'.
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Profiles not registered!'(011) TYPE 'I'.
 
     ENDTRY.
@@ -819,7 +819,7 @@ CLASS lcl_util IMPLEMENTATION.
       CATCH cx_failed.
         MESSAGE 'Checks not found!'(020) TYPE 'S'.
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Checks not registered!'(021) TYPE 'S'.
 
     ENDTRY.
@@ -920,7 +920,7 @@ CLASS lcl_util IMPLEMENTATION.
       CATCH ycx_failed_to_remove_a_line.
         MESSAGE 'Profile cannot be unassigned!'(008) TYPE 'I'.
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
 
     ENDTRY.
@@ -967,7 +967,7 @@ CLASS lcl_util IMPLEMENTATION.
       CATCH ycx_no_delegation_rights.
         MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'I'.
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please choose a valid profile to copy from!'(047) TYPE 'I'.
 
       CATCH ycx_failed_to_add_a_line.
@@ -1038,19 +1038,19 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD export_profile.
     TRY.
         DATA(profile) = get_selected_profile( ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'W'.
     ENDTRY.
 
     TRY.
         DATA(checks) = profile_manager->select_checks( profile-profile ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Checks not found!'(020) TYPE 'E'.
     ENDTRY.
 
     TRY.
         DATA(delegates) = profile_manager->select_delegates( profile-profile ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'There must be at least one delegate!'(024) TYPE 'E'.
     ENDTRY.
 
@@ -1098,7 +1098,7 @@ CLASS lcl_util IMPLEMENTATION.
         profile_manager->insert_delegate( VALUE #( profile = get_selected_profile( )-profile
                                                    delegate = io_delegate_name ) ).
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
 
       CATCH ycx_failed_to_add_a_line.
@@ -1111,7 +1111,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         get_selected_delegate( ).
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a delegate!'(035)  TYPE 'I'.
         RETURN.
 
@@ -1120,12 +1120,12 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(lines_of_delegates) = lines( profile_manager->select_delegates( get_selected_profile( )-profile ) ).
         IF lines_of_delegates <= 1.
-          RAISE EXCEPTION TYPE ycx_entry_not_found.
+          RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
         ENDIF.
 
         profile_manager->delete_delegate( get_selected_delegate( ) ).
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'There must be at least one delegate!'(024) TYPE 'I'.
 
       CATCH ycx_failed_to_remove_a_line.
@@ -1144,7 +1144,7 @@ CLASS lcl_util IMPLEMENTATION.
         profile_manager->check_delegation_rights( prof-profile ).
         result = abap_true.
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
 
       CATCH ycx_no_delegation_rights.
@@ -1194,7 +1194,7 @@ CLASS lcl_util IMPLEMENTATION.
             io_issue_prio = 'Notification'.
         ENDCASE.
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a check!'(015) TYPE 'I'.
         RETURN.
     ENDTRY.
@@ -1214,7 +1214,7 @@ CLASS lcl_util IMPLEMENTATION.
                                       change_apply_testcode    = chbx_apply_testcode
                                       change_allow_exemptios   = chbx_apply_pcom ).
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         RETURN.
       CATCH cx_failed.
         MESSAGE 'The profile needs to have checks!' TYPE 'I'.
@@ -1265,7 +1265,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         io_check_description = profile_manager->get_check_description( check_line-checkid ).
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         io_check_description = ''.
 
     ENDTRY.
@@ -1283,7 +1283,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD add_check.
     TRY.
         DATA(profile) = get_selected_profile( )-profile.
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
     ENDTRY.
 
@@ -1303,7 +1303,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     TRY.
         profile_manager->get_check_description( check-checkid ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Check is not registered!'(044) TYPE 'I'.
         RAISE EXCEPTION TYPE cx_failed.
     ENDTRY.
@@ -1325,7 +1325,7 @@ CLASS lcl_util IMPLEMENTATION.
         ENDIF.
 
         profile_manager->insert_check( check ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Check is not registered!'(044) TYPE 'I'.
         RAISE EXCEPTION TYPE cx_failed.
 
@@ -1352,7 +1352,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD remove_selected_check.
     TRY.
         remove_check( get_selected_check( ) ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a check!'(015) TYPE 'W'.
     ENDTRY.
   ENDMETHOD.
@@ -1371,7 +1371,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD check_selected_check_rights.
     TRY.
         result = check_check_rights( get_selected_profile( )-profile ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'W'.
     ENDTRY.
   ENDMETHOD.
@@ -1395,7 +1395,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD add_all_checks.
     TRY.
         DATA(profile) = get_selected_profile( )-profile.
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
     ENDTRY.
 
@@ -1408,7 +1408,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         profile_manager->select_checks( profile ).
         request_confirmation( | Would you like to replace the current checks? | ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         request_confirmation( | Would you like to add all the checks? | ).
     ENDTRY.
 
@@ -1416,7 +1416,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     TRY.
         DATA(available_checks) = profile_manager->select_existing_checks( ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Checks not registered!'(021) TYPE 'S'.
     ENDTRY.
 
@@ -1437,7 +1437,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD remove_all_checks.
     TRY.
         DATA(profile) = get_selected_profile( )-profile.
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
     ENDTRY.
 
@@ -1449,7 +1449,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     TRY.
         profile_manager->select_checks( profile ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         RETURN.
     ENDTRY.
 
@@ -1465,7 +1465,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     TRY.
         DATA(profile) = get_selected_profile( )-profile.
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         MESSAGE 'Please select a profile!'(005) TYPE 'I'.
     ENDTRY.
 
@@ -1478,7 +1478,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(checks_available) = profile_manager->select_checks( profile ).
         request_confirmation( | Would you like to add all missing checks? | ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         add_all_checks( ).
         RETURN.
     ENDTRY.

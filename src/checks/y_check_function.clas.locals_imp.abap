@@ -4,9 +4,6 @@ CLASS ltd_check_function DEFINITION INHERITING FROM y_check_function.
 
     METHODS get_ref_scan RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
     METHODS set_ref_scan IMPORTING ref_scan TYPE REF TO cl_ci_scan.
-
-    METHODS get_statistics RETURNING VALUE(result) TYPE REF TO y_if_scan_statistics.
-    METHODS set_statistics IMPORTING statistics TYPE REF TO y_if_scan_statistics.
 ENDCLASS.
 
 
@@ -19,8 +16,7 @@ CLASS ltd_check_function IMPLEMENTATION.
     object_type = 'CLAS'.
     has_attributes = abap_false.
     attributes_ok = abap_true.
-    clean_code_manager = NEW y_clean_code_manager_double( me ).
-    statistics = NEW y_scan_statistics( ).
+    manager = NEW y_code_pal_manager_double( me ).
   ENDMETHOD.
 
   METHOD get_ref_scan.
@@ -29,14 +25,6 @@ CLASS ltd_check_function IMPLEMENTATION.
 
   METHOD set_ref_scan.
     me->ref_scan = ref_scan.
-  ENDMETHOD.
-
-  METHOD get_statistics.
-    result = statistics.
-  ENDMETHOD.
-
-  METHOD set_statistics.
-    me->statistics = statistics.
   ENDMETHOD.
 
 ENDCLASS.

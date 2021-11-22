@@ -133,7 +133,7 @@ CLASS Y_ALV_TREE_CONTROL IMPLEMENTATION.
       TRY.
           result = index_table[ 1 ].
         CATCH cx_sy_itab_line_not_found.
-          RAISE EXCEPTION TYPE ycx_entry_not_found.
+          RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
       ENDTRY.
     ENDIF.
   ENDMETHOD.

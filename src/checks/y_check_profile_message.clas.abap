@@ -86,7 +86,7 @@ CLASS y_check_profile_message IMPLEMENTATION.
   METHOD get_profiles.
     TRY.
         result = y_profile_manager=>create( )->select_profiles( sy-uname ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         RETURN.
     ENDTRY.
   ENDMETHOD.

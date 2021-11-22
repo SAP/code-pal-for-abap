@@ -37,14 +37,14 @@ CLASS lth_function IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD then_finds.
-    cl_abap_unit_assert=>assert_equals( act  = cut->get_statistics( )->count-notes
+    cl_abap_unit_assert=>assert_equals( act  = cut->manager->statistics->count-notes
                                         exp  = expected_issues
                                         quit = if_aunit_constants=>quit-no ).
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-errors
+    cl_abap_unit_assert=>assert_initial( act = cut->manager->statistics->count-errors
                                          quit = if_aunit_constants=>quit-no ).
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-warnings
+    cl_abap_unit_assert=>assert_initial( act = cut->manager->statistics->count-warnings
                                          quit = if_aunit_constants=>quit-no ).
-    cl_abap_unit_assert=>assert_initial( act = cut->get_statistics( )->count-pseudo_comments
+    cl_abap_unit_assert=>assert_initial( act = cut->manager->statistics->count-pseudo_comments
                                          quit = if_aunit_constants=>quit-no ).
   ENDMETHOD.
 

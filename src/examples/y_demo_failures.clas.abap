@@ -183,7 +183,7 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
 
   METHOD cx_root_usage.
     TRY.
-        RAISE EXCEPTION TYPE ycx_entry_not_found.
+        RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
       CATCH cx_root.                                   "#EC EMPTY_CATCH
     ENDTRY.
   ENDMETHOD.
@@ -232,7 +232,7 @@ CLASS Y_DEMO_FAILURES IMPLEMENTATION.
   METHOD empty_catches.
     TRY.
         DATA(string) = 1.
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
     ENDTRY.
   ENDMETHOD.
 

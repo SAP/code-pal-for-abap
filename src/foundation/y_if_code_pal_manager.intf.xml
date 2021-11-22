@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>Y_IF_CLEAN_CODE_MANAGER</CLSNAME>
+    <CLSNAME>Y_IF_CODE_PAL_MANAGER</CLSNAME>
     <LANGU>E</LANGU>
     <DESCRIPT>Clean Code Manager</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>

@@ -73,9 +73,7 @@ CLASS y_unit_test_base IMPLEMENTATION.
     cut->object_type = 'CLAS'.
     cut->has_attributes = abap_false.
     cut->attributes_ok = abap_true.
-    cut->clean_code_manager = NEW y_clean_code_manager_double( cut ).
-    cut->exemption = NEW ltd_exemption( ).
-    cut->statistics = NEW y_scan_statistics( ).
+    cut->manager = NEW y_code_pal_manager_double( cut ).
   ENDMETHOD.
 
   METHOD given_code_without_issue.
@@ -104,18 +102,18 @@ CLASS y_unit_test_base IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD then_exemption.
-    cl_abap_unit_assert=>assert_equals( act = cut->statistics->count-pseudo_comments
+    cl_abap_unit_assert=>assert_equals( act = cut->manager->statistics->count-pseudo_comments
                                         exp = get_expected_count( ) ).
   ENDMETHOD.
 
   METHOD then_no_exemption.
-    cl_abap_unit_assert=>assert_initial( cut->statistics->count-pseudo_comments ).
+    cl_abap_unit_assert=>assert_initial( cut->manager->statistics->count-pseudo_comments ).
   ENDMETHOD.
 
   METHOD get_issue_count.
-    result = COND #( WHEN cut->settings-prio = cl_ci_test_root=>c_error   THEN cut->statistics->count-errors
-                     WHEN cut->settings-prio = cl_ci_test_root=>c_warning THEN cut->statistics->count-warnings
-                     WHEN cut->settings-prio = cl_ci_test_root=>c_note    THEN cut->statistics->count-notes ).
+    result = COND #( WHEN cut->settings-prio = cl_ci_test_root=>c_error   THEN cut->manager->statistics->count-errors
+                     WHEN cut->settings-prio = cl_ci_test_root=>c_warning THEN cut->manager->statistics->count-warnings
+                     WHEN cut->settings-prio = cl_ci_test_root=>c_note    THEN cut->manager->statistics->count-notes ).
   ENDMETHOD.
 
   METHOD has_pseudo_comment.

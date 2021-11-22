@@ -43,7 +43,7 @@ CLASS lcl_select IMPLEMENTATION.
 
   METHOD run.
     result = COND #( WHEN rfc_destination IS INITIAL THEN run_local( CHANGING table = table )
-                                                 ELSE run_remote( CHANGING table = table ) ).
+                                                     ELSE run_remote( CHANGING table = table ) ).
   ENDMETHOD.
 
   METHOD run_local.

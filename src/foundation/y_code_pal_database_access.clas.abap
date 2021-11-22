@@ -1,4 +1,4 @@
-CLASS y_code_pal_database_access DEFINITION PUBLIC FINAL CREATE PUBLIC.
+CLASS y_code_pal_database_access DEFINITION PUBLIC CREATE PUBLIC.
   PUBLIC SECTION.
     TYPES tty_source_code TYPE TABLE OF abaptxt255 WITH EMPTY KEY.
     TYPES tty_tadir TYPE TABLE OF tadir WITH DEFAULT KEY.
@@ -9,10 +9,10 @@ CLASS y_code_pal_database_access DEFINITION PUBLIC FINAL CREATE PUBLIC.
     TYPES tty_t777ditclass TYPE TABLE OF t777ditclass WITH DEFAULT KEY.
     TYPES tty_seometarel TYPE TABLE OF seometarel WITH DEFAULT KEY.
     TYPES tty_seoclassdf TYPE TABLE OF seoclassdf WITH DEFAULT KEY.
-
+    TYPES tty_reposrc TYPE TABLE OF reposrc WITH DEFAULT KEY.
+    TYPES tty_vrsd TYPE TABLE OF vrsd WITH DEFAULT KEY.
 
     DATA repository_access TYPE REF TO if_sca_repository_access READ-ONLY.
-    DATA repository_proxy  TYPE REF TO if_sca_repository_proxy READ-ONLY.
 
     METHODS constructor IMPORTING srcid TYPE scr_source_id.
 
@@ -47,6 +47,14 @@ CLASS y_code_pal_database_access DEFINITION PUBLIC FINAL CREATE PUBLIC.
     METHODS get_class_definition IMPORTING object_name   TYPE seoclassdf-clsname
                                  RETURNING VALUE(result) TYPE tty_seoclassdf.
 
+    METHODS get_report_source IMPORTING object_name   TYPE reposrc-progname
+                              RETURNING VALUE(result) TYPE tty_reposrc.
+
+    METHODS get_version_management IMPORTING object_type   TYPE vrsd-objtype
+                                             object_name   TYPE vrsd-objname
+                                   RETURNING VALUE(result) TYPE tty_vrsd.
+
+
 
   PRIVATE SECTION.
     DATA rfc_destination TYPE rfcdest.
@@ -60,9 +68,6 @@ CLASS y_code_pal_database_access IMPLEMENTATION.
   METHOD constructor.
     repository_access = COND #( WHEN srcid IS INITIAL THEN cl_sca_repository_access=>get_local_access( )
                                                       ELSE cl_sca_repository_access=>get_access_by_rfc( cl_abap_source_id=>get_destination( srcid ) ) ).
-
-    repository_proxy = COND #( WHEN srcid IS INITIAL THEN cl_sca_repository_proxy=>get_local_access( )
-                                                     ELSE cl_sca_repository_proxy=>get_remote_access( i_rfc_destination = cl_abap_source_id=>get_destination( srcid ) ) ).
   ENDMETHOD.
 
   METHOD get_tadir.
@@ -186,6 +191,37 @@ CLASS y_code_pal_database_access IMPLEMENTATION.
 
     IF sql->run( CHANGING table = seoclassdf ).
       result = seoclassdf.
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD get_report_source.
+    DATA reposrc TYPE tty_reposrc.
+
+    DATA(sql) = NEW lcl_select( rfc_destination ).
+
+    sql->set_from( 'REPOSRC' ).
+
+    sql->add_where( |PROGNAME = '{ object_name }'| ).
+    sql->add_where( |AND R3STATE = 'A'| ).
+
+    IF sql->run( CHANGING table = reposrc ).
+      result = reposrc.
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD get_version_management.
+    DATA vrsd TYPE tty_vrsd.
+
+    DATA(sql) = NEW lcl_select( rfc_destination ).
+
+    sql->set_from( 'VRSD' ).
+
+    sql->add_where( |OBJTYPE = '{ object_type }'| ).
+    sql->add_where( |AND OBJNAME LIKE '{ object_name }'| ).
+    sql->add_where( |AND DATUM IS NOT NULL| ).
+
+    IF sql->run( CHANGING table = vrsd ).
+      result = vrsd.
     ENDIF.
   ENDMETHOD.
 

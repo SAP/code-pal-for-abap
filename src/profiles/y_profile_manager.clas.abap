@@ -155,7 +155,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
 
     TRY.
         y_if_profile_manager~select_checks( profile-profile ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         DELETE FROM ytab_delegates WHERE profile = @profile-profile.
     ENDTRY.
     COMMIT WORK.
@@ -165,7 +165,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
   METHOD y_if_profile_manager~delete_profiles.
     TRY.
         DATA(profiles) = y_if_profile_manager~select_profiles( sy-uname ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         RETURN.
     ENDTRY.
 
@@ -185,7 +185,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
     IF sy-subrc <> 0.
       SELECT SINGLE descript FROM vseoclass WHERE clsname = @classname INTO @result.
       IF sy-subrc <> 0.
-        RAISE EXCEPTION TYPE ycx_entry_not_found.
+        RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
       ENDIF.
     ENDIF.
   ENDMETHOD.
@@ -208,7 +208,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
     SELECT profile FROM ytab_profiles APPENDING TABLE @result.
     IF sy-subrc <> 0 AND
        prof_subrc <> 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
 
     SORT result AS TEXT ASCENDING.
@@ -278,7 +278,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
 
     TRY.
         y_if_profile_manager~select_delegates( profile-profile ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         y_if_profile_manager~insert_delegate( VALUE ytab_delegates( profile = profile-profile
                                                                     delegate = sy-uname ) ).
     ENDTRY.
@@ -310,7 +310,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
   METHOD y_if_profile_manager~select_checks.
     SELECT * FROM ytab_checks INTO TABLE @result WHERE profile = @profile.
     IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
   ENDMETHOD.
 
@@ -318,7 +318,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
   METHOD y_if_profile_manager~select_delegates.
     SELECT * FROM ytab_delegates INTO TABLE @result WHERE profile = @profile.
     IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
   ENDMETHOD.
 
@@ -327,7 +327,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
     DATA(checks) = get_checks_from_db( ).
 
     IF checks IS INITIAL.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
 
     LOOP AT checks ASSIGNING FIELD-SYMBOL(<line>).
@@ -351,7 +351,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
     SELECT * FROM ytab_profiles INTO TABLE @result WHERE username = @username OR
                                                          is_standard = @abap_true.
     IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
 
     LOOP AT result ASSIGNING FIELD-SYMBOL(<line>) WHERE username <> username AND is_standard = abap_true.
@@ -379,7 +379,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
   METHOD y_if_profile_manager~remove_all_delegates.
     TRY.
         DATA(delegates) = y_if_profile_manager~select_delegates( profile ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         RETURN.
     ENDTRY.
     LOOP AT delegates ASSIGNING FIELD-SYMBOL(<delegate>).
@@ -395,7 +395,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
   METHOD y_if_profile_manager~remove_all_checks.
     TRY.
         DATA(checks) = y_if_profile_manager~select_checks( profile ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         RETURN.
     ENDTRY.
     LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
@@ -411,7 +411,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
   METHOD y_if_profile_manager~profile_exists.
     TRY.
         result = xsdbool( y_if_profile_manager~select_delegates( name ) IS NOT INITIAL ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         result = abap_false.
     ENDTRY.
   ENDMETHOD.
@@ -504,7 +504,7 @@ CLASS Y_PROFILE_MANAGER IMPLEMENTATION.
           ENDTRY.
         ENDLOOP.
 
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         RAISE EXCEPTION TYPE cx_failed.
     ENDTRY.
   ENDMETHOD.

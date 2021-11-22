@@ -48,31 +48,31 @@ INTERFACE y_if_profile_manager PUBLIC.
     RETURNING
       VALUE(result) TYPE profile_assignments
     RAISING
-      ycx_entry_not_found .
+      ycx_code_pal_entry_not_found .
   METHODS select_all_profiles
     RETURNING
       VALUE(result) TYPE profile_assignments
     RAISING
-      ycx_entry_not_found .
+      ycx_code_pal_entry_not_found .
   METHODS select_checks
     IMPORTING
       !profile      TYPE ytab_checks-profile
     RETURNING
       VALUE(result) TYPE check_assignments
     RAISING
-      ycx_entry_not_found .
+      ycx_code_pal_entry_not_found .
   METHODS select_delegates
     IMPORTING
       !profile      TYPE ytab_delegates-profile
     RETURNING
       VALUE(result) TYPE delegate_assigments
     RAISING
-      ycx_entry_not_found .
+      ycx_code_pal_entry_not_found .
   METHODS select_existing_checks
     RETURNING
       VALUE(result) TYPE check_descriptions
     RAISING
-      ycx_entry_not_found .
+      ycx_code_pal_entry_not_found .
   METHODS delete_profile
     IMPORTING
       !profile TYPE ytab_profiles
@@ -118,14 +118,14 @@ INTERFACE y_if_profile_manager PUBLIC.
     RETURNING
       VALUE(result) TYPE profile_names
     RAISING
-      ycx_entry_not_found .
+      ycx_code_pal_entry_not_found .
   METHODS get_check_description
     IMPORTING
       !classname    TYPE vseoclass-clsname
     RETURNING
       VALUE(result) TYPE vseoclass-descript
     RAISING
-      ycx_entry_not_found .
+      ycx_code_pal_entry_not_found .
   METHODS check_delegation_rights
     IMPORTING
       !profile TYPE ytab_profiles-profile

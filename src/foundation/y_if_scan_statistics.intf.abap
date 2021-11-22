@@ -7,7 +7,12 @@ INTERFACE y_if_scan_statistics PUBLIC.
           pseudo_comments TYPE i,
         END OF count.
 
-  METHODS collect IMPORTING kind TYPE sychar01
-                            pc   TYPE sychar01.
+  METHODS collect IMPORTING ref_scan         TYPE REF TO cl_ci_scan
+                            scimessages      TYPE scimessages
+                            test             TYPE sci_chk
+                            code             TYPE sci_errc
+                            kind             TYPE sychar01
+                            suppress         TYPE sci_pcom
+                            position         TYPE int4.
 
 ENDINTERFACE.

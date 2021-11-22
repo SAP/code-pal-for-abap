@@ -10,7 +10,7 @@ CLASS y_code_pal_app_comp DEFINITION PUBLIC CREATE PUBLIC.
 
     CLASS-METHODS get IMPORTING level         TYPE entry-level
                       RETURNING VALUE(result) TYPE entry-application_component
-                      RAISING ycx_entry_not_found.
+                      RAISING ycx_code_pal_entry_not_found.
 
   PRIVATE SECTION.
     CONSTANTS max_entries TYPE i VALUE 50.
@@ -19,7 +19,7 @@ CLASS y_code_pal_app_comp DEFINITION PUBLIC CREATE PUBLIC.
 
     CLASS-METHODS new IMPORTING level         TYPE entry-level
                       RETURNING VALUE(result) TYPE entry
-                      RAISING ycx_entry_not_found.
+                      RAISING ycx_code_pal_entry_not_found.
 
 ENDCLASS.
 
@@ -59,7 +59,7 @@ CLASS y_code_pal_app_comp IMPLEMENTATION.
     AND obj_name = @tadir-obj_name.
 
     IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE ycx_entry_not_found.
+      RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
     ENDIF.
 
     result = VALUE #( level = level

@@ -33,7 +33,9 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
             ignore_pseudo_comments        TYPE abap_bool,
           END OF settings.
 
-    METHODS constructor.
+    DATA manager TYPE REF TO y_if_code_pal_manager READ-ONLY.
+
+    METHODS constructor IMPORTING manager_double TYPE REF TO y_if_code_pal_manager OPTIONAL.
 
     METHODS get_attributes REDEFINITION.
     METHODS if_ci_test~display_documentation  REDEFINITION.
@@ -44,12 +46,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
   PROTECTED SECTION.
     CONSTANTS initial_date TYPE datum VALUE '19000101'.
 
-    DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
-    DATA exemption TYPE REF TO y_if_code_pal_exemption.
-    DATA clean_code_manager TYPE REF TO y_if_clean_code_manager.
-    DATA statistics TYPE REF TO y_if_scan_statistics.
+    DATA check_configurations TYPE y_if_code_pal_manager=>check_configurations.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
-    DATA database_access TYPE REF TO y_code_pal_database_access.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
@@ -67,7 +65,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     "! @parameter result | Configuration structure if the check must be raised
     METHODS detect_check_configuration IMPORTING statement     TYPE sstmnt
                                                  error_count   TYPE int4 DEFAULT 1
-                                       RETURNING VALUE(result) TYPE y_if_clean_code_manager=>check_configuration.
+                                       RETURNING VALUE(result) TYPE y_if_code_pal_manager=>check_configuration.
 
     METHODS get_code IMPORTING message_prio  TYPE sychar01
                      RETURNING VALUE(result) TYPE sci_errc.
@@ -96,7 +94,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                   parameter_02           TYPE csequence OPTIONAL
                                   parameter_03           TYPE csequence OPTIONAL
                                   parameter_04           TYPE csequence OPTIONAL
-                                  check_configuration    TYPE y_if_clean_code_manager=>check_configuration. "#EC OPTL_PARAM
+                                  check_configuration    TYPE y_if_code_pal_manager=>check_configuration. "#EC OPTL_PARAM
 
     METHODS set_check_message IMPORTING message TYPE itex132.
 
@@ -106,18 +104,20 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_test_code IMPORTING statement TYPE sstmnt
                          RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS add_check_quickfix ABSTRACT IMPORTING check_configuration TYPE y_if_clean_code_manager=>check_configuration
+    METHODS add_check_quickfix ABSTRACT IMPORTING check_configuration TYPE y_if_code_pal_manager=>check_configuration
                                                   statement_index     TYPE int4.
 
     METHODS new_quickfix RETURNING VALUE(result) TYPE REF TO if_ci_quickfix_abap_actions.
+
+    METHODS inform REDEFINITION.
 
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS instantiate_objects.
 
-    METHODS is_config_stricter IMPORTING previous TYPE y_if_clean_code_manager=>check_configuration
-                                         current TYPE y_if_clean_code_manager=>check_configuration
+    METHODS is_config_stricter IMPORTING previous TYPE y_if_code_pal_manager=>check_configuration
+                                         current TYPE y_if_code_pal_manager=>check_configuration
                                RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_app_comp_in_scope IMPORTING level         TYPE stmnt_levl
@@ -126,36 +126,28 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS switch_bool IMPORTING boolean       TYPE abap_bool
                         RETURNING VALUE(result) TYPE abap_bool. "#EC BOOL_PARAM
 
-    METHODS handle_ignore_pseudo_comments IMPORTING  check_configuration TYPE y_if_clean_code_manager=>check_configuration.
-
-    METHODS is_running_unit_test RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS handle_unit_test_statistics IMPORTING statement_index TYPE i
-                                                  check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+    METHODS handle_ignore_pseudo_comments IMPORTING  check_configuration TYPE y_if_code_pal_manager=>check_configuration.
 
     METHODS is_statement_in_aunit_tab IMPORTING statement TYPE sstmnt
                                       RETURNING VALUE(result) TYPE abap_bool
                                      RAISING cx_sy_itab_line_not_found.
 
-    METHODS get_tadir_keys IMPORTING statement TYPE sstmnt
-                           RETURNING VALUE(result) TYPE tadir.
-
-    METHODS add_pseudo_comment_quickfix IMPORTING check_configuration TYPE y_if_clean_code_manager=>check_configuration
+    METHODS add_pseudo_comment_quickfix IMPORTING check_configuration TYPE y_if_code_pal_manager=>check_configuration
                                                   statement_index     TYPE int4.
 
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_BASE IMPLEMENTATION.
+CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD constructor.
     super->constructor( ).
 
-    database_access = NEW #( srcid ).
+    manager = COND #( WHEN manager_double IS BOUND THEN manager_double ELSE NEW y_code_pal_manager( srcid ) ).
 
-    description = database_access->repository_access->get_class_description( myname ).
+    description = manager->database_access->repository_access->get_class_description( myname ).
     category = 'Y_CATEGORY_CODE_PAL'.
     position = y_code_pal_sorter=>get_position( myname ).
     version = '0000'.
@@ -186,10 +178,10 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
-    DATA(tadir_keys) = get_tadir_keys( statement ).
+    DATA(include) = get_include( p_level = statement-level ).
 
-    DATA(creation_date) = clean_code_manager->calculate_obj_creation_date( object_type = tadir_keys-object
-                                                                           object_name = tadir_keys-obj_name  ).
+    DATA(creation_date) = manager->creation_date->get_creation_date( object_type = c_type_include
+                                                                     object_name = include  ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
     WHERE object_creation_date <= creation_date.
@@ -226,8 +218,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(exempt) = exemption->is_exempt( object_type = tadir_keys-object
-                                         object_name = tadir_keys-obj_name  ).
+    DATA(exempt) = manager->exemption->is_exempt( object_type = c_type_include
+                                                  object_name = include  ).
 
     IF exempt = abap_true.
       CLEAR result.
@@ -245,7 +237,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     TRY.
         DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
         attributes_ok = xsdbool( profiles IS INITIAL ).
-      CATCH ycx_entry_not_found.
+      CATCH ycx_code_pal_entry_not_found.
         attributes_ok = abap_true.
     ENDTRY.
     result = attributes_ok.
@@ -439,17 +431,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
   METHOD instantiate_objects.
     IF ref_scan IS INITIAL.
-      " Force ref_scan->aunit_tab
       no_aunit = abap_true.
       get( ).
-    ENDIF.
-
-    IF clean_code_manager IS NOT BOUND.
-      clean_code_manager = NEW y_clean_code_manager( ).
-    ENDIF.
-
-    IF exemption IS NOT BOUND.
-      exemption = NEW y_code_pal_exemption( database_access ).
     ENDIF.
 
     IF lines( check_configurations ) = 1
@@ -462,7 +445,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
 
 
   METHOD put_attributes.
-    DATA check_configuration TYPE y_if_clean_code_manager=>check_configuration.
+    DATA check_configuration TYPE y_if_code_pal_manager=>check_configuration.
 
     TRY.
         IMPORT
@@ -492,25 +475,20 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     add_check_quickfix( check_configuration = check_configuration
                         statement_index     = statement_index ).
 
-    IF is_running_unit_test( ) = abap_true.
-      handle_unit_test_statistics( statement_index =  statement_index
-                                   check_configuration = check_configuration ).
-    ELSE.
-      inform( p_sub_obj_type = object_type
-              p_sub_obj_name = get_include( p_level = statement_level )
-              p_position = statement_index
-              p_line = get_line_abs( statement_from )
-              p_column = get_column_abs( statement_from )
-              p_errcnt = error_counter
-              p_kind = check_configuration-prio
-              p_test = myname
-              p_code = get_code( check_configuration-prio )
-              p_param_1 = parameter_01
-              p_param_2 = parameter_02
-              p_param_3 = parameter_03
-              p_param_4 = parameter_04
-              p_detail = quickfix_factory->export_to_xstring( ) ).
-    ENDIF.
+    inform( p_sub_obj_type = object_type
+            p_sub_obj_name = get_include( p_level = statement_level )
+            p_position = statement_index
+            p_line = get_line_abs( statement_from )
+            p_column = get_column_abs( statement_from )
+            p_errcnt = error_counter
+            p_kind = check_configuration-prio
+            p_test = myname
+            p_code = get_code( check_configuration-prio )
+            p_param_1 = parameter_01
+            p_param_2 = parameter_02
+            p_param_3 = parameter_03
+            p_param_4 = parameter_04
+            p_detail = quickfix_factory->export_to_xstring( ) ).
   ENDMETHOD.
 
 
@@ -535,8 +513,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     " Profile
     IF has_attributes = abap_false.
       TRY.
-          check_configurations = clean_code_manager->read_check_customizing( myname ).
-        CATCH ycx_no_check_customizing.
+          check_configurations = manager->read_check_customizing( myname ).
+        CATCH ycx_code_pal_no_customizing.
           RETURN.
       ENDTRY.
     ENDIF.
@@ -597,7 +575,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan->levels[ level ] ).
         result = xsdbool( main_app_comp = curr_app_comp ).
       CATCH cx_sy_itab_line_not_found
-            ycx_entry_not_found.
+            ycx_code_pal_entry_not_found.
         result = abap_true.
     ENDTRY.
   ENDMETHOD.
@@ -633,26 +611,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_running_unit_test.
-    result = xsdbool( statistics IS BOUND ).
-  ENDMETHOD.
-
-
-  METHOD handle_unit_test_statistics.
-    DATA(code) = get_code( check_configuration-prio ).
-
-    DATA(pcom_detector) = NEW y_pseudo_comment_detector( )->is_pseudo_comment( ref_scan = ref_scan
-                                                                               scimessages = scimessages
-                                                                               test = myname
-                                                                               code = code
-                                                                               suppress = settings-pseudo_comment
-                                                                               position = statement_index ).
-
-    statistics->collect( kind = check_configuration-prio
-                         pc = pcom_detector ).
-  ENDMETHOD.
-
-
   METHOD is_test_code.
     TRY.
         result = is_statement_in_aunit_tab( statement ).
@@ -684,17 +642,6 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_tadir_keys.
-    DATA(level) = ref_scan->levels[ statement-level ].
-
-    CALL FUNCTION 'TR_TRANSFORM_TRDIR_TO_TADIR'
-      EXPORTING
-        iv_trdir_name = level-name
-      IMPORTING
-        es_tadir_keys = result.
-  ENDMETHOD.
-
-
   METHOD add_pseudo_comment_quickfix.
     CHECK settings-pseudo_comment IS NOT INITIAL.
     CHECK check_configuration-ignore_pseudo_comments = abap_false.
@@ -721,6 +668,39 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     quickfix->enable_automatic_execution( ).
 
     result = CAST #( quickfix ).
+  ENDMETHOD.
+
+
+  METHOD inform.
+    IF manager->statistics IS BOUND.
+      manager->statistics->collect( ref_scan    = ref_scan
+                                    scimessages = scimessages
+                                    test        = p_test
+                                    code        = p_code
+                                    kind        = p_kind
+                                    suppress    = p_suppress
+                                    position    = p_position ).
+    ELSE.
+      super->inform( p_sub_obj_type    = p_sub_obj_type
+                     p_sub_obj_name    = p_sub_obj_name
+                     p_position        = p_position
+                     p_line            = p_line
+                     p_column          = p_column
+                     p_errcnt          = p_errcnt
+                     p_kind            = p_kind
+                     p_test            = p_test
+                     p_code            = p_code
+                     p_suppress        = p_suppress
+                     p_param_1         = p_param_1
+                     p_param_2         = p_param_2
+                     p_param_3         = p_param_3
+                     p_param_4         = p_param_4
+                     p_inclspec        = p_inclspec
+                     p_detail          = p_detail
+                     p_checksum_1      = p_checksum_1
+                     p_comments        = p_comments
+                     p_finding_origins = p_finding_origins ).
+   ENDIF.
   ENDMETHOD.
 
 

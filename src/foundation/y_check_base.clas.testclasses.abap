@@ -10,11 +10,11 @@ CLASS ltc_check_configuration_base DEFINITION ABSTRACT FOR TESTING RISK LEVEL HA
     METHODS when_four_errors.
     METHODS when_eight_errors.
     METHODS when_zero_errors.
-    METHODS then_expect IMPORTING expected TYPE y_if_clean_code_manager=>check_configuration.
+    METHODS then_expect IMPORTING expected TYPE y_if_code_pal_manager=>check_configuration.
     METHODS then_expect_no_result.
     METHODS cleanup.
   PRIVATE SECTION.
-    DATA actual TYPE y_if_clean_code_manager=>check_configuration.
+    DATA actual TYPE y_if_code_pal_manager=>check_configuration.
 ENDCLASS.
 
 CLASS y_check_base DEFINITION LOCAL FRIENDS ltc_check_configuration_base.
