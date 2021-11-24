@@ -9,7 +9,6 @@ CLASS y_code_pal_database_access DEFINITION PUBLIC CREATE PUBLIC.
     TYPES tty_t777ditclass TYPE TABLE OF t777ditclass WITH DEFAULT KEY.
     TYPES tty_seometarel TYPE TABLE OF seometarel WITH DEFAULT KEY.
     TYPES tty_seoclassdf TYPE TABLE OF seoclassdf WITH DEFAULT KEY.
-    TYPES tty_reposrc TYPE TABLE OF reposrc WITH DEFAULT KEY.
     TYPES tty_vrsd TYPE TABLE OF vrsd WITH DEFAULT KEY.
 
     DATA repository_access TYPE REF TO if_sca_repository_access READ-ONLY.
@@ -46,9 +45,6 @@ CLASS y_code_pal_database_access DEFINITION PUBLIC CREATE PUBLIC.
 
     METHODS get_class_definition IMPORTING object_name   TYPE seoclassdf-clsname
                                  RETURNING VALUE(result) TYPE tty_seoclassdf.
-
-    METHODS get_report_source IMPORTING object_name   TYPE reposrc-progname
-                              RETURNING VALUE(result) TYPE tty_reposrc.
 
     METHODS get_version_management IMPORTING object_type   TYPE vrsd-objtype
                                              object_name   TYPE vrsd-objname
@@ -103,7 +99,7 @@ CLASS y_code_pal_database_access IMPLEMENTATION.
   METHOD get_source_code.
     DATA(source) = NEW lcl_report_source( rfc_destination = rfc_destination
                                           object_type     = object_type
-                                          object_name     = object_name ).
+                                          object_name     = CONV #( object_name ) ).
 
     source->run( ).
 
@@ -128,7 +124,7 @@ CLASS y_code_pal_database_access IMPLEMENTATION.
   METHOD get_trdir.
     DATA(source) = NEW lcl_report_source( rfc_destination = rfc_destination
                                           object_type     = object_type
-                                          object_name     = object_name ).
+                                          object_name     = CONV #( object_name ) ).
 
     source->run( ).
 
@@ -191,21 +187,6 @@ CLASS y_code_pal_database_access IMPLEMENTATION.
 
     IF sql->run( CHANGING table = seoclassdf ).
       result = seoclassdf.
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD get_report_source.
-    DATA reposrc TYPE tty_reposrc.
-
-    DATA(sql) = NEW lcl_select( rfc_destination ).
-
-    sql->set_from( 'REPOSRC' ).
-
-    sql->add_where( |PROGNAME = '{ object_name }'| ).
-    sql->add_where( |AND R3STATE = 'A'| ).
-
-    IF sql->run( CHANGING table = reposrc ).
-      result = reposrc.
     ENDIF.
   ENDMETHOD.
 

@@ -1,15 +1,15 @@
 INTERFACE y_if_code_pal_creation_date PUBLIC.
 
-  TYPES created_on_dates TYPE STANDARD TABLE OF as4date.
-
   TYPES: BEGIN OF ty_buffer,
            object_type TYPE trobjtype,
            object_name TYPE trobj_name,
+           include     TYPE program,
            created_on  TYPE creationdt,
          END OF ty_buffer.
 
   TYPES tty_buffer TYPE TABLE OF ty_buffer WITH KEY object_type
-                                                    object_name.
+                                                    object_name
+                                                    include.
 
   CONSTANTS max_entries TYPE i VALUE 100.
 
@@ -19,6 +19,7 @@ INTERFACE y_if_code_pal_creation_date PUBLIC.
 
   METHODS get_creation_date IMPORTING object_type   TYPE trobjtype
                                       object_name   TYPE sobj_name
+                                      include       TYPE program
                             RETURNING VALUE(result) TYPE as4date.
 
 ENDINTERFACE.

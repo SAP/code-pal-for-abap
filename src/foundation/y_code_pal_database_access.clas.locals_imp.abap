@@ -80,8 +80,8 @@ ENDCLASS.
 CLASS lcl_report_source DEFINITION.
   PUBLIC SECTION.
     METHODS constructor IMPORTING rfc_destination TYPE rfcdest
-                                  object_type TYPE tadir-object
-                                  object_name TYPE tadir-obj_name.
+                                  object_type TYPE versobjtyp
+                                  object_name TYPE versobjnam.
 
     "! Run Query
     "! @parameter result | true - if record(s) found
@@ -92,8 +92,8 @@ CLASS lcl_report_source DEFINITION.
 
   PROTECTED SECTION.
     DATA rfc_destination TYPE rfcdest.
-    DATA object_type TYPE tadir-object.
-    DATA object_name TYPE tadir-obj_name.
+    DATA object_type TYPE versobjtyp.
+    DATA object_name TYPE versobjnam.
 
   PRIVATE SECTION.
     DATA source_code TYPE y_code_pal_database_access=>tty_source_code.

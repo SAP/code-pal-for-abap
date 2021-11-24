@@ -42,10 +42,10 @@ ENDCLASS.
 
 CLASS ltd_statistics DEFINITION.
   PUBLIC SECTION.
-    INTERFACES: y_if_scan_statistics.
+    INTERFACES: y_if_code_pal_statistics.
 
   PROTECTED SECTION.
-    ALIASES count FOR y_if_scan_statistics~count.
+    ALIASES count FOR y_if_code_pal_statistics~count.
 
   PRIVATE SECTION.
     CONSTANTS ec_prefix  TYPE string VALUE `#EC`.
@@ -80,7 +80,7 @@ ENDCLASS.
 
 CLASS ltd_statistics IMPLEMENTATION.
 
-  METHOD y_if_scan_statistics~collect.
+  METHOD y_if_code_pal_statistics~collect.
     DATA(pseudo_comment) = is_pseudo_comment( ref_scan = ref_scan
                                               scimessages = scimessages
                                               test = test
