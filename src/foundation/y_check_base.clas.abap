@@ -178,10 +178,9 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
+    DATA(is_test_code) = is_test_code( statement ).
     DATA(include) = get_include( p_level = statement-level ).
-
-    DATA(creation_date) = manager->creation_date->get_creation_date( object_type = c_type_include
-                                                                     object_name = include  ).
+    DATA(creation_date) = manager->creation_date->get_creation_date( include ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
     WHERE object_creation_date <= creation_date.
@@ -194,8 +193,6 @@ CLASS y_check_base IMPLEMENTATION.
       AND <configuration>-threshold > error_count.
         CONTINUE.
       ENDIF.
-
-      DATA(is_test_code) = is_test_code( statement ).
 
       IF is_test_code = abap_true
       AND <configuration>-apply_on_testcode = abap_false.
@@ -218,8 +215,9 @@ CLASS y_check_base IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(exempt) = manager->exemption->is_exempt( object_type = c_type_include
-                                                  object_name = include  ).
+    DATA(exempt) = manager->exemption->is_exempt( object_type = object_type
+                                                  object_name = object_name
+                                                  include     = include ).
 
     IF exempt = abap_true.
       CLEAR result.
@@ -250,15 +248,11 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD inspect_structures.
-    DATA(structures) = FILTER #( ref_scan->structures IN relevant_structure_types WHERE type = table_line ).
-
-    LOOP AT structures INTO structure_wa.
+    LOOP AT FILTER #( ref_scan->structures IN relevant_structure_types WHERE type = table_line ) INTO structure_wa.
       inspect_statements( structure_wa ).
     ENDLOOP.
 
-    structures = FILTER #( ref_scan->structures IN relevant_statement_types WHERE stmnt_type = table_line ).
-
-    LOOP AT structures INTO structure_wa.
+    LOOP AT FILTER #( ref_scan->structures IN relevant_statement_types WHERE stmnt_type = table_line ) INTO structure_wa.
       inspect_statements( structure_wa ).
     ENDLOOP.
   ENDMETHOD.

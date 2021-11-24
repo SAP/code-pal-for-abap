@@ -9,7 +9,7 @@ CLASS lcl_select DEFINITION.
 
     "! Run Query
     "! @parameter result | true - if record(s) found
-    METHODS run CHANGING table TYPE table
+    METHODS run CHANGING  table         TYPE table
                 RETURNING VALUE(result) TYPE abap_bool.
 
   PROTECTED SECTION.
@@ -17,10 +17,10 @@ CLASS lcl_select DEFINITION.
     DATA sql_where TYPE TABLE OF rfc_db_opt.
     DATA sql_from TYPE dd02l-tabname.
 
-    METHODS run_local CHANGING table TYPE table
+    METHODS run_local CHANGING  table         TYPE table
                       RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS run_remote CHANGING table TYPE table
+    METHODS run_remote CHANGING  table         TYPE table
                        RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
@@ -54,7 +54,7 @@ CLASS lcl_select IMPLEMENTATION.
   METHOD run_remote.
     CALL FUNCTION 'RFC_READ_TABLE'
       DESTINATION
-        rfc_destination
+      rfc_destination
       EXPORTING
         sql_from             = sql_from
         use_et_data_4_return = abap_true
@@ -80,15 +80,14 @@ ENDCLASS.
 CLASS lcl_report_source DEFINITION.
   PUBLIC SECTION.
     METHODS constructor IMPORTING rfc_destination TYPE rfcdest
-                                  object_type TYPE versobjtyp
-                                  object_name TYPE versobjnam.
+                                  object_type     TYPE versobjtyp
+                                  object_name     TYPE versobjnam.
 
     "! Run Query
     "! @parameter result | true - if record(s) found
     METHODS run RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS get_source_code RETURNING VALUE(result) TYPE y_code_pal_database_access=>tty_source_code.
-    METHODS get_trdir RETURNING VALUE(result) TYPE y_code_pal_database_access=>tty_trdir.
+    METHODS get_source_code RETURNING VALUE(result) TYPE y_if_code_pal_database_access=>tty_source_code.
 
   PROTECTED SECTION.
     DATA rfc_destination TYPE rfcdest.
@@ -96,8 +95,8 @@ CLASS lcl_report_source DEFINITION.
     DATA object_name TYPE versobjnam.
 
   PRIVATE SECTION.
-    DATA source_code TYPE y_code_pal_database_access=>tty_source_code.
-    DATA trdir TYPE y_code_pal_database_access=>tty_trdir.
+    DATA source_code TYPE y_if_code_pal_database_access=>tty_source_code.
+    DATA trdir TYPE y_if_code_pal_database_access=>tty_trdir.
 
 ENDCLASS.
 
@@ -113,7 +112,7 @@ CLASS lcl_report_source IMPLEMENTATION.
   METHOD run.
     CALL FUNCTION 'SVRS_GET_REPS_FROM_OBJECT'
       DESTINATION
-        rfc_destination
+      rfc_destination
       EXPORTING
         object_name = object_name
         object_type = object_type
@@ -130,10 +129,6 @@ CLASS lcl_report_source IMPLEMENTATION.
 
   METHOD get_source_code.
     result = source_code.
-  ENDMETHOD.
-
-  METHOD get_trdir.
-    result = trdir.
   ENDMETHOD.
 
 ENDCLASS.

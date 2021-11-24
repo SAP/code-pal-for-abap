@@ -16,7 +16,7 @@ INTERFACE y_if_code_pal_manager PUBLIC.
                                  RAISING ycx_code_pal_no_customizing.
 
   DATA creation_date TYPE REF TO y_if_code_pal_creation_date READ-ONLY.
-  DATA database_access TYPE REF TO y_code_pal_database_access READ-ONLY.
+  DATA database_access TYPE REF TO y_if_code_pal_database_access READ-ONLY.
   DATA exemption TYPE REF TO y_if_code_pal_exemption READ-ONLY.
   DATA statistics TYPE REF TO y_if_code_pal_statistics READ-ONLY.
 

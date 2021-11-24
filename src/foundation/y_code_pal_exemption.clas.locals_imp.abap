@@ -1,56 +1,35 @@
 *"* use this source file for the definition and implementation of
 *"* local helper classes, interface definitions and type
 *"* declarations
-CLASS lcl_exemption_base DEFINITION ABSTRACT.
-  PUBLIC SECTION.
-    INTERFACES y_if_code_pal_exemption.
-    ALIASES is_exempt FOR y_if_code_pal_exemption~is_exempt.
-    METHODS constructor IMPORTING database_access TYPE REF TO y_code_pal_database_access.
-
-  PROTECTED SECTION.
-    DATA database_access TYPE REF TO y_code_pal_database_access.
-    DATA object_type TYPE trobjtype.
-    DATA object_name TYPE sobj_name.
-
-ENDCLASS.
-
-
-
 CLASS lcl_exemption_base IMPLEMENTATION.
 
   METHOD constructor.
     me->database_access = database_access.
-  ENDMETHOD.
-
-  METHOD is_exempt.
     me->object_type = object_type.
     me->object_name = object_name.
+    me->include = include.
   ENDMETHOD.
 
-ENDCLASS.
+
+  METHOD is_exempt.
+    result = xsdbool( has_tadir_generated_flag( )
+                   OR has_trdir_generated_flag( ) ).
+  ENDMETHOD.
 
 
+  METHOD has_tadir_generated_flag.
+    DATA(tadir) = database_access->get_tadir( object_type = object_type
+                                              object_name = object_name ).
 
-CLASS lcl_exemption_of_clas DEFINITION INHERITING FROM lcl_exemption_base.
-  PUBLIC SECTION.
-    METHODS is_exempt REDEFINITION.
+    result = xsdbool( line_exists( tadir[ genflag = abap_true ] ) ).
+  ENDMETHOD.
 
-  PROTECTED SECTION.
-    METHODS is_srv_maint_ui_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_odata_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_ecatt_odata_test_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_fin_infotype_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_extensibility_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_shma_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_proxy_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_sadl_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_exit_class RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_exception_class RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_bsp_application IMPORTING class LIKE object_name
-                               RETURNING VALUE(result) TYPE abap_bool.
 
-  PRIVATE SECTION.
-    DATA class_header_data TYPE seoclassdf.
+  METHOD has_trdir_generated_flag.
+    DATA(trdir) = database_access->get_trdir( include ).
+
+    result = xsdbool( line_exists( trdir[ occurs = abap_true ] ) ).
+  ENDMETHOD.
 
 ENDCLASS.
 
@@ -59,10 +38,7 @@ ENDCLASS.
 CLASS lcl_exemption_of_clas IMPLEMENTATION.
 
   METHOD is_exempt.
-    super->is_exempt( object_type = object_type
-                      object_name = object_name ).
-
-    result = abap_true.
+    CHECK super->is_exempt( ) = abap_false.
 
     DATA(definitions) = database_access->get_class_definition( CONV #( object_name ) ).
 
@@ -82,6 +58,7 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
                    OR is_bsp_application( object_name ) ).
   ENDMETHOD.
 
+
   METHOD is_bsp_application.
     DATA it_bsp_classes TYPE STANDARD TABLE OF seoclsname.
 
@@ -94,7 +71,7 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
                               ( 'CL_BSP_WD_ADVSEARCH_CONTROLLER' )
                               ( 'CL_BSP_WD_CONTEXT_NODE_ASP' ) ).
 
-    DATA(metadatas) = database_access->get_class_metadata( CONV #( object_name ) ).
+    DATA(metadatas) = database_access->get_class_metadata( CONV #( class_name ) ).
 
     IF lines( metadatas ) = 0.
       RETURN.
@@ -110,6 +87,7 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD is_ecatt_odata_test_generate.
     database_access->repository_access->get_object_info( EXPORTING i_object_key     = VALUE #( pgmid = 'R3TR'
                                                                                                obj_type = object_type
@@ -118,15 +96,18 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
     result = xsdbool( author = 'eCATTClassGe' ).
   ENDMETHOD.
 
+
   METHOD is_exception_class.
     CONSTANTS exception_clase_type LIKE class_header_data-category VALUE '40'.
     result = xsdbool( class_header_data-category = exception_clase_type ).
   ENDMETHOD.
 
+
   METHOD is_exit_class.
     CONSTANTS exit_class_type LIKE class_header_data-category VALUE '01'.
     result = xsdbool( class_header_data-category = exit_class_type ).
   ENDMETHOD.
+
 
   METHOD is_extensibility_generate.
     "TODO: RFC?
@@ -153,10 +134,12 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
                    OR line_exists( lt_interfaces[ refclsname = 'IF_CFD_ODATA_DPC_FLX' ] ) ).
   ENDMETHOD.
 
+
   METHOD is_fin_infotype_generate.
     DATA(t777ditclass) = database_access->get_hrbas_infotype( CONV #( object_name ) ).
     result = xsdbool( lines( t777ditclass ) > 0 ).
   ENDMETHOD.
+
 
   METHOD is_odata_generate.
     DATA(sbd_ga) = database_access->get_service_builder_artifact( object_type = object_type
@@ -166,19 +149,23 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
                    OR line_exists( sbd_ga[ gen_art_type = 'MPCB' ] ) ).
   ENDMETHOD.
 
+
   METHOD is_proxy_generate.
     result = xsdbool( class_header_data-clsproxy = abap_true ).
   ENDMETHOD.
+
 
   METHOD is_sadl_generate.
     DATA(description) = database_access->repository_access->get_class_description( CONV #( object_name ) ).
     result = xsdbool( description = 'Generated by SADL Generation Toolkit' ).
   ENDMETHOD.
 
+
   METHOD is_shma_generate.
-   result = database_access->repository_access->exists_object( VALUE #( obj_type = 'SHMA'
-                                                                        obj_name = object_name ) ).
+    result = database_access->repository_access->exists_object( VALUE #( obj_type = 'SHMA'
+                                                                         obj_name = object_name ) ).
   ENDMETHOD.
+
 
   METHOD is_srv_maint_ui_generate.
     "TODO: RFC?
@@ -208,45 +195,20 @@ ENDCLASS.
 
 
 
-CLASS lcl_exemption_of_fugr DEFINITION INHERITING FROM lcl_exemption_base.
-  PUBLIC SECTION.
-    METHODS is_exempt REDEFINITION.
-
-  PROTECTED SECTION.
-    METHODS is_table_maintenance_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_configuration_tablegenerate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_rai_generate RETURNING VALUE(result) TYPE abap_bool.
-
-ENDCLASS.
-
-
-
 CLASS lcl_exemption_of_fugr IMPLEMENTATION.
 
   METHOD is_exempt.
-    super->is_exempt( object_type = object_type
-                      object_name = object_name ).
+    CHECK super->is_exempt( ) = abap_false.
 
     result = xsdbool( is_table_maintenance_generate( )
                    OR is_configuration_tablegenerate( )
                    OR is_rai_generate( ) ).
   ENDMETHOD.
 
+
   METHOD is_configuration_tablegenerate.
-    DATA fugr_name TYPE tfdir-pname.
+    DATA(functions) = database_access->repository_access->get_functions_of_function_pool( CONV #( object_name ) ).
 
-    "Handling of ABAP Namespaces
-    IF object_name(1) = '/'.
-      FIND FIRST OCCURRENCE OF '/' IN object_name+1 MATCH OFFSET DATA(l_offset).
-      l_offset = l_offset + 2.
-      fugr_name = insert( val = object_name
-                          sub = 'SAPL'
-                          off = l_offset ).
-    ELSE.
-      fugr_name =  |'SAPL'{ object_name }|.
-    ENDIF.
-
-    DATA(functions) = database_access->repository_access->get_functions_of_function_pool( CONV #( fugr_name ) ).
     result = abap_true.
 
     LOOP AT functions TRANSPORTING NO FIELDS
@@ -259,16 +221,10 @@ CLASS lcl_exemption_of_fugr IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD is_rai_generate.
-    CHECK object_name(4) = '/1RA'.
+    DATA(functions) = database_access->repository_access->get_functions_of_function_pool( CONV #( object_name ) ).
 
-    FIND FIRST OCCURRENCE OF '/' IN object_name+1 MATCH OFFSET DATA(l_offset).
-    l_offset = l_offset + 2.
-    DATA(fugr_name) = insert( val = object_name
-                              sub = 'SAPL'
-                              off = l_offset ).
-
-    DATA(functions) = database_access->repository_access->get_functions_of_function_pool( CONV #( fugr_name ) ).
     result = abap_true.
 
     LOOP AT functions TRANSPORTING NO FIELDS
@@ -280,6 +236,7 @@ CLASS lcl_exemption_of_fugr IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD is_table_maintenance_generate.
     DATA(description) = database_access->repository_access->get_function_description( CONV #( object_name ) ).
     result = xsdbool( description = 'Extended Table Maintenance (Generated)' ).
@@ -288,59 +245,28 @@ CLASS lcl_exemption_of_fugr IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS lcl_exemption_of_prog DEFINITION INHERITING FROM lcl_exemption_base.
-  PUBLIC SECTION.
-    METHODS is_exempt REDEFINITION.
-
-  PROTECTED SECTION.
-    METHODS is_enterprise_search_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_downport_assist_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_fin_infotyp_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_object_sw01_generate RETURNING VALUE(result) TYPE abap_bool.
-
-ENDCLASS.
-
-
 
 CLASS lcl_exemption_of_prog IMPLEMENTATION.
 
   METHOD is_exempt.
-    super->is_exempt( object_type = object_type
-                      object_name = object_name ).
+    CHECK super->is_exempt( ) = abap_false.
 
-    result = xsdbool( is_enterprise_search_generate( )
-                   OR is_downport_assist_generate( )
+    result = xsdbool( is_downport_assist_generate( )
                    OR is_fin_infotyp_generate( )
                    OR is_object_sw01_generate( ) ).
   ENDMETHOD.
 
+
   METHOD is_downport_assist_generate.
-    IF object_name(5) = 'NOTE_'.
-      result = abap_true.
-    ELSE.
-      FIND REGEX '_NOTE_\d{1,20}\>' IN object_name.
-      IF sy-subrc = 0.
-        result = abap_true.
-      ENDIF.
-    ENDIF.
+    result = xsdbool( object_name CP 'NOTE_*'
+                   OR object_name CP '_NOTE_*' ).
   ENDMETHOD.
 
-  METHOD is_enterprise_search_generate.
-    DATA(trdir) = database_access->get_trdir( object_type = object_type
-                                              object_name = object_name ).
-
-    LOOP AT trdir TRANSPORTING NO FIELDS
-    WHERE name CP '*\_001'
-    AND ( secu = 'ESH' OR name CP 'ESHS*' )
-    AND ( subc = 'S' OR subc = '1' ).
-      result = abap_true.
-      RETURN.
-    ENDLOOP.
-  ENDMETHOD.
 
   METHOD is_fin_infotyp_generate.
     result = xsdbool( database_access->get_infotype( object_name ) IS NOT INITIAL ).
   ENDMETHOD.
+
 
   METHOD is_object_sw01_generate.
     result = xsdbool( database_access->get_table_object_repository( object_name ) IS NOT INITIAL ).
@@ -350,40 +276,26 @@ ENDCLASS.
 
 
 
-CLASS lcl_exemption_general DEFINITION INHERITING FROM lcl_exemption_base.
-  PUBLIC SECTION.
-    METHODS is_exempt REDEFINITION.
+CLASS lcl_exemption_factory IMPLEMENTATION.
 
-  PROTECTED SECTION.
-    METHODS is_generated RETURNING VALUE(result) TYPE abap_bool.
-    METHODS get_exemption_object RETURNING VALUE(result) TYPE REF TO y_if_code_pal_exemption.
-
-ENDCLASS.
-
-
-
-CLASS lcl_exemption_general IMPLEMENTATION.
-
-  METHOD is_exempt.
-    super->is_exempt( object_type = object_type
-                      object_name = object_name ).
-
-    result = xsdbool( is_generated( )
-                   OR get_exemption_object( )->is_exempt( object_type = object_type
-                                                          object_name = object_name ) ).
-  ENDMETHOD.
-
-  METHOD get_exemption_object.
-    result = COND #( WHEN object_type = 'PROG' THEN NEW lcl_exemption_of_prog( database_access )
-                     WHEN object_type = 'CLAS' THEN NEW lcl_exemption_of_clas( database_access )
-                     WHEN object_type = 'FUGR' THEN NEW lcl_exemption_of_fugr( database_access ) ).
-  ENDMETHOD.
-
-  METHOD is_generated.
-    DATA(tadir) = database_access->get_tadir( object_type = object_type
-                                              object_name = object_name ).
-
-    result = xsdbool( line_exists( tadir[ genflag = abap_true ] ) ).
+  METHOD get.
+    CASE object_type.
+      WHEN 'PROG'.
+        result = NEW lcl_exemption_of_prog( database_access = database_access
+                                            object_type     = object_type
+                                            object_name     = object_name
+                                            include         = include ).
+      WHEN 'CLAS' OR 'INTF'.
+        result = NEW lcl_exemption_of_clas( database_access = database_access
+                                            object_type     = object_type
+                                            object_name     = object_name
+                                            include         = include ).
+      WHEN 'FUGR'.
+        result = NEW lcl_exemption_of_fugr( database_access = database_access
+                                            object_type     = object_type
+                                            object_name     = object_name
+                                            include         = include ).
+    ENDCASE.
   ENDMETHOD.
 
 ENDCLASS.
