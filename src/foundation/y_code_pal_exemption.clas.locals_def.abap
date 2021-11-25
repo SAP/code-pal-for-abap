@@ -29,18 +29,16 @@ CLASS lcl_exemption_of_clas DEFINITION INHERITING FROM lcl_exemption_base.
     METHODS is_exempt REDEFINITION.
 
   PROTECTED SECTION.
-    METHODS is_srv_maint_ui_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_odata_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_ecatt_odata_test_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_fin_infotype_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_extensibility_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_shma_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_proxy_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_sadl_generate RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_exit_class RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_exception_class RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_bsp_application IMPORTING class_name LIKE object_name
-                               RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_reference_exempted IMPORTING class_name LIKE object_name
+                                  RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
     DATA class_header_data TYPE seoclassdf.

@@ -45,43 +45,56 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
     SORT definitions BY version.
     class_header_data = definitions[ 1 ].
 
-    result = xsdbool( is_srv_maint_ui_generate( )
-                   OR is_odata_generate( )
+    result = xsdbool( is_odata_generate( )
                    OR is_ecatt_odata_test_generate( )
                    OR is_fin_infotype_generate( )
-                   OR is_extensibility_generate( )
                    OR is_shma_generate( )
                    OR is_proxy_generate( )
                    OR is_sadl_generate( )
                    OR is_exit_class( )
                    OR is_exception_class( )
-                   OR is_bsp_application( object_name ) ).
+                   OR is_reference_exempted( object_name ) ).
   ENDMETHOD.
 
 
-  METHOD is_bsp_application.
-    DATA it_bsp_classes TYPE STANDARD TABLE OF seoclsname.
+  METHOD is_reference_exempted.
+    DATA exempt_references TYPE STANDARD TABLE OF seometarel-refclsname.
 
-    it_bsp_classes = VALUE #( ( 'CL_BSP_WD_COMPONENT_CONTROLLER' )
-                              ( 'CL_BSP_WD_CONTEXT' )
-                              ( 'CL_BSP_WD_CONTEXT_NODE' )
-                              ( 'CL_BSP_WD_WINDOW' )
-                              ( 'CL_BSP_WD_CUSTOM_CONTROLLER' )
-                              ( 'CL_BSP_WD_VIEW_CONTROLLER' )
-                              ( 'CL_BSP_WD_ADVSEARCH_CONTROLLER' )
-                              ( 'CL_BSP_WD_CONTEXT_NODE_ASP' ) ).
+    " BSP application
+    exempt_references = VALUE #( ( 'CL_BSP_WD_COMPONENT_CONTROLLER' )
+                                 ( 'CL_BSP_WD_CONTEXT' )
+                                 ( 'CL_BSP_WD_CONTEXT_NODE' )
+                                 ( 'CL_BSP_WD_WINDOW' )
+                                 ( 'CL_BSP_WD_CUSTOM_CONTROLLER' )
+                                 ( 'CL_BSP_WD_VIEW_CONTROLLER' )
+                                 ( 'CL_BSP_WD_ADVSEARCH_CONTROLLER' )
+                                 ( 'CL_BSP_WD_CONTEXT_NODE_ASP' ) ).
+
+    " extensibility generated objects
+    exempt_references = VALUE #( BASE exempt_references
+                               ( 'IF_CFD_ODATA_MPC_FLX' )
+                               ( 'IF_CFD_ODATA_DPC_FLX' ) ).
+
+    " service maintenance UI
+    exempt_references = VALUE #( BASE exempt_references
+                               ( '/FTI/IF_FTI_MODEL' ) ).
+
+    " SQL routines
+    exempt_references = VALUE #( BASE exempt_references
+                               ( '/FTI/IF_NATIVE_SQL_GENERATOR' ) ).
 
     DATA(metadatas) = database_access->get_class_metadata( CONV #( class_name ) ).
 
-    IF lines( metadatas ) = 0.
-      RETURN.
-    ENDIF.
-
     LOOP AT metadatas ASSIGNING FIELD-SYMBOL(<metadata>).
-      result = xsdbool( line_exists( it_bsp_classes[ table_line = <metadata>-refclsname ] )
-                     OR is_bsp_application( CONV #( <metadata>-refclsname ) ) ).
+      IF line_exists( exempt_references[ table_line = <metadata>-refclsname ] ).
+        result = abap_true.
+        RETURN.
+      ENDIF.
+    ENDLOOP.
 
-      IF result = abap_true.
+    LOOP AT metadatas ASSIGNING <metadata>.
+      IF is_reference_exempted( CONV #( <metadata>-refclsname ) ).
+        result = abap_true.
         RETURN.
       ENDIF.
     ENDLOOP.
@@ -89,11 +102,7 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
 
 
   METHOD is_ecatt_odata_test_generate.
-    database_access->repository_access->get_object_info( EXPORTING i_object_key     = VALUE #( pgmid = 'R3TR'
-                                                                                               obj_type = object_type
-                                                                                               obj_name = object_name )
-                                                         IMPORTING e_contact_person = DATA(author) ).
-    result = xsdbool( author = 'eCATTClassGe' ).
+    result = xsdbool( class_header_data-author = 'eCATTClassGe' ).
   ENDMETHOD.
 
 
@@ -106,32 +115,6 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
   METHOD is_exit_class.
     CONSTANTS exit_class_type LIKE class_header_data-category VALUE '01'.
     result = xsdbool( class_header_data-category = exit_class_type ).
-  ENDMETHOD.
-
-
-  METHOD is_extensibility_generate.
-    "TODO: RFC?
-    DATA lt_interfaces TYPE seor_implementing_keys.
-    DATA lv_seoclskey TYPE  seoclskey.
-
-    lv_seoclskey = class_header_data-clsname.
-
-    CALL FUNCTION 'SEO_CLASS_ALL_IMPLEMENTG_GET'
-      EXPORTING
-        clskey       = lv_seoclskey
-      IMPORTING
-        set          = lt_interfaces
-      EXCEPTIONS
-        not_existing = 1
-        is_interface = 2
-        model_only   = 3
-        OTHERS       = 4.
-    IF sy-subrc <> 0.
-      RETURN.
-    ENDIF.
-
-    result = xsdbool( line_exists( lt_interfaces[ refclsname = 'IF_CFD_ODATA_MPC_FLX' ] )
-                   OR line_exists( lt_interfaces[ refclsname = 'IF_CFD_ODATA_DPC_FLX' ] ) ).
   ENDMETHOD.
 
 
@@ -162,33 +145,8 @@ CLASS lcl_exemption_of_clas IMPLEMENTATION.
 
 
   METHOD is_shma_generate.
-    result = database_access->repository_access->exists_object( VALUE #( obj_type = 'SHMA'
-                                                                         obj_name = object_name ) ).
-  ENDMETHOD.
-
-
-  METHOD is_srv_maint_ui_generate.
-    "TODO: RFC?
-    DATA: lt_interfaces TYPE seor_implementing_keys.
-    DATA: lv_seoclskey TYPE seoclskey.
-    lv_seoclskey = class_header_data-clsname.
-
-    CALL FUNCTION 'SEO_CLASS_ALL_IMPLEMENTG_GET'
-      EXPORTING
-        clskey       = lv_seoclskey
-      IMPORTING
-        set          = lt_interfaces
-      EXCEPTIONS
-        not_existing = 1
-        is_interface = 2
-        model_only   = 3
-        OTHERS       = 4.
-    IF sy-subrc <> 0.
-      RETURN.
-    ENDIF.
-
-    result = xsdbool( line_exists( lt_interfaces[ refclsname = '/FTI/IF_FTI_MODEL' ] )
-                   OR line_exists( lt_interfaces[ refclsname = '/FTI/IF_NATIVE_SQL_GENERATOR' ] ) ).
+    CONSTANTS shma_type LIKE class_header_data-category VALUE '45'.
+    result = xsdbool( class_header_data-category = shma_type ).
   ENDMETHOD.
 
 ENDCLASS.
