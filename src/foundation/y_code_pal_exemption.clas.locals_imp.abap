@@ -217,7 +217,8 @@ CLASS lcl_exemption_of_prog IMPLEMENTATION.
 
   METHOD is_downport_assist_generate.
     result = xsdbool( object_name CP 'NOTE_*'
-                   OR object_name CP '_NOTE_*' ).
+                   OR object_name CP 'SAP_NOTE_*'
+                   OR object_name CP '_NOTE_*').
   ENDMETHOD.
 
 
