@@ -38,7 +38,11 @@ ENDCLASS.
 CLASS lcl_exemption_of_clas IMPLEMENTATION.
 
   METHOD is_exempt.
-    CHECK super->is_exempt( ) = abap_false.
+    result = super->is_exempt( ).
+
+    IF result = abap_true.
+      RETURN.
+    ENDIF.
 
     DATA(definitions) = database_access->get_class_definition( CONV #( object_name ) ).
 
@@ -156,8 +160,12 @@ ENDCLASS.
 CLASS lcl_exemption_of_fugr IMPLEMENTATION.
 
   METHOD is_exempt.
-    CHECK super->is_exempt( ) = abap_false.
-    CHECK is_function_module( ) = abap_true.
+    result = super->is_exempt( ).
+
+    IF is_function_module( ) = abap_false
+    OR result = abap_true.
+      RETURN.
+    ENDIF.
 
     function_module = get_function_module( ).
     function_module_attributes = get_function_attributes( ).
@@ -211,9 +219,8 @@ ENDCLASS.
 CLASS lcl_exemption_of_prog IMPLEMENTATION.
 
   METHOD is_exempt.
-    CHECK super->is_exempt( ) = abap_false.
-
-    result = xsdbool( is_downport_assist_generate( )
+    result = xsdbool( super->is_exempt( )
+                   OR is_downport_assist_generate( )
                    OR is_fin_infotyp_generate( )
                    OR is_object_sw01_generate( ) ).
   ENDMETHOD.
