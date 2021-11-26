@@ -9,7 +9,7 @@ INTERFACE y_if_code_pal_database_access PUBLIC.
   TYPES tty_t777ditclass TYPE TABLE OF t777ditclass WITH DEFAULT KEY.
   TYPES tty_seometarel TYPE TABLE OF seometarel WITH DEFAULT KEY.
   TYPES tty_seoclassdf TYPE TABLE OF seoclassdf WITH DEFAULT KEY.
-  TYPES tty_vrsd TYPE TABLE OF vrsd WITH DEFAULT KEY.
+  TYPES tty_enlfdir TYPE TABLE OF enlfdir WITH DEFAULT KEY.
 
   DATA repository_access TYPE REF TO if_sca_repository_access READ-ONLY.
 
@@ -43,8 +43,7 @@ INTERFACE y_if_code_pal_database_access PUBLIC.
   METHODS get_class_definition IMPORTING object_name   TYPE seoclassdf-clsname
                                RETURNING VALUE(result) TYPE tty_seoclassdf.
 
-  METHODS get_version_management IMPORTING object_type   TYPE vrsd-objtype
-                                           object_name   TYPE vrsd-objname
-                                 RETURNING VALUE(result) TYPE tty_vrsd.
+  METHODS get_function_attributes IMPORTING object_name   TYPE enlfdir-funcname
+                                  RETURNING VALUE(result) TYPE tty_enlfdir.
 
 ENDINTERFACE.

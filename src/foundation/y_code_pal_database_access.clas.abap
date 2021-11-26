@@ -132,14 +132,12 @@ CLASS y_code_pal_database_access IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD y_if_code_pal_database_access~get_version_management.
+  METHOD y_if_code_pal_database_access~get_function_attributes.
     DATA(sql) = NEW lcl_select( rfc_destination ).
 
-    sql->set_from( 'VRSD' ).
+    sql->set_from( 'ENLFDIR' ).
 
-    sql->add_where( |OBJTYPE = '{ object_type }'| ).
-    sql->add_where( |AND OBJNAME LIKE '{ object_name }'| ).
-    sql->add_where( |AND DATUM IS NOT NULL| ).
+    sql->add_where( |FUNCNAME = '{ object_name }'| ).
 
     sql->run( CHANGING table = result ).
   ENDMETHOD.

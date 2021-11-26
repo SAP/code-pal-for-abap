@@ -157,47 +157,51 @@ CLASS lcl_exemption_of_fugr IMPLEMENTATION.
 
   METHOD is_exempt.
     CHECK super->is_exempt( ) = abap_false.
+    CHECK is_function_module( ) = abap_true.
 
-    result = xsdbool( is_table_maintenance_generate( )
-                   OR is_configuration_tablegenerate( )
+    function_module = get_function_module( ).
+    function_module_attributes = get_function_attributes( ).
+
+    result = xsdbool( is_generated( )
+                   OR is_obsolete( )
                    OR is_rai_generate( ) ).
   ENDMETHOD.
 
 
-  METHOD is_configuration_tablegenerate.
-    DATA(functions) = database_access->repository_access->get_functions_of_function_pool( CONV #( object_name ) ).
+  METHOD is_function_module.
+    DATA(function_include_pattern) = |{ object_name }U|.
+    result = xsdbool( include CS function_include_pattern ).
+  ENDMETHOD.
 
-    result = abap_true.
 
-    LOOP AT functions TRANSPORTING NO FIELDS
-    WHERE funcname NP 'VIEWFRAME*'
-    OR funcname NP 'VIEWPROC*'
-    OR funcname NP 'TABLEPROC*'
-    OR funcname NP 'TABLEFRAME*'.
-      result = abap_false.
-      RETURN.
-    ENDLOOP.
+  METHOD get_function_module.
+    DATA(function_modules) = database_access->repository_access->get_functions_of_function_pool( CONV #( object_name ) ).
+    result = function_modules[ include = include ]-funcname.
+  ENDMETHOD.
+
+
+  METHOD get_function_attributes.
+    DATA(attributes) = database_access->get_function_attributes( function_module ).
+    result = attributes[ 1 ].
+  ENDMETHOD.
+
+
+  METHOD is_generated.
+    result = function_module_attributes-generated.
+  ENDMETHOD.
+
+
+  METHOD is_obsolete.
+    result = function_module_attributes-exten5.
   ENDMETHOD.
 
 
   METHOD is_rai_generate.
-    DATA(functions) = database_access->repository_access->get_functions_of_function_pool( CONV #( object_name ) ).
+    CHECK function_module CP '*_RAI_*'.
 
-    result = abap_true.
-
-    LOOP AT functions TRANSPORTING NO FIELDS
-    WHERE funcname NP '*_UPDATE'
-    OR funcname NP '*_INSERT'
-    OR funcname NP '*_RAI_CREATE_API'.
-      result = abap_false.
-      RETURN.
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD is_table_maintenance_generate.
-    DATA(description) = database_access->repository_access->get_function_description( CONV #( object_name ) ).
-    result = xsdbool( description = 'Extended Table Maintenance (Generated)' ).
+    result = xsdbool( function_module CP '*_UPDATE'
+                   OR function_module CP '*_INSERT'
+                   OR function_module CP '*_CREATE_API' ).
   ENDMETHOD.
 
 ENDCLASS.

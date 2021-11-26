@@ -52,9 +52,16 @@ CLASS lcl_exemption_of_fugr DEFINITION INHERITING FROM lcl_exemption_base.
     METHODS is_exempt REDEFINITION.
 
   PROTECTED SECTION.
-    METHODS is_table_maintenance_generate RETURNING VALUE(result) TYPE abap_bool.
-    METHODS is_configuration_tablegenerate RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_generated RETURNING VALUE(result) TYPE abap_bool.
+    METHODS is_obsolete RETURNING VALUE(result) TYPE abap_bool.
     METHODS is_rai_generate RETURNING VALUE(result) TYPE abap_bool.
+
+  PRIVATE SECTION.
+    DATA function_module TYPE tfdir-funcname.
+    DATA function_module_attributes TYPE enlfdir.
+    METHODS is_function_module RETURNING VALUE(result) TYPE abap_bool.
+    METHODS get_function_module RETURNING VALUE(result) LIKE function_module.
+    METHODS get_function_attributes RETURNING VALUE(result) LIKE function_module_attributes.
 
 ENDCLASS.
 
