@@ -278,14 +278,9 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
 
 
   METHOD is_persistent_object.
-    DATA(upper_name) = to_upper( obj_name ).
-
-    SELECT SINGLE @abap_true
-    FROM tadir
-    INTO @result
-    WHERE obj_name = @upper_name
-    AND object = @keys-table
-    AND delflag = @space.
+    result = manager->database_access->repository_access->exists_object( VALUE #( pgmid = 'R3TR'
+                                                                                  obj_type = keys-table
+                                                                                  obj_name = to_upper( obj_name ) ) ).
   ENDMETHOD.
 
 

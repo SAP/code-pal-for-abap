@@ -9,8 +9,6 @@ CLASS y_check_message_easy_to_find DEFINITION PUBLIC INHERITING FROM y_check_bas
   PRIVATE SECTION.
     CLASS-DATA message_classes TYPE HASHED TABLE OF arbgb WITH UNIQUE KEY table_line.
 
-    METHODS load_message_classes.
-
     METHODS is_message_dynamic IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 
@@ -97,24 +95,15 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
       message_class = parts[ 1 ].
     ENDIF.
 
-    load_message_classes( ).
+    DATA(metadata) = manager->database_access->get_message_class( CONV #( message_class ) ).
 
-    result = xsdbool( line_exists( message_classes[ table_line = message_class ] ) ).
+    result = xsdbool( lines( metadata ) > 0 ).
   ENDMETHOD.
 
 
   METHOD is_text_element.
     result = xsdbool( contains( val = token_wa-str
                                 start = 'TEXT-' ) ).
-  ENDMETHOD.
-
-
-  METHOD load_message_classes.
-    CHECK message_classes IS INITIAL.
-
-    SELECT arbgb
-    FROM t100a
-    INTO TABLE @message_classes.
   ENDMETHOD.
 
 

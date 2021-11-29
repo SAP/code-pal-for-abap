@@ -174,14 +174,10 @@ CLASS y_check_comment_usage IMPLEMENTATION.
   METHOD is_badi_example_class.
     CHECK object_type = 'CLAS'.
 
-    SELECT SINGLE enhspot
-    FROM enhspotobj
-    INTO @DATA(enhancement)
-    WHERE obj_type = @object_type
-    AND obj_name = @object_name
-    AND VERSION = 'A'.
+    DATA(enhancements) = manager->database_access->get_enhancement_spot( object_type = object_type
+                                                                         object_name = CONV #( object_name ) ).
 
-    result = xsdbool( enhancement IS NOT INITIAL ).
+    result = xsdbool( lines( enhancements ) > 0 ).
   ENDMETHOD.
 
 

@@ -47,17 +47,14 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
   METHOD is_screen_event.
     DATA(form) = get_token_abs( statement_wa-from + 1 ).
 
-    SELECT tabname
-    FROM tvimf
-    INTO TABLE @DATA(views)
-    WHERE formname = @form.
+    DATA(views) = manager->database_access->get_view_maintenance_routines( CONV #( form ) ).
 
-    IF views IS INITIAL.
+    IF lines( views ) = 0.
       RETURN.
     ENDIF.
 
     LOOP AT views ASSIGNING FIELD-SYMBOL(<view>).
-      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS WHERE str = <view>.
+      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS WHERE str = <view>-tabname.
         IF get_token_abs( sy-tabix - 1 ) = if_kaizen_keywords_c=>gc_tables.
           result = abap_true.
           RETURN.

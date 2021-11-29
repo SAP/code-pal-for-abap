@@ -47,8 +47,8 @@ CLASS y_check_function IMPLEMENTATION.
 
   METHOD is_normal_mode.
     DATA(function_module) = next1( CONV #( if_kaizen_keywords_c=>gc_function ) ).
-    SELECT SINGLE pname INTO @DATA(function_group) FROM tfdir WHERE funcname = @function_module AND fmode = @space.
-    result = xsdbool( sy-subrc = 0 ).
+    DATA(function_modules) = manager->database_access->get_function_module( CONV #( function_module ) ).
+    result = xsdbool( line_exists( function_modules[ fmode = space ] ) ).
   ENDMETHOD.
 
 

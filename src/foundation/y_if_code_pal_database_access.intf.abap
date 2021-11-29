@@ -10,6 +10,10 @@ INTERFACE y_if_code_pal_database_access PUBLIC.
   TYPES tty_seometarel TYPE TABLE OF seometarel WITH DEFAULT KEY.
   TYPES tty_seoclassdf TYPE TABLE OF seoclassdf WITH DEFAULT KEY.
   TYPES tty_enlfdir TYPE TABLE OF enlfdir WITH DEFAULT KEY.
+  TYPES tty_enhspotobj TYPE TABLE OF enhspotobj WITH DEFAULT KEY.
+  TYPES tty_tvimf TYPE TABLE OF tvimf WITH DEFAULT KEY.
+  TYPES tty_tfdir TYPE TABLE OF tfdir WITH DEFAULT KEY.
+  TYPES tty_t100a TYPE TABLE OF t100a WITH DEFAULT KEY.
 
   DATA repository_access TYPE REF TO if_sca_repository_access READ-ONLY.
 
@@ -45,5 +49,18 @@ INTERFACE y_if_code_pal_database_access PUBLIC.
 
   METHODS get_function_attributes IMPORTING object_name   TYPE enlfdir-funcname
                                   RETURNING VALUE(result) TYPE tty_enlfdir.
+
+  METHODS get_enhancement_spot IMPORTING object_type   TYPE enhspotobj-obj_type
+                                         object_name   TYPE enhspotobj-obj_name
+                               RETURNING VALUE(result) TYPE tty_enhspotobj.
+
+  METHODS get_view_maintenance_routines IMPORTING object_name   TYPE tvimf-formname
+                                        RETURNING VALUE(result) TYPE tty_tvimf.
+
+  METHODS get_function_module IMPORTING object_name TYPE tfdir-funcname
+                              RETURNING VALUE(result) TYPE tty_tfdir.
+
+  METHODS get_message_class IMPORTING object_name TYPE t100a-arbgb
+                            RETURNING VALUE(result) TYPE tty_t100a.
 
 ENDINTERFACE.
