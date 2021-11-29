@@ -7,8 +7,6 @@ CLASS y_check_message_easy_to_find DEFINITION PUBLIC INHERITING FROM y_check_bas
     METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
-    CLASS-DATA message_classes TYPE HASHED TABLE OF arbgb WITH UNIQUE KEY table_line.
-
     METHODS is_message_dynamic IMPORTING statement TYPE sstmnt
                                RETURNING VALUE(result) TYPE abap_bool.
 

@@ -678,7 +678,7 @@ CLASS y_check_base IMPLEMENTATION.
                      p_checksum_1      = p_checksum_1
                      p_comments        = p_comments
                      p_finding_origins = p_finding_origins ).
-   ENDIF.
+    ENDIF.
   ENDMETHOD.
 
 
