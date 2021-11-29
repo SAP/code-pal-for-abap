@@ -11,13 +11,17 @@ INTERFACE y_if_code_pal_manager PUBLIC.
 
   TYPES check_configurations TYPE STANDARD TABLE OF check_configuration WITH DEFAULT KEY.
 
-  METHODS read_check_customizing IMPORTING checkid       TYPE seoclsname
+  METHODS get_profile_configuration IMPORTING checkid       TYPE seoclsname
                                  RETURNING VALUE(result) TYPE check_configurations
                                  RAISING ycx_code_pal_no_customizing.
+
+  METHODS set_scope IMPORTING include TYPE program.
 
   DATA creation_date TYPE REF TO y_if_code_pal_creation_date READ-ONLY.
   DATA database_access TYPE REF TO y_if_code_pal_database_access READ-ONLY.
   DATA exemption TYPE REF TO y_if_code_pal_exemption READ-ONLY.
   DATA statistics TYPE REF TO y_if_code_pal_statistics READ-ONLY.
+  DATA scope TYPE REF TO y_if_code_pal_scope READ-ONLY.
+  DATA profile TYPE REF TO y_if_profile_manager READ-ONLY.
 
 ENDINTERFACE.

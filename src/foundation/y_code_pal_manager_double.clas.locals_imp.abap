@@ -1,13 +1,6 @@
 *"* use this source file for the definition and implementation of
 *"* local helper classes, interface definitions and type
 *"* declarations
-CLASS ltd_exemption DEFINITION.
-  PUBLIC SECTION.
-    INTERFACES y_if_code_pal_exemption.
-
-ENDCLASS.
-
-
 CLASS ltd_exemption IMPLEMENTATION.
 
   METHOD y_if_code_pal_exemption~is_exempt.
@@ -17,15 +10,6 @@ CLASS ltd_exemption IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltd_creation_date DEFINITION.
-  PUBLIC SECTION.
-    INTERFACES y_if_code_pal_creation_date.
-    METHODS constructor IMPORTING check TYPE REF TO y_check_base.
-
-  PRIVATE SECTION.
-    DATA check TYPE REF TO y_check_base.
-
-ENDCLASS.
 
 CLASS ltd_creation_date IMPLEMENTATION.
 
@@ -37,43 +21,6 @@ CLASS ltd_creation_date IMPLEMENTATION.
     result = check->settings-object_created_on.
   ENDMETHOD.
 
-ENDCLASS.
-
-
-CLASS ltd_statistics DEFINITION.
-  PUBLIC SECTION.
-    INTERFACES: y_if_code_pal_statistics.
-
-  PROTECTED SECTION.
-    ALIASES count FOR y_if_code_pal_statistics~count.
-
-  PRIVATE SECTION.
-    CONSTANTS ec_prefix  TYPE string VALUE `#EC`.
-    CONSTANTS ec_comment TYPE string VALUE `"#EC`.
-
-    DATA pcom     TYPE sci_pcom.
-    DATA pcom_alt TYPE sci_pcom.
-
-    METHODS is_pseudo_comment IMPORTING ref_scan         TYPE REF TO cl_ci_scan
-                                        scimessages      TYPE scimessages
-                                        test             TYPE sci_chk
-                                        code             TYPE sci_errc
-                                        suppress         TYPE sci_pcom OPTIONAL
-                                        position         TYPE int4
-                              RETURNING VALUE(result)     TYPE sychar01.
-
-    METHODS determine_pseudo_comments IMPORTING scimessages TYPE scimessages
-                                                test        TYPE sci_chk
-                                                code        TYPE sci_errc
-                                                suppress    TYPE sci_pcom.
-
-    METHODS has_comment IMPORTING ref_scan TYPE REF TO cl_ci_scan
-                                  position TYPE int4
-                        RETURNING VALUE(result) TYPE sci_pcom.
-
-    METHODS has_inline_comment IMPORTING ref_scan      TYPE REF TO cl_ci_scan
-                                         position      TYPE int4
-                               RETURNING VALUE(result) TYPE sci_pcom.
 ENDCLASS.
 
 
@@ -210,6 +157,146 @@ CLASS ltd_statistics IMPLEMENTATION.
                                    position = position ).
     ENDIF.
 
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
+CLASS ltd_scope IMPLEMENTATION.
+
+  METHOD y_if_code_pal_scope~is_it_in_scope.
+    result = abap_true.
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
+CLASS ltd_profile IMPLEMENTATION.
+
+  METHOD y_if_profile_manager~check_delegation_rights.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~check_time_overlap.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~cleanup_profile.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~create.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~delete_check.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~delete_delegate.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~delete_profile.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~delete_profiles.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~get_checks_from_db.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~get_check_description.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~get_registered_profiles.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~import_profile.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~insert_check.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~insert_delegate.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~insert_profile.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~mass_change.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~profile_exists.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~register_standard_profile.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~remove_all_checks.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~remove_all_delegates.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~select_all_profiles.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~select_checks.
+    RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~select_delegates.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~select_existing_checks.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_profile_manager~select_profiles.
+    RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
   ENDMETHOD.
 
 ENDCLASS.

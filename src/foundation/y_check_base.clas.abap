@@ -120,9 +120,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                          current TYPE y_if_code_pal_manager=>check_configuration
                                RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_app_comp_in_scope IMPORTING level         TYPE stmnt_levl
-                                 RETURNING VALUE(result) TYPE abap_bool.
-
     METHODS switch_bool IMPORTING boolean       TYPE abap_bool
                         RETURNING VALUE(result) TYPE abap_bool. "#EC BOOL_PARAM
 
@@ -178,8 +175,10 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
-    DATA(is_test_code) = is_test_code( statement ).
+    CHECK check_configurations IS NOT INITIAL.
+
     DATA(include) = get_include( p_level = statement-level ).
+    DATA(is_test_code) = is_test_code( statement ).
     DATA(creation_date) = manager->creation_date->get_creation_date( include ).
 
     LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
@@ -219,21 +218,16 @@ CLASS y_check_base IMPLEMENTATION.
                                                   object_name = object_name
                                                   include     = include ).
 
-    IF exempt = abap_true.
+    IF exempt = abap_true
+    OR manager->scope->is_it_in_scope( include ) = abap_false.
       CLEAR result.
-      RETURN.
-    ENDIF.
-
-    IF is_app_comp_in_scope( statement-level ) = abap_false.
-      CLEAR result.
-      RETURN.
     ENDIF.
   ENDMETHOD.
 
 
   METHOD do_attributes_exist.
     TRY.
-        DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
+        DATA(profiles) = manager->profile->select_profiles( sy-uname ).
         attributes_ok = xsdbool( profiles IS INITIAL ).
       CATCH ycx_code_pal_entry_not_found.
         attributes_ok = abap_true.
@@ -435,6 +429,8 @@ CLASS y_check_base IMPLEMENTATION.
     ENDIF.
 
     quickfix_factory = cl_ci_quickfix_creation=>create_quickfix_alternatives( ).
+
+    manager->set_scope( ref_scan->levels[ 1 ]-name ).
   ENDMETHOD.
 
 
@@ -507,7 +503,7 @@ CLASS y_check_base IMPLEMENTATION.
     " Profile
     IF has_attributes = abap_false.
       TRY.
-          check_configurations = manager->read_check_customizing( myname ).
+          check_configurations = manager->get_profile_configuration( myname ).
         CATCH ycx_code_pal_no_customizing.
           RETURN.
       ENDTRY.
@@ -560,18 +556,6 @@ CLASS y_check_base IMPLEMENTATION.
                    OR ( previous-prio <> c_error AND current-prio = c_error )
                    OR ( previous-prio = c_note AND current-prio = c_warning )
                    OR ( previous-ignore_pseudo_comments = abap_false AND current-ignore_pseudo_comments = abap_true ) ).
-  ENDMETHOD.
-
-
-  METHOD is_app_comp_in_scope.
-    TRY.
-        DATA(main_app_comp) = y_code_pal_app_comp=>get( ref_scan->levels[ level = 0 ] ).
-        DATA(curr_app_comp) = y_code_pal_app_comp=>get( ref_scan->levels[ level ] ).
-        result = xsdbool( main_app_comp = curr_app_comp ).
-      CATCH cx_sy_itab_line_not_found
-            ycx_code_pal_entry_not_found.
-        result = abap_true.
-    ENDTRY.
   ENDMETHOD.
 
 
