@@ -400,7 +400,7 @@ CLASS lcl_check_events IMPLEMENTATION.
         lcl_util=>init_edit_check( lcl_util=>get_selected_check( ) ).
         lcl_util=>auto_re_start_check( abap_true ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+        MESSAGE TEXT-015 TYPE 'I'.
     ENDTRY.
   ENDMETHOD.
 
@@ -410,7 +410,7 @@ CLASS lcl_check_events IMPLEMENTATION.
         lcl_util=>auto_re_start_check( ).
       CATCH ycx_code_pal_entry_not_found
             cx_sy_create_object_error.
-        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+        MESSAGE TEXT-015 TYPE 'I'.
     ENDTRY.
   ENDMETHOD.
 
@@ -419,7 +419,7 @@ CLASS lcl_check_events IMPLEMENTATION.
         io_check_id = lcl_util=>get_selected_check( )-checkid.
         lcl_util=>call_check_info(  ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+        MESSAGE TEXT-015 TYPE 'I'.
     ENDTRY.
   ENDMETHOD.
 
@@ -430,7 +430,7 @@ ENDCLASS.
 CLASS lcl_util IMPLEMENTATION.
   METHOD init_profiles.
     TRY.
-        profiles_tree = y_alv_tree_control=>create( alv_header_text = 'Profiles'(002)
+        profiles_tree = y_alv_tree_control=>create( alv_header_text = TEXT-002
                                                     dynpro_nr       = '0100'
                                                     docking_side    = cl_gui_docking_container=>align_at_left
                                                     ratio           = 21
@@ -444,32 +444,32 @@ CLASS lcl_util IMPLEMENTATION.
         profiles_tree->toolbar_control( )->add_button( fcode     = 'BTN_ASSIGN'
                                                        icon      = '@04@'
                                                        butn_type = cntb_btype_button
-                                                       quickinfo = 'Assign'(003) ).
+                                                       quickinfo = TEXT-003 ).
 
         profiles_tree->toolbar_control( )->add_button( fcode     = 'BTN_UNASSIGN'
                                                        icon      = '@05@'
                                                        butn_type = cntb_btype_button
-                                                       quickinfo = 'Unassign'(004) ).
+                                                       quickinfo = TEXT-004 ).
 
         profiles_tree->toolbar_control( )->add_button( fcode     = 'BTN_COPY'
                                                        icon      = '@14@'
                                                        butn_type = cntb_btype_button
-                                                       quickinfo = 'Copy Profile' ).
+                                                       quickinfo = TEXT-061 ).
 
         profiles_tree->toolbar_control( )->add_button( fcode     = 'BTN_IMPORT'
                                                        icon      = '@48@'
                                                        butn_type = cntb_btype_button
-                                                       quickinfo = 'Import Profile' ).
+                                                       quickinfo = TEXT-062 ).
 
         profiles_tree->toolbar_control( )->add_button( fcode     = 'BTN_EXPORT'
                                                        icon      = '@49@'
                                                        butn_type = cntb_btype_button
-                                                       quickinfo = 'Export Profile' ).
+                                                       quickinfo = TEXT-063 ).
 
         profiles_tree->set_field_header_text( fieldname   = 'USERNAME'
-                                              header_text = 'User'(028) ).
+                                              header_text = TEXT-028 ).
         profiles_tree->set_field_header_text( fieldname   = 'PROFILE'
-                                              header_text = 'Profile'(001) ).
+                                              header_text = TEXT-001 ).
 
         profiles_tree->init_display( ).
 
@@ -484,7 +484,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD init_checks.
     TRY.
-        checks_tree = y_alv_tree_control=>create( alv_header_text = 'Checks'(013)
+        checks_tree = y_alv_tree_control=>create( alv_header_text = TEXT-013
                                                   dynpro_nr       = '0100'
                                                   docking_side    = cl_gui_docking_container=>align_at_right
                                                   ratio           = 60
@@ -497,42 +497,42 @@ CLASS lcl_util IMPLEMENTATION.
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_ADD'
                                                      icon      = '@04@'
                                                      butn_type = cntb_btype_button
-                                                     quickinfo = 'Add'(025) ).
+                                                     quickinfo = TEXT-025 ).
 
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_EDIT'
                                                      icon      = '@0Z@'
                                                      butn_type = cntb_btype_button
-                                                     quickinfo = 'Edit'(026) ).
+                                                     quickinfo = TEXT-026 ).
 
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_MASS_CHANGE'
                                                      icon      = '@EP@'
                                                      butn_type = cntb_btype_button
-                                                     quickinfo = 'Replicate Configuration' ).
+                                                     quickinfo = TEXT-064 ).
 
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_REMOVE'
                                                      icon      = '@05@'
                                                      butn_type = cntb_btype_button
-                                                     quickinfo = 'Remove'(027) ).
+                                                     quickinfo = TEXT-027 ).
 
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_INFO'
                                                      icon      = '@5E@'
                                                      butn_type = cntb_btype_button
-                                                     quickinfo = 'Check Documentation'(052) ).
+                                                     quickinfo = TEXT-052 ).
 
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_ADD_ALL'
                                                      icon      = '@VY@'
                                                      butn_type = cntb_btype_button
-                                                     quickinfo = 'Add All'(058) ).
+                                                     quickinfo = TEXT-058 ).
 
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_REMOVE_ALL'
                                                      icon      = '@VZ@'
                                                      butn_type = cntb_btype_button
-                                                     quickinfo = 'Remove All'(059) ).
+                                                     quickinfo = TEXT-059 ).
 
         checks_tree->toolbar_control( )->add_button( fcode     = 'BTN_MISSING_CK'
                                                      icon      = '@A7@'
                                                      butn_type = cntb_btype_button
-                                                     quickinfo = 'Add Missing Checks'(000) ).
+                                                     quickinfo = TEXT-065 ).
 
         checks_tree->set_field_visibility( fieldname  = 'START_DATE'
                                            is_visible = abap_true ).
@@ -552,25 +552,25 @@ CLASS lcl_util IMPLEMENTATION.
                                            is_visible = abap_true ).
 
         checks_tree->set_field_header_text( fieldname   = 'PROFILE'
-                                            header_text = 'Profile'(001) ).
+                                            header_text = TEXT-001 ).
         checks_tree->set_field_header_text( fieldname   = 'CHECKID'
-                                            header_text = 'Check ID'(014) ).
+                                            header_text = TEXT-014 ).
         checks_tree->set_field_header_text( fieldname   = 'START_DATE'
-                                            header_text = 'Start Date'(030) ).
+                                            header_text = TEXT-030 ).
         checks_tree->set_field_header_text( fieldname   = 'END_DATE'
-                                            header_text = 'End Date'(031) ).
+                                            header_text = TEXT-031 ).
         checks_tree->set_field_header_text( fieldname   = 'OBJECTS_CREATED_ON'
-                                            header_text = 'Apply On Objects Created Since'(032) ).
+                                            header_text = TEXT-032 ).
         checks_tree->set_field_header_text( fieldname   = 'PRIO'
-                                            header_text = 'Message Priority'(033) ).
+                                            header_text = TEXT-033 ).
         checks_tree->set_field_header_text( fieldname   = 'APPLY_ON_PRODUCTIVE_CODE'
-                                            header_text = 'Apply on Productive Code'(050) ).
+                                            header_text = TEXT-050 ).
         checks_tree->set_field_header_text( fieldname   = 'APPLY_ON_TESTCODE'
-                                            header_text = 'Apply on Testcode'(034) ).
+                                            header_text = TEXT-034 ).
 
         "Cause of usability, the text is switched on the UX side.
         checks_tree->set_field_header_text( fieldname   = 'IGNORE_PSEUDO_COMMENTS'
-                                            header_text = 'Allow Exemptions' ).
+                                            header_text = TEXT-066 ).
 
         checks_tree->init_display( ).
 
@@ -585,7 +585,7 @@ CLASS lcl_util IMPLEMENTATION.
 
   METHOD init_delegates.
     TRY.
-        delegates_tree = y_alv_tree_control=>create( alv_header_text = 'Delegates'(029)
+        delegates_tree = y_alv_tree_control=>create( alv_header_text = TEXT-029
                                                      dynpro_nr       = '0100'
                                                      docking_side    = cl_gui_docking_container=>align_at_right
                                                      ratio           = 40
@@ -598,17 +598,17 @@ CLASS lcl_util IMPLEMENTATION.
         delegates_tree->toolbar_control( )->add_button( fcode     = 'BTN_ADD'
                                                         icon      = '@04@'
                                                         butn_type = cntb_btype_button
-                                                        quickinfo = 'Add'(025) ).
+                                                        quickinfo = TEXT-025 ).
 
         delegates_tree->toolbar_control( )->add_button( fcode     = 'BTN_REMOVE'
                                                         icon      = '@05@'
                                                         butn_type = cntb_btype_button
-                                                        quickinfo = 'Remove'(027) ).
+                                                        quickinfo = TEXT-027 ).
 
         delegates_tree->set_field_header_text( fieldname   = 'PROFILE'
-                                               header_text = 'Profile'(001) ).
+                                               header_text = TEXT-001 ).
         delegates_tree->set_field_header_text( fieldname   = 'DELEGATE'
-                                               header_text = 'Delegate'(036) ).
+                                               header_text = TEXT-036 ).
 
 
         delegates_tree->init_display( ).
@@ -629,7 +629,7 @@ CLASS lcl_util IMPLEMENTATION.
         CALL FUNCTION 'CALL_BROWSER' EXPORTING url = base->settings-documentation.
 
       CATCH cx_sy_create_object_error.
-        MESSAGE 'Failed to find the check!'(043) TYPE 'I'.
+        MESSAGE TEXT-043 TYPE 'I'.
 
     ENDTRY.
   ENDMETHOD.
@@ -761,7 +761,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD profile_f4help_200.
     TRY.
         DATA(f4values) = call_f4help( referenced_field_name = 'PROFILE'
-                                      window_title          = 'Available Profiles'(009)
+                                      window_title          = TEXT-009
                                       value_table           = profile_manager->get_registered_profiles( ) ).
 
         IF f4values IS NOT INITIAL.
@@ -771,10 +771,10 @@ CLASS lcl_util IMPLEMENTATION.
         LEAVE TO SCREEN 200.
 
       CATCH cx_failed.
-        MESSAGE 'Profiles not found!'(010) TYPE 'I'.
+        MESSAGE TEXT-010 TYPE 'I'.
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Profiles not registered!'(011) TYPE 'I'.
+        MESSAGE TEXT-011 TYPE 'I'.
 
     ENDTRY.
   ENDMETHOD.
@@ -782,7 +782,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD profile_f4help_600.
     TRY.
         DATA(f4values) = call_f4help( referenced_field_name = 'PROFILE'
-                                      window_title          = 'Available Profiles'(009)
+                                      window_title          = TEXT-009
                                       value_table           = profile_manager->get_registered_profiles( ) ).
 
         IF f4values IS NOT INITIAL.
@@ -792,10 +792,10 @@ CLASS lcl_util IMPLEMENTATION.
         LEAVE TO SCREEN 600.
 
       CATCH cx_failed.
-        MESSAGE 'Profiles not found!'(010) TYPE 'I'.
+        MESSAGE TEXT-010 TYPE 'I'.
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Profiles not registered!'(011) TYPE 'I'.
+        MESSAGE TEXT-011 TYPE 'I'.
 
     ENDTRY.
   ENDMETHOD.
@@ -803,7 +803,7 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD check_f4help.
     TRY.
         DATA(f4values) = call_f4help( referenced_field_name = 'CHECKID'
-                                      window_title          = 'Available Checks'(019)
+                                      window_title          = TEXT-019
                                       value_table           = profile_manager->select_existing_checks( ) ).
 
         IF f4values IS NOT INITIAL.
@@ -817,10 +817,10 @@ CLASS lcl_util IMPLEMENTATION.
         LEAVE TO SCREEN 400.
 
       CATCH cx_failed.
-        MESSAGE 'Checks not found!'(020) TYPE 'S'.
+        MESSAGE TEXT-020 TYPE 'S'.
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Checks not registered!'(021) TYPE 'S'.
+        MESSAGE TEXT-021 TYPE 'S'.
 
     ENDTRY.
   ENDMETHOD.
@@ -908,7 +908,7 @@ CLASS lcl_util IMPLEMENTATION.
                                                   last_changed_at = sy-timlo ) ).
 
       CATCH ycx_failed_to_add_a_line.
-        MESSAGE 'Profile already assigned!'(007) TYPE 'I'.
+        MESSAGE TEXT-007 TYPE 'I'.
 
     ENDTRY.
   ENDMETHOD.
@@ -918,10 +918,10 @@ CLASS lcl_util IMPLEMENTATION.
         profile_manager->delete_profile( get_selected_profile( ) ).
 
       CATCH ycx_failed_to_remove_a_line.
-        MESSAGE 'Profile cannot be unassigned!'(008) TYPE 'I'.
+        MESSAGE TEXT-008 TYPE 'I'.
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        MESSAGE TEXT-005 TYPE 'I'.
 
     ENDTRY.
   ENDMETHOD.
@@ -960,18 +960,18 @@ CLASS lcl_util IMPLEMENTATION.
               profile_manager->insert_check( check ).
             CATCH ycx_failed_to_add_a_line
                   ycx_time_overlap.
-              MESSAGE 'Failed to Copy the Check:'(049) && check-checkid TYPE 'I'.
+              MESSAGE |{ TEXT-049 } { check-checkid }| TYPE 'I'.
           ENDTRY.
         ENDLOOP.
 
       CATCH ycx_no_delegation_rights.
-        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'I'.
+        MESSAGE TEXT-006 TYPE 'I'.
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please choose a valid profile to copy from!'(047) TYPE 'I'.
+        MESSAGE TEXT-047 TYPE 'I'.
 
       CATCH ycx_failed_to_add_a_line.
-        MESSAGE 'A profile can not be copied into another existing profile!'(048) TYPE 'I'.
+        MESSAGE TEXT-048 TYPE 'I'.
 
     ENDTRY.
 
@@ -1002,10 +1002,10 @@ CLASS lcl_util IMPLEMENTATION.
 
       CATCH ycx_failed_to_add_a_line
             ycx_time_overlap.
-        MESSAGE 'Template creation has failed!'(045) TYPE 'I'.
+        MESSAGE TEXT-045 TYPE 'I'.
 
       CATCH ycx_no_delegation_rights.
-        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'I'.
+        MESSAGE TEXT-006 TYPE 'I'.
 
     ENDTRY.
   ENDMETHOD.
@@ -1014,13 +1014,13 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(structure) = lcl_file=>upload( ).
       CATCH ycx_object_not_processed.
-        MESSAGE 'Failed to Import!'(054) TYPE 'E'.
+        MESSAGE TEXT-054 TYPE 'E'.
       CATCH cx_abap_invalid_value.
-        MESSAGE 'Invalid Imported File!'(055) TYPE 'E'.
+        MESSAGE TEXT-055 TYPE 'E'.
     ENDTRY.
 
     IF profile_manager->profile_exists( structure-profile-profile ) = abap_true.
-      request_confirmation( | Would you like to replace the { structure-profile-profile } profile? | ).
+      request_confirmation( |{ TEXT-067 } ({ structure-profile-profile })| ).
       check_check_rights( structure-profile-profile ).
     ENDIF.
 
@@ -1029,29 +1029,29 @@ CLASS lcl_util IMPLEMENTATION.
       CATCH ycx_failed_to_add_a_line
             ycx_time_overlap
             ycx_no_delegation_rights.
-        MESSAGE 'Failed to Import!'(054) TYPE 'E'.
+        MESSAGE TEXT-054 TYPE 'E'.
     ENDTRY.
 
-    MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
+    MESSAGE TEXT-056 TYPE 'S'.
   ENDMETHOD.
 
   METHOD export_profile.
     TRY.
         DATA(profile) = get_selected_profile( ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'W'.
+        MESSAGE TEXT-005 TYPE 'W'.
     ENDTRY.
 
     TRY.
         DATA(checks) = profile_manager->select_checks( profile-profile ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Checks not found!'(020) TYPE 'E'.
+        MESSAGE TEXT-020 TYPE 'E'.
     ENDTRY.
 
     TRY.
         DATA(delegates) = profile_manager->select_delegates( profile-profile ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'There must be at least one delegate!'(024) TYPE 'E'.
+        MESSAGE TEXT-024 TYPE 'E'.
     ENDTRY.
 
     TRY.
@@ -1059,10 +1059,10 @@ CLASS lcl_util IMPLEMENTATION.
                             checks    = checks
                             delegates = delegates ).
       CATCH ycx_object_not_processed.
-        MESSAGE 'Failed to Export!'(053) TYPE 'E'.
+        MESSAGE TEXT-053 TYPE 'E'.
     ENDTRY.
 
-    MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
+    MESSAGE TEXT-056 TYPE 'S'.
   ENDMETHOD.
 
   METHOD get_initial_check.
@@ -1099,10 +1099,10 @@ CLASS lcl_util IMPLEMENTATION.
                                                    delegate = io_delegate_name ) ).
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        MESSAGE TEXT-005 TYPE 'I'.
 
       CATCH ycx_failed_to_add_a_line.
-        MESSAGE 'Delegate already exist!'(022) TYPE 'I'.
+        MESSAGE TEXT-022 TYPE 'I'.
         RAISE EXCEPTION TYPE cx_failed.
     ENDTRY.
   ENDMETHOD.
@@ -1110,11 +1110,9 @@ CLASS lcl_util IMPLEMENTATION.
   METHOD remove_delegate.
     TRY.
         get_selected_delegate( ).
-
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a delegate!'(035)  TYPE 'I'.
+        MESSAGE TEXT-035  TYPE 'I'.
         RETURN.
-
     ENDTRY.
 
     TRY.
@@ -1126,10 +1124,10 @@ CLASS lcl_util IMPLEMENTATION.
         profile_manager->delete_delegate( get_selected_delegate( ) ).
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'There must be at least one delegate!'(024) TYPE 'I'.
+        MESSAGE TEXT-024 TYPE 'I'.
 
       CATCH ycx_failed_to_remove_a_line.
-        MESSAGE 'Delegate cannot be removed!'(023) TYPE 'I'.
+        MESSAGE TEXT-023 TYPE 'I'.
 
     ENDTRY.
   ENDMETHOD.
@@ -1145,13 +1143,13 @@ CLASS lcl_util IMPLEMENTATION.
         result = abap_true.
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        MESSAGE TEXT-005 TYPE 'I'.
 
       CATCH ycx_no_delegation_rights.
-        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'I'.
+        MESSAGE TEXT-006 TYPE 'I'.
 
       CATCH cx_failed.
-        MESSAGE 'The rights of the standard profile cannot be delegated!'(040) TYPE 'I'.
+        MESSAGE TEXT-040 TYPE 'I'.
 
     ENDTRY.
   ENDMETHOD.
@@ -1195,7 +1193,7 @@ CLASS lcl_util IMPLEMENTATION.
         ENDCASE.
 
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a check!'(015) TYPE 'I'.
+        MESSAGE TEXT-015 TYPE 'I'.
         RETURN.
     ENDTRY.
 
@@ -1217,7 +1215,7 @@ CLASS lcl_util IMPLEMENTATION.
       CATCH ycx_code_pal_entry_not_found.
         RETURN.
       CATCH cx_failed.
-        MESSAGE 'The profile needs to have checks!' TYPE 'I'.
+        MESSAGE TEXT-068 TYPE 'I'.
     ENDTRY.
   ENDMETHOD.
 
@@ -1284,7 +1282,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(profile) = get_selected_profile( )-profile.
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        MESSAGE TEXT-005 TYPE 'I'.
     ENDTRY.
 
     DATA(check) = VALUE ytab_checks( profile = profile
@@ -1304,13 +1302,13 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         profile_manager->get_check_description( check-checkid ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Check is not registered!'(044) TYPE 'I'.
+        MESSAGE TEXT-044 TYPE 'I'.
         RAISE EXCEPTION TYPE cx_failed.
     ENDTRY.
 
     IF chbx_on_prodcode = abap_false
     AND chbx_on_testcode = abap_false.
-      MESSAGE 'Please choose Productive Code and/or Testcode for check execution!'(051) TYPE 'I'.
+      MESSAGE TEXT-051 TYPE 'I'.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
 
@@ -1326,16 +1324,16 @@ CLASS lcl_util IMPLEMENTATION.
 
         profile_manager->insert_check( check ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Check is not registered!'(044) TYPE 'I'.
+        MESSAGE TEXT-044 TYPE 'I'.
         RAISE EXCEPTION TYPE cx_failed.
 
       CATCH ycx_failed_to_add_a_line
             ycx_failed_to_remove_a_line.
-        MESSAGE 'Check already exist!'(016) TYPE 'I'.
+        MESSAGE TEXT-016 TYPE 'I'.
         RAISE EXCEPTION TYPE cx_failed.
 
       CATCH ycx_time_overlap.
-        MESSAGE 'Please select a different start / end date to avoid a time overlap!'(037) TYPE 'I'.
+        MESSAGE TEXT-037 TYPE 'I'.
         RAISE EXCEPTION TYPE cx_failed.
 
     ENDTRY.
@@ -1345,7 +1343,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         profile_manager->delete_check( check ).
       CATCH ycx_failed_to_remove_a_line.
-        MESSAGE 'Check cannot be removed!'(018) TYPE 'E'.
+        MESSAGE TEXT-018 TYPE 'E'.
     ENDTRY.
   ENDMETHOD.
 
@@ -1353,7 +1351,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         remove_check( get_selected_check( ) ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a check!'(015) TYPE 'W'.
+        MESSAGE TEXT-015 TYPE 'W'.
     ENDTRY.
   ENDMETHOD.
 
@@ -1362,9 +1360,9 @@ CLASS lcl_util IMPLEMENTATION.
         profile_manager->check_delegation_rights( profile ).
         result = abap_true.
       CATCH ycx_no_delegation_rights.
-        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'W'.
+        MESSAGE TEXT-006 TYPE 'W'.
       CATCH cx_failed.
-        MESSAGE 'Insufficient rights to edit the standard profile!'(039) TYPE 'W'.
+        MESSAGE TEXT-039 TYPE 'W'.
     ENDTRY.
   ENDMETHOD.
 
@@ -1372,7 +1370,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         result = check_check_rights( get_selected_profile( )-profile ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'W'.
+        MESSAGE TEXT-005 TYPE 'W'.
     ENDTRY.
   ENDMETHOD.
 
@@ -1381,14 +1379,14 @@ CLASS lcl_util IMPLEMENTATION.
 
     CALL FUNCTION 'POPUP_TO_CONFIRM'
       EXPORTING
-        titlebar              = | Confirmation |
+        titlebar              = |{ TEXT-069 }|
         text_question         = text_question
         display_cancel_button = abap_false
       IMPORTING
         answer                = answer.
 
     IF answer <> 1.
-      MESSAGE 'Action Canceled.' TYPE 'W'.
+      MESSAGE TEXT-057 TYPE 'W'.
     ENDIF.
   ENDMETHOD.
 
@@ -1396,20 +1394,20 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(profile) = get_selected_profile( )-profile.
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        MESSAGE TEXT-005 TYPE 'I'.
     ENDTRY.
 
     TRY.
         profile_manager->check_delegation_rights( profile ).
       CATCH ycx_no_delegation_rights.
-        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'W'.
+        MESSAGE TEXT-006 TYPE 'W'.
     ENDTRY.
 
     TRY.
         profile_manager->select_checks( profile ).
-        request_confirmation( | Would you like to replace the current checks? | ).
+        request_confirmation( |{ TEXT-070 }| ).
       CATCH ycx_code_pal_entry_not_found.
-        request_confirmation( | Would you like to add all the checks? | ).
+        request_confirmation( |{ TEXT-071 }| ).
     ENDTRY.
 
     profile_manager->remove_all_checks( profile ).
@@ -1417,7 +1415,7 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(available_checks) = profile_manager->select_existing_checks( ).
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Checks not registered!'(021) TYPE 'S'.
+        MESSAGE TEXT-021 TYPE 'S'.
     ENDTRY.
 
     LOOP AT available_checks ASSIGNING FIELD-SYMBOL(<check>).
@@ -1430,7 +1428,7 @@ CLASS lcl_util IMPLEMENTATION.
       ENDTRY.
     ENDLOOP.
 
-    MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
+    MESSAGE TEXT-056 TYPE 'S'.
   ENDMETHOD.
 
 
@@ -1438,13 +1436,13 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(profile) = get_selected_profile( )-profile.
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        MESSAGE TEXT-005 TYPE 'I'.
     ENDTRY.
 
     TRY.
         profile_manager->check_delegation_rights( profile ).
       CATCH ycx_no_delegation_rights.
-        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'W'.
+        MESSAGE TEXT-006 TYPE 'W'.
     ENDTRY.
 
     TRY.
@@ -1453,11 +1451,11 @@ CLASS lcl_util IMPLEMENTATION.
         RETURN.
     ENDTRY.
 
-    request_confirmation( | Would you like to remove all the checks? | ).
+    request_confirmation( |{ TEXT-072 }| ).
 
     profile_manager->remove_all_checks( profile ).
 
-    MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
+    MESSAGE TEXT-056 TYPE 'S'.
   ENDMETHOD.
 
   METHOD add_missing_checks.
@@ -1466,18 +1464,18 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         DATA(profile) = get_selected_profile( )-profile.
       CATCH ycx_code_pal_entry_not_found.
-        MESSAGE 'Please select a profile!'(005) TYPE 'I'.
+        MESSAGE TEXT-005 TYPE 'I'.
     ENDTRY.
 
     TRY.
         profile_manager->check_delegation_rights( profile ).
       CATCH ycx_no_delegation_rights.
-        MESSAGE 'You are not a delegate of the profile!'(006) TYPE 'W'.
+        MESSAGE TEXT-006 TYPE 'W'.
     ENDTRY.
 
     TRY.
         DATA(checks_available) = profile_manager->select_checks( profile ).
-        request_confirmation( | Would you like to add all missing checks? | ).
+        request_confirmation( |{ TEXT-073 }| ).
       CATCH ycx_code_pal_entry_not_found.
         add_all_checks( ).
         RETURN.
@@ -1492,7 +1490,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDLOOP.
 
     IF missing_checks IS INITIAL.
-      MESSAGE 'No checks are missing!'(060) TYPE 'I'.
+      MESSAGE TEXT-060 TYPE 'I'.
       RETURN.
     ENDIF.
 
@@ -1505,7 +1503,7 @@ CLASS lcl_util IMPLEMENTATION.
           CONTINUE.
       ENDTRY.
     ENDLOOP.
-    MESSAGE 'Action Executed Successfully!'(056) TYPE 'S'.
+    MESSAGE TEXT-056 TYPE 'S'.
   ENDMETHOD.
 
 

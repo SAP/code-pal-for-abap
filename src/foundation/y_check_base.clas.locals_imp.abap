@@ -12,7 +12,7 @@ CLASS ltd_check_base DEFINITION INHERITING FROM y_check_base.
     METHODS set_ref_scan IMPORTING ref_scan TYPE REF TO cl_ci_scan.
 
     METHODS get_is_test_code IMPORTING statement TYPE sstmnt
-                             RETURNING VALUE(result) TYPE abap_bool.
+                             RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.

@@ -54,7 +54,7 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
     ENDIF.
 
     LOOP AT views ASSIGNING FIELD-SYMBOL(<view>).
-      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS WHERE str = <view>-tabname.
+      LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS WHERE str = <view>-tabname. "#EC PREF_LINE_EX
         IF get_token_abs( sy-tabix - 1 ) = if_kaizen_keywords_c=>gc_tables.
           result = abap_true.
           RETURN.

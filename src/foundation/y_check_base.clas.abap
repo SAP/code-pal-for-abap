@@ -35,7 +35,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     DATA manager TYPE REF TO y_if_code_pal_manager READ-ONLY.
 
-    METHODS constructor IMPORTING manager_double TYPE REF TO y_if_code_pal_manager OPTIONAL.
+    METHODS constructor.
 
     METHODS get_attributes REDEFINITION.
     METHODS if_ci_test~display_documentation  REDEFINITION.
@@ -121,7 +121,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS switch_bool IMPORTING boolean       TYPE abap_bool
-                        RETURNING VALUE(result) TYPE abap_bool. "#EC BOOL_PARAM
+                        RETURNING VALUE(result) TYPE abap_bool. "#EC BOOL_PARAM #EC METH_RET_BOOL
 
     METHODS handle_ignore_pseudo_comments IMPORTING  check_configuration TYPE y_if_code_pal_manager=>check_configuration.
 
@@ -142,7 +142,7 @@ CLASS y_check_base IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    manager = COND #( WHEN manager_double IS BOUND THEN manager_double ELSE NEW y_code_pal_manager( srcid ) ).
+    manager = NEW y_code_pal_manager( srcid ).
 
     description = manager->database_access->repository_access->get_class_description( myname ).
     category = 'Y_CATEGORY_CODE_PAL'.

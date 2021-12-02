@@ -82,11 +82,7 @@ CLASS lcl_report_source DEFINITION.
     METHODS constructor IMPORTING rfc_destination TYPE rfcdest
                                   object_type     TYPE versobjtyp
                                   object_name     TYPE versobjnam.
-
-    "! Run Query
-    "! @parameter result | true - if record(s) found
-    METHODS run RETURNING VALUE(result) TYPE abap_bool.
-
+    METHODS run.
     METHODS get_source_code RETURNING VALUE(result) TYPE y_if_code_pal_database_access=>tty_source_code.
 
   PROTECTED SECTION.
@@ -127,7 +123,9 @@ CLASS lcl_report_source IMPLEMENTATION.
         resource_failure      = 4
         OTHERS                = 5.
 
-    result = xsdbool( sy-subrc = 0 ).
+    IF sy-subrc IS NOT INITIAL.
+      CLEAR source_code.
+    ENDIF.
   ENDMETHOD.
 
   METHOD get_source_code.

@@ -12,7 +12,7 @@ CLASS y_code_pal_exemption DEFINITION PUBLIC.
                                       object_name   TYPE sobj_name
                                       include       TYPE program
                             RETURNING VALUE(result) TYPE abap_bool
-                            RAISING   cx_sy_itab_line_not_found.
+                            RAISING   cx_sy_itab_line_not_found. "#EC METH_RET_BOOL
 
     METHODS try_new_exemption IMPORTING object_type   TYPE trobjtype
                                         object_name   TYPE sobj_name

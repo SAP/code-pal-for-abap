@@ -12,10 +12,10 @@ CLASS y_code_pal_scope DEFINITION PUBLIC CREATE PUBLIC.
 
     METHODS get_from_buffer IMPORTING include TYPE program
                             RETURNING VALUE(result) TYPE abap_bool
-                            RAISING   cx_sy_itab_line_not_found.
+                            RAISING   cx_sy_itab_line_not_found. "#EC METH_RET_BOOL
 
     METHODS get_from_database IMPORTING include TYPE program
-                              RETURNING VALUE(result) TYPE abap_bool.
+                              RETURNING VALUE(result) TYPE abap_bool. "#EC METH_RET_BOOL
 
     METHODS get_application_component IMPORTING include TYPE program
                                       RETURNING VALUE(result) TYPE tadir-devclass.

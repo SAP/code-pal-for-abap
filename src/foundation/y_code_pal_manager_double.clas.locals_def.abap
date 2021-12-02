@@ -36,13 +36,13 @@ CLASS ltd_statistics DEFINITION.
     DATA pcom     TYPE sci_pcom.
     DATA pcom_alt TYPE sci_pcom.
 
-    METHODS is_pseudo_comment IMPORTING ref_scan         TYPE REF TO cl_ci_scan
-                                        scimessages      TYPE scimessages
-                                        test             TYPE sci_chk
-                                        code             TYPE sci_errc
-                                        suppress         TYPE sci_pcom OPTIONAL
-                                        position         TYPE int4
-                              RETURNING VALUE(result)     TYPE sychar01.
+    METHODS is_pseudo_comment IMPORTING ref_scan      TYPE REF TO cl_ci_scan
+                                        scimessages   TYPE scimessages
+                                        test          TYPE sci_chk
+                                        code          TYPE sci_errc
+                                        suppress      TYPE sci_pcom
+                                        position      TYPE int4
+                              RETURNING VALUE(result) TYPE sychar01.
 
     METHODS determine_pseudo_comments IMPORTING scimessages TYPE scimessages
                                                 test        TYPE sci_chk
