@@ -26,6 +26,9 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
     settings-ignore_pseudo_comments = abap_true.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
+    remote_enabled = abap_false.
+    remote_rfc_enabled = abap_false.
+
     set_check_message( 'Procedure Coverage must be higher than &2%! (&1%<=&2%)' ).
   ENDMETHOD.
 
