@@ -167,6 +167,9 @@ CLASS y_check_base IMPLEMENTATION.
 
     relevant_structure_types = VALUE #( ( scan_struc_type-event ) ).
 
+    remote_enabled = abap_true.
+    remote_rfc_enabled = abap_true.
+
     INSERT VALUE #( test = myname
                     code = message_code-not_maintained
                     kind = c_note

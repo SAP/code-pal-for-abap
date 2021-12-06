@@ -47,31 +47,41 @@ CLASS lcl_select IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD run_remote.
+    DATA data TYPE TABLE OF tab512.
+    DATA line TYPE REF TO data.
+    DATA fields TYPE STANDARD TABLE OF rfc_db_fld.
+
     CALL FUNCTION 'RFC_READ_TABLE'
       DESTINATION
         rfc_destination
       EXPORTING
-        sql_from             = sql_from
-        use_et_data_4_return = abap_true
-      IMPORTING
-        et_data              = table
+        query_table = sql_from
       TABLES
-        sql_where            = sql_where
+        options     = sql_where
+        fields      = fields
+        data        = data
       EXCEPTIONS
-        table_not_available   = 1
-        table_without_data    = 2
-        option_not_valid      = 3
-        field_not_valid       = 4
-        not_authorized        = 5
-        data_buffer_exceeded  = 6
-        system_failure        = 7
-        communication_failure = 8
-        resource_failure      = 9
-        OTHERS                = 10.
+        OTHERS      = 99.
 
-    IF sy-subrc IS NOT INITIAL.
-      CLEAR table.
+    IF sy-subrc <> 0.
+      RETURN.
     ENDIF.
+
+    CREATE DATA line LIKE LINE OF table.
+    ASSIGN line->* TO FIELD-SYMBOL(<line>).
+
+    TRY.
+        LOOP AT data INTO DATA(ls_data).
+          LOOP AT fields INTO DATA(field).
+            ASSIGN COMPONENT field-fieldname OF STRUCTURE <line> TO FIELD-SYMBOL(<field>).
+            <field> = ls_data+field-offset(field-length).
+            UNASSIGN <field>.
+          ENDLOOP.
+          APPEND <line> TO table.
+        ENDLOOP.
+      CATCH cx_root.
+        RETURN.
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.
@@ -108,14 +118,14 @@ CLASS lcl_report_source IMPLEMENTATION.
   METHOD run.
     CALL FUNCTION 'SVRS_GET_REPS_FROM_OBJECT'
       DESTINATION
-        rfc_destination
+      rfc_destination
       EXPORTING
-        object_name = object_name
-        object_type = object_type
-        versno      = 0
+        object_name           = object_name
+        object_type           = object_type
+        versno                = 0
       TABLES
-        repos_tab   = source_code
-        trdir_tab   = trdir
+        repos_tab             = source_code
+        trdir_tab             = trdir
       EXCEPTIONS
         no_version            = 1
         system_failure        = 2
