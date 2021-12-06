@@ -240,6 +240,7 @@ CLASS y_check_base IMPLEMENTATION.
 
 
   METHOD execute_check.
+    manager->telemetry->add_usage( myname ).
     inspect_structures( ).
   ENDMETHOD.
 
@@ -662,6 +663,8 @@ CLASS y_check_base IMPLEMENTATION.
                                     suppress    = p_suppress
                                     position    = p_position ).
     ELSE.
+      manager->telemetry->add_finding( myname ).
+
       super->inform( p_sub_obj_type    = p_sub_obj_type
                      p_sub_obj_name    = p_sub_obj_name
                      p_position        = p_position

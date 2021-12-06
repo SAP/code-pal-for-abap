@@ -10,6 +10,7 @@ CLASS y_code_pal_manager DEFINITION PUBLIC CREATE PUBLIC.
     ALIASES statistics FOR y_if_code_pal_manager~statistics.
     ALIASES scope FOR y_if_code_pal_manager~scope.
     ALIASES profile FOR y_if_code_pal_manager~profile.
+    ALIASES telemetry FOR y_if_code_pal_manager~telemetry.
 
   PRIVATE SECTION.
     METHODS get_profiles RETURNING VALUE(result) TYPE string_table
@@ -31,6 +32,7 @@ CLASS y_code_pal_manager IMPLEMENTATION.
     creation_date = NEW y_code_pal_creation_date( database_access ).
     exemption = NEW y_code_pal_exemption( database_access ).
     profile = NEW y_profile_manager( ).
+    telemetry = NEW y_code_pal_telemetry( ).
   ENDMETHOD.
 
 

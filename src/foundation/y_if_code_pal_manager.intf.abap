@@ -23,5 +23,6 @@ INTERFACE y_if_code_pal_manager PUBLIC.
   DATA statistics TYPE REF TO y_if_code_pal_statistics READ-ONLY.
   DATA scope TYPE REF TO y_if_code_pal_scope READ-ONLY.
   DATA profile TYPE REF TO y_if_profile_manager READ-ONLY.
+  DATA telemetry TYPE REF TO y_if_code_pal_telemetry READ-ONLY.
 
 ENDINTERFACE.
