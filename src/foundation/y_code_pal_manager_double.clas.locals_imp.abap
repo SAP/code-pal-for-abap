@@ -37,11 +37,11 @@ CLASS ltd_statistics IMPLEMENTATION.
 
     IF pseudo_comment = cl_ci_test_root=>c_pc_exceptn_exists.
       count-pseudo_comments = count-pseudo_comments + 1.
-    ELSEIF kind = y_check_base=>c_error.
+    ELSEIF kind = y_code_pal_base=>c_error.
       count-errors = count-errors + 1.
-    ELSEIF kind = y_check_base=>c_warning.
+    ELSEIF kind = y_code_pal_base=>c_warning.
       count-warnings = count-warnings + 1.
-    ELSEIF kind = y_check_base=>c_note.
+    ELSEIF kind = y_code_pal_base=>c_note.
       count-notes = count-notes + 1.
     ENDIF.
   ENDMETHOD.
@@ -175,127 +175,127 @@ ENDCLASS.
 
 CLASS ltd_profile IMPLEMENTATION.
 
-  METHOD y_if_profile_manager~check_delegation_rights.
+  METHOD Y_IF_CODE_PAL_PROFILE~check_delegation_rights.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~check_time_overlap.
+  METHOD Y_IF_CODE_PAL_PROFILE~check_time_overlap.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~cleanup_profile.
+  METHOD Y_IF_CODE_PAL_PROFILE~cleanup_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~create.
+  METHOD Y_IF_CODE_PAL_PROFILE~create.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~delete_check.
+  METHOD Y_IF_CODE_PAL_PROFILE~delete_check.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~delete_delegate.
+  METHOD Y_IF_CODE_PAL_PROFILE~delete_delegate.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~delete_profile.
+  METHOD Y_IF_CODE_PAL_PROFILE~delete_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~delete_profiles.
+  METHOD Y_IF_CODE_PAL_PROFILE~delete_profiles.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~get_checks_from_db.
+  METHOD Y_IF_CODE_PAL_PROFILE~get_checks_from_db.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~get_check_description.
+  METHOD Y_IF_CODE_PAL_PROFILE~get_check_description.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~get_registered_profiles.
+  METHOD Y_IF_CODE_PAL_PROFILE~get_registered_profiles.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~import_profile.
+  METHOD Y_IF_CODE_PAL_PROFILE~import_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~insert_check.
+  METHOD Y_IF_CODE_PAL_PROFILE~insert_check.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~insert_delegate.
+  METHOD Y_IF_CODE_PAL_PROFILE~insert_delegate.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~insert_profile.
+  METHOD Y_IF_CODE_PAL_PROFILE~insert_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~mass_change.
+  METHOD Y_IF_CODE_PAL_PROFILE~mass_change.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~profile_exists.
+  METHOD Y_IF_CODE_PAL_PROFILE~profile_exists.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~register_standard_profile.
+  METHOD Y_IF_CODE_PAL_PROFILE~register_standard_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~remove_all_checks.
+  METHOD Y_IF_CODE_PAL_PROFILE~remove_all_checks.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~remove_all_delegates.
+  METHOD Y_IF_CODE_PAL_PROFILE~remove_all_delegates.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~select_all_profiles.
+  METHOD Y_IF_CODE_PAL_PROFILE~select_all_profiles.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~select_checks.
+  METHOD Y_IF_CODE_PAL_PROFILE~select_checks.
     RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~select_delegates.
+  METHOD Y_IF_CODE_PAL_PROFILE~select_delegates.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~select_existing_checks.
+  METHOD Y_IF_CODE_PAL_PROFILE~select_existing_checks.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD y_if_profile_manager~select_profiles.
+  METHOD Y_IF_CODE_PAL_PROFILE~select_profiles.
     RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
   ENDMETHOD.
 

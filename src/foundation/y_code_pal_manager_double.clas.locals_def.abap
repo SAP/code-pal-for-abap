@@ -13,10 +13,10 @@ ENDCLASS.
 CLASS ltd_creation_date DEFINITION.
   PUBLIC SECTION.
     INTERFACES y_if_code_pal_creation_date.
-    METHODS constructor IMPORTING check TYPE REF TO y_check_base.
+    METHODS constructor IMPORTING check TYPE REF TO y_code_pal_base.
 
   PRIVATE SECTION.
-    DATA check TYPE REF TO y_check_base.
+    DATA check TYPE REF TO y_code_pal_base.
 
 ENDCLASS.
 
@@ -70,6 +70,6 @@ ENDCLASS.
 
 CLASS ltd_profile DEFINITION.
   PUBLIC SECTION.
-    INTERFACES y_if_profile_manager.
+    INTERFACES Y_IF_CODE_PAL_PROFILE.
 
 ENDCLASS.

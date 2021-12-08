@@ -19,7 +19,7 @@ CLASS y_code_pal_sorter IMPLEMENTATION.
 
   METHOD prepare.
     CHECK tadir IS INITIAL.
-    tadir = y_profile_manager=>get_checks_from_db( ).
+    tadir = y_code_pal_profile=>get_checks_from_db( ).
   ENDMETHOD.
 
   METHOD determine.

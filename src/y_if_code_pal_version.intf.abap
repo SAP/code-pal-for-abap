@@ -1,0 +1,3 @@
+INTERFACE y_if_code_pal_version PUBLIC. "#EC CONS_INTF
+  CONSTANTS abap TYPE string VALUE '2.00.0' ##NO_TEXT.
+ENDINTERFACE.

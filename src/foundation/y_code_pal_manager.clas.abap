@@ -31,7 +31,7 @@ CLASS y_code_pal_manager IMPLEMENTATION.
     database_access = NEW y_code_pal_database_access( srcid ).
     creation_date = NEW y_code_pal_creation_date( database_access ).
     exemption = NEW y_code_pal_exemption( database_access ).
-    profile = NEW y_profile_manager( ).
+    profile = NEW y_code_pal_profile( ).
     telemetry = NEW y_code_pal_telemetry( ).
   ENDMETHOD.
 

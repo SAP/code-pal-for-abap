@@ -1,7 +1,7 @@
 CLASS y_code_pal_manager_double DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES y_if_code_pal_manager.
-    METHODS constructor IMPORTING check TYPE REF TO y_check_base.
+    METHODS constructor IMPORTING check TYPE REF TO y_code_pal_base.
 
   PROTECTED SECTION.
     ALIASES exemption FOR y_if_code_pal_manager~exemption.
@@ -13,7 +13,7 @@ CLASS y_code_pal_manager_double DEFINITION PUBLIC.
 
   PRIVATE SECTION.
     CONSTANTS srcid TYPE scr_source_id VALUE ''.
-    DATA check TYPE REF TO y_check_base.
+    DATA check TYPE REF TO y_code_pal_base.
 
 ENDCLASS.
 

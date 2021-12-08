@@ -4,16 +4,16 @@ INTERFACE y_if_code_pal_manager PUBLIC.
            object_creation_date     TYPE datum,
            threshold                TYPE ycicc_threshold,
            prio                     TYPE ycicc_message_kind,
-           apply_on_productive_code TYPE ycicc_productive_code,
-           apply_on_testcode        TYPE ycicc_testcode,
+           apply_on_productive_code TYPE abap_bool,
+           apply_on_testcode        TYPE abap_bool,
            ignore_pseudo_comments   TYPE y_code_pal_pseudo_comments,
          END OF check_configuration.
 
   TYPES check_configurations TYPE STANDARD TABLE OF check_configuration WITH DEFAULT KEY.
 
   METHODS get_profile_configuration IMPORTING checkid       TYPE seoclsname
-                                 RETURNING VALUE(result) TYPE check_configurations
-                                 RAISING ycx_code_pal_no_customizing.
+                                    RETURNING VALUE(result) TYPE check_configurations
+                                    RAISING ycx_code_pal_no_customizing.
 
   METHODS set_scope IMPORTING include TYPE program.
 
@@ -22,7 +22,7 @@ INTERFACE y_if_code_pal_manager PUBLIC.
   DATA exemption TYPE REF TO y_if_code_pal_exemption READ-ONLY.
   DATA statistics TYPE REF TO y_if_code_pal_statistics READ-ONLY.
   DATA scope TYPE REF TO y_if_code_pal_scope READ-ONLY.
-  DATA profile TYPE REF TO y_if_profile_manager READ-ONLY.
+  DATA profile TYPE REF TO Y_IF_CODE_PAL_PROFILE READ-ONLY.
   DATA telemetry TYPE REF TO y_if_code_pal_telemetry READ-ONLY.
 
 ENDINTERFACE.
