@@ -31,7 +31,7 @@ CLASS Y_PAL_CATEGORY IMPLEMENTATION.
   METHOD if_ci_test~display_documentation.
     CALL FUNCTION 'CALL_BROWSER'
       EXPORTING
-        url                    = NEW lcl_check_base_mock( )->settings-documentation
+        url                    = NEW lcl_code_pal_base( )->settings-documentation
         window_name            = ' '
         new_window             = 'X'
       EXCEPTIONS
