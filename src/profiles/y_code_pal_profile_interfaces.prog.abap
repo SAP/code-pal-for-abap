@@ -103,7 +103,7 @@ INTERFACE lif_profile_manager.
   TYPES:
     delegate_assigments TYPE STANDARD TABLE OF ytab_delegates WITH DEFAULT KEY.
   TYPES:
-    check_assignments TYPE STANDARD TABLE OF ytab_checks WITH DEFAULT KEY .
+    check_assignments TYPE STANDARD TABLE OF ytab_checks WITH DEFAULT KEY.
 
   TYPES: BEGIN OF file,
            profile   TYPE ytab_profiles,
