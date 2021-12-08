@@ -99,7 +99,7 @@ INTERFACE lif_profile_manager.
              END OF types.
 
   TYPES:
-    profile_assignments TYPE STANDARD TABLE OF ytab_profiles WITH DEFAULT KEY .
+    profile_assignments TYPE STANDARD TABLE OF ytab_profiles WITH DEFAULT KEY.
   TYPES:
     delegate_assigments TYPE STANDARD TABLE OF ytab_delegates WITH DEFAULT KEY .
   TYPES:
