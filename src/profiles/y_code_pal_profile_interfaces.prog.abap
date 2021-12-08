@@ -164,7 +164,7 @@ INTERFACE lif_profile_manager.
     RETURNING
       VALUE(result) TYPE check_descriptions
     RAISING
-      ycx_code_pal_entry_not_found .
+      ycx_code_pal_entry_not_found.
   METHODS delete_profile
     IMPORTING
       !profile TYPE ytab_profiles
