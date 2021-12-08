@@ -410,7 +410,7 @@ ENDCLASS.
 
 CLASS lcl_list DEFINITION.
   PUBLIC SECTION.
-    INTERFACES lif_list .
+    INTERFACES lif_list.
     METHODS constructor IMPORTING !type_name TYPE string
                         RAISING cx_sy_create_data_error.
 
