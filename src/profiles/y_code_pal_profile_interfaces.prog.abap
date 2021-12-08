@@ -159,7 +159,7 @@ INTERFACE lif_profile_manager.
     RETURNING
       VALUE(result) TYPE delegate_assigments
     RAISING
-      ycx_code_pal_entry_not_found .
+      ycx_code_pal_entry_not_found.
   METHODS select_existing_checks
     RETURNING
       VALUE(result) TYPE check_descriptions
