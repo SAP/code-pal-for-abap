@@ -140,7 +140,7 @@ INTERFACE lif_profile_manager.
     RETURNING
       VALUE(result) TYPE profile_assignments
     RAISING
-      ycx_code_pal_entry_not_found .
+      ycx_code_pal_entry_not_found.
   METHODS select_all_profiles
     RETURNING
       VALUE(result) TYPE profile_assignments
