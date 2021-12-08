@@ -546,7 +546,7 @@ ENDCLASS.
 CLASS lcl_alv_tree_control DEFINITION.
   PUBLIC SECTION.
 
-    INTERFACES lif_alv_tree_control .
+    INTERFACES lif_alv_tree_control.
 
     CLASS-METHODS create
       IMPORTING
