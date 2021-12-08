@@ -54,7 +54,7 @@ CLASS y_code_pal_telemetry IMPLEMENTATION.
   METHOD insert.
     DATA table TYPE TABLE OF ycodepaltlmy.
     APPEND entry TO table.
-    INSERT ycodepaltlmy FROM TABLE table ACCEPTING DUPLICATE KEYS.
+    INSERT ycodepaltlmy FROM TABLE @table ACCEPTING DUPLICATE KEYS.
   ENDMETHOD.
 
 

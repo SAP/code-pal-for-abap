@@ -61,7 +61,10 @@ CLASS lcl_select IMPLEMENTATION.
         fields      = fields
         data        = data
       EXCEPTIONS
-        OTHERS      = 99.
+        system_failure        = 1
+        communication_failure = 2
+        resource_failure      = 3
+        OTHERS                = 4.
 
     IF sy-subrc <> 0.
       RETURN.
