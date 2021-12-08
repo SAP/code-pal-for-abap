@@ -119,7 +119,7 @@
       "onlyConstants": true
     },
     "object_naming": {
-      "clas": "^Y_(PAL|CODE_PAL)",
+      "clas": "^Y(CX|)_(PAL|CODE_PAL)",
       "intf": "^Y_IF_(PAL|CODE_PAL)",
       "prog": "^Y_(PAL|CODE_PAL)",
       "fugr": "^Y_(PAL|CODE_PAL)",
