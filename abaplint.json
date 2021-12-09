@@ -123,10 +123,10 @@
       "intf": "^Y_IF_(PAL|CODE_PAL)",
       "prog": "^Y_(PAL|CODE_PAL)",
       "fugr": "^Y_(PAL|CODE_PAL)",
-      "tabl": "^Y(PAL|CODEPAL)",
+      "tabl": "^Y(PAL|CODEPAL|TAB)",
       "ttyp": "^Y_(PAL|CODE_PAL)",
-      "dtel": "^Y_(PAL|CODE_PAL)",
-      "doma": "^Y_(PAL|CODE_PAL)",
+      "dtel": "^Y_(PAL|CODE_PAL|YCICC)",
+      "doma": "^Y_(PAL|CODE_PAL|YCICC)",
       "msag": "^Y_(PAL|CODE_PAL)",
       "tran": "^Y_(PAL|CODE_PAL)"
     },
