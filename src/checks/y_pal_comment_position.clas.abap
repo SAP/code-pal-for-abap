@@ -4,7 +4,7 @@ CLASS y_pal_comment_position DEFINITION PUBLIC INHERITING FROM y_code_pal_base C
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS: add_check_quickfix REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS has_wrong_position IMPORTING statement TYPE sstmnt
