@@ -569,19 +569,19 @@ ENDCLASS.
 CLASS lth_test_code IMPLEMENTATION.
 
   METHOD given_global_test_class.
-    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_UNIT_TEST_BASE' ) ).
+    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_CODE_PAL_UNIT_TEST_BASE' ) ).
   ENDMETHOD.
 
   METHOD given_local_test_class.
-    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_CHECK_BASE' ) ).
+    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_CODE_PAL_BASE' ) ).
   ENDMETHOD.
 
   METHOD given_class_without_test.
-    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_UNIT_TEST_COVERAGE' ) ).
+    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_global_class( 'Y_CODE_PAL_COVERAGE' ) ).
   ENDMETHOD.
 
   METHOD given_program_without_test.
-    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_program( 'Y_DEMO_FAILURES' ) ).
+    cut->set_ref_scan( y_code_pal_ref_scan_double=>get_from_program( 'Y_CODE_PAL_EXAMPLE' ) ).
   ENDMETHOD.
 
   METHOD when_scan_class_definition.

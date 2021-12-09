@@ -36,9 +36,9 @@ CLASS y_pal_branch_coverage IMPLEMENTATION.
 
   METHOD execute_check.
     TRY.
-        DATA(coverage) = y_unit_test_coverage=>get( program_name = program_name
-                                                    object = VALUE #( object = object_type obj_name = object_name )
-                                                    coverage_type = ce_scv_coverage_type=>branch ).
+        DATA(coverage) = y_code_pal_coverage=>get( program_name = program_name
+                                                   object = VALUE #( object = object_type obj_name = object_name )
+                                                   coverage_type = ce_scv_coverage_type=>branch ).
 
         DATA(branch) = round( val = coverage->get_percentage( )
                               dec = 2 ).

@@ -10,6 +10,7 @@ CLASS y_code_pal_manager_double DEFINITION PUBLIC.
     ALIASES creation_date FOR y_if_code_pal_manager~creation_date.
     ALIASES scope FOR y_if_code_pal_manager~scope.
     ALIASES profile FOR y_if_code_pal_manager~profile.
+    ALIASES telemetry FOR y_if_code_pal_manager~telemetry.
 
   PRIVATE SECTION.
     CONSTANTS srcid TYPE scr_source_id VALUE ''.
@@ -30,6 +31,7 @@ CLASS y_code_pal_manager_double IMPLEMENTATION.
     me->creation_date = NEW ltd_creation_date( check ).
     me->scope = NEW ltd_scope( ).
     me->profile = NEW ltd_profile( ).
+    me->telemetry = NEW ltd_telemetry( ).
   ENDMETHOD.
 
 

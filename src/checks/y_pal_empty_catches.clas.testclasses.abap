@@ -167,7 +167,7 @@ CLASS ltc_test_double_framework IMPLEMENTATION.
 
       ( ' CLASS classname IMPLEMENTATION. ' )
       ( '   METHOD framwork. ' )
-      ( '     DATA cut TYPE REF TO y_check_empty_catches. ' )
+      ( '     DATA cut TYPE REF TO y_pal_empty_catches. ' )
       ( '     cl_abap_testdouble=>configure_call( cut )->returning( 55 ). ' )
       ( '     TRY. ' )
       ( '       cut->get_attributes( ). ' )

@@ -1,10 +1,10 @@
 CLASS y_code_pal_profile DEFINITION PUBLIC CREATE PUBLIC .
   PUBLIC SECTION.
-    INTERFACES Y_IF_CODE_PAL_PROFILE.
-    ALIASES create FOR Y_IF_CODE_PAL_PROFILE~create.
-    ALIASES get_checks_from_db FOR Y_IF_CODE_PAL_PROFILE~get_checks_from_db.
-    ALIASES types FOR Y_IF_CODE_PAL_PROFILE~types.
-    ALIASES mass_change FOR Y_IF_CODE_PAL_PROFILE~mass_change.
+    INTERFACES y_if_code_pal_profile.
+    ALIASES create FOR y_if_code_pal_profile~create.
+    ALIASES get_checks_from_db FOR y_if_code_pal_profile~get_checks_from_db.
+    ALIASES types FOR y_if_code_pal_profile~types.
+    ALIASES mass_change FOR y_if_code_pal_profile~mass_change.
 
   PROTECTED SECTION.
     METHODS has_time_collision
@@ -29,7 +29,7 @@ ENDCLASS.
 
 
 
-CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
+CLASS y_code_pal_profile IMPLEMENTATION.
 
 
   METHOD has_time_collision.
@@ -56,7 +56,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~check_delegation_rights.
+  METHOD y_if_code_pal_profile~check_delegation_rights.
     SELECT SINGLE delegate
     FROM ytab_delegates
     INTO @DATA(delegate)
@@ -69,7 +69,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~check_time_overlap.
+  METHOD y_if_code_pal_profile~check_time_overlap.
     DATA table TYPE SORTED TABLE OF ytab_checks WITH UNIQUE KEY profile
                                                                 checkid
                                                                 start_date
@@ -114,7 +114,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~delete_check.
+  METHOD y_if_code_pal_profile~delete_check.
     DELETE FROM ytab_checks WHERE profile = @check-profile AND
                                   checkid = @check-checkid AND
                                   start_date = @check-start_date AND
@@ -131,7 +131,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~delete_delegate.
+  METHOD y_if_code_pal_profile~delete_delegate.
     DELETE FROM ytab_delegates WHERE profile = @delegate-profile AND
                                      delegate = @delegate-delegate.
     IF sy-subrc <> 0.
@@ -141,7 +141,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~delete_profile.
+  METHOD y_if_code_pal_profile~delete_profile.
     IF profile-is_standard = abap_true.
       RAISE EXCEPTION TYPE ycx_code_pal_remove_a_line.
     ENDIF.
@@ -154,7 +154,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
     ENDIF.
 
     TRY.
-        Y_IF_CODE_PAL_PROFILE~select_checks( profile-profile ).
+        y_if_code_pal_profile~select_checks( profile-profile ).
       CATCH ycx_code_pal_entry_not_found.
         DELETE FROM ytab_delegates WHERE profile = @profile-profile.
     ENDTRY.
@@ -162,20 +162,20 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~delete_profiles.
+  METHOD y_if_code_pal_profile~delete_profiles.
     TRY.
-        DATA(profiles) = Y_IF_CODE_PAL_PROFILE~select_profiles( sy-uname ).
+        DATA(profiles) = y_if_code_pal_profile~select_profiles( sy-uname ).
       CATCH ycx_code_pal_entry_not_found.
         RETURN.
     ENDTRY.
 
     LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
-      Y_IF_CODE_PAL_PROFILE~delete_profile( <profile> ).
+      y_if_code_pal_profile~delete_profile( <profile> ).
     ENDLOOP.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~get_check_description.
+  METHOD y_if_code_pal_profile~get_check_description.
     SELECT SINGLE descript FROM vseoclass WHERE langu = @sy-langu AND clsname = @classname INTO @result.
     IF sy-subrc <> 0.
       SELECT SINGLE descript FROM vseoclass WHERE clsname = @classname INTO @result.
@@ -186,7 +186,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~get_registered_profiles.
+  METHOD y_if_code_pal_profile~get_registered_profiles.
     SELECT profile FROM ytab_checks APPENDING TABLE @result.
     DATA(prof_subrc) = sy-subrc.
 
@@ -201,25 +201,25 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~import_profile.
+  METHOD y_if_code_pal_profile~import_profile.
     DATA(profile) = structure-profile.
     DATA(delegates) = structure-delegates.
     DATA(checks) = structure-checks.
 
-    IF Y_IF_CODE_PAL_PROFILE~profile_exists( profile-profile ).
-      Y_IF_CODE_PAL_PROFILE~check_delegation_rights( profile-profile ).
+    IF y_if_code_pal_profile~profile_exists( profile-profile ).
+      y_if_code_pal_profile~check_delegation_rights( profile-profile ).
     ENDIF.
 
     profile-last_changed_by = sy-uname.
     profile-last_changed_on = sy-datum.
     profile-last_changed_at = sy-timlo.
 
-    Y_IF_CODE_PAL_PROFILE~insert_profile( profile ).
+    y_if_code_pal_profile~insert_profile( profile ).
 
-    Y_IF_CODE_PAL_PROFILE~cleanup_profile( profile-profile ).
+    y_if_code_pal_profile~cleanup_profile( profile-profile ).
 
     LOOP AT delegates ASSIGNING FIELD-SYMBOL(<delegate>).
-      Y_IF_CODE_PAL_PROFILE~insert_delegate( <delegate> ).
+      y_if_code_pal_profile~insert_delegate( <delegate> ).
     ENDLOOP.
 
     LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
@@ -227,12 +227,12 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
       <check>-last_changed_on = sy-datum.
       <check>-last_changed_at = sy-timlo.
 
-      Y_IF_CODE_PAL_PROFILE~insert_check( <check> ).
+      y_if_code_pal_profile~insert_check( <check> ).
     ENDLOOP.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~insert_check.
+  METHOD y_if_code_pal_profile~insert_check.
     INSERT INTO ytab_checks VALUES @check.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_code_pal_add_a_line.
@@ -241,7 +241,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~insert_delegate.
+  METHOD y_if_code_pal_profile~insert_delegate.
     INSERT INTO ytab_delegates VALUES @delegate.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_code_pal_add_a_line.
@@ -250,7 +250,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~insert_profile.
+  METHOD y_if_code_pal_profile~insert_profile.
     IF profile-is_standard = abap_true OR
        profile-profile = standardprofile.
       RAISE EXCEPTION TYPE ycx_code_pal_add_a_line.
@@ -262,15 +262,15 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
     COMMIT WORK AND WAIT.
 
     TRY.
-        Y_IF_CODE_PAL_PROFILE~select_delegates( profile-profile ).
+        y_if_code_pal_profile~select_delegates( profile-profile ).
       CATCH ycx_code_pal_entry_not_found.
-        Y_IF_CODE_PAL_PROFILE~insert_delegate( VALUE ytab_delegates( profile = profile-profile
+        y_if_code_pal_profile~insert_delegate( VALUE ytab_delegates( profile = profile-profile
                                                                     delegate = sy-uname ) ).
     ENDTRY.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~register_standard_profile.
+  METHOD y_if_code_pal_profile~register_standard_profile.
     SELECT SINGLE @abap_true
     FROM ytab_profiles
     INTO @DATA(exists)
@@ -292,7 +292,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_checks.
+  METHOD y_if_code_pal_profile~select_checks.
     SELECT * FROM ytab_checks INTO TABLE @result WHERE profile = @profile.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
@@ -300,7 +300,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_delegates.
+  METHOD y_if_code_pal_profile~select_delegates.
     SELECT * FROM ytab_delegates INTO TABLE @result WHERE profile = @profile.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
@@ -308,7 +308,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_existing_checks.
+  METHOD y_if_code_pal_profile~select_existing_checks.
     DATA(checks) = get_checks_from_db( ).
 
     IF checks IS INITIAL.
@@ -332,7 +332,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_profiles.
+  METHOD y_if_code_pal_profile~select_profiles.
     SELECT * FROM ytab_profiles INTO TABLE @result WHERE username = @username OR
                                                          is_standard = @abap_true.
     IF sy-subrc <> 0.
@@ -346,7 +346,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_all_profiles.
+  METHOD y_if_code_pal_profile~select_all_profiles.
     "Based on Checks because the profile might be inactive
     SELECT DISTINCT profile FROM ytab_checks INTO TABLE @DATA(profiles).
     LOOP AT profiles ASSIGNING FIELD-SYMBOL(<profile>).
@@ -355,21 +355,21 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~cleanup_profile.
-    Y_IF_CODE_PAL_PROFILE~remove_all_delegates( profile ).
-    Y_IF_CODE_PAL_PROFILE~remove_all_checks( profile ).
+  METHOD y_if_code_pal_profile~cleanup_profile.
+    y_if_code_pal_profile~remove_all_delegates( profile ).
+    y_if_code_pal_profile~remove_all_checks( profile ).
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~remove_all_delegates.
+  METHOD y_if_code_pal_profile~remove_all_delegates.
     TRY.
-        DATA(delegates) = Y_IF_CODE_PAL_PROFILE~select_delegates( profile ).
+        DATA(delegates) = y_if_code_pal_profile~select_delegates( profile ).
       CATCH ycx_code_pal_entry_not_found.
         RETURN.
     ENDTRY.
     LOOP AT delegates ASSIGNING FIELD-SYMBOL(<delegate>).
       TRY.
-          Y_IF_CODE_PAL_PROFILE~delete_delegate( <delegate> ).
+          y_if_code_pal_profile~delete_delegate( <delegate> ).
         CATCH ycx_code_pal_remove_a_line.
           CONTINUE.
       ENDTRY.
@@ -377,15 +377,15 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~remove_all_checks.
+  METHOD y_if_code_pal_profile~remove_all_checks.
     TRY.
-        DATA(checks) = Y_IF_CODE_PAL_PROFILE~select_checks( profile ).
+        DATA(checks) = y_if_code_pal_profile~select_checks( profile ).
       CATCH ycx_code_pal_entry_not_found.
         RETURN.
     ENDTRY.
     LOOP AT checks ASSIGNING FIELD-SYMBOL(<check>).
       TRY.
-          Y_IF_CODE_PAL_PROFILE~delete_check( <check> ).
+          y_if_code_pal_profile~delete_check( <check> ).
         CATCH ycx_code_pal_remove_a_line.
           CONTINUE.
       ENDTRY.
@@ -393,9 +393,9 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~profile_exists.
+  METHOD y_if_code_pal_profile~profile_exists.
     TRY.
-        result = xsdbool( Y_IF_CODE_PAL_PROFILE~select_delegates( name ) IS NOT INITIAL ).
+        result = xsdbool( y_if_code_pal_profile~select_delegates( name ) IS NOT INITIAL ).
       CATCH ycx_code_pal_entry_not_found.
         result = abap_false.
     ENDTRY.
@@ -423,11 +423,11 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
     SELECT SINGLE devclass
     FROM tadir
     INTO @result
-    WHERE obj_name = 'y_code_pal_base'.
+    WHERE obj_name = 'Y_CODE_PAL_BASE'.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~create.
+  METHOD y_if_code_pal_profile~create.
     result = NEW y_code_pal_profile( ).
   ENDMETHOD.
 
@@ -435,7 +435,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
   METHOD mass_change.
     DATA check TYPE REF TO y_code_pal_base.
     TRY.
-        DATA(checks) = Y_IF_CODE_PAL_PROFILE~select_checks( name ).
+        DATA(checks) = y_if_code_pal_profile~select_checks( name ).
 
         LOOP AT checks INTO DATA(temp_config).
           TRY.
@@ -472,8 +472,8 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
           ENDIF.
 
           TRY.
-              Y_IF_CODE_PAL_PROFILE~delete_check( temp_config ).
-              Y_IF_CODE_PAL_PROFILE~insert_check( temp_check ).
+              y_if_code_pal_profile~delete_check( temp_config ).
+              y_if_code_pal_profile~insert_check( temp_check ).
 
             CATCH ycx_code_pal_remove_a_line.
 
@@ -481,7 +481,7 @@ CLASS Y_CODE_PAL_PROFILE IMPLEMENTATION.
                   ycx_code_pal_time_overlap.
 
               TRY.
-                  Y_IF_CODE_PAL_PROFILE~insert_check( temp_config ).
+                  y_if_code_pal_profile~insert_check( temp_config ).
                 CATCH ycx_code_pal_add_a_line
                       ycx_code_pal_time_overlap.
               ENDTRY.

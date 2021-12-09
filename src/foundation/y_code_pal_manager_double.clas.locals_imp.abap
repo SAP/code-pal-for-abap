@@ -175,128 +175,153 @@ ENDCLASS.
 
 CLASS ltd_profile IMPLEMENTATION.
 
-  METHOD Y_IF_CODE_PAL_PROFILE~check_delegation_rights.
+  METHOD y_if_code_pal_profile~check_delegation_rights.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~check_time_overlap.
+  METHOD y_if_code_pal_profile~check_time_overlap.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~cleanup_profile.
+  METHOD y_if_code_pal_profile~cleanup_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~create.
+  METHOD y_if_code_pal_profile~create.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~delete_check.
+  METHOD y_if_code_pal_profile~delete_check.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~delete_delegate.
+  METHOD y_if_code_pal_profile~delete_delegate.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~delete_profile.
+  METHOD y_if_code_pal_profile~delete_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~delete_profiles.
+  METHOD y_if_code_pal_profile~delete_profiles.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~get_checks_from_db.
+  METHOD y_if_code_pal_profile~get_checks_from_db.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~get_check_description.
+  METHOD y_if_code_pal_profile~get_check_description.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~get_registered_profiles.
+  METHOD y_if_code_pal_profile~get_registered_profiles.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~import_profile.
+  METHOD y_if_code_pal_profile~import_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~insert_check.
+  METHOD y_if_code_pal_profile~insert_check.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~insert_delegate.
+  METHOD y_if_code_pal_profile~insert_delegate.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~insert_profile.
+  METHOD y_if_code_pal_profile~insert_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~mass_change.
+  METHOD y_if_code_pal_profile~mass_change.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~profile_exists.
+  METHOD y_if_code_pal_profile~profile_exists.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~register_standard_profile.
+  METHOD y_if_code_pal_profile~register_standard_profile.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~remove_all_checks.
+  METHOD y_if_code_pal_profile~remove_all_checks.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~remove_all_delegates.
+  METHOD y_if_code_pal_profile~remove_all_delegates.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_all_profiles.
+  METHOD y_if_code_pal_profile~select_all_profiles.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_checks.
+  METHOD y_if_code_pal_profile~select_checks.
     RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_delegates.
+  METHOD y_if_code_pal_profile~select_delegates.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_existing_checks.
+  METHOD y_if_code_pal_profile~select_existing_checks.
     RETURN.
   ENDMETHOD.
 
 
-  METHOD Y_IF_CODE_PAL_PROFILE~select_profiles.
+  METHOD y_if_code_pal_profile~select_profiles.
     RAISE EXCEPTION TYPE ycx_code_pal_entry_not_found.
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
+CLASS ltd_telemetry IMPLEMENTATION.
+
+  METHOD y_if_code_pal_telemetry~add_usage.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_code_pal_telemetry~add_finding.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_code_pal_telemetry~get_count.
+    RETURN.
+  ENDMETHOD.
+
+
+  METHOD y_if_code_pal_telemetry~get_counters.
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.

@@ -23,7 +23,7 @@ CLASS ltc_create_object IMPLEMENTATION.
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD example.' )
-      ( '     DATA prefer_new_to_crt_obj TYPE REF TO y_check_prefer_new_to_crt_obj. ' )
+      ( '     DATA prefer_new_to_crt_obj TYPE REF TO y_pal_prefer_new_to_crt_obj. ' )
       ( '     CREATE OBJECT prefer_new_to_crt_obj. ' )
       ( '   ENDMETHOD.' )
       ( ' ENDCLASS. ' )
@@ -41,7 +41,7 @@ CLASS ltc_create_object IMPLEMENTATION.
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD example.' )
-      ( '     DATA(prefer_new_to_crt_obj) = NEW y_check_prefer_new_to_crt_obj( ). ' )
+      ( '     DATA(prefer_new_to_crt_obj) = NEW y_pal_prefer_new_to_crt_obj( ). ' )
       ( '   ENDMETHOD.' )
       ( ' ENDCLASS. ' )
     ).
@@ -58,7 +58,7 @@ CLASS ltc_create_object IMPLEMENTATION.
 
       ( ' CLASS y_example IMPLEMENTATION. ' )
       ( '   METHOD example.' )
-      ( '     DATA prefer_new_to_crt_obj TYPE REF TO y_check_prefer_new_to_crt_obj. ' )
+      ( '     DATA prefer_new_to_crt_obj TYPE REF TO y_pal_prefer_new_to_crt_obj. ' )
       ( '     CREATE OBJECT prefer_new_to_crt_obj. "#EC PREF_NEW' )
       ( '   ENDMETHOD.' )
       ( ' ENDCLASS. ' )
@@ -80,9 +80,9 @@ CLASS ltc_dynamic_object_with_param IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT ut_test.' )
       ( ' START-OF-SELECTION.' )
-      ( |   DATA check TYPE REF TO y_check_base. | )
+      ( |   DATA check TYPE REF TO y_code_pal_base. | )
       ( |   DATA params TYPE abap_parmbind_tab. | )
-      ( |   DATA(prefer_new) = 'y_check_prefer_new_to_crt_obj'. | )
+      ( |   DATA(prefer_new) = 'y_pal_prefer_new_to_crt_obj'. | )
       ( |   CREATE OBJECT check TYPE (prefer_new) PARAMETER-TABLE params. | )
     ).
   ENDMETHOD.
@@ -102,8 +102,8 @@ CLASS ltc_dynamic_object IMPLEMENTATION.
     result = VALUE #(
       ( ' REPORT ut_test.' )
       ( ' START-OF-SELECTION.' )
-      ( |   DATA check TYPE REF TO y_check_base. | )
-      ( |   DATA(prefer_new) = 'y_check_prefer_new_to_crt_obj'. | )
+      ( |   DATA check TYPE REF TO y_code_pal_base. | )
+      ( |   DATA(prefer_new) = 'y_pal_prefer_new_to_crt_obj'. | )
       ( |   CREATE OBJECT check TYPE (prefer_new). | )
     ).
   ENDMETHOD.

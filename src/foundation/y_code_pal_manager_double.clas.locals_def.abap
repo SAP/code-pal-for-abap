@@ -70,6 +70,14 @@ ENDCLASS.
 
 CLASS ltd_profile DEFINITION.
   PUBLIC SECTION.
-    INTERFACES Y_IF_CODE_PAL_PROFILE.
+    INTERFACES y_if_code_pal_profile.
+
+ENDCLASS.
+
+
+
+CLASS ltd_telemetry DEFINITION.
+  PUBLIC SECTION.
+    INTERFACES y_if_code_pal_telemetry.
 
 ENDCLASS.
