@@ -13,9 +13,6 @@ INTERFACE lif_list.
   METHODS insert_at IMPORTING line  TYPE any
                               index TYPE i.
 
-  METHODS modify_at IMPORTING line  TYPE any
-                              index TYPE i.
-
   METHODS number_of_rows RETURNING VALUE(result) TYPE i.
 
   METHODS is_contained IMPORTING line          TYPE any

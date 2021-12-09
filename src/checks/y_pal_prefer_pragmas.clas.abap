@@ -1,4 +1,4 @@
-CLASS y_pal_prefer_pragmas DEFINITION PUBLIC INHERITING FROM y_code_pal_base CREATE PUBLIC .
+CLASS y_pal_prefer_pragmas DEFINITION PUBLIC INHERITING FROM y_code_pal_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor.
 
@@ -12,7 +12,7 @@ CLASS y_pal_prefer_pragmas DEFINITION PUBLIC INHERITING FROM y_code_pal_base CRE
              pseudo_com TYPE slin_desc-pseudo_com,
            END OF mapping.
 
-    TYPES: pseudo_comments TYPE SORTED TABLE OF mapping-pseudo_com WITH UNIQUE KEY table_line.
+    TYPES pseudo_comments TYPE SORTED TABLE OF mapping-pseudo_com WITH UNIQUE KEY table_line.
 
     CLASS-DATA mappings TYPE TABLE OF mapping.
 

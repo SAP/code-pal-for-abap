@@ -3,12 +3,12 @@
 *&---------------------------------------------------------------------*
 CLASS lcl_file DEFINITION.
   PUBLIC SECTION.
-    CLASS-METHODS upload RETURNING VALUE(result) TYPE Y_IF_CODE_PAL_PROFILE=>file
+    CLASS-METHODS upload RETURNING VALUE(result) TYPE y_if_code_pal_profile=>file
                          RAISING   ycx_code_pal_obj_not_processed
                                    cx_abap_invalid_value.
-    CLASS-METHODS download IMPORTING profile   TYPE Y_IF_CODE_PAL_PROFILE=>file-profile
-                                     checks    TYPE Y_IF_CODE_PAL_PROFILE=>file-checks
-                                     delegates TYPE Y_IF_CODE_PAL_PROFILE=>file-delegates
+    CLASS-METHODS download IMPORTING profile   TYPE y_if_code_pal_profile=>file-profile
+                                     checks    TYPE y_if_code_pal_profile=>file-checks
+                                     delegates TYPE y_if_code_pal_profile=>file-delegates
                            RAISING   ycx_code_pal_obj_not_processed.
 ENDCLASS.
 
@@ -21,7 +21,7 @@ CLASS lcl_file IMPLEMENTATION.
 
     CONCATENATE 'CODE_PAL_PROFILE-' sy-sysid sy-mandt '-' profile-profile INTO DATA(file_name).
 
-    DATA(structure) = NEW Y_IF_CODE_PAL_PROFILE=>file( profile   = profile
+    DATA(structure) = NEW y_if_code_pal_profile=>file( profile   = profile
                                                       checks    = checks
                                                       delegates = delegates ).
 
@@ -152,131 +152,104 @@ CLASS lcl_file IMPLEMENTATION.
     IF result IS INITIAL.
       RAISE EXCEPTION TYPE cx_abap_invalid_value.
     ENDIF.
-
   ENDMETHOD.
 
 ENDCLASS.
 
 CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
   PUBLIC SECTION.
-    CLASS-METHODS:
-      init_profiles IMPORTING sy_repid TYPE sy-repid,
-      init_checks IMPORTING sy_repid TYPE sy-repid,
-      init_delegates IMPORTING sy_repid TYPE sy-repid.
+    CLASS-METHODS init_profiles IMPORTING sy_repid TYPE sy-repid.
+    CLASS-METHODS init_checks IMPORTING sy_repid TYPE sy-repid.
+    CLASS-METHODS init_delegates IMPORTING sy_repid TYPE sy-repid.
 
-    CLASS-METHODS:
-      refresh_all_trees,
-      refresh_profiles,
-      refresh_checks,
-      refresh_delegates.
+    CLASS-METHODS refresh_all_trees.
+    CLASS-METHODS  refresh_profiles.
+    CLASS-METHODS  refresh_checks.
+    CLASS-METHODS  refresh_delegates.
 
-    CLASS-METHODS:
-      get_selected_profile
-        RETURNING VALUE(result) TYPE ytab_profiles
-        RAISING   ycx_code_pal_entry_not_found,
-      set_selected_profile
-        IMPORTING profile TYPE data,
-      get_selected_delegate
-        RETURNING VALUE(result) TYPE ytab_delegates
-        RAISING   ycx_code_pal_entry_not_found,
-      get_selected_check
-        RETURNING VALUE(result) TYPE ytab_checks
-        RAISING   ycx_code_pal_entry_not_found.
+    CLASS-METHODS get_selected_profile RETURNING VALUE(result) TYPE ytab_profiles
+                                       RAISING   ycx_code_pal_entry_not_found.
 
-    CLASS-METHODS switch_toolbar_activation
-      RAISING cx_failed.
+    CLASS-METHODS set_selected_profile IMPORTING profile TYPE data.
 
-    CLASS-METHODS:
-      call_f4help
-        IMPORTING referenced_field_name TYPE dfies-fieldname
-                  window_title          TYPE c
-                  value_table           TYPE STANDARD TABLE
-        RETURNING VALUE(result)         TYPE Y_IF_CODE_PAL_PROFILE=>value_help
-        RAISING   cx_failed.
+    CLASS-METHODS get_selected_delegate RETURNING VALUE(result) TYPE ytab_delegates
+                                        RAISING   ycx_code_pal_entry_not_found.
 
-    CLASS-METHODS:
-      profile_f4help_200,
-      profile_f4help_600,
-      check_f4help.
+    CLASS-METHODS get_selected_check RETURNING VALUE(result) TYPE ytab_checks
+                                     RAISING   ycx_code_pal_entry_not_found.
 
-    CLASS-METHODS:
-      init_ui_400,
-      get_check
-        IMPORTING checkid       TYPE vseoclass-clsname
-        RETURNING VALUE(result) TYPE REF TO y_code_pal_base
-        RAISING   cx_sy_create_object_error,
-      set_dynpro_field_active
-        IMPORTING fieldname TYPE string
-                  is_active TYPE abap_bool.
+    CLASS-METHODS switch_toolbar_activation RAISING cx_failed.
 
-    CLASS-METHODS:
-      assign_profile,
-      unassign_profile,
-      copy_profile,
-      create_template_profile,
-      import_profile,
-      export_profile,
-      get_initial_check
-        RETURNING VALUE(result) TYPE ytab_checks.
+    CLASS-METHODS call_f4help IMPORTING referenced_field_name TYPE dfies-fieldname
+                                        window_title          TYPE c
+                                        value_table           TYPE STANDARD TABLE
+                              RETURNING VALUE(result)         TYPE y_if_code_pal_profile=>value_help
+                              RAISING   cx_failed.
 
-    CLASS-METHODS:
-      add_delegate
-        RAISING cx_failed,
-      remove_delegate,
-      auto_re_start_delegate,
-      check_delegate_rights
-        RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS profile_f4help_200.
+    CLASS-METHODS profile_f4help_600.
+    CLASS-METHODS check_f4help.
 
+    CLASS-METHODS init_ui_400.
 
-    CLASS-METHODS:
-      init_add_check,
-      init_edit_check
-        IMPORTING check TYPE ytab_checks,
-      check_customization
-        IMPORTING edit_mode TYPE abap_bool DEFAULT abap_false
-        RAISING   cx_failed,
-      auto_re_start_check
-        IMPORTING edit_mode TYPE abap_bool DEFAULT abap_false,
-      remove_check
-        IMPORTING check TYPE ytab_checks,
-      remove_selected_check,
-      check_check_rights
-        IMPORTING profile       TYPE ycicc_profile
-        RETURNING VALUE(result) TYPE abap_bool,
-      check_selected_check_rights
-        RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS  get_check IMPORTING checkid       TYPE vseoclass-clsname
+                             RETURNING VALUE(result) TYPE REF TO y_code_pal_base
+                             RAISING   cx_sy_create_object_error.
 
-    CLASS-METHODS:
-      mass_change,
-      set_text_field_text
-        IMPORTING fieldname TYPE string
-                  text      TYPE string.
+    CLASS-METHODS set_dynpro_field_active IMPORTING fieldname TYPE string
+                                                    is_active TYPE abap_bool.
 
-    CLASS-METHODS:
-      get_cursor_field
-        RETURNING VALUE(result) TYPE char20,
-      call_check_info,
-      add_all_checks.
-    CLASS-METHODS add_check
-      IMPORTING
-        edit_mode TYPE abap_bool DEFAULT abap_false
-      RAISING
-        cx_failed.
+    CLASS-METHODS assign_profile.
+    CLASS-METHODS unassign_profile.
+    CLASS-METHODS copy_profile.
+    CLASS-METHODS create_template_profile.
+    CLASS-METHODS import_profile.
+    CLASS-METHODS export_profile.
+    CLASS-METHODS get_initial_check RETURNING VALUE(result) TYPE ytab_checks.
+
+    CLASS-METHODS add_delegate RAISING cx_failed.
+    CLASS-METHODS remove_delegate.
+    CLASS-METHODS auto_re_start_delegate.
+    CLASS-METHODS check_delegate_rights RETURNING VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS init_add_check.
+    CLASS-METHODS init_edit_check IMPORTING check TYPE ytab_checks.
+
+    CLASS-METHODS check_customization IMPORTING edit_mode TYPE abap_bool DEFAULT abap_false
+                                      RAISING   cx_failed.
+
+    CLASS-METHODS auto_re_start_check IMPORTING edit_mode TYPE abap_bool DEFAULT abap_false.
+    CLASS-METHODS remove_check IMPORTING check TYPE ytab_checks.
+    CLASS-METHODS  remove_selected_check.
+
+    CLASS-METHODS check_check_rights IMPORTING profile       TYPE ycicc_profile
+                                     RETURNING VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS check_selected_check_rights RETURNING VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS mass_change.
+
+    CLASS-METHODS set_text_field_text IMPORTING fieldname TYPE string
+                                                text      TYPE string.
+
+    CLASS-METHODS get_cursor_field RETURNING VALUE(result) TYPE char20.
+    CLASS-METHODS call_check_info.
+    CLASS-METHODS add_all_checks.
+
+    CLASS-METHODS add_check IMPORTING edit_mode TYPE abap_bool DEFAULT abap_false
+                            RAISING cx_failed.
+
     CLASS-METHODS remove_all_checks.
     CLASS-METHODS add_missing_checks.
 
-    CLASS-METHODS switch_bool
-      IMPORTING boolean       TYPE abap_bool
-      RETURNING VALUE(result) TYPE abap_bool.
+    CLASS-METHODS switch_bool IMPORTING boolean       TYPE abap_bool
+                              RETURNING VALUE(result) TYPE abap_bool.
 
-    CLASS-METHODS ux_usability_switch
-      IMPORTING checks        TYPE Y_IF_CODE_PAL_PROFILE=>check_assignments
-      RETURNING VALUE(result) TYPE Y_IF_CODE_PAL_PROFILE=>check_assignments.
+    CLASS-METHODS ux_usability_switch IMPORTING checks        TYPE y_if_code_pal_profile=>check_assignments
+                                      RETURNING VALUE(result) TYPE y_if_code_pal_profile=>check_assignments.
 
   PRIVATE SECTION.
-    CLASS-METHODS request_confirmation
-      IMPORTING
-        text_question TYPE string.
+    CLASS-METHODS request_confirmation IMPORTING text_question TYPE string.
 
 ENDCLASS.
 
@@ -383,7 +356,7 @@ ENDCLASS.
 CLASS lcl_delegator_events DEFINITION INHERITING FROM lcl_alv_events.
   PUBLIC SECTION.
     METHODS lif_alv_events~handle_function_selected REDEFINITION.
-  PRIVATE SECTION.
+
 ENDCLASS.
 
 
@@ -402,8 +375,10 @@ CLASS lcl_delegator_events IMPLEMENTATION.
         lcl_util=>remove_delegate( ).
 
     ENDCASE.
+
     lcl_util=>refresh_delegates( ).
   ENDMETHOD.
+
 ENDCLASS.
 
 
@@ -424,7 +399,6 @@ ENDCLASS.
 
 CLASS lcl_list IMPLEMENTATION.
 
-
   METHOD constructor.
     CREATE DATA table_component TYPE TABLE OF (type_name).
     comp_type_name = type_name.
@@ -432,7 +406,7 @@ CLASS lcl_list IMPLEMENTATION.
 
 
   METHOD lif_list~append.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     APPEND line TO <table>.
     SORT <table> ASCENDING.
@@ -441,7 +415,7 @@ CLASS lcl_list IMPLEMENTATION.
 
 
   METHOD lif_list~delete_all.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     <table> = VALUE #( ).
     SORT <table> ASCENDING.
@@ -450,7 +424,7 @@ CLASS lcl_list IMPLEMENTATION.
 
 
   METHOD lif_list~delete_at.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     DELETE <table> INDEX index.
     SORT <table> ASCENDING.
@@ -459,16 +433,16 @@ CLASS lcl_list IMPLEMENTATION.
 
 
   METHOD lif_list~get_line_at.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     READ TABLE <table> ASSIGNING FIELD-SYMBOL(<line1>) INDEX index.
     IF sy-subrc = 0.
       CREATE DATA result LIKE <line1>.
       ASSIGN result->* TO FIELD-SYMBOL(<line2>).
       <line2> = <line1>.
-      UNASSIGN: <line2>.
+      UNASSIGN <line2>.
     ENDIF.
-    UNASSIGN: <table>, <line1>.
+    UNASSIGN <table>, <line1>.
   ENDMETHOD.
 
 
@@ -483,7 +457,7 @@ CLASS lcl_list IMPLEMENTATION.
 
 
   METHOD lif_list~insert_at.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     INSERT line INTO <table> INDEX index.
     SORT <table> ASCENDING.
@@ -492,18 +466,18 @@ CLASS lcl_list IMPLEMENTATION.
 
 
   METHOD lif_list~is_contained.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     FIND FIRST OCCURRENCE OF line IN TABLE <table>.
     IF sy-subrc = 0.
       result = abap_true.
     ENDIF.
-    UNASSIGN: <table>.
+    UNASSIGN <table>.
   ENDMETHOD.
 
 
   METHOD lif_list~number_of_rows.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     result = 0.
     ASSIGN table_component->* TO <table>.
     DESCRIBE TABLE <table> LINES result.
@@ -511,17 +485,8 @@ CLASS lcl_list IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD lif_list~modify_at.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
-    ASSIGN table_component->* TO <table>.
-    MODIFY <table> FROM line INDEX index.
-    SORT <table> ASCENDING.
-    UNASSIGN <table>.
-  ENDMETHOD.
-
-
   METHOD lif_list~set_table.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     <table> = table.
     SORT <table> ASCENDING.
@@ -530,7 +495,7 @@ CLASS lcl_list IMPLEMENTATION.
 
 
   METHOD lif_list~get_line_index.
-    FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
     ASSIGN table_component->* TO <table>.
     LOOP AT <table> ASSIGNING FIELD-SYMBOL(<entry>).
       IF <entry> = line.
@@ -539,41 +504,34 @@ CLASS lcl_list IMPLEMENTATION.
     ENDLOOP.
     UNASSIGN <table>.
   ENDMETHOD.
+
 ENDCLASS.
 
 
 
 CLASS lcl_alv_tree_control DEFINITION.
   PUBLIC SECTION.
-
     INTERFACES lif_alv_tree_control.
 
-    CLASS-METHODS create
-      IMPORTING
-        alv_header_text TYPE slis_entry
-        dynpro_nr       TYPE sydynnr
-        sy_repid        TYPE syrepid
-        docking_side    TYPE i DEFAULT cl_gui_docking_container=>align_at_left
-        ratio           TYPE i
-        type_name       TYPE string
-        sort_table      TYPE lvc_t_sort
-        events          TYPE REF TO lif_alv_events
-        event_mode      TYPE i DEFAULT lif_alv_events=>mode_double_click
-      RETURNING
-        VALUE(result)   TYPE REF TO lif_alv_tree_control
-      RAISING
-        cx_sy_create_data_error
-        cx_failed.
+    CLASS-METHODS create IMPORTING alv_header_text TYPE slis_entry
+                                   dynpro_nr       TYPE sydynnr
+                                   sy_repid        TYPE syrepid
+                                   docking_side    TYPE i DEFAULT cl_gui_docking_container=>align_at_left
+                                   ratio           TYPE i
+                                   type_name       TYPE string
+                                   sort_table      TYPE lvc_t_sort
+                                   events          TYPE REF TO lif_alv_events
+                                   event_mode      TYPE i DEFAULT lif_alv_events=>mode_double_click
+                         RETURNING VALUE(result)   TYPE REF TO lif_alv_tree_control
+                         RAISING cx_sy_create_data_error
+                                 cx_failed.
 
-    METHODS constructor
-      IMPORTING
-        type_name  TYPE string
-        sort_table TYPE lvc_t_sort
-        alv_tree   TYPE REF TO cl_gui_alv_tree_simple
-        alv_header TYPE slis_t_listheader
-      RAISING
-        cx_sy_create_data_error
-        cx_failed.
+    METHODS constructor IMPORTING type_name  TYPE string
+                                  sort_table TYPE lvc_t_sort
+                                  alv_tree   TYPE REF TO cl_gui_alv_tree_simple
+                                  alv_header TYPE slis_t_listheader
+                        RAISING cx_sy_create_data_error
+                                cx_failed.
 
   PROTECTED SECTION.
     METHODS set_all_fields_invisible.
@@ -636,9 +594,9 @@ CLASS lcl_alv_tree_control IMPLEMENTATION.
     DATA(alv_header) = VALUE slis_t_listheader( ( typ = 'H' info = alv_header_text ) ).
 
     result = NEW lcl_alv_tree_control( type_name = type_name
-                                     sort_table = sort_table
-                                     alv_tree = alv_tree
-                                     alv_header = alv_header ).
+                                       sort_table = sort_table
+                                       alv_tree = alv_tree
+                                       alv_header = alv_header ).
   ENDMETHOD.
 
 
@@ -797,11 +755,15 @@ ENDCLASS.
 CLASS lcl_check_events DEFINITION INHERITING FROM lcl_alv_events.
   PUBLIC SECTION.
     METHODS lif_alv_events~handle_function_selected REDEFINITION.
+
   PRIVATE SECTION.
     METHODS handle_btn_info.
     METHODS handle_btn_add.
     METHODS handle_btn_edit.
+
 ENDCLASS.
+
+
 
 CLASS lcl_check_events IMPLEMENTATION.
 
@@ -842,6 +804,7 @@ CLASS lcl_check_events IMPLEMENTATION.
     lcl_util=>refresh_checks( ).
   ENDMETHOD.
 
+
   METHOD handle_btn_edit.
     TRY.
         lcl_util=>init_edit_check( lcl_util=>get_selected_check( ) ).
@@ -850,6 +813,7 @@ CLASS lcl_check_events IMPLEMENTATION.
         MESSAGE TEXT-015 TYPE 'I'.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD handle_btn_add.
     TRY.
@@ -860,6 +824,7 @@ CLASS lcl_check_events IMPLEMENTATION.
         MESSAGE TEXT-015 TYPE 'I'.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD handle_btn_info.
     TRY.
@@ -875,6 +840,7 @@ ENDCLASS.
 
 
 CLASS lcl_util IMPLEMENTATION.
+
   METHOD init_profiles.
     TRY.
         profiles_tree = lcl_alv_tree_control=>create( alv_header_text = TEXT-002
@@ -928,6 +894,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     refresh_profiles( ).
   ENDMETHOD.
+
 
   METHOD init_checks.
     TRY.
@@ -1030,6 +997,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD init_delegates.
     TRY.
         delegates_tree = lcl_alv_tree_control=>create( alv_header_text = TEXT-029
@@ -1069,6 +1037,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD call_check_info.
     DATA base TYPE REF TO y_code_pal_base.
     TRY.
@@ -1081,12 +1050,14 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD get_cursor_field.
     GET CURSOR FIELD result.
   ENDMETHOD.
 
+
   METHOD get_selected_profile.
-    FIELD-SYMBOLS: <line> TYPE ytab_profiles.
+    FIELD-SYMBOLS <line> TYPE ytab_profiles.
     DATA(line) = profiles_tree->get_selected_line( ).
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
@@ -1096,13 +1067,15 @@ CLASS lcl_util IMPLEMENTATION.
     UNASSIGN <line>.
   ENDMETHOD.
 
+
   METHOD set_selected_profile.
     DATA(index) = profiles_tree->list_control( )->get_line_index( profile ).
     profiles_tree->set_selected_index( index ).
   ENDMETHOD.
 
+
   METHOD get_selected_delegate.
-    FIELD-SYMBOLS: <line> TYPE ytab_delegates.
+    FIELD-SYMBOLS <line> TYPE ytab_delegates.
     DATA(line) = delegates_tree->get_selected_line( ).
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
@@ -1112,8 +1085,9 @@ CLASS lcl_util IMPLEMENTATION.
     UNASSIGN <line>.
   ENDMETHOD.
 
+
   METHOD get_selected_check.
-    FIELD-SYMBOLS: <line> TYPE ytab_checks.
+    FIELD-SYMBOLS <line> TYPE ytab_checks.
     DATA(line) = checks_tree->get_selected_line( ).
     ASSIGN line->* TO <line>.
     IF sy-subrc <> 0.
@@ -1123,6 +1097,7 @@ CLASS lcl_util IMPLEMENTATION.
     result-ignore_pseudo_comments = switch_bool( result-ignore_pseudo_comments ).
     UNASSIGN <line>.
   ENDMETHOD.
+
 
   METHOD switch_toolbar_activation.
     TRY.
@@ -1134,6 +1109,7 @@ CLASS lcl_util IMPLEMENTATION.
         delegates_tree->deactivate_toolbar( ).
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD refresh_checks.
     CHECK checks_tree IS BOUND.
@@ -1149,6 +1125,7 @@ CLASS lcl_util IMPLEMENTATION.
     checks_tree->refresh_display( ).
   ENDMETHOD.
 
+
   METHOD ux_usability_switch.
     result = checks.
     LOOP AT result ASSIGNING FIELD-SYMBOL(<check>).
@@ -1156,6 +1133,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDLOOP.
     UNASSIGN <check>.
   ENDMETHOD.
+
 
   METHOD refresh_delegates.
     CHECK delegates_tree IS BOUND.
@@ -1169,6 +1147,7 @@ CLASS lcl_util IMPLEMENTATION.
     delegates_tree->refresh_display( ).
   ENDMETHOD.
 
+
   METHOD refresh_profiles.
     CHECK profiles_tree IS BOUND.
     TRY.
@@ -1181,11 +1160,13 @@ CLASS lcl_util IMPLEMENTATION.
     profiles_tree->refresh_display( ).
   ENDMETHOD.
 
+
   METHOD refresh_all_trees.
     refresh_profiles( ).
     refresh_checks( ).
     refresh_delegates( ).
   ENDMETHOD.
+
 
   METHOD call_f4help.
     CALL FUNCTION 'F4IF_INT_TABLE_VALUE_REQUEST'
@@ -1204,6 +1185,7 @@ CLASS lcl_util IMPLEMENTATION.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD profile_f4help_200.
     TRY.
@@ -1226,6 +1208,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD profile_f4help_600.
     TRY.
         DATA(f4values) = call_f4help( referenced_field_name = 'PROFILE'
@@ -1246,6 +1229,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD check_f4help.
     TRY.
@@ -1271,6 +1255,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD init_ui_400.
     TRY.
@@ -1306,12 +1291,14 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD get_check.
     CREATE OBJECT result TYPE (checkid).
   ENDMETHOD.
 
+
   METHOD set_dynpro_field_active.
-    LOOP AT SCREEN INTO DATA(line).
+    LOOP AT screen INTO DATA(line).
 
       IF line-name = to_upper( fieldname ).
         IF is_active = abap_true.
@@ -1328,8 +1315,9 @@ CLASS lcl_util IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD set_text_field_text.
-    LOOP AT SCREEN INTO DATA(line).
+    LOOP AT screen INTO DATA(line).
       IF line-name = to_upper( fieldname ).
         line-output = text.
         MODIFY SCREEN FROM line.
@@ -1337,6 +1325,7 @@ CLASS lcl_util IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD assign_profile.
     CALL SCREEN 200 STARTING AT 10 10.
@@ -1360,6 +1349,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD unassign_profile.
     TRY.
         profile_manager->delete_profile( get_selected_profile( ) ).
@@ -1372,6 +1362,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD copy_profile.
     CALL SCREEN 600 STARTING AT 10 10.
@@ -1424,7 +1415,8 @@ CLASS lcl_util IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD  create_template_profile.
+
+  METHOD create_template_profile.
     CALL SCREEN 500 STARTING AT 10 10.
 
     IF user_command <> 'ENTR_500'
@@ -1433,7 +1425,6 @@ CLASS lcl_util IMPLEMENTATION.
     ENDIF.
 
     TRY.
-
         IF profile_manager->profile_exists( io_profilename ) = abap_true.
           RAISE EXCEPTION TYPE ycx_code_pal_add_a_line.
         ENDIF.
@@ -1456,6 +1447,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD import_profile.
     TRY.
@@ -1481,6 +1473,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     MESSAGE TEXT-056 TYPE 'S'.
   ENDMETHOD.
+
 
   METHOD export_profile.
     TRY.
@@ -1512,6 +1505,7 @@ CLASS lcl_util IMPLEMENTATION.
     MESSAGE TEXT-056 TYPE 'S'.
   ENDMETHOD.
 
+
   METHOD get_initial_check.
     result-profile = ''.
     result-checkid = ''.
@@ -1527,6 +1521,7 @@ CLASS lcl_util IMPLEMENTATION.
     result-ignore_pseudo_comments = abap_false.
   ENDMETHOD.
 
+
   METHOD auto_re_start_delegate.
     TRY.
         CALL SCREEN 300 STARTING AT 10 10.
@@ -1537,6 +1532,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD add_delegate.
     CHECK user_command = 'ENTR_300' AND io_delegate_name <> space.
@@ -1553,6 +1549,7 @@ CLASS lcl_util IMPLEMENTATION.
         RAISE EXCEPTION TYPE cx_failed.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD remove_delegate.
     TRY.
@@ -1579,6 +1576,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD check_delegate_rights.
     TRY.
         DATA(prof) = get_selected_profile( ).
@@ -1601,6 +1599,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD auto_re_start_check.
     TRY.
         CALL SCREEN 400 STARTING AT 10 10.
@@ -1611,6 +1610,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD mass_change.
     chbx_change_vp = abap_false.
@@ -1666,6 +1666,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD init_add_check.
     DATA obj TYPE REF TO y_code_pal_base.
 
@@ -1694,6 +1695,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD init_edit_check.
     DATA(check_line) = check.
 
@@ -1718,12 +1720,14 @@ CLASS lcl_util IMPLEMENTATION.
     FREE check_line.
   ENDMETHOD.
 
+
   METHOD check_customization.
     CHECK user_command = 'ENTR_400'
     AND io_check_id <> space.
 
     add_check( edit_mode ).
   ENDMETHOD.
+
 
   METHOD add_check.
     TRY.
@@ -1786,6 +1790,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD remove_check.
     TRY.
         profile_manager->delete_check( check ).
@@ -1794,6 +1799,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD remove_selected_check.
     TRY.
         remove_check( get_selected_check( ) ).
@@ -1801,6 +1807,7 @@ CLASS lcl_util IMPLEMENTATION.
         MESSAGE TEXT-015 TYPE 'W'.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD check_check_rights.
     TRY.
@@ -1813,6 +1820,7 @@ CLASS lcl_util IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD check_selected_check_rights.
     TRY.
         result = check_check_rights( get_selected_profile( )-profile ).
@@ -1820,6 +1828,7 @@ CLASS lcl_util IMPLEMENTATION.
         MESSAGE TEXT-005 TYPE 'W'.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD request_confirmation.
     DATA answer TYPE c.
@@ -1836,6 +1845,7 @@ CLASS lcl_util IMPLEMENTATION.
       MESSAGE TEXT-057 TYPE 'W'.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD add_all_checks.
     TRY.
@@ -1904,6 +1914,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     MESSAGE TEXT-056 TYPE 'S'.
   ENDMETHOD.
+
 
   METHOD add_missing_checks.
     DATA missing_checks TYPE STANDARD TABLE OF ycicc_checkid.

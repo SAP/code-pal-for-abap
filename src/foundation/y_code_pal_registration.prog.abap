@@ -145,8 +145,8 @@ CLASS lcl_util IMPLEMENTATION.
           count_errors = count_errors + 1.
       ENDTRY.
     ENDLOOP.
-    WRITE: / |{ count_successes } { messages-successfully_activated }|.
-    WRITE: / |{ count_errors } { messages-failed_activation }|.
+    WRITE / |{ count_successes } { messages-successfully_activated }|.
+    WRITE / |{ count_errors } { messages-failed_activation }|.
   ENDMETHOD.
 
   METHOD deactivate_all_checks.
@@ -161,8 +161,8 @@ CLASS lcl_util IMPLEMENTATION.
           count_faults = count_faults + 1.
       ENDTRY.
     ENDLOOP.
-    WRITE: / |{ count_successes } { messages-successfully_deactivated }|.
-    WRITE:  / |{ count_faults } { messages-failed_deactivation }|.
+    WRITE / |{ count_successes } { messages-successfully_deactivated }|.
+    WRITE / |{ count_faults } { messages-failed_deactivation }|.
   ENDMETHOD.
 
 ENDCLASS.
@@ -185,8 +185,8 @@ AT SELECTION-SCREEN OUTPUT.
   comm1 = comments-runmode.
 
 START-OF-SELECTION.
-  WRITE: / comments-title.
-  WRITE: / space.
+  WRITE / comments-title.
+  WRITE / space.
 
   IF p_activa = abap_true.
     lcl_util=>activate_all_checks( ).
@@ -201,4 +201,4 @@ START-OF-SELECTION.
   ENDIF.
   COMMIT WORK.
 
-  WRITE: / |{ messages-done }|.
+  WRITE / |{ messages-done }|.
