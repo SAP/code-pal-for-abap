@@ -68,12 +68,6 @@ ENDINTERFACE.
 
 INTERFACE lif_profile_manager.
 
-  CONSTANTS: BEGIN OF types,
-               checks    TYPE tabname VALUE 'YTAB_CHECKS',
-               delegates TYPE tabname VALUE 'YTAB_DELEGATES',
-               profiles  TYPE tabname VALUE 'YTAB_PROFILES',
-             END OF types.
-
   TYPES profile_assignments TYPE STANDARD TABLE OF ytab_profiles WITH DEFAULT KEY.
   TYPES delegate_assigments TYPE STANDARD TABLE OF ytab_delegates WITH DEFAULT KEY.
   TYPES check_assignments TYPE STANDARD TABLE OF ytab_checks WITH DEFAULT KEY.

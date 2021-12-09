@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>Y_UNIT_TEST_BASE</CLSNAME>
+    <CLSNAME>Y_CODE_PAL_UNIT_TEST_BASE</CLSNAME>
     <LANGU>E</LANGU>
     <DESCRIPT>Unit Test Base</DESCRIPT>
     <CATEGORY>05</CATEGORY>

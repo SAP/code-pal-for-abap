@@ -8,7 +8,7 @@ CLASS y_code_pal_telemetry DEFINITION PUBLIC FINAL CREATE PUBLIC.
   PRIVATE SECTION.
     CONSTANTS active VALUE abap_true.
 
-    METHODS insert IMPORTING entry TYPE ycodepaltlmy.
+    METHODS add IMPORTING entry TYPE ycodepaltlmy.
     METHODS get_timestamp RETURNING VALUE(result) TYPE ycodepaltlmy-timestamp.
 ENDCLASS.
 
@@ -19,7 +19,7 @@ CLASS y_code_pal_telemetry IMPLEMENTATION.
   METHOD y_if_code_pal_telemetry~add_usage.
     CHECK active = abap_true.
 
-    insert( VALUE ycodepaltlmy( event = events-usage
+    add( VALUE ycodepaltlmy( event = events-usage
                                 check_name = check
                                 timestamp = get_timestamp( ) ) ).
   ENDMETHOD.
@@ -28,7 +28,7 @@ CLASS y_code_pal_telemetry IMPLEMENTATION.
   METHOD y_if_code_pal_telemetry~add_finding.
     CHECK active = abap_true.
 
-    insert( VALUE ycodepaltlmy( event = events-finding
+    add( VALUE ycodepaltlmy( event = events-finding
                                 check_name = check
                                 timestamp = get_timestamp( ) ) ).
   ENDMETHOD.
@@ -51,10 +51,10 @@ CLASS y_code_pal_telemetry IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD insert.
+  METHOD add.
     DATA table TYPE TABLE OF ycodepaltlmy.
     APPEND entry TO table.
-    INSERT ycodepaltlmy FROM TABLE @table ACCEPTING DUPLICATE KEYS.
+    INSERT ycodepaltlmy FROM TABLE @table.
   ENDMETHOD.
 
 

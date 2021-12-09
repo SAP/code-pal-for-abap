@@ -1,7 +1,7 @@
 CLASS y_code_pal_base DEFINITION PUBLIC ABSTRACT
   INHERITING FROM cl_ci_test_scan
   CREATE PUBLIC
-  GLOBAL FRIENDS y_unit_test_base
+  GLOBAL FRIENDS y_code_pal_unit_test_base
                  y_code_pal_coverage.
 
   PUBLIC SECTION.

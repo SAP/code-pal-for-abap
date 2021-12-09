@@ -1,5 +1,5 @@
 *"* use this source file for your ABAP unit test classes
-CLASS ltc_read_table DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+CLASS ltc_read_table DEFINITION INHERITING FROM y_code_pal_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
     METHODS get_code_with_issue REDEFINITION.
