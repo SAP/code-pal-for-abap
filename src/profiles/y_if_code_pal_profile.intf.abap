@@ -28,6 +28,7 @@ INTERFACE y_if_code_pal_profile PUBLIC.
         END OF check_description.
 
   TYPES check_descriptions TYPE STANDARD TABLE OF check_description WITH DEFAULT KEY.
+  TYPES value_help TYPE STANDARD TABLE OF ddshretval WITH DEFAULT KEY.
 
   CLASS-METHODS create RETURNING VALUE(result) TYPE REF TO y_if_code_pal_profile.
   CLASS-METHODS get_checks_from_db RETURNING VALUE(result) TYPE tt_tadir.
