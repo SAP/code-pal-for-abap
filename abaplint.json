@@ -125,8 +125,8 @@
       "fugr": "^Y_(PAL|CODE_PAL)",
       "tabl": "^Y(PAL|CODEPAL|TAB)",
       "ttyp": "^Y_(PAL|CODE_PAL)",
-      "dtel": "^Y(_PAL|_CODE_PAL|YCICC)",
-      "doma": "^Y(_PAL|_CODE_PAL|YCICC)",
+      "dtel": "^Y(_PAL|_CODE_PAL|CICC)",
+      "doma": "^Y(_PAL|_CODE_PAL|CICC)",
       "msag": "^Y_(PAL|CODE_PAL)",
       "tran": "^Y_(PAL|CODE_PAL)"
     },
