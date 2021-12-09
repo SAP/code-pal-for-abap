@@ -168,6 +168,7 @@
     "type_form_parameters": true,
     "types_naming": false,
     "uncaught_exception": true,
+    "unnecessary_chaining": true,
     "unknown_types": true,
     "unreachable_code": true,
     "unsecure_fae": false,
