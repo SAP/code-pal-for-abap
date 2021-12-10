@@ -1,19 +1,5 @@
 REPORT y_code_pal_registration.
 
-DATA: BEGIN OF comments,
-        title   TYPE string VALUE 'code pal for ABAP - Check Activation Tool (Local Only)',
-        runmode TYPE string VALUE 'Please choose a run mode',
-      END OF comments.
-
-DATA: BEGIN OF messages,
-        checks_not_found         TYPE string VALUE 'Code Pal Checks not found.',
-        successfully_activated   TYPE string VALUE 'Entrys Successfully activated (category + checks)',
-        failed_activation        TYPE string VALUE 'Entrys Failed to activate',
-        successfully_deactivated TYPE string VALUE 'Entrys Successfully deactivated (category + checks)',
-        failed_deactivation      TYPE string VALUE 'Entrys Failed to deactivate',
-        done                     TYPE string VALUE 'Done!',
-      END OF messages.
-
 CONSTANTS: BEGIN OF reference,
              check_base           TYPE sci_chk VALUE 'Y_CODE_PAL_BASE',
              class                TYPE tadir-object VALUE 'CLAS',
@@ -21,42 +7,38 @@ CONSTANTS: BEGIN OF reference,
              checks               TYPE string VALUE 'CHECKS',
              modifiable           TYPE e070-trstatus VALUE 'D',
              modifiable_protected TYPE e070-trstatus VALUE 'L',
-             error                TYPE c LENGTH 1 VALUE 'E',
            END OF reference.
 
 CLASS lcl_check_registration DEFINITION.
   PUBLIC SECTION.
     CLASS-DATA name_tab TYPE STANDARD TABLE OF scitests-name READ-ONLY.
 
-    CLASS-METHODS select_object_list
-      RETURNING VALUE(result) LIKE name_tab
-      RAISING   cx_failed.
+    CLASS-METHODS select_object_list RETURNING VALUE(result) LIKE name_tab
+                                     RAISING   cx_failed.
 
-    CLASS-METHODS activate_check
-      IMPORTING name TYPE sci_chk
-      RAISING   cx_failed
-                cx_sy_create_object_error.
+    CLASS-METHODS activate_check IMPORTING name TYPE sci_chk
+                                 RAISING   cx_failed
+                                           cx_sy_create_object_error.
 
-    CLASS-METHODS deactivate_check
-      IMPORTING name TYPE sci_chk
-      RAISING   cx_failed
-                cx_sy_create_object_error.
+    CLASS-METHODS deactivate_check IMPORTING name TYPE sci_chk
+                                   RAISING   cx_failed
+                                             cx_sy_create_object_error.
 
-    CLASS-METHODS is_check_compatible
-      IMPORTING name TYPE sci_chk
-      RAISING   cx_sy_create_object_error.
+    CLASS-METHODS is_check_compatible IMPORTING name TYPE sci_chk
+                                      RAISING   cx_sy_create_object_error.
 
-    CLASS-METHODS get_category_name
-      RETURNING VALUE(result) TYPE sci_chk.
+    CLASS-METHODS get_category_name RETURNING VALUE(result) TYPE sci_chk.
 
-  PROTECTED SECTION.
-  PRIVATE SECTION.
 ENDCLASS.
 
+
+
 CLASS lcl_check_registration IMPLEMENTATION.
+
   METHOD get_category_name.
-    result = cl_abap_objectdescr=>describe_by_object_ref( NEW Y_PAL_CATEGORY( ) )->get_relative_name( ).
+    result = cl_abap_objectdescr=>describe_by_object_ref( NEW y_code_pal_category( ) )->get_relative_name( ).
   ENDMETHOD.
+
 
   METHOD is_check_compatible.
     DATA code_pal_check TYPE REF TO y_code_pal_base.
@@ -64,6 +46,7 @@ CLASS lcl_check_registration IMPLEMENTATION.
       CREATE OBJECT code_pal_check TYPE (name).
     ENDIF.
   ENDMETHOD.
+
 
   METHOD select_object_list.
     SELECT SINGLE devclass FROM tadir
@@ -90,6 +73,7 @@ CLASS lcl_check_registration IMPLEMENTATION.
     SORT result ASCENDING AS TEXT.
   ENDMETHOD.
 
+
   METHOD activate_check.
     is_check_compatible( name ).
 
@@ -98,6 +82,7 @@ CLASS lcl_check_registration IMPLEMENTATION.
       RAISE EXCEPTION TYPE cx_failed.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD deactivate_check.
     is_check_compatible( name ).
@@ -110,18 +95,20 @@ CLASS lcl_check_registration IMPLEMENTATION.
 
 ENDCLASS.
 
+
+
 CLASS lcl_util DEFINITION.
   PUBLIC SECTION.
     CLASS-METHODS activate_all_checks.
-
     CLASS-METHODS deactivate_all_checks.
+    CLASS-METHODS migrate_v1_to_v2 RAISING cx_failed.
 
-  PROTECTED SECTION.
   PRIVATE SECTION.
-    CLASS-METHODS get_obj_list
-      RETURNING VALUE(result) LIKE lcl_check_registration=>name_tab.
+    CLASS-METHODS get_obj_list RETURNING VALUE(result) LIKE lcl_check_registration=>name_tab.
 
 ENDCLASS.
+
+
 
 CLASS lcl_util IMPLEMENTATION.
 
@@ -129,9 +116,10 @@ CLASS lcl_util IMPLEMENTATION.
     TRY.
         result = lcl_check_registration=>select_object_list( ).
       CATCH cx_failed.
-        MESSAGE messages-checks_not_found TYPE reference-error.
+        MESSAGE TEXT-001 TYPE 'E'.
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD activate_all_checks.
     DATA(count_successes) = 0.
@@ -145,9 +133,10 @@ CLASS lcl_util IMPLEMENTATION.
           count_errors = count_errors + 1.
       ENDTRY.
     ENDLOOP.
-    WRITE / |{ count_successes } { messages-successfully_activated }|.
-    WRITE / |{ count_errors } { messages-failed_activation }|.
+    WRITE / |{ count_successes } { TEXT-002 }|.
+    WRITE / |{ count_errors } { TEXT-003 }|.
   ENDMETHOD.
+
 
   METHOD deactivate_all_checks.
     DATA(count_successes) = 0.
@@ -161,44 +150,88 @@ CLASS lcl_util IMPLEMENTATION.
           count_faults = count_faults + 1.
       ENDTRY.
     ENDLOOP.
-    WRITE / |{ count_successes } { messages-successfully_deactivated }|.
-    WRITE / |{ count_faults } { messages-failed_deactivation }|.
+    WRITE / |{ count_successes } { TEXT-004 }|.
+    WRITE / |{ count_faults } { TEXT-005 }|.
+  ENDMETHOD.
+
+
+  METHOD migrate_v1_to_v2.
+    SELECT *
+    FROM ytab_checks
+    INTO TABLE @DATA(entries)
+    WHERE checkid LIKE 'Y_CHECK_%'.
+
+    DATA(count) = lines( entries ).
+
+    IF count = 0.
+      WRITE / TEXT-008.
+      RAISE EXCEPTION TYPE cx_failed.
+    ENDIF.
+
+    LOOP AT entries ASSIGNING FIELD-SYMBOL(<deprecated_entry>).
+      REPLACE 'Y_CHECK_' WITH 'Y_PAL_' INTO <deprecated_entry>-checkid.
+    ENDLOOP.
+
+    INSERT ytab_checks FROM TABLE entries.
+
+    IF sy-subrc IS NOT INITIAL.
+      WRITE / TEXT-009.
+      RAISE EXCEPTION TYPE cx_failed.
+    ENDIF.
+
+    DELETE FROM ytab_checks WHERE checkid LIKE 'Y_CHECK_%'.
+
+    IF sy-subrc IS NOT INITIAL .
+      WRITE TEXT-009.
+      RAISE EXCEPTION TYPE cx_failed.
+    ELSE.
+      WRITE / |{ count } { TEXT-007 }|.
+    ENDIF.
   ENDMETHOD.
 
 ENDCLASS.
 
-START-OF-SELECTION.
 
+
+START-OF-SELECTION.
   SELECTION-SCREEN BEGIN OF BLOCK part0.
     SELECTION-SCREEN COMMENT /1(83) comm0 MODIF ID mg1.
-
     SELECTION-SCREEN BEGIN OF BLOCK part1 WITH FRAME.
       SELECTION-SCREEN COMMENT /1(60) comm1 MODIF ID mg1.
-      PARAMETERS: p_activa RADIOBUTTON GROUP g1,
-                  p_deacti RADIOBUTTON GROUP g1,
-                  p_reacti RADIOBUTTON GROUP g1 DEFAULT 'X'.
+      PARAMETERS p_activa RADIOBUTTON GROUP g1.
+      PARAMETERS p_deacti RADIOBUTTON GROUP g1.
+      PARAMETERS p_reacti RADIOBUTTON GROUP g1 DEFAULT 'X'.
+      PARAMETERS p_migrat RADIOBUTTON GROUP g1.
     SELECTION-SCREEN END OF BLOCK part1.
   SELECTION-SCREEN END OF BLOCK part0.
 
 AT SELECTION-SCREEN OUTPUT.
-  comm0 = comments-title.
-  comm1 = comments-runmode.
+  comm0 = TEXT-010.
+  comm1 = TEXT-011.
 
 START-OF-SELECTION.
-  WRITE / comments-title.
+  WRITE / TEXT-010.
   WRITE / space.
 
-  IF p_activa = abap_true.
-    lcl_util=>activate_all_checks( ).
+  TRY.
+      IF p_activa = abap_true.
+        lcl_util=>activate_all_checks( ).
 
-  ELSEIF p_deacti = abap_true.
-    lcl_util=>deactivate_all_checks( ).
+      ELSEIF p_deacti = abap_true.
+        lcl_util=>deactivate_all_checks( ).
 
-  ELSEIF p_reacti = abap_true.
-    lcl_util=>deactivate_all_checks( ).
-    lcl_util=>activate_all_checks( ).
+      ELSEIF p_reacti = abap_true.
+        lcl_util=>deactivate_all_checks( ).
+        lcl_util=>activate_all_checks( ).
 
-  ENDIF.
-  COMMIT WORK.
+      ELSEIF p_migrat = abap_true.
+        lcl_util=>migrate_v1_to_v2( ).
 
-  WRITE / |{ messages-done }|.
+      ENDIF.
+
+      COMMIT WORK AND WAIT.
+
+    CATCH cx_failed.
+      ROLLBACK WORK.
+
+  ENDTRY.

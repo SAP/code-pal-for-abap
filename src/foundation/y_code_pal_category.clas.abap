@@ -1,4 +1,4 @@
-class Y_PAL_CATEGORY definition
+class Y_CODE_PAL_CATEGORY definition
   public
   inheriting from CL_CI_CATEGORY_ROOT
   create public .
@@ -17,7 +17,7 @@ ENDCLASS.
 
 
 
-CLASS Y_PAL_CATEGORY IMPLEMENTATION.
+CLASS Y_CODE_PAL_CATEGORY IMPLEMENTATION.
 
 
   METHOD constructor.

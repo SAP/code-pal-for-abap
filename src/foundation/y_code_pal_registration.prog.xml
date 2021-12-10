@@ -11,6 +11,66 @@
    </PROGDIR>
    <TPOOL>
     <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Checks not found</ENTRY>
+     <LENGTH>26</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>002</KEY>
+     <ENTRY>entries successfully activated (category + checks)</ENTRY>
+     <LENGTH>106</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>003</KEY>
+     <ENTRY>entries failed to activate</ENTRY>
+     <LENGTH>52</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>004</KEY>
+     <ENTRY>entries successfully deactivated (category + checks)</ENTRY>
+     <LENGTH>104</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>005</KEY>
+     <ENTRY>entries failed to deactivate</ENTRY>
+     <LENGTH>56</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>007</KEY>
+     <ENTRY>entries successfully migrated</ENTRY>
+     <LENGTH>58</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>008</KEY>
+     <ENTRY>no migration required</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>009</KEY>
+     <ENTRY>migration failed</ENTRY>
+     <LENGTH>27</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>010</KEY>
+     <ENTRY>code pal for ABAP - Check Activation Tool (Local Only)</ENTRY>
+     <LENGTH>108</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>011</KEY>
+     <ENTRY>Please choose a run mode</ENTRY>
+     <LENGTH>48</LENGTH>
+    </item>
+    <item>
      <ID>R</ID>
      <ENTRY>Program Y_CHECK_REGISTRATION</ENTRY>
      <LENGTH>28</LENGTH>
@@ -29,21 +89,15 @@
     </item>
     <item>
      <ID>S</ID>
-     <KEY>P_LOCAL</KEY>
-     <ENTRY>Keep the checks local?</ENTRY>
-     <LENGTH>30</LENGTH>
+     <KEY>P_MIGRAT</KEY>
+     <ENTRY>Migrate</ENTRY>
+     <LENGTH>15</LENGTH>
     </item>
     <item>
      <ID>S</ID>
      <KEY>P_REACTI</KEY>
      <ENTRY>Reactivate</ENTRY>
      <LENGTH>18</LENGTH>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_TRANSP</KEY>
-     <ENTRY>Transport ID</ENTRY>
-     <LENGTH>20</LENGTH>
     </item>
    </TPOOL>
   </asx:values>

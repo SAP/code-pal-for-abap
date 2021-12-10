@@ -145,7 +145,7 @@ CLASS y_code_pal_base IMPLEMENTATION.
     manager = NEW y_code_pal_manager( srcid ).
 
     description = manager->database_access->repository_access->get_class_description( myname ).
-    category = 'Y_CATEGORY_CODE_PAL'.
+    category = 'Y_CODE_PAL_CATEGORY'.
     position = y_code_pal_sorter=>get_position( myname ).
     version = '0000'.
     has_documentation = abap_true.
