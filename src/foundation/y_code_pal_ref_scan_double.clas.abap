@@ -1,7 +1,8 @@
 CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC.  "#EC INTF_IN_CLASS
   PUBLIC SECTION.
+    TYPES source_code TYPE TABLE OF char255 WITH EMPTY KEY.
 
-    CLASS-METHODS get IMPORTING source        TYPE y_char255_tab
+    CLASS-METHODS get IMPORTING source        TYPE source_code
                       RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
     CLASS-METHODS get_from_global_class IMPORTING name          TYPE trdir-name
@@ -17,9 +18,9 @@ CLASS y_code_pal_ref_scan_double DEFINITION PUBLIC.  "#EC INTF_IN_CLASS
     CLASS-METHODS create_ref_scan IMPORTING include       TYPE REF TO cl_ci_source_include
                                   RETURNING VALUE(result) TYPE REF TO cl_ci_scan.
 
-    CLASS-METHODS syntax_check IMPORTING source TYPE y_char255_tab.
+    CLASS-METHODS syntax_check IMPORTING source TYPE source_code.
 
-    CLASS-METHODS convert_code IMPORTING source        TYPE y_char255_tab
+    CLASS-METHODS convert_code IMPORTING source        TYPE source_code
                                RETURNING VALUE(result) TYPE sci_include.
 
     CLASS-METHODS get_include_from_trdir IMPORTING pattern       TYPE trdir-name

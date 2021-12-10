@@ -72,7 +72,7 @@ CLASS y_pal_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_code_pal_base CR
                               RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS get_forbidden_tokens IMPORTING class_name    TYPE string
-                                 RETURNING VALUE(result) TYPE y_char255_tab.
+                                 RETURNING VALUE(result) TYPE y_code_pal_ref_scan_double=>source_code.
 
     METHODS has_ddic_itab_same_syntax IMPORTING token         TYPE stokesx
                                       RETURNING VALUE(result) TYPE abap_bool.

@@ -371,8 +371,8 @@ CLASS ltc_risk_dangerous DEFINITION INHERITING FROM ltc_risk_critical FOR TESTIN
     METHODS get_code_without_issue REDEFINITION.
     METHODS get_code_with_exemption REDEFINITION.
   PRIVATE SECTION.
-    METHODS convert_critical_to_dangerous IMPORTING code          TYPE y_char255_tab
-                                          RETURNING VALUE(result) TYPE y_char255_tab.
+    METHODS convert_critical_to_dangerous IMPORTING code          TYPE y_code_pal_ref_scan_double=>source_code
+                                          RETURNING VALUE(result) TYPE y_code_pal_ref_scan_double=>source_code.
 ENDCLASS.
 
 CLASS ltc_risk_dangerous IMPLEMENTATION.
@@ -413,8 +413,8 @@ CLASS ltc_risk_not_set DEFINITION INHERITING FROM ltc_risk_harmless FOR TESTING 
     METHODS get_code_without_issue REDEFINITION.
     METHODS get_code_with_exemption REDEFINITION.
   PRIVATE SECTION.
-    METHODS convert_harmless_to_not_set IMPORTING code          TYPE y_char255_tab
-                                        RETURNING VALUE(result) TYPE y_char255_tab.
+    METHODS convert_harmless_to_not_set IMPORTING code          TYPE y_code_pal_ref_scan_double=>source_code
+                                        RETURNING VALUE(result) TYPE y_code_pal_ref_scan_double=>source_code.
 ENDCLASS.
 
 CLASS ltc_risk_not_set IMPLEMENTATION.
