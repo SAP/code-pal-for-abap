@@ -172,7 +172,7 @@ CLASS lcl_util IMPLEMENTATION.
       REPLACE 'Y_CHECK_' WITH 'Y_PAL_' INTO <deprecated_entry>-checkid.
     ENDLOOP.
 
-    INSERT ytab_checks FROM TABLE entries.
+    INSERT ytab_checks FROM TABLE @entries.
 
     IF sy-subrc IS NOT INITIAL.
       WRITE / TEXT-009.
@@ -181,7 +181,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     DELETE FROM ytab_checks WHERE checkid LIKE 'Y_CHECK_%'.
 
-    IF sy-subrc IS NOT INITIAL.
+    IF sy-subrc IS NOT INITIAL .
       WRITE TEXT-009.
       RAISE EXCEPTION TYPE cx_failed.
     ELSE.
