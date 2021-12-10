@@ -85,7 +85,9 @@
     "identical_form_names": true,
     "identical_descriptions": false,
     "if_in_if": true,
-    "implement_methods": true,
+    "implement_methods": {
+      "severity": "Warning"      
+    },
     "in_statement_indentation": false,
     "indentation": false,
     "inline_data_old_versions": true,
@@ -175,7 +177,8 @@
     "unused_methods": true,
     "unused_types": true,
     "unused_variables": {
-      "severity": "Warning"
+      "severity": "Warning",
+      "skipNames": []
     },
     "use_bool_expression": true,
     "use_class_based_exceptions": true,
