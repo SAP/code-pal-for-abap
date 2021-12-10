@@ -181,7 +181,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     DELETE FROM ytab_checks WHERE checkid LIKE 'Y_CHECK_%'.
 
-    IF sy-subrc IS NOT INITIAL .
+    IF sy-subrc IS NOT INITIAL.
       WRITE TEXT-009.
       RAISE EXCEPTION TYPE cx_failed.
     ELSE.
