@@ -442,7 +442,8 @@ CLASS lcl_list IMPLEMENTATION.
       <line2> = <line1>.
       UNASSIGN <line2>.
     ENDIF.
-    UNASSIGN <table>, <line1>.
+    UNASSIGN <table>.
+    UNASSIGN <line1>.
   ENDMETHOD.
 
 
