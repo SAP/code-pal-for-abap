@@ -99,14 +99,15 @@ INTERFACE y_if_code_pal_profile PUBLIC.
   METHODS profile_exists IMPORTING name          TYPE ytab_profiles-profile
                          RETURNING VALUE(result) TYPE abap_bool.
 
-  METHODS mass_change IMPORTING name                     TYPE ytab_profiles-profile
-                                config                   TYPE ytab_checks
-                                change_validation_period TYPE abap_bool
-                                change_created_since     TYPE abap_bool
-                                change_prio              TYPE abap_bool
-                                change_apply_prod_code   TYPE abap_bool
-                                change_apply_testcode    TYPE abap_bool
-                                change_allow_exemptios   TYPE abap_bool
+  METHODS mass_change IMPORTING name                          TYPE ytab_profiles-profile
+                                config                        TYPE ytab_checks
+                                change_validation_period      TYPE abap_bool
+                                change_created_since          TYPE abap_bool
+                                change_prio                   TYPE abap_bool
+                                change_apply_prod_code        TYPE abap_bool
+                                change_apply_testcode         TYPE abap_bool
+                                change_allow_exemptios        TYPE abap_bool
+                                change_evaluate_new_child_obj TYPE abap_bool
                       RAISING cx_failed.
 
 ENDINTERFACE.

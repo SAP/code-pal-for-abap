@@ -77,7 +77,8 @@ CLASS y_code_pal_profile IMPLEMENTATION.
                                                                 objects_created_on
                                                                 prio
                                                                 apply_on_testcode
-                                                                ignore_pseudo_comments.
+                                                                ignore_pseudo_comments
+                                                                evaluate_new_child_objects.
 
     IF check-start_date > check-end_date.
       RAISE EXCEPTION TYPE ycx_code_pal_time_overlap.
@@ -88,7 +89,8 @@ CLASS y_code_pal_profile IMPLEMENTATION.
                                                       prio = @check-prio AND
                                                       objects_created_on = @check-objects_created_on AND
                                                       apply_on_testcode = @check-apply_on_testcode AND
-                                                      ignore_pseudo_comments = @check-ignore_pseudo_comments.
+                                                      ignore_pseudo_comments = @check-ignore_pseudo_comments AND
+                                                      evaluate_new_child_objects = @check-evaluate_new_child_objects.
 
     IF sy-subrc = 0.
       IF selected_check IS NOT INITIAL.
@@ -99,7 +101,8 @@ CLASS y_code_pal_profile IMPLEMENTATION.
                                           objects_created_on = selected_check-objects_created_on
                                           prio = selected_check-prio
                                           apply_on_testcode = selected_check-apply_on_testcode
-                                          ignore_pseudo_comments = selected_check-ignore_pseudo_comments.
+                                          ignore_pseudo_comments = selected_check-ignore_pseudo_comments
+                                          evaluate_new_child_objects = selected_check-evaluate_new_child_objects.
       ENDIF.
 
       LOOP AT table INTO DATA(line).
@@ -123,7 +126,8 @@ CLASS y_code_pal_profile IMPLEMENTATION.
                                   prio = @check-prio AND
                                   threshold = @check-threshold AND
                                   apply_on_testcode = @check-apply_on_testcode AND
-                                  ignore_pseudo_comments = @check-ignore_pseudo_comments.
+                                  ignore_pseudo_comments = @check-ignore_pseudo_comments AND
+                                  evaluate_new_child_objects = @check-evaluate_new_child_objects.
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE ycx_code_pal_remove_a_line.
     ENDIF.
@@ -469,6 +473,10 @@ CLASS y_code_pal_profile IMPLEMENTATION.
 
           IF change_allow_exemptios = abap_true AND check->settings-pseudo_comment <> space.
             temp_check-ignore_pseudo_comments = config-ignore_pseudo_comments.
+          ENDIF.
+
+          IF change_evaluate_new_child_obj = abap_true.
+            temp_check-evaluate_new_child_objects = config-evaluate_new_child_objects.
           ENDIF.
 
           TRY.

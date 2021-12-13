@@ -31,6 +31,7 @@ CLASS y_code_pal_base DEFINITION PUBLIC ABSTRACT
             documentation                 TYPE c LENGTH 1000,
             is_threshold_reversed         TYPE abap_bool,
             ignore_pseudo_comments        TYPE abap_bool,
+            evaluate_new_child_objects    TYPE abap_bool,
           END OF settings.
 
     DATA manager TYPE REF TO y_if_code_pal_manager READ-ONLY.
@@ -85,23 +86,23 @@ CLASS y_code_pal_base DEFINITION PUBLIC ABSTRACT
                                               index     TYPE i
                                               statement TYPE sstmnt.
 
-    METHODS raise_error IMPORTING object_type            TYPE trobjtype DEFAULT c_type_include
-                                  statement_level        TYPE stmnt_levl
-                                  statement_index        TYPE int4
-                                  statement_from         TYPE int4
-                                  error_counter          TYPE sci_errcnt OPTIONAL
-                                  parameter_01           TYPE csequence OPTIONAL
-                                  parameter_02           TYPE csequence OPTIONAL
-                                  parameter_03           TYPE csequence OPTIONAL
-                                  parameter_04           TYPE csequence OPTIONAL
-                                  check_configuration    TYPE y_if_code_pal_manager=>check_configuration. "#EC OPTL_PARAM
+    METHODS raise_error IMPORTING object_type         TYPE trobjtype DEFAULT c_type_include
+                                  statement_level     TYPE stmnt_levl
+                                  statement_index     TYPE int4
+                                  statement_from      TYPE int4
+                                  error_counter       TYPE sci_errcnt OPTIONAL
+                                  parameter_01        TYPE csequence OPTIONAL
+                                  parameter_02        TYPE csequence OPTIONAL
+                                  parameter_03        TYPE csequence OPTIONAL
+                                  parameter_04        TYPE csequence OPTIONAL
+                                  check_configuration TYPE y_if_code_pal_manager=>check_configuration. "#EC OPTL_PARAM
 
     METHODS set_check_message IMPORTING message TYPE itex132.
 
-    METHODS condense_tokens IMPORTING statement TYPE sstmnt
+    METHODS condense_tokens IMPORTING statement     TYPE sstmnt
                             RETURNING VALUE(result) TYPE string.
 
-    METHODS is_test_code IMPORTING statement TYPE sstmnt
+    METHODS is_test_code IMPORTING statement     TYPE sstmnt
                          RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS add_check_quickfix ABSTRACT IMPORTING check_configuration TYPE y_if_code_pal_manager=>check_configuration
@@ -116,8 +117,8 @@ CLASS y_code_pal_base DEFINITION PUBLIC ABSTRACT
 
     METHODS instantiate_objects.
 
-    METHODS is_config_stricter IMPORTING previous TYPE y_if_code_pal_manager=>check_configuration
-                                         current TYPE y_if_code_pal_manager=>check_configuration
+    METHODS is_config_stricter IMPORTING previous      TYPE y_if_code_pal_manager=>check_configuration
+                                         current       TYPE y_if_code_pal_manager=>check_configuration
                                RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS switch_bool IMPORTING boolean       TYPE abap_bool
@@ -125,9 +126,9 @@ CLASS y_code_pal_base DEFINITION PUBLIC ABSTRACT
 
     METHODS handle_ignore_pseudo_comments IMPORTING  check_configuration TYPE y_if_code_pal_manager=>check_configuration.
 
-    METHODS is_statement_in_aunit_tab IMPORTING statement TYPE sstmnt
+    METHODS is_statement_in_aunit_tab IMPORTING statement     TYPE sstmnt
                                       RETURNING VALUE(result) TYPE abap_bool
-                                     RAISING cx_sy_itab_line_not_found.
+                                      RAISING   cx_sy_itab_line_not_found.
 
     METHODS add_pseudo_comment_quickfix IMPORTING check_configuration TYPE y_if_code_pal_manager=>check_configuration
                                                   statement_index     TYPE int4.
@@ -157,6 +158,7 @@ CLASS y_code_pal_base IMPLEMENTATION.
     settings-apply_on_test_code = abap_true.
     settings-documentation = |{ c_docs_path-main }check_documentation.md|.
     settings-ignore_pseudo_comments = abap_false.
+    settings-evaluate_new_child_objects = abap_true.
 
     has_attributes = do_attributes_exist( ).
 
@@ -178,39 +180,46 @@ CLASS y_code_pal_base IMPLEMENTATION.
 
 
   METHOD detect_check_configuration.
+    DATA creation_date LIKE settings-object_created_on.
+
     CHECK check_configurations IS NOT INITIAL.
 
     DATA(include) = get_include( p_level = statement-level ).
     DATA(is_test_code) = is_test_code( statement ).
-    DATA(creation_date) = manager->creation_date->get_creation_date( include ).
+    DATA(configurations) = check_configurations.
 
-    LOOP AT check_configurations ASSIGNING FIELD-SYMBOL(<configuration>)
-    WHERE object_creation_date <= creation_date.
-      IF settings-is_threshold_reversed  = abap_true
-      AND <configuration>-threshold < error_count.
+    IF settings-is_threshold_reversed = abap_true.
+      DELETE configurations WHERE threshold < error_count.
+    ENDIF.
+
+    IF settings-is_threshold_reversed = abap_false.
+      DELETE configurations WHERE threshold > error_count.
+    ENDIF.
+
+    IF is_test_code = abap_true.
+      DELETE configurations WHERE apply_on_testcode = abap_false.
+    ELSE.
+      DELETE configurations WHERE apply_on_productive_code = abap_false.
+    ENDIF.
+
+    LOOP AT configurations ASSIGNING FIELD-SYMBOL(<configuration>).
+      IF is_config_stricter( previous = result
+                             current = <configuration> ) = abap_false.
         CONTINUE.
       ENDIF.
 
-      IF settings-is_threshold_reversed = abap_false
-      AND <configuration>-threshold > error_count.
+      IF result IS INITIAL
+      OR result-evaluate_new_child_objects <> <configuration>-evaluate_new_child_objects.
+        creation_date = COND #( WHEN <configuration>-evaluate_new_child_objects = abap_true  THEN manager->creation_date->get_creation_date( include )
+                                WHEN <configuration>-evaluate_new_child_objects = abap_false THEN manager->creation_date->get_creation_date( get_include( p_level = 1 ) ) ).
+      ENDIF.
+
+      IF creation_date < <configuration>-object_creation_date.
         CONTINUE.
       ENDIF.
 
-      IF is_test_code = abap_true
-      AND <configuration>-apply_on_testcode = abap_false.
-        CONTINUE.
-      ELSEIF is_test_code = abap_false
-      AND <configuration>-apply_on_productive_code = abap_false.
-        CONTINUE.
-      ENDIF.
-
-      DATA(is_config_stricter) = is_config_stricter( previous = result
-                                                     current = <configuration> ).
-
-      IF is_config_stricter = abap_true.
-        no_aunit = xsdbool( <configuration>-apply_on_testcode = abap_false ).
-        result = <configuration>.
-      ENDIF.
+      no_aunit = xsdbool( <configuration>-apply_on_testcode = abap_false ).
+      result = <configuration>.
     ENDLOOP.
 
     IF result IS INITIAL.
@@ -279,6 +288,7 @@ CLASS y_code_pal_base IMPLEMENTATION.
       check_configuration-prio = settings-prio.
       check_configuration-threshold = settings-threshold.
       check_configuration-ignore_pseudo_comments = settings-ignore_pseudo_comments.
+      check_configuration-evaluate_new_child_objects = settings-evaluate_new_child_objects.
       APPEND check_configuration TO check_configurations.
     ENDIF.
     EXPORT
@@ -288,6 +298,7 @@ CLASS y_code_pal_base IMPLEMENTATION.
       apply_on_productive_code = check_configuration-apply_on_productive_code
       apply_on_testcode = check_configuration-apply_on_testcode
       ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
+      evaluate_child_objects = check_configuration-evaluate_new_child_objects
     TO DATA BUFFER p_attributes.
   ENDMETHOD.
 
@@ -338,6 +349,7 @@ CLASS y_code_pal_base IMPLEMENTATION.
       check_configuration-apply_on_testcode = settings-apply_on_test_code.
       check_configuration-threshold = settings-threshold.
       check_configuration-ignore_pseudo_comments = settings-ignore_pseudo_comments.
+      check_configuration-evaluate_new_child_objects = settings-evaluate_new_child_objects.
     ENDIF.
 
     INSERT VALUE #(
@@ -385,6 +397,12 @@ CLASS y_code_pal_base IMPLEMENTATION.
         text = |Allow { settings-pseudo_comment }|
       ) INTO TABLE sci_attributes.
     ENDIF.
+
+    INSERT VALUE #(
+      kind = ''
+      ref  = REF #( check_configuration-evaluate_new_child_objects )
+      text = |Evaluate Child Objects|
+    ) INTO TABLE sci_attributes.
 
     attributes_ok = abap_false.
     WHILE attributes_ok = abap_false.
@@ -449,6 +467,7 @@ CLASS y_code_pal_base IMPLEMENTATION.
           apply_on_productive_code = check_configuration-apply_on_productive_code
           apply_on_testcode = check_configuration-apply_on_testcode
           ignore_pseudo_comments = check_configuration-ignore_pseudo_comments
+          evaluate_child_objects = check_configuration-evaluate_new_child_objects
         FROM DATA BUFFER p_attributes.
         APPEND check_configuration TO check_configurations.
       CATCH cx_root.                                  "#EC NEED_CX_ROOT
@@ -559,7 +578,8 @@ CLASS y_code_pal_base IMPLEMENTATION.
                    OR ( previous-prio = current-prio AND threshold_stricter = abap_true )
                    OR ( previous-prio <> c_error AND current-prio = c_error )
                    OR ( previous-prio = c_note AND current-prio = c_warning )
-                   OR ( previous-ignore_pseudo_comments = abap_false AND current-ignore_pseudo_comments = abap_true ) ).
+                   OR ( previous-ignore_pseudo_comments = abap_false AND current-ignore_pseudo_comments = abap_true )
+                   OR ( previous-evaluate_new_child_objects = abap_false AND current-evaluate_new_child_objects = abap_true ) ).
   ENDMETHOD.
 
 
@@ -605,9 +625,9 @@ CLASS y_code_pal_base IMPLEMENTATION.
   METHOD is_statement_in_aunit_tab.
     " Based on: CL_CI_TEST_SCAN->INFORM()
     DATA: BEGIN OF aunit,
-        incl_name  TYPE program,
-        line_range TYPE RANGE OF i,
-      END OF aunit.
+            incl_name  TYPE program,
+            line_range TYPE RANGE OF i,
+          END OF aunit.
 
     DATA(include) = get_include( p_level = statement-level ).
 

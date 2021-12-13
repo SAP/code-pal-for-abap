@@ -73,18 +73,14 @@ CLASS lcl_select IMPLEMENTATION.
     CREATE DATA line LIKE LINE OF table.
     ASSIGN line->* TO FIELD-SYMBOL(<line>).
 
-    TRY.
-        LOOP AT data INTO DATA(ls_data).
-          LOOP AT fields INTO DATA(field).
-            ASSIGN COMPONENT field-fieldname OF STRUCTURE <line> TO FIELD-SYMBOL(<field>).
-            <field> = ls_data+field-offset(field-length).
-            UNASSIGN <field>.
-          ENDLOOP.
-          APPEND <line> TO table.
-        ENDLOOP.
-      CATCH cx_root.
-        RETURN.
-    ENDTRY.
+    LOOP AT data INTO DATA(ls_data).
+      LOOP AT fields INTO DATA(field).
+        ASSIGN COMPONENT field-fieldname OF STRUCTURE <line> TO FIELD-SYMBOL(<field>).
+        <field> = ls_data+field-offset(field-length).
+        UNASSIGN <field>.
+      ENDLOOP.
+      APPEND <line> TO table.
+    ENDLOOP.
   ENDMETHOD.
 
 ENDCLASS.

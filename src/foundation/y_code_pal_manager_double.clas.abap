@@ -39,7 +39,8 @@ CLASS y_code_pal_manager_double IMPLEMENTATION.
     result = VALUE #( ( apply_on_testcode        = check->settings-apply_on_test_code
                         apply_on_productive_code = check->settings-apply_on_productive_code
                         prio                     = check->settings-prio
-                        threshold                = check->settings-threshold ) ).
+                        threshold                = check->settings-threshold
+                        object_creation_date     = check->settings-object_created_on ) ).
   ENDMETHOD.
 
 

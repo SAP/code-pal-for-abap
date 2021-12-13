@@ -163,9 +163,9 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
     CLASS-METHODS init_delegates IMPORTING sy_repid TYPE sy-repid.
 
     CLASS-METHODS refresh_all_trees.
-    CLASS-METHODS  refresh_profiles.
-    CLASS-METHODS  refresh_checks.
-    CLASS-METHODS  refresh_delegates.
+    CLASS-METHODS refresh_profiles.
+    CLASS-METHODS refresh_checks.
+    CLASS-METHODS refresh_delegates.
 
     CLASS-METHODS get_selected_profile RETURNING VALUE(result) TYPE ytab_profiles
                                        RAISING   ycx_code_pal_entry_not_found.
@@ -192,9 +192,9 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
 
     CLASS-METHODS init_ui_400.
 
-    CLASS-METHODS  get_check IMPORTING checkid       TYPE vseoclass-clsname
-                             RETURNING VALUE(result) TYPE REF TO y_code_pal_base
-                             RAISING   cx_sy_create_object_error.
+    CLASS-METHODS get_check IMPORTING checkid       TYPE vseoclass-clsname
+                            RETURNING VALUE(result) TYPE REF TO y_code_pal_base
+                            RAISING   cx_sy_create_object_error.
 
     CLASS-METHODS set_dynpro_field_active IMPORTING fieldname TYPE string
                                                     is_active TYPE abap_bool.
@@ -220,7 +220,7 @@ CLASS lcl_util DEFINITION.                          "#EC NUMBER_METHODS
 
     CLASS-METHODS auto_re_start_check IMPORTING edit_mode TYPE abap_bool DEFAULT abap_false.
     CLASS-METHODS remove_check IMPORTING check TYPE ytab_checks.
-    CLASS-METHODS  remove_selected_check.
+    CLASS-METHODS remove_selected_check.
 
     CLASS-METHODS check_check_rights IMPORTING profile       TYPE ycicc_profile
                                      RETURNING VALUE(result) TYPE abap_bool.
@@ -965,6 +965,8 @@ CLASS lcl_util IMPLEMENTATION.
                                            is_visible = abap_true ).
         checks_tree->set_field_visibility( fieldname  = 'IGNORE_PSEUDO_COMMENTS'
                                            is_visible = abap_true ).
+        checks_tree->set_field_visibility( fieldname  = 'EVALUATE_NEW_CHILD_OBJECTS'
+                                           is_visible = abap_true ).
 
         checks_tree->set_field_header_text( fieldname   = 'PROFILE'
                                             header_text = TEXT-001 ).
@@ -982,10 +984,10 @@ CLASS lcl_util IMPLEMENTATION.
                                             header_text = TEXT-050 ).
         checks_tree->set_field_header_text( fieldname   = 'APPLY_ON_TESTCODE'
                                             header_text = TEXT-034 ).
-
-        "Cause of usability, the text is switched on the UX side.
         checks_tree->set_field_header_text( fieldname   = 'IGNORE_PSEUDO_COMMENTS'
                                             header_text = TEXT-066 ).
+        checks_tree->set_field_header_text( fieldname   = 'EVALUATE_NEW_CHILD_OBJECTS'
+                                            header_text = TEXT-074 ).
 
         checks_tree->init_display( ).
 
@@ -1283,6 +1285,7 @@ CLASS lcl_util IMPLEMENTATION.
           chbx_on_prodcode = obj->settings-apply_on_productive_code.
           chbx_on_testcode = obj->settings-apply_on_test_code.
           chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
+          chbx_evaluate_new_child_obj = obj->settings-evaluate_new_child_objects.
           io_pcom_name = obj->settings-pseudo_comment.
           has_edit_mode_started = abap_false.
         ENDIF.
@@ -1520,6 +1523,7 @@ CLASS lcl_util IMPLEMENTATION.
     result-last_changed_on = sy-datum.
     result-last_changed_at = sy-timlo.
     result-ignore_pseudo_comments = abap_false.
+    result-evaluate_new_child_objects = abap_true.
   ENDMETHOD.
 
 
@@ -1620,6 +1624,7 @@ CLASS lcl_util IMPLEMENTATION.
     chbx_select_prodcode = abap_false.
     chbx_apply_testcode = abap_false.
     chbx_apply_pcom = abap_false.
+    chbx_apply_evaluate_new_child = abap_false.
 
     TRY.
         DATA(config) = get_selected_check( ).
@@ -1630,6 +1635,7 @@ CLASS lcl_util IMPLEMENTATION.
         chbx_on_prodcode = config-apply_on_productive_code.
         chbx_on_testcode = config-apply_on_testcode.
         chbx_allow_pcom = switch_bool( config-ignore_pseudo_comments ).
+        chbx_evaluate_new_child_obj = config-evaluate_new_child_objects.
 
         CASE config-prio.
           WHEN 'E'.
@@ -1651,14 +1657,15 @@ CLASS lcl_util IMPLEMENTATION.
     ENDIF.
 
     TRY.
-        profile_manager->mass_change( name                     = get_selected_profile( )-profile
-                                      config                   = config
+        profile_manager->mass_change( name = get_selected_profile( )-profile
+                                      config = config
                                       change_validation_period = chbx_change_vp
-                                      change_created_since     = chbx_change_since
-                                      change_prio              = chbx_message_prio
-                                      change_apply_prod_code   = chbx_select_prodcode
-                                      change_apply_testcode    = chbx_apply_testcode
-                                      change_allow_exemptios   = chbx_apply_pcom ).
+                                      change_created_since = chbx_change_since
+                                      change_prio = chbx_message_prio
+                                      change_apply_prod_code = chbx_select_prodcode
+                                      change_apply_testcode = chbx_apply_testcode
+                                      change_allow_exemptios = chbx_apply_pcom
+                                      change_evaluate_new_child_obj = chbx_apply_evaluate_new_child ).
 
       CATCH ycx_code_pal_entry_not_found.
         RETURN.
@@ -1680,6 +1687,7 @@ CLASS lcl_util IMPLEMENTATION.
     chbx_on_prodcode = abap_true.
     chbx_on_testcode = abap_true.
     chbx_allow_pcom = abap_true.
+    chbx_evaluate_new_child_obj = abap_true.
     io_pcom_name = space.
 
     TRY.
@@ -1690,6 +1698,7 @@ CLASS lcl_util IMPLEMENTATION.
         chbx_on_prodcode = obj->settings-apply_on_productive_code.
         chbx_on_testcode = obj->settings-apply_on_test_code.
         chbx_allow_pcom = switch_bool( obj->settings-ignore_pseudo_comments ).
+        chbx_evaluate_new_child_obj = obj->settings-evaluate_new_child_objects.
         io_pcom_name = obj->settings-pseudo_comment.
       CATCH cx_sy_create_object_error.
         RETURN.
@@ -1709,6 +1718,7 @@ CLASS lcl_util IMPLEMENTATION.
     chbx_on_prodcode = check_line-apply_on_productive_code.
     chbx_on_testcode = check_line-apply_on_testcode.
     chbx_allow_pcom = switch_bool( check_line-ignore_pseudo_comments ).
+    chbx_evaluate_new_child_obj = check_line-evaluate_new_child_objects.
 
     TRY.
         io_check_description = profile_manager->get_check_description( check_line-checkid ).
@@ -1747,6 +1757,7 @@ CLASS lcl_util IMPLEMENTATION.
                                      apply_on_productive_code = chbx_on_prodcode
                                      apply_on_testcode = chbx_on_testcode
                                      ignore_pseudo_comments = switch_bool( chbx_allow_pcom )
+                                     evaluate_new_child_objects = chbx_evaluate_new_child_obj
                                      last_changed_by = sy-uname
                                      last_changed_on = sy-datum
                                      last_changed_at = sy-timlo ).

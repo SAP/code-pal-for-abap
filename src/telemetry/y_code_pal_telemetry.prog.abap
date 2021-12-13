@@ -5,10 +5,8 @@
 *&---------------------------------------------------------------------*
 REPORT y_code_pal_telemetry.
 
-* entry point
 START-OF-SELECTION.
 
-* global objects
   DATA container TYPE REF TO cl_gui_custom_container.
   DATA viewer TYPE REF TO cl_gui_chart_engine.
 

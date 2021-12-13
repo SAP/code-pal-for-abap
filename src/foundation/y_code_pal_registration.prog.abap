@@ -170,6 +170,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     LOOP AT entries ASSIGNING FIELD-SYMBOL(<deprecated_entry>).
       REPLACE 'Y_CHECK_' WITH 'Y_PAL_' INTO <deprecated_entry>-checkid.
+      <deprecated_entry>-evaluate_new_child_objects = abap_true.
     ENDLOOP.
 
     INSERT ytab_checks FROM TABLE @entries.
@@ -181,7 +182,7 @@ CLASS lcl_util IMPLEMENTATION.
 
     DELETE FROM ytab_checks WHERE checkid LIKE 'Y_CHECK_%'.
 
-    IF sy-subrc IS NOT INITIAL.
+    IF sy-subrc IS NOT INITIAL .
       WRITE TEXT-009.
       RAISE EXCEPTION TYPE cx_failed.
     ELSE.

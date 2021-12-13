@@ -23,32 +23,56 @@ CLASS ltc_check_configuration_base IMPLEMENTATION.
 
   METHOD given_error_threshold_one.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = cut->c_error threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_error
+                                         threshold = 1
+                                         apply_on_testcode = abap_true
+                                         apply_on_productive_code = abap_true
+                                         object_creation_date = cut->settings-object_created_on ) ).
   ENDMETHOD.
 
   METHOD given_error_threshold_five.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = cut->c_error threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_error
+                                         threshold = 5
+                                         apply_on_testcode = abap_true
+                                         apply_on_productive_code = abap_true
+                                         object_creation_date = cut->settings-object_created_on ) ).
   ENDMETHOD.
 
   METHOD given_note_threshold_one.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = cut->c_note threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_note
+                                         threshold = 1
+                                         apply_on_testcode = abap_true
+                                         apply_on_productive_code = abap_true
+                                         object_creation_date = cut->settings-object_created_on ) ).
   ENDMETHOD.
 
   METHOD given_note_threshold_five.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = cut->c_note threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_note
+                                         threshold = 5
+                                         apply_on_testcode = abap_true
+                                         apply_on_productive_code = abap_true
+                                         object_creation_date = cut->settings-object_created_on ) ).
   ENDMETHOD.
 
   METHOD given_warning_threshold_five.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = cut->c_warning threshold = 5 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_warning
+                                         threshold = 5
+                                         apply_on_testcode = abap_true
+                                         apply_on_productive_code = abap_true
+                                         object_creation_date = cut->settings-object_created_on ) ).
   ENDMETHOD.
 
   METHOD given_warning_threshold_one.
     cut->check_configurations = VALUE #( BASE cut->check_configurations
-                                       ( prio = cut->c_warning threshold = 1 apply_on_testcode = abap_true apply_on_productive_code = abap_true ) ).
+                                       ( prio = cut->c_warning
+                                         threshold = 1
+                                         apply_on_testcode = abap_true
+                                         apply_on_productive_code = abap_true
+                                         object_creation_date = cut->settings-object_created_on ) ).
   ENDMETHOD.
 
   METHOD when_eight_errors.

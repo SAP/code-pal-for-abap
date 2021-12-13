@@ -231,7 +231,7 @@
       <TYPE>N</TYPE>
       <NEXTSCREEN>0400</NEXTSCREEN>
       <LINES>027</LINES>
-      <COLUMNS>126</COLUMNS>
+      <COLUMNS>128</COLUMNS>
      </HEADER>
      <CONTAINERS>
       <RPY_DYCATT>
@@ -600,6 +600,34 @@
       <RPY_DYFATC>
        <CONT_TYPE>SCREEN</CONT_TYPE>
        <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEXT</TYPE>
+       <NAME>LBL_EVALUATE_NEW_CHILD_OBJ</NAME>
+       <TEXT>Evaluate_New_Child_Objects:______</TEXT>
+       <LINE>010</LINE>
+       <COLUMN>001</COLUMN>
+       <LENGTH>033</LENGTH>
+       <VISLENGTH>033</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <REQU_ENTRY>N</REQU_ENTRY>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>CHECK</TYPE>
+       <NAME>CHBX_EVALUATE_NEW_CHILD_OBJ</NAME>
+       <LINE>010</LINE>
+       <COLUMN>035</COLUMN>
+       <LENGTH>001</LENGTH>
+       <VISLENGTH>001</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+       <OUTPUT_FLD>X</OUTPUT_FLD>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>OKCODE</TYPE>
        <NAME>USER_COMMAND</NAME>
        <TEXT>____________________</TEXT>
@@ -842,8 +870,8 @@
       <DESCRIPT>Mass Update of Checks</DESCRIPT>
       <TYPE>N</TYPE>
       <NEXTSCREEN>0700</NEXTSCREEN>
-      <LINES>008</LINES>
-      <COLUMNS>073</COLUMNS>
+      <LINES>012</LINES>
+      <COLUMNS>077</COLUMNS>
      </HEADER>
      <CONTAINERS>
       <RPY_DYCATT>
@@ -1160,6 +1188,48 @@
        <TYPE>CHECK</TYPE>
        <NAME>CHBX_ALLOW_PCOM</NAME>
        <LINE>007</LINE>
+       <COLUMN>040</COLUMN>
+       <LENGTH>001</LENGTH>
+       <VISLENGTH>001</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <OUTPUT_FLD>X</OUTPUT_FLD>
+       <REQU_ENTRY>N</REQU_ENTRY>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>CHECK</TYPE>
+       <NAME>CHBX_APPLY_EVALUATE_NEW_CHILD</NAME>
+       <LINE>008</LINE>
+       <COLUMN>003</COLUMN>
+       <LENGTH>001</LENGTH>
+       <VISLENGTH>001</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+       <OUTPUT_FLD>X</OUTPUT_FLD>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>TEXT</TYPE>
+       <NAME>LBL_EVALUATE_NEW_CHILD_OBJECTS</NAME>
+       <TEXT>Evaluate_New_Child_Objects:_____</TEXT>
+       <LINE>008</LINE>
+       <COLUMN>007</COLUMN>
+       <LENGTH>032</LENGTH>
+       <VISLENGTH>032</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <REQU_ENTRY>N</REQU_ENTRY>
+      </RPY_DYFATC>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>CHECK</TYPE>
+       <NAME>CHBX_EVALUATE_NEW_CHILD_OBJ</NAME>
+       <LINE>008</LINE>
        <COLUMN>040</COLUMN>
        <LENGTH>001</LENGTH>
        <VISLENGTH>001</VISLENGTH>
@@ -2102,6 +2172,12 @@
      <KEY>073</KEY>
      <ENTRY>Would you like to add all missing checks?</ENTRY>
      <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>074</KEY>
+     <ENTRY>Evaluate New Child Objects</ENTRY>
+     <LENGTH>30</LENGTH>
     </item>
     <item>
      <ID>R</ID>

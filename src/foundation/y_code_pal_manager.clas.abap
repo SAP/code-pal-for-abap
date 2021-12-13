@@ -87,7 +87,8 @@ CLASS y_code_pal_manager IMPLEMENTATION.
                                                                                     prio = <check>-prio
                                                                                     apply_on_productive_code = <check>-apply_on_productive_code
                                                                                     apply_on_testcode = <check>-apply_on_testcode
-                                                                                    ignore_pseudo_comments = <check>-ignore_pseudo_comments ).
+                                                                                    ignore_pseudo_comments = <check>-ignore_pseudo_comments
+                                                                                    evaluate_new_child_objects = <check>-evaluate_new_child_objects ).
       result = VALUE #( BASE result ( CORRESPONDING #( check_configuration ) ) ).
     ENDLOOP.
   ENDMETHOD.

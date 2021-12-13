@@ -1,12 +1,13 @@
 INTERFACE y_if_code_pal_manager PUBLIC.
 
   TYPES: BEGIN OF check_configuration,
-           object_creation_date     TYPE datum,
-           threshold                TYPE ycicc_threshold,
-           prio                     TYPE ycicc_message_kind,
-           apply_on_productive_code TYPE abap_bool,
-           apply_on_testcode        TYPE abap_bool,
-           ignore_pseudo_comments   TYPE y_code_pal_pseudo_comments,
+           object_creation_date       TYPE datum,
+           threshold                  TYPE ycicc_threshold,
+           prio                       TYPE ycicc_message_kind,
+           apply_on_productive_code   TYPE abap_bool,
+           apply_on_testcode          TYPE abap_bool,
+           ignore_pseudo_comments     TYPE y_code_pal_pseudo_comments,
+           evaluate_new_child_objects TYPE abap_bool,
          END OF check_configuration.
 
   TYPES check_configurations TYPE STANDARD TABLE OF check_configuration WITH DEFAULT KEY.
@@ -22,7 +23,7 @@ INTERFACE y_if_code_pal_manager PUBLIC.
   DATA exemption TYPE REF TO y_if_code_pal_exemption READ-ONLY.
   DATA statistics TYPE REF TO y_if_code_pal_statistics READ-ONLY.
   DATA scope TYPE REF TO y_if_code_pal_scope READ-ONLY.
-  DATA profile TYPE REF TO Y_IF_CODE_PAL_PROFILE READ-ONLY.
+  DATA profile TYPE REF TO y_if_code_pal_profile READ-ONLY.
   DATA telemetry TYPE REF TO y_if_code_pal_telemetry READ-ONLY.
 
 ENDINTERFACE.
