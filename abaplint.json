@@ -85,9 +85,7 @@
     "identical_form_names": true,
     "identical_descriptions": false,
     "if_in_if": true,
-    "implement_methods": {
-      "severity": "Warning"      
-    },
+    "implement_methods": true,
     "in_statement_indentation": false,
     "indentation": false,
     "inline_data_old_versions": true,
