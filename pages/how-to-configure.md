@@ -4,25 +4,25 @@
 
 ## How to Configure
 
-⚠️This documentation describes how to configure using the `Profile Management Tool` feature only.
+You can use the Check Variant or the Code Pal Profile. 
 
-💡Alternatively, you can use the SAP Code Inspector variants in the `SCI` transaction.
+💡 If you have at least one Profile assigned to your user, the Check Variant attributes are disabled. 
 
-Table of Contents:
 
-- [How to Configure](#how-to-configure)
-  - [Profiles](#1-profiles)
-  - [Delegates](#2-delegates)
-  - [Checks](#3-checks)
-- [Further Features](#further-features)
-  - [Import / Export Profile](#import--export-profile)
-  - [Import via API](#import-via-api)
-  - [Add / Remove All Checks](#add--remove-all-checks)
-  - [Add Missing Checks](#add-missing-checks)
+
+### 1. Check Variant
+
+It is the native Code Inspector way to configure the Checks. 
+
+In the Check Variant, transaction `SCI`, you can change the Check attributes: 
+
+
+
+
+
+### 2. Code Pal Profiles
 
 💡 The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management Tool`.
-
-### Profiles
 
 > Profiles are similar to Code Inspector Variants.
 
