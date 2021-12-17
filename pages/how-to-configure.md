@@ -64,3 +64,20 @@ Available configurations:
 To assign a user, click on the `+` button:
 
 ![assign delegate](imgs/assign-delegate.png)
+
+## Remote Checks
+
+* Code Pal is required in the Remote Check System only;
+* Profiles are allowed, but you have to assign them to the RFC user.
+
+You can use the **Remote Code Inspector** or the **Remote ATC**. 
+
+### 1. Remote Code Inspector
+
+Having the `Reference Check System` set under `SCI` > `Code Inspector` > `Management Of` > `Reference Check System`, you can create a Check Variant using the `In Reference Check System` option.
+
+In the Remote Check System, you can create and configure the Check Variant and Code Pal Profile, as mentioned before.
+
+### 2. Remote ATC
+
+- [Remote Code Analysis in ATC](https://blogs.sap.com/2016/12/12/remote-code-analysis-in-atc-one-central-check-system-for-multiple-systems-on-various-releases/)
