@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [CX_ROOT Usage Check](cx-root-usage.md)
+[code pal for ABAP](../README.md) > [CX_ROOT Usage Check](cx-root-usage.md)
 
 ## CX_ROOT Usage Check
 

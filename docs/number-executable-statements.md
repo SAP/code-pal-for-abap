@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Number of Executable Statements Check](number-executable-statements.md)
+[code pal for ABAP](../README.md) > [Number of Executable Statements Check](number-executable-statements.md)
 
 ## Number of Executable Statements Check
 

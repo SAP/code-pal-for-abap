@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Comment Type](comment-type.md)
+[code pal for ABAP](../README.md) > [Comment Type](comment-type.md)
 
 ## Comment Type
 

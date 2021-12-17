@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [TEST-SEAM Statement Usage Check](test-seam-usage.md)
+[code pal for ABAP](../README.md) > [TEST-SEAM Statement Usage Check](test-seam-usage.md)
 
 ## TEST-SEAM Statement Usage Check
 

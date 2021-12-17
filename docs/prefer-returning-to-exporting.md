@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Prefer RETURNING to EXPORTING](prefer-returning-to-exporting.md)
+[code pal for ABAP](../README.md) > [Prefer RETURNING to EXPORTING](prefer-returning-to-exporting.md)
 
 ## Prefer RETURNING to EXPORTING
 

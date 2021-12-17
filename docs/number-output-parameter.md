@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Number of Output Parameters Check](number-output-parameter.md)
+[code pal for ABAP](../README.md) > [Number of Output Parameters Check](number-output-parameter.md)
 
 ## Number of Output Parameters Check
 

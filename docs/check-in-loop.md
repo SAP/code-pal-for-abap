@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [CHECK in LOOP](check-in-loop.md)
+[code pal for ABAP](../README.md) > [CHECK in LOOP](check-in-loop.md)
 
 ## CHECK in LOOP
 

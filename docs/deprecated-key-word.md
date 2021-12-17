@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Deprecated Key Word Check](deprecated-key-word.md)
+[code pal for ABAP](../README.md) > [Deprecated Key Word Check](deprecated-key-word.md)
 
 ## Deprecated Key Word Check
 

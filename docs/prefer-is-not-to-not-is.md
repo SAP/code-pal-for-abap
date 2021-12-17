@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Prefer IS NOT to NOT IS](prefer-is-not-to-not-is.md)
+[code pal for ABAP](../README.md) > [Prefer IS NOT to NOT IS](prefer-is-not-to-not-is.md)
 
 ## Prefer IS NOT to NOT IS
 

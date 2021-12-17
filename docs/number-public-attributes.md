@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Number of Public Attributes Check](number-public-attributes.md)
+[code pal for ABAP](../README.md) > [Number of Public Attributes Check](number-public-attributes.md)
 
 ## Number of Public Attributes Check
 

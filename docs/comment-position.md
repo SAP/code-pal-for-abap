@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Comment Position](comment-position.md)
+[code pal for ABAP](../README.md) > [Comment Position](comment-position.md)
 
 ## Comment Position
 

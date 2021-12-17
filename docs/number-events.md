@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Number of Events Check](number-events.md)
+[code pal for ABAP](../README.md) > [Number of Events Check](number-events.md)
 
 ## Number of Events Check
 

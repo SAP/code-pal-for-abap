@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Self-Reference](self-reference.md)
+[code pal for ABAP](../README.md) > [Self-Reference](self-reference.md)
 
 ## Self-Reference
 

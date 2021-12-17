@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT](prefer-line-exists.md)
+[code pal for ABAP](../README.md) > [Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT](prefer-line-exists.md)
 
 ## Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT
 

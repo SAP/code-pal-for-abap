@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Message Translation](message-translation.md)
+[code pal for ABAP](../README.md) > [Message Translation](message-translation.md)
 
 ## Message Translation
 

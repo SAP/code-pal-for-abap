@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Magic Number Check](magic-number.md)
+[code pal for ABAP](../README.md) > [Magic Number Check](magic-number.md)
 
 ## Magic Number Usage Check
 

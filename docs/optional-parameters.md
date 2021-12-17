@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Optional Parameters](optional-parameters.md)
+[code pal for ABAP](../README.md) > [Optional Parameters](optional-parameters.md)
 
 ## Optional Parameters
 

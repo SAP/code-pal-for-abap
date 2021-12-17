@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Message Easy To Find](message-easy-to-find.md)
+[code pal for ABAP](../README.md) > [Message Easy To Find](message-easy-to-find.md)
 
 ## Message Easy To Find
 

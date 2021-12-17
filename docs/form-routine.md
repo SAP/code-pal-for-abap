@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [FORM Routine Check](form-routine.md)
+[code pal for ABAP](../README.md) > [FORM Routine Check](form-routine.md)
 
 ## FORM Routine Usage Check
 

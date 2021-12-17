@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Text Assembly](text-assembly.md)
+[code pal for ABAP](../README.md) > [Text Assembly](text-assembly.md)
 
 ## Text Assembly
 

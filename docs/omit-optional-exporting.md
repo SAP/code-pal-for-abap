@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Omit Optional EXPORTING](omit-optional-exporting.md)
+[code pal for ABAP](../README.md) > [Omit Optional EXPORTING](omit-optional-exporting.md)
 
 ## Omit Optional EXPORTING
 

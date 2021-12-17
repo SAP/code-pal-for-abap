@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Prefer Pragmas to Pseudo Comments](prefer-pragmas-to-pseudo-comments.md)
+[code pal for ABAP](../README.md) > [Prefer Pragmas to Pseudo Comments](prefer-pragmas-to-pseudo-comments.md)
 
 ## Prefer Pragmas to Pseudo Comments
 

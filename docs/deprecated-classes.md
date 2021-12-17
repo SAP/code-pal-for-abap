@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Deprecated Classes](deprecated-classes.md)
+[code pal for ABAP](../README.md) > [Deprecated Classes](deprecated-classes.md)
 
 ## Deprecated Classes
 

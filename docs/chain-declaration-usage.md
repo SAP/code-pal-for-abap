@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Chain Declaration Usage](chain-declaration-usage.md)
+[code pal for ABAP](../README.md) > [Chain Declaration Usage](chain-declaration-usage.md)
 
 ## Chain Declaration Usage
 

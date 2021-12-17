@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Empty Catch](empty_catch.md)
+[code pal for ABAP](../README.md) > [Empty Catch](empty_catch.md)
 
 ## Empty Catch
 

@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Cyclomatic Complexity Check](cyclomatic-complexity.md)
+[code pal for ABAP](../README.md) > [Cyclomatic Complexity Check](cyclomatic-complexity.md)
 
 ## Cyclomatic Complexity Check
 

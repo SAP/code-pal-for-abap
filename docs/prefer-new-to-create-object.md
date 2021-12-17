@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Prefer New to Create Object](prefer_new_to_create_object.md)
+[code pal for ABAP](../README.md) > [Prefer New to Create Object](prefer_new_to_create_object.md)
 
 ## Prefer New to Create Object
 

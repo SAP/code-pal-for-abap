@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Combination of Output Parameters Check](method-output-parameter.md)
+[code pal for ABAP](../README.md) > [Combination of Output Parameters Check](method-output-parameter.md)
 
 ## Combination of Output Parameters Check
 

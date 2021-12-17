@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Number of Interfaces Check](number-interfaces.md)
+[code pal for ABAP](../README.md) > [Number of Interfaces Check](number-interfaces.md)
 
 ## Number of Interfaces Check
 

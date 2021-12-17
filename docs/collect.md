@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [COLLECT restriction](collect.md)
+[code pal for ABAP](../README.md) > [COLLECT restriction](collect.md)
 
 ## COLLECT restriction
 

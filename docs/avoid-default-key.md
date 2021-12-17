@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Avoid DEFAULT KEY](avoid-default-key.md)
+[code pal for ABAP](../README.md) > [Avoid DEFAULT KEY](avoid-default-key.md)
 
 ## Avoid DEFAULT KEY
 

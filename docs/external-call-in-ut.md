@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [External Call in Unit Tests Check](external-call-in-ut.md)
+[code pal for ABAP](../README.md) > [External Call in Unit Tests Check](external-call-in-ut.md)
 
 ## External Call in Unit Tests-Check
 

@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Empty IF Branches Check](empty-if-branches.md)
+[code pal for ABAP](../README.md) > [Empty IF Branches Check](empty-if-branches.md)
 
 ## Empty IF-Branch Check
 

@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Equals Sign Chaining](equals-sign-chaining.md)
+[code pal for ABAP](../README.md) > [Equals Sign Chaining](equals-sign-chaining.md)
 
 ## Equals Sign Chaining
 

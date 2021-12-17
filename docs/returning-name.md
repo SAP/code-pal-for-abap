@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Returning Name](returning-name.md)
+[code pal for ABAP](../README.md) > [Returning Name](returning-name.md)
 
 ## Returning Name
 

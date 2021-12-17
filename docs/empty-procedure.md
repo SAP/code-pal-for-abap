@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Empty Procedure Check](empty-procedure.md)
+[code pal for ABAP](../README.md) > [Empty Procedure Check](empty-procedure.md)
 
 ## Empty Procedure Check
 

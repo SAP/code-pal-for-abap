@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Interface in Class Check](interface-in-class.md)
+[code pal for ABAP](../README.md) > [Interface in Class Check](interface-in-class.md)
 
 ## Interface Missing Check
 

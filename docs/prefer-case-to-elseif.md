@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Prefer CASE to ELSE IF](prefer-case-to-elseif.md)
+[code pal for ABAP](../README.md) > [Prefer CASE to ELSE IF](prefer-case-to-elseif.md)
 
 ## Prefer CASE to ELSE IF
 

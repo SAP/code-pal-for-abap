@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [READ TABLE with Subsequent Memory Assignment Check](sub-assign-read-table.md)
+[code pal for ABAP](../README.md) > [READ TABLE with Subsequent Memory Assignment Check](sub-assign-read-table.md)
 
 ## READ TABLE with Subsequent Memory Assignment Check
 

@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [FUNCTION Routine Check](function-routine.md)
+[code pal for ABAP](../README.md) > [FUNCTION Routine Check](function-routine.md)
 
 ## FUNCTION Routine Usage Check
 

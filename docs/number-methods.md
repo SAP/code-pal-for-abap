@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Number of Methods Check](number-methods.md)
+[code pal for ABAP](../README.md) > [Number of Methods Check](number-methods.md)
 
 ## Number of Methods Check
 

@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Comment Usage Check](comment-usage.md)
+[code pal for ABAP](../README.md) > [Comment Usage Check](comment-usage.md)
 
 ## Comment Usage Check
 

@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Nesting Depth Check](maximum-nesting-depth.md)
+[code pal for ABAP](../README.md) > [Nesting Depth Check](maximum-nesting-depth.md)
 
 ## Nesting Depth Check
 

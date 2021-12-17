@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Unit-Test Assert Validator](unit_test_assert.md)
+[code pal for ABAP](../README.md) > [Unit-Test Assert Validator](unit_test_assert.md)
 
 ## Unit-Test Assert Validator
 

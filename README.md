@@ -23,7 +23,7 @@ Together, we both support you in writing a clean ABAP code.
   - Rule relevance for productive and test codes;
   - Rule relevance for objects created since a specific date;
   - Rule relevance for new child objects;
-  - Rule allows/deny exemptions.
+  - Rule relevance for exemptions.
 
 ## Set of Checks
 

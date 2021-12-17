@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Scope of Variable](scope-of-variable.md)
+[code pal for ABAP](../README.md) > [Scope of Variable](scope-of-variable.md)
 
 ## Scope of Variable
 

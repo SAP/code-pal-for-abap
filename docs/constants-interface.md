@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Constants Interface Check](constants-interface.md)
+[code pal for ABAP](../README.md) > [Constants Interface Check](constants-interface.md)
 
 ## Constants Interface Check
 

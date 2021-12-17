@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [RECEIVING Statement Usage Check](receiving-usage.md)
+[code pal for ABAP](../README.md) > [RECEIVING Statement Usage Check](receiving-usage.md)
 
 ## RECEIVING Statement Usage Check
 

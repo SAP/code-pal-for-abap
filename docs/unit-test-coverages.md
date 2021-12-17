@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Unit-Test Coverages (Statement, Branch and Procedure)](unit-test-coverages.md)
+[code pal for ABAP](../README.md) > [Unit-Test Coverages (Statement, Branch and Procedure)](unit-test-coverages.md)
 
 ## Unit-Test Coverages (Statement, Branch and Procedural Coverage)
 

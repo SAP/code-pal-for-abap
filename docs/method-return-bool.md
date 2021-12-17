@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Method Return Bool Check](method-return-bool.md)
+[code pal for ABAP](../README.md) > [Method Return Bool Check](method-return-bool.md)
 
 ## Method Name Misleading for Boolean Return Check
 

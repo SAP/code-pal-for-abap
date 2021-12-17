@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [CHECK Statement Position Check](check-statement-position.md)
+[code pal for ABAP](../README.md) > [CHECK Statement Position Check](check-statement-position.md)
 
 ## CHECK Statement Position Check
 

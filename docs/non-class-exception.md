@@ -1,4 +1,4 @@
-[code pal for ABAP](../../README.md) > [Non-Class Exception Usage Check](non-class-exception.md)
+[code pal for ABAP](../README.md) > [Non-Class Exception Usage Check](non-class-exception.md)
 
 ## Non-Class Exception Check Usage
 
