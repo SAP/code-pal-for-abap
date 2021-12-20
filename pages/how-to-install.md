@@ -8,7 +8,7 @@
 
 Follow the step-by-step available in the abapGit documentation: [Installing online repo](https://docs.abapgit.org/guide-online-install.html).
 
-> Please, use folder logic `PREFIX`.
+> Please, use folder logic `PREFIX`
 
 ![how to clone repository](imgs/clone-repository.png)
 
@@ -24,7 +24,7 @@ Start the transaction `SCI`, create a new Check Variant, select the `code pal fo
 ### 4. User Parameter
 
 Code Pal requires ABAP Test Cockpit (ATC) in `Code Inspector` mode.  
-Instead of changing the default configuration, you can force it on your user only. 
+Instead of changing the default configuration, you can force it on your User only. 
 
 To set it, go to transaction `SU3`, and add the user parameter `SATC_CI_MODE` as `X`:
 ![user parameter](imgs/user-parameter.png)
