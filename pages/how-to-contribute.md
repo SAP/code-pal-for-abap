@@ -4,180 +4,183 @@
 
 ## How to Contribute
 
-How about having 1000s of ABAP Developers worldwide using a CHECK developed by you? How about helping our ABAP Ecosystem by writing Clean ABAP Checks that could be accessible to everyone? Got you curious?  
+How about having 1000s of ABAP developers worldwide using a Check developed by you?  
+How about helping our ABAP ecosystem by writing Clean ABAP Checks that could be accessible to everyone?  
+Got you curious?  
 
 So, don't miss the opportunity to contribute to this Open-Source Project!  
+
 Let's keep this project up & running!
 
 > :bulb: [Keep it Simple](https://en.wikipedia.org/wiki/KISS_principle): One check validates one single behavior.
 
-### How to Fork the Repository
+### Preparing GitHub and abapGit
 
-Fork our repository, then clone/pull the forked repo via abapGit into your system.  
-Follow the [Fork a repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) guide.
+Follow the [Contributing to a project](https://docs.abapgit.org/guide-contributing.html).
 
-### How to Create a New Check
+### Creating a new Check
 
-Create a new global class under the package `*_checks`. It should have a `constructor` and redefine the `inspect_tokens` methods at least.
+> We will use the `y_pal_boolean_input_param` as a guide. 
+
+To start, create a new Global Class named `y_pal_<NAME>` under the Code Pal package `*_checks`. It should have a `constructor` and inherit from the `y_code_pal_base`:
 
 ```abap
-CLASS y_check_<its_name> DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_pal_boolean_input_param DEFINITION PUBLIC INHERITING FROM y_code_pal_base CREATE PUBLIC.
     PUBLIC SECTION.
         METHODS constructor.
     PROTECTED SECTION.
         METHODS inspect_tokens REDEFINITION.
+        METHODS add_check_quickfix REDEFINITION.
 ENDCLASS.
 ```
 
-The `constructor` method will inherit the superclass, define the check default customization, and set the code inspector message:
+The `constructor` must inherit the superclass, redefine the required configuration, and set the Check message:
+
+> You can find the avaiable configurations in the `y_code_pal_base` constructor. 
 
 ```abap
-METHOD constructor.
+  METHOD constructor.
     super->constructor( ).
 
-    settings-prio = <its_priority>.
-    settings-threshold = <its_threshold>.
-    settings-documentation = |{ c_docs_path-checks }<its_documentation>.md|.
-    settings-pseudo_comment = '"#EC <its_pseudo_comment>' ##NO_TEXT.
-    " settings...
+    settings-pseudo_comment = '"#EC BOOL_PARAM' ##NO_TEXT.
+    settings-disable_threshold_selection = abap_true.
+    settings-threshold = 0.
+    settings-documentation = |{ c_docs_path-checks }boolean-input-parameter.md|.
 
-    set_check_message( '<its_message>' ).
-ENDMETHOD.
+    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_definition ) ).
+    relevant_structure_types = VALUE #( ).
+
+    set_check_message( 'Split method instead of Boolean input parameter!' ).
+  ENDMETHOD.
 ```
 
-The `inspect_tokens` method will detect the issue, validate the customizing, and raise the check.  
-Here, you can use the imported `structures` and `statements` to loop the `tokens`.
+The `inspect_tokens` will detect the issue, validate the customizing, and raise the check.  You can use the imported `structures` and `statements` to loop the `tokens`.
+
+The `detect_check_configuration` is required to identify the most relevant Check configuration. If no configuration is relevant, the framework will skip it internally. 
+
+The `raise_error` is required to inform the Code Inspector about the finding. 
 
 ```abap
-LOOP AT ref_scan_manager->get_tokens( ) ASSIGNING FIELD-SYMBOL(<token>)
-FROM statement-from TO statement-to.
-    " ...
-ENDLOOP.
+  METHOD inspect_tokens.
+    CHECK keyword( ) = if_kaizen_keywords_c=>gc_methods.
+    CHECK is_setter_method( statement ) = abap_false.
+    CHECK has_boolean_input_param( statement ).
+
+    DATA(configuration) = detect_check_configuration( statement ).
+
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
+                 check_configuration = configuration ).
+  ENDMETHOD.
 ```
 
-> :bulb: Before start implementing the `inspect_tokens` method, we recommend you to create the unit tests to follow the Test Driven Development (TDD) approach.
+There are some Checks with distinct ways to scan the code. Please, take a look at how the already existing objects perform before deciding how to implement your new object.
 
-The `detect_check_configuration` method validates the check customizing.
-If an empty structure is received, it means the check should not be raise.
+To ensure the remote check capability, you must use the `manager->database_access` object:
 
-```abap
-DATA(check_configuration) = detect_check_configuration( error_count = <error_count>
-                                                        statement = <statement_structure> ).
-
-IF configuration IS INITIAL.
-    RETURN.
-ENDIF.
+```abap 
+    DATA(object_description) = manager->database_access->repository_access->get_class_description( name ).    
 ```
 
-The `raise_error` method raises the check.
-
-```abap
-raise_error( statement_level = statement-level
-             statement_index = index
-             statement_from = statement-from
-             error_priority = configuration-prio ).
+```abap 
+    DATA(message_class) = manager->database_access->get_message_class( name ).
 ```
 
-The `execute_check` method can be redefined when the check searches for an issue in a non-default statement type. The default types are defined in the `y_check_base`->`execute_check`.
+### Creating the unit test
 
-### How to Create a Unit-Test
+> We will use the `y_pal_boolean_input_param` as a guide. 
 
-Create a local test class under the global test class created above. It should inherit and implement the abstract methods from the `y_unit_test_base` class.  
-We will use the `y_check_prefer_is_not` check as an example.
+It is highly recommended to follow the Test Driven Development (TDD) approach.
 
-> :bulb: Create multiples local test classes to validate distinct behaviors.
+Create one or more `Local Test Class` under the `Global Class` created before. It must inherit the `y_code_pal_unit_test_base` class.  
 
 ```abap
-CLASS ltc_not_is_initial DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-    PROTECTED SECTION.
-        METHODS get_cut REDEFINITION.
-        METHODS get_code_with_issue REDEFINITION.
-        METHODS get_code_without_issue REDEFINITION.
-        METHODS get_code_with_exemption REDEFINITION.
+CLASS local_test_class DEFINITION INHERITING FROM y_code_pal_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
 ENDCLASS.
 ```
 
-The `get_cut` method must return an instance of the class under test.
+The `get_cut` method returns an instance of the class under test.
 
 ```abap
-METHOD get_cut.
-    result ?= NEW y_check_prefer_is_not( ).
-ENDMETHOD.
+  METHOD get_cut.
+    result ?= NEW y_pal_boolean_input_param( ).
+  ENDMETHOD.
 ```
 
-The `get_code_with_issue` method must return a snippet of code which raises the check.  
+The `get_code_with_issue` method returns a code sample that will raise the finding:
 
 ```abap
-METHOD get_code_with_issue.
+  METHOD get_code_with_issue.
     result = VALUE #(
-        ( ' REPORT y_example. ' )
+      ( ' REPORT y_example. ' )
 
-        ( ' START-OF-SELECTION. ' )
-        ( '   DATA(count) = 0. ' )
-        ( '   IF NOT count IS INITIAL. ' )
-        ( '     count = 1. ' )
-        ( '   ENDIF. ' )
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS update IMPORTING do_commit TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD update. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
     ).
-ENDMETHOD.
+  ENDMETHOD.
 ```
 
-The `get_code_without_issue` method must return a snippet of code which do not raise the check, or how the fixed code should be.
+The `get_code_without_issue` method returns a code sample that will not raise the finding (you can use it for false-positives):
 
 ```abap
-METHOD get_code_with_issue.
+  METHOD get_code_without_issue.
     result = VALUE #(
-        ( 'REPORT y_example. ' )
+      ( ' REPORT y_example. ' )
 
-        ( ' START-OF-SELECTION.      ' )
-        ( '   DATA(count) = 0. ' )
-        ( '   IF count IS NOT INITIAL. ' )
-        ( '     count = 1. ' )
-        ( '   ENDIF. ' )
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS update_without_commit. ' )
+      ( '     METHODS update_and_commit. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD update_without_commit. ' )
+      ( '   ENDMETHOD. ' )
+      ( '   METHOD update_and_commit. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
     ).
-ENDMETHOD.
+  ENDMETHOD.
 ```
 
-The `get_code_with_exemption` method must return a snippet of code which usage of the pseudo comment.
+The `get_code_with_exemption` method returns a code sample that will ommit the finding by using the Pseudo Comment (exemption):
 
 ```abap
-METHOD get_code_with_exemption.
+  METHOD get_code_with_exemption.
     result = VALUE #(
-        ( 'REPORT y_example. ' )
+      ( ' REPORT y_example. ' )
 
-        ( ' START-OF-SELECTION.      ' )
-        ( '   DATA(count) = 0. ' )
-        ( '   IF NOT count IS INITIAL. "#EC PREFER_IS_NOT ' )
-        ( '     count = 1. ' )
-        ( '   ENDIF. ' )
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS update IMPORTING do_commit TYPE abap_bool.  "#EC BOOL_PARAM ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD update. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
     ).
-ENDMETHOD.
+  ENDMETHOD.
 ```
 
-### How to Test the New Check
+### Activating the Check
 
-Start the transaction `SCI`, and go to the `Code Inspector > Management of > Checks` menu.  
-Then, select the new check class and save it.
+Execute the report `Y_CODE_PAL_REGISTRATION` using the run mode `Activate`.
 
-Start the transaction `SCI` again, and change the global check variant.  
-Then, select the new check class and save it.
-
-Extend the `y_demo_failures` class with an example for the new check.  
-Then, run the code inspector or ATC using the global check variant.
-
-### How to Submit the New Check
-
-When it is done, please `stage` --> `commit` --> `push` the files to your fork.
-
-In the github.com, create a pull request from your fork to our base repo.
-
-At this point of time, we will verify your code and authorize/approve the merge (if applicable).  
-Please create the pull request to merge it with our `master` branch.
-
-Thank you in advance for contributing and sharing your ideas within our community!
-
-**We really appreciate this! :heart_eyes:**
-
-## Further Reading
+## Further reading
 
 - [How to write an ATC Check](https://www.sap.com/documents/2018/09/905bfdab-1a7d-0010-87a3-c30de2ffd8ff.html)
 - [How to scan ABAP source code](https://www.abapoptimizer.com/blog/how-to-scan-abap)
