@@ -36,7 +36,7 @@ ENDCLASS.
 
 The `constructor` must inherit the superclass, redefine the required configuration, and set the Check message:
 
-> You can find the avaiable configurations in the `y_code_pal_base` constructor. 
+> You can find the available configurations in the `y_code_pal_base` constructor. 
 
 ```abap
   METHOD constructor.
@@ -156,7 +156,7 @@ The `get_code_without_issue` method returns a code sample that will not raise th
   ENDMETHOD.
 ```
 
-The `get_code_with_exemption` method returns a code sample that will ommit the finding by using the Pseudo Comment (exemption):
+The `get_code_with_exemption` method returns a code sample that will omit the finding by using the Pseudo Comment (exemption):
 
 ```abap
   METHOD get_code_with_exemption.
