@@ -249,7 +249,6 @@ CLASS y_code_pal_base IMPLEMENTATION.
 
 
   METHOD execute_check.
-    manager->telemetry->add_usage( myname ).
     inspect_structures( ).
   ENDMETHOD.
 
@@ -445,11 +444,6 @@ CLASS y_code_pal_base IMPLEMENTATION.
       get( ).
     ENDIF.
 
-    IF lines( check_configurations ) = 1
-    AND check_configurations[ 1 ]-object_creation_date IS INITIAL.
-      CLEAR check_configurations.
-    ENDIF.
-
     quickfix_factory = cl_ci_quickfix_creation=>create_quickfix_alternatives( ).
 
     manager->set_scope( ref_scan->levels[ 1 ]-name ).
@@ -530,6 +524,11 @@ CLASS y_code_pal_base IMPLEMENTATION.
         CATCH ycx_code_pal_no_customizing.
           RETURN.
       ENDTRY.
+    ENDIF.
+
+    " No relevant configurations
+    IF check_configurations IS INITIAL.
+      RETURN.
     ENDIF.
 
     execute_check( ).
@@ -683,8 +682,6 @@ CLASS y_code_pal_base IMPLEMENTATION.
                                     suppress    = p_suppress
                                     position    = p_position ).
     ELSE.
-      manager->telemetry->add_finding( myname ).
-
       super->inform( p_sub_obj_type    = p_sub_obj_type
                      p_sub_obj_name    = p_sub_obj_name
                      p_position        = p_position

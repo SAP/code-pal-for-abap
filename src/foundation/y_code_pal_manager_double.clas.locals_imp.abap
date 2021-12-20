@@ -300,28 +300,3 @@ CLASS ltd_profile IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
-
-
-
-CLASS ltd_telemetry IMPLEMENTATION.
-
-  METHOD y_if_code_pal_telemetry~add_usage.
-    RETURN.
-  ENDMETHOD.
-
-
-  METHOD y_if_code_pal_telemetry~add_finding.
-    RETURN.
-  ENDMETHOD.
-
-
-  METHOD y_if_code_pal_telemetry~get_count.
-    RETURN.
-  ENDMETHOD.
-
-
-  METHOD y_if_code_pal_telemetry~get_counters.
-    RETURN.
-  ENDMETHOD.
-
-ENDCLASS.
