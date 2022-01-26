@@ -4,13 +4,13 @@ CLASS y_check_text_assembly DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 
 
 
 CLASS y_check_text_assembly IMPLEMENTATION.
-
 
   METHOD constructor.
     super->constructor( ).
@@ -55,5 +55,9 @@ CLASS y_check_text_assembly IMPLEMENTATION.
                  check_configuration = check_configuration ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

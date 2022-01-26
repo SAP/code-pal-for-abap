@@ -4,6 +4,7 @@ CLASS y_check_comment_position DEFINITION PUBLIC INHERITING FROM y_check_base CR
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS: add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS has_wrong_position IMPORTING statement TYPE sstmnt
@@ -128,6 +129,12 @@ CLASS y_check_comment_position IMPLEMENTATION.
       CATCH cx_sy_range_out_of_bounds.
         result = abap_false.
     ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    " Comments are not supported
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.

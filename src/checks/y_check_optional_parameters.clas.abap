@@ -4,12 +4,14 @@ CLASS y_check_optional_parameters DEFINITION PUBLIC INHERITING FROM y_check_base
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS has_optional_parameter IMPORTING statement TYPE sstmnt
                                    RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
+
 
 
 CLASS Y_CHECK_OPTIONAL_PARAMETERS IMPLEMENTATION.
@@ -41,6 +43,7 @@ CLASS Y_CHECK_OPTIONAL_PARAMETERS IMPLEMENTATION.
                  check_configuration  = check_configuration ).
   ENDMETHOD.
 
+
   METHOD has_optional_parameter.
     LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
     FROM statement-from TO statement-to
@@ -48,6 +51,11 @@ CLASS Y_CHECK_OPTIONAL_PARAMETERS IMPLEMENTATION.
       result = abap_true.
       RETURN.
     ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.

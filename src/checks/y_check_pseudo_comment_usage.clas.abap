@@ -5,6 +5,7 @@ CLASS y_check_pseudo_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_bas
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     TYPES ty_pseudo_comments LIKE SORTED TABLE OF settings-pseudo_comment WITH NON-UNIQUE KEY table_line.
@@ -122,5 +123,9 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     CREATE OBJECT result TYPE (name).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

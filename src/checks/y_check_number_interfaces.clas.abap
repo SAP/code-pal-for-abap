@@ -5,6 +5,7 @@ CLASS y_check_number_interfaces DEFINITION PUBLIC INHERITING FROM y_check_base C
   PROTECTED SECTION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA interface_counter TYPE i VALUE 0.
@@ -64,5 +65,9 @@ CLASS y_check_number_interfaces IMPLEMENTATION.
                  parameter_02 = |{ check_configuration-threshold }| ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

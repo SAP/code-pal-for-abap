@@ -16,6 +16,13 @@ Legend
 + : added
 - : removed
 
+2021-XX-XX v.1.17.0
+------------------
+* Refactoring Quick Fixes (#523)
++ Quickfix: Pseudo Comment (#509)
++ Check Button: Replicate Configuration
+! Check Button: Edit
+
 2021-11-11 v.1.16.3
 ------------------
 * Incompatibility with abapGit after commit dc4b3705216757c7533f5802d51 (#528)

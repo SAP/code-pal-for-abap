@@ -4,6 +4,7 @@ CLASS y_check_sub_assign_read_table DEFINITION PUBLIC INHERITING FROM y_check_ba
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_read_table IMPORTING statement     TYPE sstmnt
@@ -20,7 +21,6 @@ ENDCLASS.
 
 
 CLASS y_check_sub_assign_read_table IMPLEMENTATION.
-
 
   METHOD constructor.
     super->constructor( ).
@@ -106,4 +106,10 @@ CLASS y_check_sub_assign_read_table IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
+
 ENDCLASS.
