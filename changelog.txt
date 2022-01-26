@@ -16,7 +16,7 @@ Legend
 + : added
 - : removed
 
-2021-XX-XX v.1.17.0
+2022-XX-XX v.1.17.0
 ------------------
 * typo in constants-interface.md
 * Refactoring Quick Fixes (#523)
