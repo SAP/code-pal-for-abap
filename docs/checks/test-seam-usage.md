@@ -28,5 +28,3 @@ TEST-SEAM seam_name.    "#EC TEST_SEAM_USAGE
 ### Further Readings & Knowledge
 
 * [Clean ABAP - Avoid Usage of TEST-SEAM](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-test-seams-as-temporary-workaround)
-* [ABAP Test Tools & Frameworks](https://pages.github.tools.sap/EngineeringCulture/ase/ABAP/abapTestTools.html)
-
