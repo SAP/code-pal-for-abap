@@ -38,7 +38,7 @@ Use enumeration classes instead.
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CONS_INTF` which should be placed right after the class definition header:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CONS_INTF` which should be placed right after the interface definition:
 
 ### Example
 
