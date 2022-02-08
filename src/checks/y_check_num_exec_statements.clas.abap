@@ -4,6 +4,7 @@ CLASS y_check_num_exec_statements DEFINITION PUBLIC INHERITING FROM y_check_base
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA no_exec_statements TYPE i.
@@ -25,7 +26,6 @@ ENDCLASS.
 
 
 CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
-
 
   METHOD constructor.
     super->constructor( ).
@@ -171,4 +171,10 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
       result = abap_true.
     ENDIF.
   ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
+
 ENDCLASS.

@@ -5,6 +5,8 @@ CLASS y_check_branch_coverage DEFINITION PUBLIC INHERITING FROM y_check_base CRE
   PROTECTED SECTION.
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
+
 ENDCLASS.
 
 
@@ -64,4 +66,10 @@ CLASS y_check_branch_coverage IMPLEMENTATION.
   METHOD inspect_tokens.
     RETURN.
   ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
+
 ENDCLASS.

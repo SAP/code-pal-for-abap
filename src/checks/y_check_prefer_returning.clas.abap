@@ -4,6 +4,7 @@ CLASS y_check_prefer_returning DEFINITION PUBLIC INHERITING FROM y_check_base CR
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS has_only_one_exporting IMPORTING statement TYPE sstmnt
@@ -97,5 +98,9 @@ CLASS y_check_prefer_returning IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

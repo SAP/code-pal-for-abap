@@ -6,6 +6,7 @@ CLASS y_check_cyclomatic_complexity DEFINITION PUBLIC INHERITING FROM y_check_ba
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA cyclo_comp TYPE i.
@@ -95,4 +96,10 @@ CLASS Y_CHECK_CYCLOMATIC_COMPLEXITY IMPLEMENTATION.
                    parameter_02 = |{ check_configuration-threshold }| ).
     ENDIF.
   ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
+
 ENDCLASS.

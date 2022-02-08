@@ -8,6 +8,7 @@ CLASS y_check_empty_if_branches DEFINITION
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA branch_counter TYPE i VALUE 0.
@@ -132,4 +133,10 @@ CLASS y_check_empty_if_branches IMPLEMENTATION.
       found_statement = abap_true.
     ENDIF.
   ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
+
 ENDCLASS.

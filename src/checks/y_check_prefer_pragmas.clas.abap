@@ -4,6 +4,7 @@ CLASS y_check_prefer_pragmas DEFINITION PUBLIC INHERITING FROM y_check_base CREA
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     TYPES: BEGIN OF mapping,
@@ -92,5 +93,9 @@ CLASS y_check_prefer_pragmas IMPLEMENTATION.
     result = FILTER #( mappings IN pseudo_comments WHERE pseudo_com = table_line ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

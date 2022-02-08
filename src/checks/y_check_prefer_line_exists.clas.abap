@@ -4,6 +4,7 @@ CLASS y_check_prefer_line_exists DEFINITION PUBLIC INHERITING FROM y_check_base 
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 
@@ -56,5 +57,9 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
                  check_configuration = check_configuration ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

@@ -4,12 +4,13 @@ CLASS y_check_receiving_usage DEFINITION PUBLIC INHERITING FROM y_check_base CRE
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
+
 ENDCLASS.
 
 
 
-CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
-
+CLASS y_check_receiving_usage IMPLEMENTATION.
 
   METHOD constructor.
     super->constructor( ).
@@ -56,4 +57,10 @@ CLASS Y_CHECK_RECEIVING_USAGE IMPLEMENTATION.
                    check_configuration = check_configuration ).
     ENDIF.
   ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
+
 ENDCLASS.

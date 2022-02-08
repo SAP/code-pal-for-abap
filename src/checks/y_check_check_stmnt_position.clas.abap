@@ -4,6 +4,7 @@ CLASS y_check_check_stmnt_position DEFINITION PUBLIC INHERITING FROM y_check_bas
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_not_relevant_token IMPORTING token         TYPE string
@@ -97,6 +98,11 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
     OR str = 'ENDLOOP'.
       result = xsdbool( <token>-str = 'LOOP' ).
     ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD add_check_quickfix.
+    RETURN.
   ENDMETHOD.
 
 ENDCLASS.
