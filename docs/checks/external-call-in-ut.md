@@ -22,3 +22,7 @@ In exceptional cases, you can suppress this finding by using the pseudo comment 
 ```abap
 SUBMIT program.       “#EC EXT_CALL_UT
 ```
+
+### Further Readings & Knowledge
+
+* [ABAP Test Tools & Frameworks](https://pages.github.tools.sap/EngineeringCulture/ase/ABAP/abapTestTools.html)
