@@ -33,7 +33,7 @@ Together, we both support you in writing a clean ABAP code.
 
 ## Dependencies
 
-- SAP NetWeaver **7.40 SP8** or higher
+- SAP NetWeaver **7.57** or higher
 - [abapGit](https://docs.abapgit.org/)
 - :new: [SAP Note 2527903 - Remote analysis (for check system)](https://launchpad.support.sap.com/#/notes/2527903)
 
