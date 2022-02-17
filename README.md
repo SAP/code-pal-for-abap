@@ -1,6 +1,5 @@
-# code pal for ABAP - 1.163 - Release for SAP NetWeaver **7.40 SP8** or higher
+# code pal for ABAP - 1.16.3 - Release for SAP NetWeaver **7.40 SP8** or higher
 
-[![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/SAP/code-pal-for-abap/src/y_code_pal_version.intf.abap/abap&label=version)](changelog.txt)
 [![license](https://img.shields.io/github/license/SAP/code-pal-for-abap)](LICENSE)
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/code-pal-for-abap)](https://api.reuse.software/info/github.com/SAP/code-pal-for-abap)
 
