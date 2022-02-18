@@ -32,7 +32,6 @@ Together, we both support you in writing a clean ABAP code.
 - [Check Documentation](docs/check_documentation.md)
 
 ## Dependencies
-- Since Version 1.17 - SAP NetWeaver **7.57** or higher
 - Since Version 1.00 - SAP NetWeaver **7.40 SP8** or higher
 - [abapGit](https://docs.abapgit.org/)
 - :new: [SAP Note 2527903 - Remote analysis (for check system)](https://launchpad.support.sap.com/#/notes/2527903)
