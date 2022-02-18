@@ -4,6 +4,7 @@ CLASS y_check_default_key DEFINITION PUBLIC INHERITING FROM y_check_base CREATE 
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 
@@ -47,5 +48,9 @@ CLASS y_check_default_key IMPLEMENTATION.
                  check_configuration = check_configuration ).
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

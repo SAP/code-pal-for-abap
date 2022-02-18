@@ -4,6 +4,7 @@ CLASS y_check_self_reference DEFINITION PUBLIC INHERITING FROM y_check_base CREA
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS method_call TYPE string VALUE 'A' ##NO_TEXT.
@@ -15,7 +16,6 @@ ENDCLASS.
 
 
 CLASS y_check_self_reference IMPLEMENTATION.
-
 
   METHOD constructor.
     super->constructor( ).
@@ -53,5 +53,9 @@ CLASS y_check_self_reference IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

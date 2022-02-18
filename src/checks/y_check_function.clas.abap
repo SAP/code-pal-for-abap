@@ -4,6 +4,7 @@ CLASS y_check_function DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUB
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_normal_mode RETURNING VALUE(result) TYPE abap_bool.

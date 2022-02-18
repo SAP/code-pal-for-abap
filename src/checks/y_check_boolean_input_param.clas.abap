@@ -4,6 +4,7 @@ CLASS y_check_boolean_input_param DEFINITION PUBLIC INHERITING FROM y_check_base
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
+    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_setter_method IMPORTING statement TYPE sstmnt
@@ -33,8 +34,7 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-
-    CHECK get_token_abs( statement-from ) = 'METHODS'.
+    CHECK keyword( ) = if_kaizen_keywords_c=>gc_methods.
     CHECK is_setter_method( statement ) = abap_false.
     CHECK has_boolean_input_param( statement ).
 
@@ -44,12 +44,11 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
                  statement_index = index
                  statement_from = statement-from
                  check_configuration = configuration ).
-
   ENDMETHOD.
 
 
   METHOD is_setter_method.
-    DATA(method_name) = get_token_abs( statement-from + 1 ).
+    DATA(method_name) = next1( CONV #( if_kaizen_keywords_c=>gc_methods ) ).
     result = xsdbool( method_name CS 'SET_' ).
   ENDMETHOD.
 
@@ -79,5 +78,9 @@ CLASS y_check_boolean_input_param IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.

@@ -60,3 +60,9 @@ The pseudo comment must be placed right after the DB access statement.
 ```ABAP
 SELECT * FROM tadir INTO TABLE @DATA(entries).       "#EC DB_ACCESS_UT
 ```
+
+### Further Readings & Knowledge
+
+* [Clean ABAP - Avoid Usage of TEST-SEAM](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-test-seams-as-temporary-workaround)
+* [ABAP Test Tools & Frameworks](https://pages.github.tools.sap/EngineeringCulture/ase/ABAP/abapTestTools.html)
+
