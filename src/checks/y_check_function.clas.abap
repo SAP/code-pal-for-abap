@@ -49,6 +49,7 @@ CLASS y_check_function IMPLEMENTATION.
     result = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
   
+  
   METHOD add_check_quickfix.
     RETURN.
   ENDMETHOD.
