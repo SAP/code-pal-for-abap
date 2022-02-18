@@ -5,7 +5,7 @@ CLASS y_check_number_methods DEFINITION PUBLIC INHERITING FROM y_check_base CREA
   PROTECTED SECTION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
+
 
   PRIVATE SECTION.
     DATA method_counter TYPE i VALUE 0.
@@ -67,9 +67,5 @@ CLASS Y_CHECK_NUMBER_METHODS IMPLEMENTATION.
 
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

@@ -4,7 +4,6 @@ CLASS y_check_deprecated_key_words DEFINITION PUBLIC INHERITING FROM y_check_bas
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS check_if_error IMPORTING index     TYPE i
@@ -14,7 +13,8 @@ ENDCLASS.
 
 
 
-CLASS y_check_deprecated_key_words IMPLEMENTATION.
+CLASS Y_CHECK_DEPRECATED_KEY_WORDS IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
@@ -48,10 +48,4 @@ CLASS y_check_deprecated_key_words IMPLEMENTATION.
                  check_configuration = check_configuration
                  parameter_01 = |{ keyword }| ).
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

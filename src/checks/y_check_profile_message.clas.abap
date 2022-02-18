@@ -6,7 +6,6 @@ CLASS y_check_profile_message DEFINITION PUBLIC INHERITING FROM y_check_base CRE
     METHODS execute_check REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
     METHODS inform REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     CLASS-DATA ran TYPE abap_bool.
@@ -98,10 +97,4 @@ CLASS y_check_profile_message IMPLEMENTATION.
                        ELSE |{ result }, { <profile>-profile }| ).
     ENDLOOP.
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

@@ -29,7 +29,7 @@ CLASS ltd_check_base DEFINITION INHERITING FROM y_check_base.
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
+
 
 ENDCLASS.
 
@@ -58,10 +58,6 @@ CLASS ltd_check_base IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD inspect_tokens.
-    RETURN.
-  ENDMETHOD.
-
-  METHOD add_check_quickfix.
     RETURN.
   ENDMETHOD.
 

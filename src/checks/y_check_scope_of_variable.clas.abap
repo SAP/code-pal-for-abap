@@ -1,10 +1,9 @@
 CLASS y_check_scope_of_variable DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-    METHODS constructor.
+    METHODS constructor .
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_isolated IMPORTING strucutre_row TYPE stmnt_stru
@@ -21,6 +20,7 @@ ENDCLASS.
 
 
 CLASS y_check_scope_of_variable IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
@@ -110,11 +110,6 @@ CLASS y_check_scope_of_variable IMPLEMENTATION.
 
     result = COND #( WHEN is_root = abap_true THEN structure
                                               ELSE get_scope_structure( structure-back ) ).
-  ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
   ENDMETHOD.
 
 ENDCLASS.

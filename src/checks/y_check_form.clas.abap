@@ -4,7 +4,6 @@ CLASS y_check_form DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS is_screen_event RETURNING VALUE(result) TYPE abap_bool.
@@ -66,9 +65,5 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

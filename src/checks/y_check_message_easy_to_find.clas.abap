@@ -4,7 +4,6 @@ CLASS y_check_message_easy_to_find DEFINITION PUBLIC INHERITING FROM y_check_bas
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     CLASS-DATA message_classes TYPE HASHED TABLE OF arbgb WITH UNIQUE KEY table_line.
@@ -136,10 +135,6 @@ CLASS y_check_message_easy_to_find IMPLEMENTATION.
   METHOD is_method_call.
     result = xsdbool( token_wa-str CA '=>'
                    OR token_wa-str CA '->' ).
-  ENDMETHOD.
-
-  METHOD add_check_quickfix.
-    RETURN.
   ENDMETHOD.
 
 ENDCLASS.

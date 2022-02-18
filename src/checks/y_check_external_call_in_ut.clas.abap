@@ -4,7 +4,6 @@ CLASS y_check_external_call_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS check_if_error IMPORTING index     TYPE i
@@ -87,10 +86,4 @@ CLASS y_check_external_call_in_ut IMPLEMENTATION.
                       statement = statement ).
     ENDIF.
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

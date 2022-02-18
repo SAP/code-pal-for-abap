@@ -4,7 +4,6 @@ CLASS y_check_collect DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBL
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS extract_itab_name IMPORTING statement     TYPE sstmnt
@@ -192,10 +191,4 @@ CLASS Y_CHECK_COLLECT IMPLEMENTATION.
         RETURN.
     ENDTRY.
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

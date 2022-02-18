@@ -4,7 +4,6 @@ CLASS y_check_non_class_exception DEFINITION PUBLIC INHERITING FROM y_check_base
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
     METHODS inspect_message IMPORTING statement TYPE sstmnt
                                       index     TYPE i.
@@ -74,9 +73,5 @@ CLASS Y_CHECK_NON_CLASS_EXCEPTION IMPLEMENTATION.
                    statement = statement ).
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

@@ -1,9 +1,9 @@
 INTERFACE y_if_profile_manager PUBLIC.
 
   CONSTANTS: BEGIN OF types,
-               checks    TYPE tabname VALUE 'YTAB_CHECKS',
+               checks TYPE tabname VALUE 'YTAB_CHECKS',
                delegates TYPE tabname VALUE 'YTAB_DELEGATES',
-               profiles  TYPE tabname VALUE 'YTAB_PROFILES',
+               profiles TYPE tabname VALUE 'YTAB_PROFILES',
              END OF types.
 
   TYPES:
@@ -14,9 +14,9 @@ INTERFACE y_if_profile_manager PUBLIC.
     check_assignments TYPE STANDARD TABLE OF ytab_checks WITH DEFAULT KEY .
 
   TYPES: BEGIN OF file,
-           profile   TYPE ytab_profiles,
-           checks    TYPE check_assignments,
-           delegates TYPE delegate_assigments,
+             profile   TYPE ytab_profiles,
+             checks    TYPE check_assignments,
+             delegates TYPE delegate_assigments,
          END OF file.
 
   TYPES:
@@ -40,7 +40,7 @@ INTERFACE y_if_profile_manager PUBLIC.
     RETURNING
       VALUE(result) TYPE REF TO y_if_profile_manager.
   CLASS-METHODS get_checks_from_db
-    RETURNING VALUE(result) TYPE tt_tadir.
+    RETURNING value(result) TYPE tt_tadir.
 
   METHODS select_profiles
     IMPORTING
@@ -151,20 +151,8 @@ INTERFACE y_if_profile_manager PUBLIC.
       profile TYPE ycicc_profile.
   METHODS profile_exists
     IMPORTING
-      name          TYPE ytab_profiles-profile
+      name TYPE ytab_profiles-profile
     RETURNING
       VALUE(result) TYPE abap_bool.
-  METHODS mass_change
-    IMPORTING
-      name                     TYPE ytab_profiles-profile
-      config                   TYPE ytab_checks
-      change_validation_period TYPE abap_bool
-      change_created_since     TYPE abap_bool
-      change_prio              TYPE abap_bool
-      change_apply_prod_code   TYPE abap_bool
-      change_apply_testcode    TYPE abap_bool
-      change_allow_exemptios   TYPE abap_bool
-    RAISING
-      cx_failed.
 
 ENDINTERFACE.

@@ -4,7 +4,6 @@ CLASS y_check_method_output_param DEFINITION PUBLIC  INHERITING FROM y_check_bas
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA has_exporting_parameter TYPE abap_bool.
@@ -18,6 +17,7 @@ ENDCLASS.
 
 
 CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
+
 
   METHOD has_error.
     DATA(sum) = 0.
@@ -86,10 +86,4 @@ CLASS Y_CHECK_METHOD_OUTPUT_PARAM IMPLEMENTATION.
                  statement_from = statement-from
                  check_configuration = check_configuration ).
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

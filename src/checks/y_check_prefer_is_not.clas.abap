@@ -4,7 +4,6 @@ CLASS y_check_prefer_is_not DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
     METHODS is_standard_function IMPORTING token TYPE stokesx
                                  RETURNING VALUE(result) TYPE abap_bool.
@@ -14,6 +13,7 @@ ENDCLASS.
 
 
 CLASS y_check_prefer_is_not IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
@@ -74,9 +74,5 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
                       OR token-str CP 'MATCHES*' ).
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

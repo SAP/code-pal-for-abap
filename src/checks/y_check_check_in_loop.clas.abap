@@ -4,7 +4,6 @@ CLASS y_check_check_in_loop DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS get_back_statement IMPORTING structure     TYPE sstruc
@@ -54,9 +53,5 @@ CLASS y_check_check_in_loop IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

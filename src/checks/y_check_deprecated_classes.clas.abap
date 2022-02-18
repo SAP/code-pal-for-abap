@@ -4,7 +4,6 @@ CLASS y_check_deprecated_classes DEFINITION PUBLIC INHERITING FROM y_check_base 
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     TYPES: BEGIN OF deprecated_classes_type,
@@ -83,11 +82,6 @@ CLASS y_check_deprecated_classes IMPLEMENTATION.
       CATCH cx_sy_itab_line_not_found.
         RETURN.
     ENDTRY.
-  ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
   ENDMETHOD.
 
 ENDCLASS.
