@@ -6,7 +6,6 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
     METHODS execute_check REDEFINITION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA abs_statement_number TYPE i VALUE 0.
@@ -184,10 +183,5 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     result = xsdbool( enhancement IS NOT INITIAL ).
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    " Comments are not supported
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

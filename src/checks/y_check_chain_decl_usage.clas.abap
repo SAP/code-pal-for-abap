@@ -5,7 +5,6 @@ CLASS y_check_chain_decl_usage DEFINITION PUBLIC INHERITING FROM y_check_base CR
   PROTECTED SECTION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS get_chained_statements RETURNING VALUE(result) TYPE sstmnt_tab.
@@ -125,9 +124,5 @@ CLASS y_check_chain_decl_usage IMPLEMENTATION.
                    OR statement_type = scan_struc_stmnt_type-types ).
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

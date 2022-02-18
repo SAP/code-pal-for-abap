@@ -5,7 +5,6 @@ CLASS y_check_is_interface_in_class DEFINITION PUBLIC INHERITING FROM y_check_ba
   PROTECTED SECTION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA public_method_counter TYPE i VALUE 0.
@@ -103,9 +102,5 @@ CLASS Y_CHECK_IS_INTERFACE_IN_CLASS IMPLEMENTATION.
                  parameter_01 = |{ public_method_counter }| ).
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

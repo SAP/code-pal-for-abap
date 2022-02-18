@@ -4,7 +4,6 @@ CLASS y_check_empty_procedures DEFINITION PUBLIC INHERITING FROM y_check_base CR
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS get_next_token_from_index IMPORTING index         TYPE i
@@ -79,10 +78,4 @@ CLASS y_check_empty_procedures IMPLEMENTATION.
         result = abap_true.
     ENDCASE.
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

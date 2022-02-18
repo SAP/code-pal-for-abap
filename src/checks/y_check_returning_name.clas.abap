@@ -4,7 +4,6 @@ CLASS y_check_returning_name DEFINITION PUBLIC INHERITING FROM y_check_base CREA
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS has_returning_with_wrong_name IMPORTING statement TYPE sstmnt
@@ -71,9 +70,5 @@ CLASS y_check_returning_name IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

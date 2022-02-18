@@ -6,7 +6,6 @@ CLASS y_check_method_return_bool DEFINITION PUBLIC INHERITING FROM y_check_base 
     DATA method_name TYPE string.
 
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA good_method_names_beginning TYPE TABLE OF string.
@@ -106,10 +105,4 @@ CLASS Y_CHECK_METHOD_RETURN_BOOL IMPLEMENTATION.
                    parameter_01 = |{ method_name }| ).
     ENDIF.
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

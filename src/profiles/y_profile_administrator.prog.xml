@@ -230,7 +230,7 @@
       <TYPE>N</TYPE>
       <NEXTSCREEN>0400</NEXTSCREEN>
       <LINES>027</LINES>
-      <COLUMNS>126</COLUMNS>
+      <COLUMNS>124</COLUMNS>
      </HEADER>
      <CONTAINERS>
       <RPY_DYCATT>
@@ -326,7 +326,7 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>LBL_TEXT_START_DATE</NAME>
-       <TEXT>*Validity_Period_________________</TEXT>
+       <TEXT>*Validity_Period___________FROM:_</TEXT>
        <LINE>003</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>033</LENGTH>
@@ -339,25 +339,11 @@
       <RPY_DYFATC>
        <CONT_TYPE>SCREEN</CONT_TYPE>
        <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_TEXT_FROM_DATE</NAME>
-       <TEXT>FROM:</TEXT>
-       <LINE>003</LINE>
-       <COLUMN>035</COLUMN>
-       <LENGTH>005</LENGTH>
-       <VISLENGTH>005</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
        <NAME>IO_START_DATE</NAME>
        <TEXT>?_________</TEXT>
        <LINE>003</LINE>
-       <COLUMN>041</COLUMN>
+       <COLUMN>035</COLUMN>
        <LENGTH>010</LENGTH>
        <VISLENGTH>010</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -374,7 +360,7 @@
        <NAME>LBL_TEXT_END_DATE</NAME>
        <TEXT>TO:</TEXT>
        <LINE>003</LINE>
-       <COLUMN>052</COLUMN>
+       <COLUMN>046</COLUMN>
        <LENGTH>003</LENGTH>
        <VISLENGTH>003</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -389,7 +375,7 @@
        <NAME>IO_END_DATE</NAME>
        <TEXT>?_________</TEXT>
        <LINE>003</LINE>
-       <COLUMN>056</COLUMN>
+       <COLUMN>050</COLUMN>
        <LENGTH>010</LENGTH>
        <VISLENGTH>010</VISLENGTH>
        <HEIGHT>001</HEIGHT>
@@ -584,7 +570,7 @@
        <CONT_TYPE>SCREEN</CONT_TYPE>
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
-       <NAME>IO_PCOM_NAME</NAME>
+       <NAME>LBL_PCOM_NAME</NAME>
        <TEXT>____________________</TEXT>
        <LINE>009</LINE>
        <COLUMN>037</COLUMN>
@@ -833,374 +819,11 @@
       </RPY_DYFLOW>
      </FLOW_LOGIC>
     </item>
-    <item>
-     <HEADER>
-      <PROGRAM>Y_PROFILE_ADMINISTRATOR</PROGRAM>
-      <SCREEN>0700</SCREEN>
-      <LANGUAGE>E</LANGUAGE>
-      <DESCRIPT>Mass Update of Checks</DESCRIPT>
-      <TYPE>N</TYPE>
-      <NEXTSCREEN>0700</NEXTSCREEN>
-      <LINES>008</LINES>
-      <COLUMNS>073</COLUMNS>
-     </HEADER>
-     <CONTAINERS>
-      <RPY_DYCATT>
-       <TYPE>SCREEN</TYPE>
-       <NAME>SCREEN</NAME>
-      </RPY_DYCATT>
-     </CONTAINERS>
-     <FIELDS>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_INFO</NAME>
-       <TEXT>Choose_the_relevant_fields_for_replication:</TEXT>
-       <LINE>001</LINE>
-       <COLUMN>001</COLUMN>
-       <LENGTH>043</LENGTH>
-       <VISLENGTH>043</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_CHANGE_VP</NAME>
-       <LINE>002</LINE>
-       <COLUMN>003</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <INPUT_FLD>X</INPUT_FLD>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_TEXT_START_DATE</NAME>
-       <TEXT>Validity_Period:________________</TEXT>
-       <LINE>002</LINE>
-       <COLUMN>007</COLUMN>
-       <LENGTH>032</LENGTH>
-       <VISLENGTH>032</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_TEXT_FROM_DATE</NAME>
-       <TEXT>FROM:</TEXT>
-       <LINE>002</LINE>
-       <COLUMN>040</COLUMN>
-       <LENGTH>005</LENGTH>
-       <VISLENGTH>005</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEMPLATE</TYPE>
-       <NAME>IO_START_DATE</NAME>
-       <TEXT>__________</TEXT>
-       <LINE>002</LINE>
-       <COLUMN>046</COLUMN>
-       <LENGTH>010</LENGTH>
-       <VISLENGTH>010</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>DATS</FORMAT>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-       <OUTPUTONLY>X</OUTPUTONLY>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_TEXT_END_DATE</NAME>
-       <TEXT>TO:</TEXT>
-       <LINE>002</LINE>
-       <COLUMN>057</COLUMN>
-       <LENGTH>003</LENGTH>
-       <VISLENGTH>003</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEMPLATE</TYPE>
-       <NAME>IO_END_DATE</NAME>
-       <TEXT>__________</TEXT>
-       <LINE>002</LINE>
-       <COLUMN>061</COLUMN>
-       <LENGTH>010</LENGTH>
-       <VISLENGTH>010</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>DATS</FORMAT>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-       <OUTPUTONLY>X</OUTPUTONLY>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_CHANGE_SINCE</NAME>
-       <LINE>003</LINE>
-       <COLUMN>003</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <INPUT_FLD>X</INPUT_FLD>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_TEXT_CREATION_DATE</NAME>
-       <TEXT>Apply_on_Objects_Created_Since:_</TEXT>
-       <LINE>003</LINE>
-       <COLUMN>007</COLUMN>
-       <LENGTH>032</LENGTH>
-       <VISLENGTH>032</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEMPLATE</TYPE>
-       <NAME>IO_CREATION_DATE</NAME>
-       <TEXT>__________</TEXT>
-       <LINE>003</LINE>
-       <COLUMN>040</COLUMN>
-       <LENGTH>010</LENGTH>
-       <VISLENGTH>010</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>DATS</FORMAT>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-       <OUTPUTONLY>X</OUTPUTONLY>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_MESSAGE_PRIO</NAME>
-       <LINE>004</LINE>
-       <COLUMN>003</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <INPUT_FLD>X</INPUT_FLD>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_TEXT_PRIO</NAME>
-       <TEXT>Message_Priority:_______________</TEXT>
-       <LINE>004</LINE>
-       <COLUMN>007</COLUMN>
-       <LENGTH>032</LENGTH>
-       <VISLENGTH>032</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEMPLATE</TYPE>
-       <NAME>IO_ISSUE_PRIO</NAME>
-       <TEXT>____________</TEXT>
-       <LINE>004</LINE>
-       <COLUMN>040</COLUMN>
-       <LENGTH>012</LENGTH>
-       <VISLENGTH>012</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-       <OUTPUTONLY>X</OUTPUTONLY>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_SELECT_PRODCODE</NAME>
-       <LINE>005</LINE>
-       <COLUMN>003</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <INPUT_FLD>X</INPUT_FLD>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_ON_PRODCODE</NAME>
-       <TEXT>Apply_on_Productive_Code:_</TEXT>
-       <LINE>005</LINE>
-       <COLUMN>007</COLUMN>
-       <LENGTH>026</LENGTH>
-       <VISLENGTH>032</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_ON_PRODCODE</NAME>
-       <LINE>005</LINE>
-       <COLUMN>040</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_APPLY_TESTCODE</NAME>
-       <LINE>006</LINE>
-       <COLUMN>003</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <INPUT_FLD>X</INPUT_FLD>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_ON_TESTCODE</NAME>
-       <TEXT>Apply_on_Testcode:______________</TEXT>
-       <LINE>006</LINE>
-       <COLUMN>007</COLUMN>
-       <LENGTH>032</LENGTH>
-       <VISLENGTH>032</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_ON_TESTCODE</NAME>
-       <LINE>006</LINE>
-       <COLUMN>040</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_APPLY_PCOM</NAME>
-       <LINE>007</LINE>
-       <COLUMN>003</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <INPUT_FLD>X</INPUT_FLD>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>TEXT</TYPE>
-       <NAME>LBL_ALLOW_PCOM</NAME>
-       <TEXT>Allow_Exemptions:_______________</TEXT>
-       <LINE>007</LINE>
-       <COLUMN>007</COLUMN>
-       <LENGTH>032</LENGTH>
-       <VISLENGTH>032</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>CHECK</TYPE>
-       <NAME>CHBX_ALLOW_PCOM</NAME>
-       <LINE>007</LINE>
-       <COLUMN>040</COLUMN>
-       <LENGTH>001</LENGTH>
-       <VISLENGTH>001</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <OUTPUT_FLD>X</OUTPUT_FLD>
-       <REQU_ENTRY>N</REQU_ENTRY>
-      </RPY_DYFATC>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>OKCODE</TYPE>
-       <NAME>USER_COMMAND</NAME>
-       <TEXT>____________________</TEXT>
-       <LENGTH>020</LENGTH>
-       <VISLENGTH>020</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <FORMAT>CHAR</FORMAT>
-       <INPUT_FLD>X</INPUT_FLD>
-      </RPY_DYFATC>
-     </FIELDS>
-     <FLOW_LOGIC>
-      <RPY_DYFLOW>
-       <LINE>PROCESS BEFORE OUTPUT.</LINE>
-      </RPY_DYFLOW>
-      <RPY_DYFLOW>
-       <LINE>  MODULE status_0700.</LINE>
-      </RPY_DYFLOW>
-      <RPY_DYFLOW/>
-      <RPY_DYFLOW>
-       <LINE>PROCESS AFTER INPUT.</LINE>
-      </RPY_DYFLOW>
-      <RPY_DYFLOW>
-       <LINE>  MODULE user_command.</LINE>
-      </RPY_DYFLOW>
-     </FLOW_LOGIC>
-    </item>
    </DYNPROS>
    <CUA>
     <ADM>
      <ACTCODE>000001</ACTCODE>
-     <PFKCODE>000007</PFKCODE>
+     <PFKCODE>000006</PFKCODE>
     </ADM>
     <STA>
      <RSMPE_STAT>
@@ -1246,13 +869,6 @@
       <BUTCODE>0001</BUTCODE>
       <INT_NOTE>Status 600</INT_NOTE>
      </RSMPE_STAT>
-     <RSMPE_STAT>
-      <CODE>700</CODE>
-      <MODAL>P</MODAL>
-      <PFKCODE>000007</PFKCODE>
-      <BUTCODE>0001</BUTCODE>
-      <INT_NOTE>Status 700</INT_NOTE>
-     </RSMPE_STAT>
     </STA>
     <FUN>
      <RSMPE_FUNT>
@@ -1287,12 +903,6 @@
      </RSMPE_FUNT>
      <RSMPE_FUNT>
       <CODE>ENTR_600</CODE>
-      <TEXTNO>001</TEXTNO>
-      <TEXT_TYPE>S</TEXT_TYPE>
-      <FUN_TEXT>Ok</FUN_TEXT>
-     </RSMPE_FUNT>
-     <RSMPE_FUNT>
-      <CODE>ENTR_700</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
       <FUN_TEXT>Ok</FUN_TEXT>
@@ -1378,18 +988,6 @@
       <NO>02</NO>
       <PFNO>12</PFNO>
      </RSMPE_BUT>
-     <RSMPE_BUT>
-      <PFK_CODE>000007</PFK_CODE>
-      <CODE>0001</CODE>
-      <NO>01</NO>
-      <PFNO>00</PFNO>
-     </RSMPE_BUT>
-     <RSMPE_BUT>
-      <PFK_CODE>000007</PFK_CODE>
-      <CODE>0001</CODE>
-      <NO>02</NO>
-      <PFNO>12</PFNO>
-     </RSMPE_BUT>
     </BUT>
     <PFK>
      <RSMPE_PFK>
@@ -1448,6 +1046,12 @@
      </RSMPE_PFK>
      <RSMPE_PFK>
       <CODE>000004</CODE>
+      <PFNO>02</PFNO>
+      <FUNCODE>PICK</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
+     <RSMPE_PFK>
+      <CODE>000004</CODE>
       <PFNO>12</PFNO>
       <FUNCODE>ESC</FUNCODE>
       <FUNNO>001</FUNNO>
@@ -1478,18 +1082,6 @@
      </RSMPE_PFK>
      <RSMPE_PFK>
       <CODE>000006</CODE>
-      <PFNO>12</PFNO>
-      <FUNCODE>ESC</FUNCODE>
-      <FUNNO>001</FUNNO>
-     </RSMPE_PFK>
-     <RSMPE_PFK>
-      <CODE>000007</CODE>
-      <PFNO>00</PFNO>
-      <FUNCODE>ENTR_700</FUNCODE>
-      <FUNNO>001</FUNNO>
-     </RSMPE_PFK>
-     <RSMPE_PFK>
-      <CODE>000007</CODE>
       <PFNO>12</PFNO>
       <FUNCODE>ESC</FUNCODE>
       <FUNNO>001</FUNNO>
@@ -1537,6 +1129,10 @@
       <FUNCTION>ESC</FUNCTION>
      </RSMPE_STAF>
      <RSMPE_STAF>
+      <STATUS>400</STATUS>
+      <FUNCTION>PICK</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
       <STATUS>500</STATUS>
       <FUNCTION>ENTR_500</FUNCTION>
      </RSMPE_STAF>
@@ -1555,18 +1151,6 @@
      <RSMPE_STAF>
       <STATUS>600</STATUS>
       <FUNCTION>PICK</FUNCTION>
-     </RSMPE_STAF>
-     <RSMPE_STAF>
-      <STATUS>700</STATUS>
-      <FUNCTION>ENTR_600</FUNCTION>
-     </RSMPE_STAF>
-     <RSMPE_STAF>
-      <STATUS>700</STATUS>
-      <FUNCTION>ENTR_700</FUNCTION>
-     </RSMPE_STAF>
-     <RSMPE_STAF>
-      <STATUS>700</STATUS>
-      <FUNCTION>ESC</FUNCTION>
      </RSMPE_STAF>
     </SET>
     <DOC>
@@ -1654,19 +1238,6 @@
       <MODAL>P</MODAL>
       <INT_NOTE>Status 600</INT_NOTE>
      </RSMPE_ATRT>
-     <RSMPE_ATRT>
-      <OBJ_TYPE>P</OBJ_TYPE>
-      <OBJ_CODE>000007</OBJ_CODE>
-      <MODAL>P</MODAL>
-      <INT_NOTE>Status 700</INT_NOTE>
-     </RSMPE_ATRT>
-     <RSMPE_ATRT>
-      <OBJ_TYPE>B</OBJ_TYPE>
-      <OBJ_CODE>000007</OBJ_CODE>
-      <SUB_CODE>0001</SUB_CODE>
-      <MODAL>P</MODAL>
-      <INT_NOTE>Status 700</INT_NOTE>
-     </RSMPE_ATRT>
     </DOC>
     <TIT>
      <RSMPE_TITT>
@@ -1692,10 +1263,6 @@
      <RSMPE_TITT>
       <CODE>600</CODE>
       <TEXT>Create a Copy of an existing Profile</TEXT>
-     </RSMPE_TITT>
-     <RSMPE_TITT>
-      <CODE>700</CODE>
-      <TEXT>Replicate Configuration</TEXT>
      </RSMPE_TITT>
     </TIT>
    </CUA>

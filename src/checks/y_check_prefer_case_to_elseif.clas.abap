@@ -6,7 +6,6 @@ CLASS y_check_prefer_case_to_elseif DEFINITION PUBLIC INHERITING FROM y_check_ba
     METHODS inspect_structures REDEFINITION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     TYPES: BEGIN OF ty_counter,
@@ -114,9 +113,5 @@ CLASS y_check_prefer_case_to_elseif IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

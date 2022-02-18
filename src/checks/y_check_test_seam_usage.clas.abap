@@ -4,13 +4,13 @@ CLASS y_check_test_seam_usage DEFINITION PUBLIC INHERITING FROM y_check_base CRE
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
 ENDCLASS.
 
 
 
-CLASS y_check_test_seam_usage IMPLEMENTATION.
+CLASS Y_CHECK_TEST_SEAM_USAGE IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
@@ -34,10 +34,4 @@ CLASS y_check_test_seam_usage IMPLEMENTATION.
                  statement_from = statement-from
                  check_configuration = check_configuration ).
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

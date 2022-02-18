@@ -4,7 +4,6 @@ CLASS y_check_unit_test_assert DEFINITION PUBLIC INHERITING FROM y_check_base CR
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS get_parameter_reference IMPORTING statement     TYPE sstmnt
@@ -25,6 +24,7 @@ ENDCLASS.
 
 
 CLASS y_check_unit_test_assert IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
@@ -164,9 +164,5 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

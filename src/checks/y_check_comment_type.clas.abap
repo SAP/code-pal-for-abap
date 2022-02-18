@@ -3,7 +3,6 @@ CLASS y_check_comment_type DEFINITION PUBLIC INHERITING FROM y_check_base CREATE
     METHODS constructor.
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
   PRIVATE SECTION.
     METHODS has_wrong_comment_type IMPORTING statement TYPE sstmnt RETURNING VALUE(result) TYPE abap_bool.
     METHODS get_first_character IMPORTING token TYPE stokesx RETURNING VALUE(result) TYPE char1.
@@ -68,11 +67,4 @@ CLASS y_check_comment_type IMPLEMENTATION.
         result = ''.
     ENDTRY.
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    " Comments are not supported
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.

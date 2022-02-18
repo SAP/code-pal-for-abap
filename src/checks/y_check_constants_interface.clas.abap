@@ -1,11 +1,10 @@
 CLASS y_check_constants_interface DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
   PUBLIC SECTION.
-    METHODS constructor.
+    METHODS constructor .
 
   PROTECTED SECTION.
     METHODS inspect_statements REDEFINITION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     DATA has_something_else TYPE abap_bool VALUE abap_false.
@@ -19,7 +18,8 @@ ENDCLASS.
 
 
 
-CLASS y_check_constants_interface IMPLEMENTATION.
+CLASS Y_CHECK_CONSTANTS_INTERFACE IMPLEMENTATION.
+
 
   METHOD constructor.
     super->constructor( ).
@@ -83,9 +83,5 @@ CLASS y_check_constants_interface IMPLEMENTATION.
     result = xsdbool( structure-stmnt_from = structure-stmnt_to - 1 ).
   ENDMETHOD.
 
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
 
 ENDCLASS.

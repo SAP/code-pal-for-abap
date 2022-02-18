@@ -4,7 +4,6 @@ CLASS y_check_num_output_parameter DEFINITION PUBLIC INHERITING FROM y_check_bas
 
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
-    METHODS add_check_quickfix REDEFINITION.
 
   PRIVATE SECTION.
     METHODS count_outputs_of_statement IMPORTING statement TYPE sstmnt RETURNING VALUE(result) TYPE i.
@@ -77,10 +76,4 @@ CLASS y_check_num_output_parameter IMPLEMENTATION.
 
     ENDLOOP.
   ENDMETHOD.
-
-
-  METHOD add_check_quickfix.
-    RETURN.
-  ENDMETHOD.
-
 ENDCLASS.
