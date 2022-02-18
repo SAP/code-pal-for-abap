@@ -48,5 +48,9 @@ CLASS y_check_function IMPLEMENTATION.
     SELECT SINGLE pname INTO @DATA(function_group) FROM tfdir WHERE funcname = @function_module AND fmode = @space.
     result = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
+  
+  METHOD add_check_quickfix.
+    RETURN.
+  ENDMETHOD.
 
 ENDCLASS.
