@@ -14,7 +14,7 @@ ENDCLASS.
 
 
 
-CLASS y_check_form IMPLEMENTATION.
+CLASS Y_CHECK_FORM IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -33,7 +33,7 @@ CLASS y_check_form IMPLEMENTATION.
     set_check_message( '"FORM" Routine should not be used!' ).
   ENDMETHOD.
 
-  method apply_ignored_objecttypes.
+  METHOD apply_ignored_objecttypes.
     " Do not run this check for adobe forms related objects
     APPEND VALUE #(
       sign  = 'E'
@@ -46,7 +46,7 @@ CLASS y_check_form IMPLEMENTATION.
       option = 'EQ'
       low = objecttypes-smart_form
     ) TO typelist.
-  endmethod.
+  ENDMETHOD.
 
 
   METHOD inspect_tokens.
@@ -55,9 +55,9 @@ CLASS y_check_form IMPLEMENTATION.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
-    raise_error( statement_level     = statement-level
-                 statement_index     = index
-                 statement_from      = statement-from
+    raise_error( statement_level = statement-level
+                 statement_index = index
+                 statement_from = statement-from
                  check_configuration = check_configuration ).
   ENDMETHOD.
 
