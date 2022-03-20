@@ -51,8 +51,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
 
     CONSTANTS: BEGIN OF objecttypes,
-                 from_object TYPE scir_objt VALUE 'SFPF',
-                 smart_form TYPE scir_objt VALUE 'SSFO',
+                 from_object TYPE trobjtype VALUE 'SFPF',
+                 smart_form TYPE trobjtype VALUE 'SSFO',
                END OF objecttypes.
 
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
