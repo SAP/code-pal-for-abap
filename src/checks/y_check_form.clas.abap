@@ -38,7 +38,7 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
     APPEND VALUE #(
       sign  = 'E'
       option = 'EQ'
-      low = objecttypes-from_object
+      low = objecttypes-form_object
     ) TO typelist.
 
     APPEND VALUE #(
@@ -90,7 +90,7 @@ CLASS Y_CHECK_FORM IMPLEMENTATION.
     " But is not doable without a sap note (see #558)
     " Remove this check as soon as a sap note is provided
     IF object_type = objecttypes-smart_form
-      OR object_type = objecttypes-from_object.
+      OR object_type = objecttypes-form_object.
       RETURN.
     ENDIF.
     super->run( ).

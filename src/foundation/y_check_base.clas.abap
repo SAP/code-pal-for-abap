@@ -51,7 +51,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
 
     CONSTANTS: BEGIN OF objecttypes,
-                 from_object TYPE trobjtype VALUE 'SFPF',
+                 form_object TYPE trobjtype VALUE 'SFPF',
                  smart_form TYPE trobjtype VALUE 'SSFO',
                END OF objecttypes.
 
