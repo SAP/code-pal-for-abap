@@ -50,6 +50,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     DATA statistics TYPE REF TO y_if_scan_statistics.
     DATA use_default_attributes TYPE abap_bool VALUE abap_true ##NO_TEXT.
 
+    CONSTANTS: BEGIN OF objecttypes,
+                 form_object TYPE trobjtype VALUE 'SFPF',
+                 smart_form TYPE trobjtype VALUE 'SSFO',
+               END OF objecttypes.
+
     "! <p class="shorttext synchronized" lang="en">Relevant Statement Types for Inspection</p>
     "! There are default values set in the Y_CHECK_BASE, and you can reuse the constants available in the 'scan_struc_stmnt_type' structure to enhance or change it.
     DATA relevant_statement_types TYPE HASHED TABLE OF sstruc-stmnt_type WITH UNIQUE KEY table_line.
