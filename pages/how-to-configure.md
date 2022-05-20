@@ -34,20 +34,20 @@ Main features:
 
 - If you assign a profile to your user, **it overwrites the Code Inspector variant**
 - If you assign multiple profiles to your user, the tool will combine them at runtime
-- You can assign someone else's profile to your user
+- You can assign another user's profile to your user
 - A profile is deleted if it has contains no checks and is assigned to no users.
 
 To create or assign a profile, click on the `+` button, and enter a name for the profile.
 
-![An image showing the Profile Management Tool's main screen, with the '+' button in the "Profiles" subscreen highlighted](imgs/create-profile.png)
+![An image showing the Profile Management Tool's main screen, with the '+' button in the "Profiles" area highlighted](imgs/create-profile.png)
 
 ### Delegates
 
 Delegates are "owners" of a profile; these are the users how are allowed to modify or delete the profile. If you aren't a delegate, you won't be able to add / change / remove a delegate or check. To add someone else as a delegate, click on the `+` button and enter their user name:
 
-![An image showing the Profile Management Tool's main screen, with the '+' button in the "Delegate" subscreen highlighted](imgs/assign-delegate.png)
+![An image showing the Profile Management Tool's main screen, with the '+' button in the "Delegate" area highlighted](imgs/assign-delegate.png)
 
 You can import and export a profile with its delegates and checks in the form of JSON files - for example, in order to transfer a profile between different systems - by clicking the corresponding buttons.
 
-![An image showing the Profile Management Tool's main screen, with the 'Import' and "Export" buttons in the "Profile" subscreen highlighted](imgs/import-export-feature.png)
+![An image showing the Profile Management Tool's main screen, with the 'Import' and "Export" buttons in the "Profile" area highlighted](imgs/import-export-feature.png)
 
