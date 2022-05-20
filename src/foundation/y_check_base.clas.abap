@@ -43,7 +43,6 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
   PROTECTED SECTION.
     CONSTANTS initial_date TYPE datum VALUE '19000101'.
-    CONSTANTS jan_1st_2019 TYPE datum value '20190101'.
 
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
