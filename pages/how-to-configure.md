@@ -4,92 +4,50 @@
 
 ## How to Configure
 
-⚠️This documentation describes how to configure using the `Profile Management Tool` feature only.
-
-💡Alternatively, you can use the SAP Code Inspector variants in the `SCI` transaction.
+This documentation describes how to configure the Code Pal checks. You can do this directly in your check variant (transaction `SCI`) or via the Profile Management Tool (transaction `Y_CODE_PAL_PROFILE`).
 
 Table of Contents:
 
-- [How to Configure](#how-to-configure)
-  - [Profiles](#1-profiles)
-  - [Delegates](#2-delegates)
-  - [Checks](#3-checks)
-- [Further Features](#further-features)
-  - [Import / Export Profile](#import--export-profile)
-  - [Import via API](#import-via-api)
-  - [Add / Remove All Checks](#add--remove-all-checks)
-  - [Add Missing Checks](#add-missing-checks)
+  - [Check Parameters](#check-parameters)
+  - [Profile management](#profile-management)
+    - [Delegates](#delegates)
 
-💡 The transaction `Y_CODE_PAL_PROFILE` provides access to the `Profile Management Tool`.
+## Check parameters
 
-### Profiles
+All Code Pal checks share a common set of parameters:
 
-> Profiles are similar to Code Inspector Variants.
+ - "Consider Objects created after" is a date threshold. Objects whose creation date in the checked system is earlier than this will not be checked.
+ - "Message Severity" allows you to choose what priority this check's findings should have.
+ - "Apply on Test Code" allows you to declare that code in ABAPUnit test classes should not be checked.
+ - "Apply on Productive Code" is the inverse setting - all code that is not "test code" is productive.
+ - "Allow "# EC_..."" (where "EC_..." differs from check to check) toggles whether or not the check takes pseudo comments into account. This settings is redundant if you are executing the checks via ATC since the ATC has its own setting for how pseudo comments are treated.
 
-Behavior:
+Some checks additionally have a "threshold" parameter - if they count some quantity, like the ["Number of Methods" check](../docs/checks/number-methods.md), then the check will only report findings when its counter exceeds this threshold.
 
-- (❗) If you assign a Profile to your user, **it overwrites the Code Inspector variant** (❗);
-- If you assign multiple Profiles to your user, the tool will combine them in runtime;
-- You can assign someone else Profile to your user;
-- The Profile is deleted once it has no check and assigned to nobody.
+In the Profile Management Tool, there is an additional "Validity Since" parameter that determines a time period during which the configuration in the profile will overwrite the setting in any Code Inspector variant executed by assigned users.
 
-To create or assign it, click on the `+` button, and inform the Profile name:
+## Profile management
 
-![create a profile](imgs/create-profile.png)
+Profiles are similar to Code Inspector check variants, but they can be assigned to specific users and will **overwrite** any settings in a Code Inspector variant. It is recommended to either use different check variant configurations for different purposes **or** individual profiles for different users, but not both at the same time.
+
+Main features:
+
+- If you assign a profile to your user, **it overwrites the Code Inspector variant**
+- If you assign multiple profiles to your user, the tool will combine them at runtime
+- You can assign someone else's profile to your user
+- A profile is deleted if it has contains no checks and is assigned to no users.
+
+To create or assign a profile, click on the `+` button, and enter a name for the profile.
+
+![An image showing the Profile Management Tool's main screen, with the '+' button in the "Profiles" subscreen highlighted](imgs/create-profile.png)
 
 ### Delegates
 
-> Delegates are the Profile owners who are allowed to configure it;
-> Multiple delegates are allowed.
+Delegates are "owners" of a profile; these are the users how are allowed to modify or delete the profile. If you aren't a delegate, you won't be able to add / change / remove a delegate or check. To add someone else as a delegate, click on the `+` button and enter their user name:
 
-Behavior:
+![An image showing the Profile Management Tool's main screen, with the '+' button in the "Delegate" subscreen highlighted](imgs/assign-delegate.png)
 
-- If you aren't a Delegate, you won't be able to add / change / remove a Delegate or Check.
+You can import and export a profile with its delegates and checks in the form of JSON files - for example, in order to transfer a profile between different systems - by clicking the corresponding buttons.
 
-To add someone else, click on the `+` button and inform his / her user name:
+![An image showing the Profile Management Tool's main screen, with the 'Import' and "Export" buttons in the "Profile" subscreen highlighted](imgs/import-export-feature.png)
 
-![assign delegate](imgs/assign-delegate.png)
-
-### Checks
-
-> Checks are the rules based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md).
-
-Behavior:
-
-- You can define a Check threshold (if applicable);  
-- You can define a Check severity / priority (error / priority 1, warning / priority 2, or notification / priority 3)
-- You can define a Check filter on productive code, test code, or both (if applicable);
-- You can define a Check filter on object creation date;
-- You can define a Check validity period;
-- You can define if a Check can/cannot be exempt via pseudo-comments (if applicable). 
-- If you have multiple Profiles assigned to your user, the check with the"strongest" or "sharpest" thresholds will be taken;
-
-To assign them to your Profile, click on the `+` button:
-
-![assign check](imgs/assign-check.png)
-
-![customize check](imgs/customize-check.png)
-
-💡 You can use the documentation button to navigate to the Check documentation:
-
-![check documentation](imgs/check-documentation.png)
-
-## Further Features
-
-### Import / Export Profile
-
-You can import and export a Profile with its Delegates and Checks using a `JSON` file, here:
-
-![import and export feature](imgs/import-export-feature.png)
-
-### Add / Remove All Checks
-
-You can add all and remove all the Checks from a Profile, here:
-
-![add all and remove all](imgs/)
-
-### Add Missing Checks
-
-You can add all the missing checks, comparing your Profile and the available Checks, here:
-
-![missing checks](imgs/)
