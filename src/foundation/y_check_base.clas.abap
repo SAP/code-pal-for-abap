@@ -43,6 +43,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
   PROTECTED SECTION.
     CONSTANTS initial_date TYPE datum VALUE '19000101'.
+    CONSTANTS jan_1st_2019 TYPE datum value '20190101'.
 
     DATA check_configurations TYPE y_if_clean_code_manager=>check_configurations.
     DATA clean_code_exemption_handler TYPE REF TO y_if_exemption.
@@ -157,7 +158,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     version = '0000'.
     has_documentation = abap_true.
 
-    settings-object_created_on = '20190101'.
+    settings-object_created_on = initial_date.
     settings-prio = c_note.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
