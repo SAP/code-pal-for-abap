@@ -157,7 +157,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     version = '0000'.
     has_documentation = abap_true.
 
-    settings-object_created_on = '20190101'.
+    settings-object_created_on = initial_date.
     settings-prio = c_note.
     settings-threshold = 5.
     settings-apply_on_productive_code = abap_true.
