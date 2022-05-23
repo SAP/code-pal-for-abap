@@ -4,15 +4,15 @@
 
 ### What is the Intent of the Check?
 
-The Check identifies database operations within the test classes. 
+The check finds database operations within ABAP Unit test classes. 
 
 ### How does the check work?
 
-The Check behaves differently depending on the test class classification (`RISK LEVEL`) and automatically exempts the finding if a known test framework is find. 
+The check behaves differently depending on the test class classification (`RISK LEVEL`) and automatically exempts the finding if a known test framework is found. 
 
 #### 1. `RISK LEVEL HARMLESS` or not set
 
-The Check reports:
+The check reports:
 * `SELECT`
 * `INSERT`
 * `UPDATE`
@@ -24,13 +24,13 @@ The Check reports:
 
 #### 2. `RISK LEVEL DANGEROUS` or `RISK LEVEL CRITICAL`
 
-The Check reports:
+The check reports:
 * `UPDATE`
 * `MODIFY`
 * `DELETE`
 * `ALTER`
 
-In short, the Check allows:
+The check allows:
 * `SELECT`
 * `INSERT`
 * `COMMIT`
@@ -38,7 +38,7 @@ In short, the Check allows:
 
 #### 3. Test Frameworks
 
-The Check identifies if the test class uses one of the following objects internally and exempts the finding automatically.
+The check identifies if the test class uses one of the following objects internally and exempts the finding automatically since usage of these environments mean that the database access is likely intended to access the mocked version of a database table.
 
 The relevant objects for the automatic exemption are:
 * `IF_OSQL_TEST_ENVIRONMENT`
@@ -64,5 +64,5 @@ SELECT * FROM tadir INTO TABLE @DATA(entries).       "#EC DB_ACCESS_UT
 ### Further Readings & Knowledge
 
 * [Clean ABAP - Avoid Usage of TEST-SEAM](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use-test-seams-as-temporary-workaround)
-* [ABAP Test Tools & Frameworks](https://pages.github.tools.sap/EngineeringCulture/ase/ABAP/abapTestTools.html)
+* [Unit testing with ABAP unit](https://help.sap.com/docs/SAP_S4HANA_CLOUD/25cf71e63940453397a32dc2b7676947/08c60b52cb85444ea3069779274b43db.html?q=abap%20unit%20test)
 
