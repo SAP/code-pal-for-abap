@@ -17,7 +17,6 @@ CLASS y_check_function IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    settings-pseudo_comment = '"#EC CI_FUNCTION' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }function-routine.md|.
