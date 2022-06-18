@@ -54,6 +54,8 @@ ENDCLASS.
 CLASS ltc_empty_interface DEFINITION INHERITING FROM ltc_constants_only FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.
+  PRIVATE SECTION.
+
 ENDCLASS.
 
 CLASS ltc_empty_interface IMPLEMENTATION.
@@ -61,11 +63,10 @@ CLASS ltc_empty_interface IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( 'REPORT y_example.' )
-
+      ( '"has a comment ' ) " #562
       ( 'INTERFACE lcl_interface. ' )
       ( 'ENDINTERFACE.' )
     ).
   ENDMETHOD.
-
 
 ENDCLASS.
