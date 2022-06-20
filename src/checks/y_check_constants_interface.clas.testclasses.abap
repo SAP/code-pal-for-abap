@@ -63,7 +63,7 @@ CLASS ltc_empty_interface IMPLEMENTATION.
   METHOD get_code_without_issue.
     result = VALUE #(
       ( 'REPORT y_example.' )
-      ( '"has a comment ' ) " #562
+      ( '"has a comment ' )
       ( 'INTERFACE lcl_interface. ' )
       ( 'ENDINTERFACE.' )
     ).

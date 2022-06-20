@@ -62,7 +62,7 @@ CLASS y_check_constants_interface IMPLEMENTATION.
 
 
   METHOD check_result.
-    CHECK has_something_else = abap_false AND has_at_least_one_constant = abap_true. " #561
+    CHECK has_something_else = abap_false AND has_at_least_one_constant = abap_true.
     DATA(statement_for_message) = ref_scan->statements[ structure-stmnt_from ].
     DATA(check_configuration) = detect_check_configuration( statement_for_message ).
     raise_error( statement_level = statement_for_message-level
