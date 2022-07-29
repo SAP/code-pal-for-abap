@@ -7,8 +7,8 @@ CLASS y_check_prefer_line_exists DEFINITION PUBLIC INHERITING FROM y_check_base 
 
   PRIVATE SECTION.
     METHODS:
-      get_valid_last_token  IMPORTING last_token               TYPE stokesx
-                            RETURNING VALUE(valid_last_token)  TYPE abap_boolean,
+      get_valid_last_token  IMPORTING last_token              TYPE stokesx
+                            RETURNING VALUE(valid_last_token) TYPE abap_boolean,
       get_valid_first_token IMPORTING first_token              TYPE string
                             RETURNING VALUE(valid_first_token) TYPE abap_boolean.
 
@@ -79,20 +79,12 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
                  check_configuration = check_configuration ).
   ENDMETHOD.
 
-  METHOD get_valid_last_token.
-    IF ( last_token-type = scan_token_type-comment OR last_token-type = scan_token_type-pragma ) OR ( last_token-str = 'ABAP_TRUE' OR last_token-str = 'ABAP_FALSE' ).
-      valid_last_token = abap_false.
-    ELSE.
-      valid_last_token = abap_true.
-    ENDIF.
+  METHOD get_valid_first_token.
+    valid_first_token = xsdbool( first_token = 'LOOP' OR first_token = 'ENDLOOP' OR first_token = 'EXIT' ).
   ENDMETHOD.
 
-  METHOD get_valid_first_token.
-    IF first_token = 'LOOP' OR first_token = 'ENDLOOP' OR first_token = 'EXIT'.
-      valid_first_token = abap_true.
-    ELSE.
-      valid_first_token = abap_false.
-    ENDIF.
+  METHOD get_valid_last_token.
+    valid_last_token = xsdbool( NOT ( last_token-type = scan_token_type-comment OR last_token-type = scan_token_type-pragma ) AND NOT ( last_token-str = 'ABAP_TRUE' OR last_token-str = 'ABAP_FALSE' ) ).
   ENDMETHOD.
 
 ENDCLASS.

@@ -174,17 +174,17 @@ ENDCLASS.
 CLASS ltc_loop_with_content IMPLEMENTATION.
 
   METHOD get_code_without_issue.
-     result = VALUE #(
-      ( 'REPORT y_example. ' )
+    result = VALUE #(
+     ( 'REPORT y_example. ' )
 
-      ( ' START-OF-SELECTION.      ' )
-      ( '   DATA actual TYPE TABLE OF tadir. ' )
-      ( '   DATA counter TYPE i. ' )
+     ( ' START-OF-SELECTION.      ' )
+     ( '   DATA actual TYPE TABLE OF tadir. ' )
+     ( '   DATA counter TYPE i. ' )
 
-      ( conv #( `   LOOP AT actual TRANSPORTING NO FIELDS WHERE object = 'CLAS'. ` )  )
-      ( '   counter += 1. ' )
-      ( '   ENDLOOP. ' )
-    ).
+     ( CONV #( `   LOOP AT actual TRANSPORTING NO FIELDS WHERE object = 'CLAS'. ` )  )
+     ( '   counter += 1. ' )
+     ( '   ENDLOOP. ' )
+   ).
   ENDMETHOD.
 
 ENDCLASS.
