@@ -144,7 +144,7 @@ ENDCLASS.
 
 CLASS ltc_loop_in DEFINITION INHERITING FROM ltc_loop_at FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
-    METHODS get_code_without_issue REDEFINITION.
+    METHODS: get_code_without_issue REDEFINITION.
 ENDCLASS.
 
 CLASS ltc_loop_in IMPLEMENTATION.
@@ -159,6 +159,30 @@ CLASS ltc_loop_in IMPLEMENTATION.
 
       ( '   LOOP AT actual TRANSPORTING NO FIELDS WHERE obj_name IN expected. ' )
       ( '   EXIT. ' )
+      ( '   ENDLOOP. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_loop_with_content DEFINITION INHERITING FROM ltc_loop_at FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS: get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_loop_with_content IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+     result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA actual TYPE TABLE OF tadir. ' )
+      ( '   DATA counter TYPE i. ' )
+
+      ( conv #( `   LOOP AT actual TRANSPORTING NO FIELDS WHERE object = 'CLAS'. ` )  )
+      ( '   counter += 1. ' )
       ( '   ENDLOOP. ' )
     ).
   ENDMETHOD.
