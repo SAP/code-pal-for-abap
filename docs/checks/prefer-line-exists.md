@@ -2,9 +2,9 @@
 
 ## Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-Prefer `LINE_EXISTS` or `LINE_INDEX` over `READ TABLE` or `LOOP AT` as they avoid needlessly longer statements.
+Prefer `LINE_EXISTS` or `LINE_INDEX` over `READ TABLE` or `LOOP AT` statements as they express the intent of the table access more specifically.
 
 ### How to solve the issue?
 
@@ -54,4 +54,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-line_exists-to-read-table-or-loop-at)
+* [Clean ABAP - Prefer `line_exists` to `READ TABLE` or `LOOP AT`s](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-line_exists-to-read-table-or-loop-at)
