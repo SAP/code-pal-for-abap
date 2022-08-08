@@ -12,7 +12,7 @@ The check looks at the parameters `act` and `exp` of calls to methods whose name
 
 ### How to solve the issue?
 
-Fix the actual (`act`) or expected (`exp`) value(s) in the unit test assertion in order to achieve a meaningful and real Assertion.
+Change the actual (`act`) or expected (`exp`) value(s) to represent a meaningful assertion.
 
 ### What to do in case of exception?
 
@@ -58,7 +58,7 @@ ENDMETHOD.
 ### Further Readings & Knowledge
 
 * [Clean ABAP: Don't obsess about coverage](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#dont-obsess-about-coverage)
-* [ABAP Test Tools & Frameworks](https://pages.github.tools.sap/EngineeringCulture/ase/ABAP/abapTestTools.html)
+* [Unit testing with ABAP unit](https://help.sap.com/docs/SAP_S4HANA_CLOUD/25cf71e63940453397a32dc2b7676947/08c60b52cb85444ea3069779274b43db.html?q=abap%20unit%20test)
 
 
 
