@@ -2,17 +2,17 @@
 
 ## CALL METHOD Usage Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check verifies the usage of the `CALL METHOD` ABAP statement. It is preferable to call a method dynamically instead of via this statement: CALL METHOD. In other words, prefer a functional instead of a procedural call.
+This check searches for `CALL METHOD` statements. Static occurrences, i.e. those where the called method is known statically at compile-time, of this statement are obsolete and should be replaced by their functional equivalents.
 
 ### How does the check work?
 
-It checks the usage of `CALL METHOD` statement in the code.
+The check finds `CALL METHOD` statements that do not contain dynamic parts. Dynamic parts are indicated by the method being called being specified by a literal or character-like variable in parentheses or the usage of the additions `PARAMETER-TABLE` or `EXCEPTION-TABLE`.
 
 ### How to solve the issue?
 
-Change the long method calls using `CALL METHOD` statement to short method calls using parenthesis notation (dynamic call).
+Change the method calls using `CALL METHOD` to functional method calls.
 
 ### What to do in case of exception?
 
@@ -28,14 +28,15 @@ Before the check:
 
 ```abap
 DATA(class) = NEW object( ).
-CALL METHOD class->method.
+CALL METHOD class->method
+    EXPORTING param = var.
 ```
 
 After the check:
 
 ```abap
 DATA(class) = NEW object( ).
-class->method( ).
+class->method( var ).
 ```
 
 ### Further Readings & Knowledge

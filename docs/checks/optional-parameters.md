@@ -2,19 +2,21 @@
 
 ## Optional Parameters
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for OPTIONAL parameter in method signatures. It is recommended to avoid the usage of `OPTIONAL` parameters because they might confuse the consumers of the class:
+This check searches for optional parameters in method signatures. It is recommended to avoid optional parameters because they might confuse the consumers of the class about questions like:
 
 * Which parameters are really required?
 * Which combination of parameters are valid?
 * Which parameters exclude each other?
 
-Multiple methods with specific parameters for the use case avoid this confusion by giving clear guidance which parameter combinations are valid and expected.
+It also becomes harder to perform any changes in the method since all possible combinations of its parameters must always be considered.
+
+Multiple methods with specific parameters for their respective use cases avoid this confusion by giving clear guidance which parameter combinations are expected.
 
 ### How to solve the issue?
 
-Splitting methods (creating new ones) instead of adding `OPTIONAL` parameters.
+Create new methods dedicated to their specific use case instead of adding optional parameters to a generic method.
 
 ### Example
 

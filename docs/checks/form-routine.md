@@ -2,17 +2,17 @@
 
 ## FORM Routine Usage Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for the usage of FORM Routines (procedural programming) since with the release of Object Oriented ABAP this syntax became obsolete.
+This check searches for the usage of form subroutines since this concept became obsolete with the release of object-oriented ABAP.
 
 ### How does the check work?
 
-This check searches for the usage of the `ENDFORM` statement.
+This check searches for `ENDFORM.` statements.
 
 ### How to solve the issue?
 
-Use classes and methods instead. Methods are similar to subroutines and can be used for modularization.
+Use classes and methods instead as these are the intended tool for modularization in object-oriented ABAP.
 
 ### What to do in case of exception?
 
@@ -26,4 +26,4 @@ ENDFORM.
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-object-orientation-to-procedural-programming)
+* [Clean ABAP - Prefer object orientation to procedural programming](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-object-orientation-to-procedural-programming)

@@ -2,15 +2,13 @@
 
 ## Unit-Test Assert Validator
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check finds invalid assertions in unit tests. It recognizes methods following the patterns `CL_ABAP_UNIT_ASSERT=>ASSERT*` and `CL_AUNIT_ASSERT=>ASSERT*` as unit test assertions.
+This check searches for assertions in unit tests that do not fulfill any actual purpose. 
 
 ### How does the check work?
 
-It checks for invalid values for the actual (`act`) or expected (`exp`) values in an assertion. An invalid value is one that leads to an assertion that is always true or always false, for instance:
-- when both are using the same variable for the assertion (always true)
-- when both are hardcoded (always true or always false)
+The check looks at the parameters `act` and `exp` of calls to methods whose name contains `assert`. It raises a finding if both parameters are identical or if both are literals.
 
 ### How to solve the issue?
 
@@ -18,7 +16,7 @@ Change the actual (`act`) or expected (`exp`) value(s) to represent a meaningful
 
 ### What to do in case of exception?
 
-In exceptional cases (if any), you can suppress this finding by using the pseudo comment `"#EC UT_ASSERT` which has to be placed after the assertion statement:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC UT_ASSERT` which has to be placed after the assertion statement:
 
 ```abap
 cl_abap_unit_assert=>assert_equals( act = sum 

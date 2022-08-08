@@ -2,15 +2,14 @@
 
 ## Prefer RETURNING to EXPORTING
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-returning-to-exporting), this check searches in classes and interfaces for methods that have only one exporting parameter. If it finds one, it will recommend you to change it from `EXPORTING` to `RETURNING`. 
+This check searches for methods in ABAP objects that have only a single exporting parameter. 
 
 ### How to solve the issue?
 
-Change the `EXPORTING` parameter to `RETURNING`.
+Change the exporting parameter to a returning parameter, if possible. This may not be possible when the exporting parameter is not fully typed (i.e. at least partly generic) as returning parameters must be fully typed.
 
-:bulb: [A RETURNING parameter must be fully typed (#218)](https://github.com/SAP/styleguides/issues/218)
 
 ### What to do in case of exception?
 

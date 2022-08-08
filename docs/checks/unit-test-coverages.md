@@ -2,15 +2,15 @@
 
 ## Unit-Test Coverages (Statement, Branch and Procedural Coverage)
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check executes the ABAP Unit-Test framework and returns the current coverage percentile for the object in question. It verifies if the coverage is under the defined thresholds (customized in the checks).
+This check executes the ABAP Unit framework and measures the current coverage percentile for the object in question. It reports a finding if the coverage is below a customizable threshold.
 
-> :WARNING: Use this check with a small set of objects only (due to possible performance issues).
+There are three versions of this check for the three different types of coverage that can be measured: Statement coverage, branch coverage and procedure coverage.
 
 ### How to solve the issue?
 
-Improve the Unit-Test coverage(s) by writing Unit-Tests.
+Improve the unit test coverage by writing additional unit tests.
 
 ### What to do in case of exception?
 

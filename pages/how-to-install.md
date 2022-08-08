@@ -22,11 +22,3 @@ Start the transaction `SCI` again, and create a new global check variant.
 Then, select the `code pal for ABAP` group and save it.
 
 ![how to create code inspector variant](imgs/sci-check-variant.png)
-
-### 4. User Parameter
-
-It requires you to set the ABAP Test Cockpit (ATC) to run in Code Inspector mode.
-
-Start the transaction `SU3`, and add/set the user parameter `SATC_CI_MODE` to `X`:
-
-![user parameter](imgs/user-parameter.png)

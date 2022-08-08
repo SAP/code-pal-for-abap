@@ -2,13 +2,13 @@
 
 ## Self-Reference
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for the usage of self-reference `me->`. Since this self-reference is implicitly set by the system, you should omit it when calling an instance method.
+This check searches for unnecessary usages of explicitly self-references using `me->` to qualify an instance variable or method. Since this self-reference is implicitly set by the system, it should be omitted.
 
 ### How to solve the issue?
 
-Omitting the self-reference whenever calling an instance method.
+Omit the self-reference.
 
 ### What to do in case of exception?
 
@@ -34,4 +34,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#omit-the-self-reference-me-when-calling-an-instance-method)
+* [Clean ABAP - Omit self-references](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#omit-the-self-reference-me-when-calling-an-instance-attribute-or-method)

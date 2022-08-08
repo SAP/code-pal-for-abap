@@ -2,14 +2,13 @@
 
 ## Returning Name
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-Good/proper method names are usually so meaningful, that the `RETURNING` parameter does not need a name of its own.  
-The name would do little more than parrot the method name or repeat something obvious.
+Suitable method names are usually meaningful enough that the returning parameter does not need a name of its own.  The name would do little more than parrot the method name or repeat something equally obvious, so this check reports a finding for all returning parameters that are not named `RESULT`.
 
 ### How to solve the issue?
 
-Calling the `RETURNING` parameter as `RESULT`.
+Call all returning parameters `RESULT`.
 
 ### What to do in case of exception?
 
@@ -41,4 +40,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#consider-calling-the-returning-parameter-result)
+* [Clean ABAP - Consider calling the RETURNING parameter RESULT](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#consider-calling-the-returning-parameter-result)

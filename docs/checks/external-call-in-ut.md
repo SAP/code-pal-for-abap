@@ -2,17 +2,17 @@
 
 ## External Call in Unit Tests-Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check finds any kind of explicit redirection (external call changing the main workflow to another program) within test methods of ABAP Unit test classes. Since every external call or redirection is considered to be a dependency, they should not be present in test code.
+This check searches test classes for statements that change the current main program or cause parallel sessions to spawn. Test code should not change the control flow to other main programs or directly call GUI elements.
 
 ### How does the check work?
 
-The check searches for statements which may lead to an external call or redirection (e.g. `SUBMIT`) diverting the regular workflow (call stack) of a program to another program. The check also searches for any Remote Function Calls (RFCs) as well as usages of `CL_GUI_*` classes.
+The check searches for `SUBMIT` statements, remote function calls of any kind (`CALL FUNCTION ... DESTINATION`) and calls to `CL_GUI_*` classes.
 
 ### How to solve the issue?
 
-The solution is either to remove or mock these external calls and redirections with a proper dependency isolation technique.
+Remove these external calls and/or mock them with a proper dependency isolation technique.
 
 ### What to do in case of exception?
 

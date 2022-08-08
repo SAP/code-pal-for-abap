@@ -2,17 +2,17 @@
 
 ## Interface Missing Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for classes having public methods without an interface.
+This check searches for classes with public methods that are not part of an interface. Methods that are not part of an interface make decoupling more difficult and, especially if the class is declared as final, are much harder to mock in unit tests of consumers.
 
 ### How does the check work?
 
-Since every class having at least one public method should implement an interface, this check searches for public methods within a class without having an associated interface (being implemented). 
+This check searches for declarations of methods within the public section of a class that are not redefinitions. It does not care about static methods (`CLASS-METHODS`).
 
 ### How to solve the issue?
 
-Make sure to implement an interface for the public methods. Even though this seems to be unnecessary in some cases, having an interface will easily allow mocking data in the future.
+Make sure to create an interface for public methods.
 
 ### What to do in case of exception?
 
@@ -26,4 +26,4 @@ ENDCLASS.
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#public-instance-methods-should-be-part-of-an-interface)
+* [Clean ABAP - Public instance methods should be part of an interface](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#public-instance-methods-should-be-part-of-an-interface)
