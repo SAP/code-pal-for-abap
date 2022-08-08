@@ -28,7 +28,7 @@ Solely replacing the raising statement is usually not enough. You should also ad
 
 In exceptional cases, you can suppress this finding by using the pseudo comment `“#EC NON_CL_EXCEPT`.
 
-Note that this check is a subset of a similar check in the Extended Program Check (SLIN) delivered by SAP. That check accepts no pseudo comments or pragmas and places its findings on the location of defintion of the classic exception i.e. the `METHOD method_name EXCEPTIONS exception_name` declaration. We recommend that you *either* use this Code Pal check *or* the corresponding SLIN check, but not both, since if you use both you get two findings for the exact same issue.
+Note that this check is a subset of a similar check in the Extended Program Check (SLIN) delivered by SAP. That check accepts no pseudo comments or pragmas and places its findings at the location of definition of the classic exception, i.e. the `METHOD method_name EXCEPTIONS exception_name` declaration. We recommend that you *either* use this Code Pal check *or* the corresponding SLIN check, but not both, since if you use both you get two findings for the exact same issue.
 
 ```abap
 RAISE SYSTEM-EXCEPTIONS.  "#EC NON_CL_EXCEPT
