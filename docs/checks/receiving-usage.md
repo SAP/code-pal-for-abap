@@ -2,16 +2,21 @@
 
 ## RECEIVING Statement Usage Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for the `RECEIVING` statement which should no longer be used.
+This check searches for `RECEIVING` clauses in method calls which should no longer be used. The only case in which it is necessary to use `RECEIVING` rather than functional notation is when an `EXCEPTIONS` clause to catch classic exceptions is present.
 
 ### How to solve the issue?
 
-`RECEIVING` shall not be used.
+Replace the `RECEIVING` clause with its functional equivalent:
 
 ```abap
 DATA(sum) = aggregate_values( values ).
+```
+instead of
+```abap
+DATA sum TYPE i.
+aggregate_values( EXPORTING values = values RECEIVING result = sum ).
 ```
 
 ### What to do in case of exception?
@@ -28,4 +33,4 @@ aggregate_values(
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP - Omit RECEIVING Statement](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#omit-receiving)
+* [Clean ABAP - Omit RECEIVING](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#omit-receiving)

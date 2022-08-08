@@ -2,23 +2,20 @@
 
 ## Deprecated Classes
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check points out deprecated classes which should be replaced by newer objects.
-
-You can check the list of currently supported objects in the `constructor` of the `y_check_deprecated_classes` class. 
+This check searches for the usage of deprecated objects which should be replaced by newer objects.
 
 ### How does the check work?
 
-This check searches for the usage of deprecated classes. For instance:
+The check searches for occurrences of the following objects:
 
-```abap
-DATA aunit TYPE REF TO cl_aunit_assert.
-```
+* `CL_AUNIT_ASSERT`
+* `IF_AUNIT_CONSTANTS`
 
 ### How to solve the issue?
 
-Reference non deprecated/newer objects instead. For the above example, a corrected code would look like:
+Reference non-deprecated/newer objects instead. For the above example, a corrected code would look like:
 
 ```abap
 DATA aunit TYPE REF TO cl_abap_unit_assert.

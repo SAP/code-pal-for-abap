@@ -2,13 +2,13 @@
 
 ## Omit Optional EXPORTING
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for the optional EXPORTING wording which makes the class method call needlessly longer:
+In functional calls of methods that only have importing parameters and a returning parameter, the keyword `EXPORTING` in front of the parameter list at call sites is superfluous. This check searches for these superfluous instances of `EXPORTING`.
 
 Anti-Pattern:
 ```abap
-modify->update(
+update(
   EXPORTING
     node   = /dirty/my_bo_c=>node-item
     key    = item->key
@@ -18,20 +18,19 @@ modify->update(
 
 Pattern:
 ```abap
-modify->update( node   = /clean/my_bo_c=>node-item
-                key    = item->key
-                data   = item
-                fields = changed_fields ).
+update( node   = /clean/my_bo_c=>node-item
+        key    = item->key
+        data   = item
+        fields = changed_fields ).
 ```
-
 
 ### How does the check work?
 
-This check searches for the usage of the optional keyword EXPORTING in the class method calls.
+This check searches for the usage of `EXPORTING` in functional method calls that have no `CHANGING`, `IMPORTING`, `RECEIVING` or `EXCEPTIONS` clauses.
 
 ### How to solve the issue?
 
-Omit the optional keyword EXPORTING (it works implicitly).
+Omit the optional keyword `EXPORTING`.
 
 ### What to do in case of exception?
 

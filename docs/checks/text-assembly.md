@@ -4,11 +4,11 @@
 
 ### What is the Intent of the Check?
 
-Following the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#use--to-assemble-text), this check searches for text assembly and suggests the usage of the `|` to perform it.
+This check searches for locations where text is assembled from different fragments and string templates (marked by `|`) are not used.
 
 ### How to solve the issue?
 
-Use `|` to assemble the text
+Use string templates to assemble text from smaller pieces.
 
 ### What to do in case of exception?
 

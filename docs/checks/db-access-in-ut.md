@@ -2,17 +2,17 @@
 
 ## Database Access within Unit-Tests Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-The Check identifies database operations within the test classes. 
+The check searches for database operations inside ABAP Unit test classes that do not use an SQL test double framework to mock the database. Unit tests should usually be isolated from the actual database.
 
 ### How does the check work?
 
-The Check behaves differently depending on the test class classification (`RISK LEVEL`) and automatically exempts the finding if a known test framework is find. 
+The check behaves differently depending on the test class's risk level:
 
 #### 1. `RISK LEVEL HARMLESS` or not set
 
-The Check reports:
+The check reports:
 * `SELECT`
 * `INSERT`
 * `UPDATE`
@@ -24,23 +24,15 @@ The Check reports:
 
 #### 2. `RISK LEVEL DANGEROUS` or `RISK LEVEL CRITICAL`
 
-The Check reports:
+The check reports:
 * `UPDATE`
 * `MODIFY`
 * `DELETE`
 * `ALTER`
 
-In short, the Check allows:
-* `SELECT`
-* `INSERT`
-* `COMMIT`
-* `ROLLBACK`
-
 #### 3. Test Frameworks
 
-The Check identifies if the test class uses one of the following objects internally and exempts the finding automatically.
-
-The relevant objects for the automatic exemption are:
+If an instance of one of the following types associated with a test double framework is used in the test class, no findings are reported for database accesses:
 * `IF_OSQL_TEST_ENVIRONMENT`
 * `CL_OSQL_TEST_ENVIRONMENT`
 * `IF_CDS_TEST_ENVIRONMENT`
@@ -48,14 +40,14 @@ The relevant objects for the automatic exemption are:
   
 ### How to solve the issue?
 
-Please, isolate the database dependency using one of the below frameworks:
+Isolate the database dependency using one of the test double frameworks for SQL and CDS accesses:
 * [ABAP SQL Test Double Framework](https://help.sap.com/viewer/c238d694b825421f940829321ffa326a/1809.000/en-US/8562b437073d4b9c93078c45f7a64f21.html)
 * [ABAP CDS Test Double Framework](https://help.sap.com/viewer/5371047f1273405bb46725a417f95433/Cloud/en-US/8562b437073d4b9c93078c45f7a64f21.html)
 
 ### What to do in case of exception?
 
 In special cases, it is possible to suppress a finding by using the pseudo comment `"#EC DB_ACCESS_UT`.  
-The pseudo comment must be placed right after the DB access statement.
+The pseudo comment must be placed right after the statement that accesses the database.
 
 ```ABAP
 SELECT * FROM tadir INTO TABLE @DATA(entries).       "#EC DB_ACCESS_UT

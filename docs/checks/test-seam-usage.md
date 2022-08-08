@@ -2,10 +2,9 @@
 
 ## TEST-SEAM Statement Usage Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for the usage of the ABAP statement: TEST-SEAM. 
-Test seams are invasive and tend to get entangled in private dependencies, such that they are hard to keep alive and stable in the long run.
+This check searches for the usage of the ABAP statement `TEST-SEAM`. Test seams are invasive and tend to get entangled in private dependencies, so that they are hard to keep alive and stable in the long run.
 
 ### How does the check work?
 

@@ -2,18 +2,13 @@
 
 ## Magic Number Usage Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for arbitrary values in the source code having no meaningful connotation.
-
-Using magic numbers has disadvantages:
-
-* The code is not readable as you need to understand the meaning of the number again and again.
-* If these numbers need to be changed, modifications are required in every place in the code where this number is present. This makes the maintenance of the code inefficient and error prone.
+This check searches for numeric literals used directly without a meaningful constant declaration, often called magic numbers. Magic numbers hide their meaning from the user (e.g. whether they are a default value or have a specific meaning in the current context) and make refactoring unnecessarily hard when the same literal occurs in several places.
 
 ### How does the check work?
 
-It searches for numbers/values in the following statements:
+The check searches for numeric literals in the following statements:
 
 1. `IF`
 2. `ELSEIF`
@@ -21,15 +16,17 @@ It searches for numbers/values in the following statements:
 4. `CHECK`
 5. `DO`
 
-REMARK: Magic Numbers associated with `SY-SUBRC` are not considered by this check. In addition, the numbers `0` and `1` are ignored.
+A finding is reported for every such literal that is not `0`, `1` or a power of ten unless it is used as an index in a table expression or an operand in a comparison with the result of a `LINES` function.
 
 ### How to solve the issue?
 
-Create constants. By the name of the constant the number becomes a meaning which increases the readability. In addition, when maintaining the code, you only need to change the constant. This change can be done without the risk of introducing new errors or without forgetting some places where this change is required.
+Replace all numeric literals by constants with a meaningful name. 
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CI_MAGIC` which should be placed right after the statement containing the magic number:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CI_MAGIC` which should be placed right after the statement containing the magic number.
+
+Note that there is a very similar check in the Extended Program Check (SLIN) delivered by SAP, although it differs in its scope as it is not restricted to specific statement types. That check accepts a pragma `##NUMBER_OK` for suppressing its findings that Code Pal cannot evaluate (pragmas are inaccessible to ordinary Code Inspector checks). We recommend that you *either* use this Code Pal check *or* the corresponding  SLIN check, but not both, since if you use both you get two findings for the exact same issue.
 
 ```abap
 DO 5 TIMES. "#EC CI_MAGIC

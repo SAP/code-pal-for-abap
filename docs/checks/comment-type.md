@@ -2,16 +2,16 @@
 
 ## Comment Type
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for comments in the code marked up with `"` instead of with `*`. Comments marked up with an asterisk tend to be indented to weird/uncontrolled places.
+This check searches for comments starting with an asterisk `*`. These tend to not align well with the rest of the code, especially when the surrounding code changes indentation level, and should be replaced by comments starting with a quotation mark `"`.
 
 ### How to solve the issue?
 
-You should replace the comment sign from `*` to `"`.
+You should replace the `*` by `"`.
 
 ### What to do in case of exception?
-There is no exception for this check since it works as an indicator only. Thus, it is also not possible to suppress its findings.
+There are no pseudo comments for this check since you cannot put pseudo comments on the same line as an actual comment.
 
 ### Example
 
@@ -39,4 +39,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP: Comment sign](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#comment-with--not-with-)
+* [Clean ABAP - Comment with ", not with *](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#comment-with--not-with-)

@@ -2,13 +2,13 @@
 
 ## Message Easy To Find
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#make-messages-easy-to-find), it searches for the `MESSAGE` statement that cannot be detected if you run a where-used search in the transaction `SE91`.
+Since the specification of message classes and numbers by variables creates no entry in the where-used list of the corresponding message, this check searches for `MESSAGE` statements that do not statically specify their message by literals since these cannot be found in the where-used list of the message.
 
 ### How to solve the issue?
 
-Declare the message class instead of making it dynamic. 
+Specify the message used by literals.
 
 ### What to do in case of exception?
 
@@ -29,7 +29,6 @@ Before the check:
 
   MESSAGE i002(message_class).
   MESSAGE ID message_class type 'I' NUMBER message_id.
-  MESSAGE ID '00' type 'I' NUMBER '002'. 
 ```
 
 After the check:
@@ -41,4 +40,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP: Make messages easy to find](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#make-messages-easy-to-find)
+* [Clean ABAP - Make messages easy to find](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#make-messages-easy-to-find)
