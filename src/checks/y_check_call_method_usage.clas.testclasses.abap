@@ -157,3 +157,37 @@ CLASS ltc_report IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+class ltc_ole_calls DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_ole_calls IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = value #(
+      ( 'REPORT y_example.' )
+
+      ( 'START-OF-SELECTION.' )
+      ( '  DATA excel TYPE ole2_object.' )
+      ( '  CALL METHOD OF excel ''AppClose''.' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    cl_abap_unit_assert=>skip( 'Not implemented' ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    cl_abap_unit_assert=>skip( 'Not implemented.' ).
+  ENDMETHOD.
+
+  METHOD get_cut.
+    result = new y_check_call_method_usage( ).
+  ENDMETHOD.
+
+ENDCLASS.
