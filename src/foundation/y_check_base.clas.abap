@@ -112,6 +112,8 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
     METHODS is_test_code IMPORTING statement TYPE sstmnt
                          RETURNING VALUE(result) TYPE abap_bool.
 
+    methods get_docu_for_test redefinition.
+
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
@@ -336,6 +338,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
             WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
     ENDIF.
   ENDMETHOD.
+
+  METHOD get_docu_for_test.
+    p_document_header = value #( tdname = 'CodePal' ).
+    p_document_lines = value #( tdformat = 'AS'
+      ( tdline = |<DS:URLA.{ settings-documentation }>Github documentation </>| )
+    ).
+  endmethod.
 
 
   METHOD if_ci_test~query_attributes.
