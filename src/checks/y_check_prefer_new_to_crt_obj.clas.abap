@@ -25,20 +25,32 @@ CLASS y_check_prefer_new_to_crt_obj IMPLEMENTATION.
 
 
   METHOD inspect_tokens.
-    CHECK get_token_abs( statement-from ) =  'CREATE'
-      AND get_token_abs( statement-from + 1 ) = 'OBJECT'.
+    DATA(has_keyword) = xsdbool(
+      get_token_abs( statement-from ) =  'CREATE' AND
+      get_token_abs( statement-from + 1 ) = 'OBJECT' ).
+    DATA(is_rap_testing_call) = xsdbool(
+      get_token_abs( statement-to - 1 ) = 'FOR' AND
+      get_token_abs( statement-to ) = 'TESTING' ).
+    DATA(is_ole_call) = COND #(
+      WHEN statement-from + 3 <= statement-to
+        THEN COND abap_bool(
+          LET fourth_token = get_token_abs( statement-from + 3 ) IN
+          WHEN fourth_token(1) = `'` THEN abap_true ELSE abap_false
+        )
+        ELSE abap_false ).
+    DATA(has_dynamic_typing) = xsdbool( next1( 'TYPE' ) CA '()' ).
 
-    CHECK get_token_abs( statement-to - 1 ) <> 'FOR'
-      AND get_token_abs( statement-to ) <> 'TESTING'.
+    IF has_keyword = abap_true AND
+       is_rap_testing_call = abap_false AND
+       is_ole_call = abap_false AND
+       has_dynamic_typing = abap_false.
+      DATA(check_configuration) = detect_check_configuration( statement ).
 
-    CHECK next1( 'TYPE' ) NA '()'.
-
-    DATA(check_configuration) = detect_check_configuration( statement ).
-
-    raise_error( statement_level = statement-level
-                 statement_index = index
-                 statement_from = statement-from
-                 check_configuration = check_configuration ).
+      raise_error( statement_level = statement-level
+                   statement_index = index
+                   statement_from = statement-from
+                   check_configuration = check_configuration ).
+    ENDIF.
   ENDMETHOD.
 
 
