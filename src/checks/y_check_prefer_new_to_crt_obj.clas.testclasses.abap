@@ -109,3 +109,37 @@ CLASS ltc_dynamic_object IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS ltc_ole_calls DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_ole_calls IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example.' )
+
+      ( 'START-OF-SELECTION.' )
+      ( '  DATA excel TYPE ole2_object.' )
+      ( '  CREATE OBJECT excel ''Excel.Application''.' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    cl_abap_unit_assert=>skip( 'Not implemented' ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    cl_abap_unit_assert=>skip( 'Not implemented.' ).
+  ENDMETHOD.
+
+  METHOD get_cut.
+    result = NEW y_check_prefer_new_to_crt_obj( ).
+  ENDMETHOD.
+
+ENDCLASS.

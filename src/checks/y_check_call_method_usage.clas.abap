@@ -34,9 +34,9 @@ CLASS y_check_call_method_usage IMPLEMENTATION.
                              OR token CP '*)=>(*)*'
                              OR token CP '*)=>*'
                              OR token CP '(*)' ).
+    DATA(is_ole_call) = xsdbool( token = 'OF' ).
 
-    IF has_keyword = abap_true
-    AND is_dynamic = abap_false.
+    IF has_keyword = abap_true AND is_dynamic = abap_false AND is_ole_call = abap_false.
       DATA(check_configuration) = detect_check_configuration( statement ).
 
       raise_error( statement_level  = statement-level
