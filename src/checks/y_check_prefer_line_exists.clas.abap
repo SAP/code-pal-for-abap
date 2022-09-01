@@ -8,9 +8,9 @@ CLASS y_check_prefer_line_exists DEFINITION PUBLIC INHERITING FROM y_check_base 
   PRIVATE SECTION.
     METHODS:
       get_valid_last_token  IMPORTING last_token              TYPE stokesx
-                            RETURNING VALUE(valid_last_token) TYPE abap_boolean,
+                            RETURNING VALUE(valid_last_token) TYPE abap_bool,
       get_valid_first_token IMPORTING first_token              TYPE string
-                            RETURNING VALUE(valid_first_token) TYPE abap_boolean.
+                            RETURNING VALUE(valid_first_token) TYPE abap_bool.
 
 ENDCLASS.
 
