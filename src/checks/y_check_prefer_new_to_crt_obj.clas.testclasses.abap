@@ -131,11 +131,11 @@ CLASS ltc_ole_calls IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_code_with_exemption.
-    cl_abap_unit_assert=>skip( 'Not implemented' ).
+    cl_aunit_assert=>abort( quit =  cl_aunit_assert=>method ).
   ENDMETHOD.
 
   METHOD get_code_with_issue.
-    cl_abap_unit_assert=>skip( 'Not implemented.' ).
+    cl_aunit_assert=>abort( quit =  cl_aunit_assert=>method ).
   ENDMETHOD.
 
   METHOD get_cut.
