@@ -2,13 +2,13 @@
 
 ## Chain Declaration Usage
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check verifies the usage of chain up-front declarations.
+This check searches for chained up-front declarations of variables. Chaining visually implies a logical grouping that is often not actually present and variables often should rather be declared inline at their first point of usage.
 
 ### How to solve the issue?
 
-Change the chain up-front declarations to inline declarations.
+Change the chained up-front declarations to inline declarations.
 
 ### What to do in case of exception?
 
@@ -18,7 +18,7 @@ In exceptional cases, you can suppress this finding by using the pseudo comment 
   DATA: "#EC CHAIN_DECL_USAG
     string TYPE string,
     json TYPE REF TO cl_abap_json,
-    client LIKE sy-mandt.
+    client LIKE sy-mandt. 
 ```
 
 ```abap
@@ -26,7 +26,7 @@ In exceptional cases, you can suppress this finding by using the pseudo comment 
     name TYPE string,
     json TYPE REF TO cl_abap_json.
 ```
-
+or 
 ```abap
   CONSTANTS: "#EC CHAIN_DECL_USAG
     min_age TYPE i VALUE 18,
@@ -42,23 +42,30 @@ Before the check:
     string TYPE string,
     json TYPE REF TO cl_abap_json,
     client LIKE sy-mandt.
+  string = `Hello world`.
+  create object json
+    exporting iv_json = string.
+  client = sy-mandt.     
 ```
 
 After the check:
 
 ```abap
+  data(string) = `Hello world`.
+  data(json) = new cl_abap_json( string ).
+  data(client) = sy-mandt. 
+```
+
+or 
+
+```abap
   DATA string TYPE string.
   DATA json TYPE REF TO cl_abap_json.
   DATA client LIKE sy-mandt.
-```
-
-Or even (which looks neat - but it won't be enforced):
-
-```abap
-DATA var1         TYPE a.
-DATA var2         TYPE string.
-DATA my_var3      TYPE int.
-DATA a            TYPE c.
+  string = `Hello world`.
+  create object json
+    exporting iv_json = string.
+  client = sy-mandt.   
 ```
 
 ### Further Readings & Knowledge

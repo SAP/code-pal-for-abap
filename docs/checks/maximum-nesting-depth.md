@@ -2,15 +2,15 @@
 
 ## Nesting Depth Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check counts the nesting-depth level of a method, function-module, form-routine or module. A high value of nesting depth is an indicator that the source code might be difficult to read (no readability). Furthermore, maintaining and extending the code is also more difficult. In addition, the risk of introducing bugs is increased with a high nesting depth value.
+This check computes the maximal nesting depth of structures within a modularization unit. A high nesting depth is an indicator that the source code might be difficult to read and understand, making maintaining and extending the code also more difficult.
 
 ### How does the check work?
 
-The check verifies if the number of nested code blocks within a method, function module, form routine or module has reached/exceeded a defined threshold (configurable).
+The nesting depth of structures at a point is defined by the number of currently open structures (like `LOOP...ENDLOOP`, `IF...ENDIF`) at that point. In well-formatted code this usually corresponds to the level of indentation. 
 
-REMARK: The `TEST-SEAM` statement does not count to the level of nesting depth (it is ignored).
+The check reports a finding when the maximum over all nesting depths inside a modularization unit exceeds the configured threshold.
 
 ### How to solve the issue?
 
@@ -39,4 +39,4 @@ ENDMETHOD. "#EC CI_NESTING
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP - keep the Nesting Depth low](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#keep-the-nesting-depth-low)
+* [Clean ABAP - Keep the Nesting Depth Low](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#keep-the-nesting-depth-low)

@@ -2,7 +2,7 @@
 
 ## Prefer IS NOT to NOT IS
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
 Prefer `IS ... NOT` to `NOT ... IS` because it requires a "mental turnaround" that makes it harder to understand the negation logic.
 
@@ -67,4 +67,5 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-is-not-to-not-is)
+* [Clean ABAP - Try to make conditions positive](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#try-to-make-conditions-positive)
+* [Clean ABAP - Prefer `IS NOT` to `NOT IS`](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-is-not-to-not-is)

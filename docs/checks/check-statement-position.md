@@ -2,19 +2,20 @@
 
 ## CHECK Statement Position Check
 
-### What is the Intent of the Check?
-This check verifies whether the `CHECK` statement is the very first statement within a method, function-module or form-routine.  
+### What is the intent of the check?
+This check searches for `CHECK` statements that are not the first statement within a method, function module or form subroutine since the statement behaves differently in different positions and may lead to unclear, unexpected effects.
 
-The [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-check-in-other-positions) says:
-> Do not use `CHECK` outside of the initialization section of a method. The statement behaves differently in different positions and may lead to unclear, unexpected effects.
+### How does the check work
 
-REMARKS: 
-1. CHECK statement inside of LOOPs will be disregard by check (for that, refer to: CHECK_IN_LOOP). 
-2. The usage of CLEAR statement prior to CHECK statement is considered to be a bad coding practice! This is actually a workaround in bad designed code (against OO scope principles). 
-3. DATA declarations (DATA / FIELD-SYMBOLS when not dynamic declared – inline declarations), might also come before the keyword CHECK.
+When the check finds a `CHECK` statement, it will report a finding unless one of the following circumstances applies:
+
+1. The statement occurs within a loop - see [Check in Loop](check-in-loop.md) for a check dealing with these statements.
+2. The only statement before the `CHECK` statement are variable declarations. However, see the check for [chained declarations](chain-declaration-usage.md) for better practices when declaring variables.
+
+While it might sometimes seem necessary to have a `CLEAR` statement for exporting parameters in front of any `CHECK` statements, a need for both of these statements indicates a method that should be refactored to be less confusing, so the check still reports a finding for these cases.
 
 ### How to solve the issue?
-The `CHECK` statement shall be the first statement of a method. If it is not possible, try to substitute this keyword with an IF-statement instead.
+Either move the `CHECK` statement to be the first statement of the method or replace it with its equivalent `IF` statement.
 
 ### What to do in case of exception?
 In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC CHECK_POSITION` which has to be placed after the `CHECK` statement:
@@ -45,7 +46,17 @@ METHOD example.
   ...
 ENDMETHOD.
 ```
-OR
+or
+
+```abap
+METHOD example.
+  ...
+  IF sy-mandt = 000.
+    ...
+  ENDIF.
+ENDMETHOD.
+```
+or
 
 ```abap
 METHOD example.
@@ -54,5 +65,6 @@ METHOD example.
 ENDMETHOD.
 ``` 
 
+Note how the second option expresses most clearly the intent both syntactically and visually - the rest of the method (the part indented inside the `IF` statement) is to be executed if the condition is true.
 ### Further Readings & Knowledge
 - [Clean ABAP: Avoid CHECK in other positions (Clean ABAP)](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#avoid-check-in-other-positions)

@@ -2,23 +2,14 @@
 
 ## Scope of Variable
 
-### What is the Intent of the Check?
-If a variable is declared in a statement, it should be used/referred to inside this statement only (not outside).
+### What is the intent of the check?
+If a variable is declared inside a code block that forms a meaningful subdivision of scope (such as the branches of an `IF` statement), it should be used only inside that subdivision. ABAP lacks this sort of subdivided scope handling on a language level and does not prevent such confusing accesses - the smallest scope in ABAP is the method (excluding helper variables in certain constructor expressions) and any variable declared in a method remains visible until the end of the method.
 
 ### How does the check work?
-It searches for `DATA` and `FIELD-SYMBOLS` declaration inside of `IF`, `ELSEIF`, `ELSE`, `DO`, `CASE/WHEN`, `LOOP`, and `WHILE` statements, and for its usage/reference outside this statement.
-
-ABAP lacks of proper scope handling. If a variable is declared in a IF-Block, it should only be used/referred inside this IF-block (not outside). The same applies for LOOP, DO, WHILE or any block structure. In other words, it is not allowed the usage of a variable outside the block/scope where it was declared. Thus, it is still possible to make usage of dynamic declarations inside of blocks with a single statement:
-
-```abap
-IF condition = abap_true.
-  DATA(entry) = method().
-ENDIF.
-entry = abap_true. "no longer accepted
-```
+The check searches for variable declarations (`DATA`, `FIELD-SYMBOLS`) inside of `IF`, `ELSEIF`, `ELSE`, `DO`, `CASE/WHEN`, `LOOP`, and `WHILE` blocks and for the usage of these variables outside these blocks.
 
 ### How to solve the issue?
-Relocate the declaration.
+Relocate the declaration if the access to the variable is intended or use a different variable for the outside access.
 
 ### What to do in case of exception?
 In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC SCOPE_OF_VAR` which should be placed right after the variable usage/reference:
@@ -44,8 +35,7 @@ ENDIF.
 
 After:
 ```abap
-DATA value TYPE i.
-
+DATA(value) = 0.
 IF has_entries = abap_true.
   value = 1.
 ELSE.
@@ -54,4 +44,4 @@ ENDIF.
 ```
 
 ### Further Readings & Knowledge
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#dont-declare-inline-in-optional-branches)
+* [Clean ABAP - Don't declare inline in optional branches](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#dont-declare-inline-in-optional-branches)

@@ -2,13 +2,13 @@
 
 ## Combination of Output Parameters Check
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
 This check searches for methods where a combination of `EXPORTING`, `CHANGING` and/or `RETURNING` parameters is used.
 
 ### How to solve the issue?
 
-Use just one sort of output type per method.
+Use just one sort of output type for each method.
 
 ### What to do in case of exception?
 

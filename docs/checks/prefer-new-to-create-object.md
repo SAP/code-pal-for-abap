@@ -2,14 +2,13 @@
 
 ## Prefer New to Create Object
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-Prefer `NEW` over `CREATE OBJECT` as it avoids needlessly longer statements.
+This check searches for `CREATE OBJECT` statements and reports a finding if the type of the instance being created is known statically. Static instance creation with the functional `NEW` constructor allows for inline declarations and more concise code.
 
 ### How to solve the issue?
 
-Preferably, use `NEW` for creating new objects/instances.
-
+Use `NEW` to create instances of objects when the type is known statically.
 ### What to do in case of exception?
 
 In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC PREF_NEW`:
@@ -41,4 +40,4 @@ After the check:
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-new-to-create-object)
+* [Clean ABAP - Prefer NEW to CREATE OBJECT](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-new-to-create-object)

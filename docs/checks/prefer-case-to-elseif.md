@@ -1,14 +1,16 @@
 [code pal for ABAP](../../README.md) > [Documentation](../check_documentation.md) > [Prefer CASE to ELSE IF](prefer-case-to-elseif.md)
 
-## Prefer CASE to ELSE IF
+## Prefer CASE to ELSEIF
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-Prefer `CASE` to `ELSEIF` for multiple alternative conditions because `CASE` makes it easy to see a set of alternatives that exclude each other. It can be faster than a series of `IF`s because it can translate to a different microprocessor command instead of a series of subsequently evaluated conditions. You can introduce new cases quickly, without having to repeat the discerning variable over and over again. The statement even prevents some errors that can occur when accidentally nesting the `IF`-`ELSEIF`s.
+Conditions with many branches, i.e. `IF` statements with many `ELSEIF` alternatives, are often hard to read. When applicable, a `CASE` statement where all branches are on equal footing as `WHEN` branches is often much more readable. 
 
-In short: If the IF-Statement has operations (like AND, OR, …) over several variables/attributes, it is not worthwhile to revert it to a CASE-Statement. In other words, conditions on multiple variables can be left in IF-statements. Only condition(s) on single variables should be converted to a CASE-Statement. 
+The check reports a finding when the number of branches exceeds a configurable threshold.
 
-The threshold determines the maximum number of conditions.
+### How does the check work?
+
+The check finds `IF`-`ELSEIF` chains where each condition consists only of a single logical expression and the first token of all logical expressions is the same. 
 
 ### How to solve the issue?
 
@@ -33,9 +35,9 @@ ENDIF.
 Before the check:
 
 ```abap
-IF type = type-some_type.
+IF type = types-some_type.
   " ...
-ELSEIF type = type-some_other_type.
+ELSEIF type = types-some_other_type.
   " ...
 ELSE.
   RAISE EXCEPTION NEW /dirty/unknown_type_failure( ).
@@ -57,4 +59,4 @@ ENDCASE.
 
 ### Further Readings & Knowledge
 
-* [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-case-to-else-if-for-multiple-alternative-conditions)
+* [Clean ABAP - Prefer CASE to ELSEIF](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-case-to-else-if-for-multiple-alternative-conditions)

@@ -2,11 +2,11 @@
 
 ## Boolean Input Parameter
 
-### What is the Intent of the Check?
+### What is the intent of the check?
 
-This check searches for the usage of boolean input parameters in a method signature. These parameters, could be an indicator of bad design where the Single Responsibility Principle is not followed (the method might be doing several things instead of a single thing).   
+This check searches for boolean input parameters in method signatures. These parameters could be an indicator that the [single-responsibility principle (SRP)](https://en.wikipedia.org/wiki/Single-responsibility_principle) is not followed since the method might be doing several things at once.   
 
-REMARK: Setter methods using boolean input variables are acceptable.
+Setter methods using boolean input variables are acceptable when the variable being set is a boolean.
 
 ### How to solve the issue?
 

@@ -4,8 +4,7 @@
 [![license](https://img.shields.io/github/license/SAP/code-pal-for-abap)](LICENSE)
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/code-pal-for-abap)](https://api.reuse.software/info/github.com/SAP/code-pal-for-abap)
 
-Based on the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md), this tool contains a set of checks to guarantee the [Clean ABAP](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md) adherence.  
-Together, we both support you in writing a clean ABAP code. 
+This tool provides a set of checks to help adhering to the [Clean ABAP style guide](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md). While not all recommendations from the guide can be checked by static code analysis and in certain situations strict adherence to the guide might not be recommended, this provides robust automated support at least for a subset of recommendations.
 
 ❣️ It's **free** and **open-source**.
 
