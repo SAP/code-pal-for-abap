@@ -6,7 +6,7 @@
 
 This check finds comments starting with `"` that are not indented at the same level as the statements that follow them. Comments should generally refer to the code that follows them, and hence should be indented at the same level.
 
-The check does not report findings for comments that are in-line comments or are the only "code" inside an empty branch of a conditional statement.
+The check does not report findings for comments that are in-line comments inside of a multi-line statement or that are the only "code" inside an empty branch of a conditional statement. In-line comments are reported when they occur at the end of a statement.
 
 ### How to solve the issue?
 
@@ -20,20 +20,27 @@ There are no pseudo comments for this check since you cannot put pseudo comments
 Before the check:
 
 ```abap
-" delegate pattern
+" comment 1
   output = calculate_result( input ).
+  var_1 = var_2. " comment 2
+  select * from tab
+    " comment 3
+    where field_1 = var_3.
 ```
 
 After the check:
 
 ```abap
-  " delegate pattern
+  " comment 1
   output = calculate_result( input ).
+  " comment 2  
+  var_1 = var_2. 
+  select * from tab
+    " comment 3
+    where field_1 = var_3.
 ```
 or
-```abap
-  output = calculate_result( input ). " delegate pattern
-```
+
 
 ### Further Readings & Knowledge
 
