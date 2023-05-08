@@ -16,17 +16,12 @@ CLASS y_check_comment_usage DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
 
     METHODS check_result IMPORTING structure TYPE sstruc.
 
-    METHODS is_code_disabled IMPORTING structure TYPE sstruc
-                                       statement TYPE sstmnt
+    METHODS is_code_disabled IMPORTING structure     TYPE sstruc
+                                       statement     TYPE sstmnt
                              RETURNING VALUE(result) TYPE abap_bool.
 
-    METHODS is_comment_excluded IMPORTING token TYPE string
+    METHODS is_comment_excluded IMPORTING token         TYPE string
                                 RETURNING VALUE(result) TYPE abap_bool.
-
-    METHODS has_token_started_with IMPORTING token TYPE string
-                                             start_with TYPE string
-                                   RETURNING VALUE(result) TYPE abap_bool
-                                   RAISING cx_sy_range_out_of_bounds.
 
     METHODS is_badi_example_class RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
@@ -94,40 +89,30 @@ CLASS y_check_comment_usage IMPLEMENTATION.
 
   METHOD is_comment_excluded.
     TRY.
-      IF has_token_started_with( token = token
-                                 start_with = |*"| )
-        OR has_token_started_with( token = token
-                                   start_with = |"!| )
-        OR has_token_started_with( token = token
-                                   start_with = |##| )
-        OR has_token_started_with( token = token
-                                   start_with = |*?| )
-        OR has_token_started_with( token = token
-                                   start_with = |"?| )
-        OR has_token_started_with( token = token
-                                   start_with = |*&| )
-        OR has_token_started_with( token = token
-                                   start_with = |"#EC| )
-        OR has_token_started_with( token = token
-                                   start_with = |* INCLUDE| )
-        OR token CP |"{ object_name }*.|
-        OR token CO |*|.
+        IF has_token_started_with( token = token
+                                   start_with = |*"| )
+            OR has_token_started_with( token = token
+                                       start_with = |"!| )
+            OR has_token_started_with( token = token
+                                       start_with = |##| )
+            OR has_token_started_with( token = token
+                                       start_with = |*?| )
+            OR has_token_started_with( token = token
+                                       start_with = |"?| )
+            OR has_token_started_with( token = token
+                                       start_with = |*&| )
+            OR has_token_started_with( token = token
+                                       start_with = |"#EC| )
+            OR has_token_started_with( token = token
+                                       start_with = |* INCLUDE| )
+            OR token CP |"{ object_name }*.|
+            OR token CO |*|.
 
-      result = abap_true.
-
-      ENDIF.
-    CATCH cx_sy_range_out_of_bounds.
-      result = abap_false.
+          result = abap_true.
+        ENDIF.
+      CATCH cx_sy_range_out_of_bounds.
+        result = abap_false.
     ENDTRY.
-  ENDMETHOD.
-
-  METHOD has_token_started_with.
-    DATA(token_length) = strlen( start_with ).
-    IF substring( val = token
-                  off = 0
-                  len = token_length ) = start_with.
-      result = abap_true.
-    ENDIF.
   ENDMETHOD.
 
   METHOD check_result.
@@ -178,7 +163,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
     INTO @DATA(enhancement)
     WHERE obj_type = @object_type
     AND obj_name = @object_name
-    AND VERSION = 'A'.
+    AND version = 'A'.
 
     result = xsdbool( enhancement IS NOT INITIAL ).
   ENDMETHOD.
