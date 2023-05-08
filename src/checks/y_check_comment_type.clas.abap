@@ -43,18 +43,22 @@ CLASS y_check_comment_type IMPLEMENTATION.
     LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
     FROM statement-from TO statement-to
     WHERE type = scan_token_type-comment.
-      IF has_token_started_with( token = <token>-str
-                                 start_with = |*"| )
-          OR has_token_started_with( token = <token>-str
-                                     start_with = |*&| ).
-        CONTINUE.
-      ENDIF.
+      TRY.
+          IF has_token_started_with( token = <token>-str
+                                     start_with = |*"| )
+              OR has_token_started_with( token = <token>-str
+                                         start_with = |*&| ).
+            CONTINUE.
+          ENDIF.
 
-      IF has_token_started_with( token = <token>-str
-                                 start_with = |*| ).
-        result = abap_true.
-        RETURN.
-      ENDIF.
+          IF has_token_started_with( token = <token>-str
+                                     start_with = |*| ).
+            result = abap_true.
+            RETURN.
+          ENDIF.
+        CATCH cx_sy_range_out_of_bounds.
+          result = abap_false.
+      ENDTRY.
     ENDLOOP.
   ENDMETHOD.
 

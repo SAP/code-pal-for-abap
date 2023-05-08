@@ -206,10 +206,9 @@ CLASS lcl_list_ut IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_table.
-    DATA dta  TYPE REF TO data.
     FIELD-SYMBOLS: <table> TYPE STANDARD TABLE.
 
-    dta = cut->get_table( ).
+    DATA(dta) = cut->get_table( ).
 
     ASSIGN dta->* TO <table>.
 
