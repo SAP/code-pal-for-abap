@@ -5,8 +5,8 @@ CLASS y_check_comment_type DEFINITION PUBLIC INHERITING FROM y_check_base CREATE
     METHODS inspect_tokens REDEFINITION.
   PRIVATE SECTION.
     METHODS has_wrong_comment_type IMPORTING statement TYPE sstmnt RETURNING VALUE(result) TYPE abap_bool.
-    METHODS get_first_character IMPORTING token TYPE stokesx RETURNING VALUE(result) TYPE char1.
-    METHODS get_second_character IMPORTING token TYPE stokesx RETURNING VALUE(result) TYPE char1.
+
+
 ENDCLASS.
 
 
@@ -41,30 +41,26 @@ CLASS y_check_comment_type IMPLEMENTATION.
 
   METHOD has_wrong_comment_type.
     LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-from TO statement-to.
-      IF get_first_character( <token> ) = '*'
-      AND get_second_character( <token> ) <> '&'.
-        result = abap_true.
-        RETURN.
-      ENDIF.
+    FROM statement-from TO statement-to
+    WHERE type = scan_token_type-comment.
+      TRY.
+          IF has_token_started_with( token = <token>-str
+                                     start_with = |*"| )
+              OR has_token_started_with( token = <token>-str
+                                         start_with = |*&| ).
+            CONTINUE.
+          ENDIF.
+
+          IF has_token_started_with( token = <token>-str
+                                     start_with = |*| ).
+            result = abap_true.
+            RETURN.
+          ENDIF.
+        CATCH cx_sy_range_out_of_bounds.
+          result = abap_false.
+      ENDTRY.
     ENDLOOP.
   ENDMETHOD.
 
 
-  METHOD get_first_character.
-    TRY.
-        result = token-str(1).
-      CATCH cx_sy_range_out_of_bounds.
-        result = ''.
-    ENDTRY.
-  ENDMETHOD.
-
-
-  METHOD get_second_character.
-    TRY.
-        result = token-str(2).
-      CATCH cx_sy_range_out_of_bounds.
-        result = ''.
-    ENDTRY.
-  ENDMETHOD.
 ENDCLASS.

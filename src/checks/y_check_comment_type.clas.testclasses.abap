@@ -71,3 +71,40 @@ CLASS ltc_generated_include IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS ltc_function_module_signature DEFINITION INHERITING FROM ltc_asterisk FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_function_module_signature IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'FUNCTION-POOL SDCB. ' )
+      ( 'FUNCTION CALL_BROWSER. ' )
+      ( '*"----------------------------------------------------------------------' )
+      ( '*"*"Local Interface:                                                    ' )
+      ( '*"  IMPORTING                                                           ' )
+      ( '*"     VALUE(import) TYPE  string                                       ' )
+      ( '*"----------------------------------------------------------------------' )
+      ( '*    anti-pattern                                                       ' )
+      ( 'ENDFUNCTION.                                                            ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'FUNCTION-POOL SDCB. ' )
+      ( 'FUNCTION CALL_BROWSER. ' )
+      ( '*"----------------------------------------------------------------------' )
+      ( '*"*"Local Interface:                                                    ' )
+      ( '*"  IMPORTING                                                           ' )
+      ( '*"     VALUE(import) TYPE  string                                       ' )
+      ( '*"----------------------------------------------------------------------' )
+      ( 'ENDFUNCTION.                                                            ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.

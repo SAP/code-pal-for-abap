@@ -114,6 +114,11 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
 
     methods get_docu_for_test redefinition.
 
+    METHODS has_token_started_with IMPORTING token TYPE string
+                                             start_with TYPE string
+                                   RETURNING VALUE(result) TYPE abap_bool
+                                   RAISING cx_sy_range_out_of_bounds.
+
   PRIVATE SECTION.
     METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
 
@@ -697,6 +702,16 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         iv_trdir_name = level-name
       IMPORTING
         es_tadir_keys = result.
+  ENDMETHOD.
+
+
+  METHOD has_token_started_with.
+    DATA(token_length) = strlen( start_with ).
+    IF substring( val = token
+                  off = 0
+                  len = token_length ) = start_with.
+      result = abap_true.
+    ENDIF.
   ENDMETHOD.
 
 
