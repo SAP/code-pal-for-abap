@@ -21,8 +21,6 @@ This tool provides a set of checks to help adhering to the [Clean ABAP style gui
   - Validity for objects created since a specific date;
   - Validity period;
   - Allow / Deny exemption.
- 
-⚠️ Tool is not RFC-Enabled ([#268](https://github.com/SAP/code-pal-for-abap/issues/268)). 
 
 ⚠️ Severities set to `Notification` / `Priority 3` by default ([#368](https://github.com/SAP/code-pal-for-abap/issues/368)).
 
@@ -41,6 +39,9 @@ This tool provides a set of checks to help adhering to the [Clean ABAP style gui
 - **[Configure](pages/how-to-configure.md)**
 - **[Execute](pages/how-to-execute.md)**
 - **[Contribute](pages/how-to-contribute.md)**
+
+## Further Documentation
+- [Known issues](pages/known-issues.md)
 
 ## Recommended Readings
 
