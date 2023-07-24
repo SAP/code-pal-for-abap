@@ -123,3 +123,24 @@ CLASS ltc_concatenate IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+
+CLASS ltc_text_assembly_mult_lines DEFINITION INHERITING FROM ltc_ampersand_with_literal FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_text_assembly_mult_lines IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' START-OF-SELECTION. ' )
+      ( |   DATA(first) = 'A'. | )
+      ( |   DATA(second) = 'B'. | )
+      ( |   DATA(string) = \|this is a very long string with some variable \{ first \}\| &&| )
+      ( |                  \|and this is the rest of the string with another variable \{ second \}\|. | ) ).
+  ENDMETHOD.
+
+ENDCLASS.
