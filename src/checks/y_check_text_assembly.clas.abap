@@ -26,6 +26,7 @@ CLASS y_check_text_assembly IMPLEMENTATION.
 
   METHOD inspect_tokens.
     DATA(has_ampersand) = abap_false.
+    DATA(has_pipe) = abap_false.
     DATA(has_literal) = abap_false.
     DATA(has_identifier) = abap_false.
     DATA(multiple_lines) = abap_false.
@@ -36,6 +37,8 @@ CLASS y_check_text_assembly IMPLEMENTATION.
         FROM statement-from TO statement-to.
       IF <token>-str = '&&'.
         has_ampersand = abap_true.
+      ELSEIF <token>-str = '|'.
+        has_pipe = abap_true.
       ELSEIF <token>-type = scan_token_type-literal.
         has_literal = abap_true.
       ELSEIF <token>-type = scan_token_type-identifier
@@ -44,18 +47,19 @@ CLASS y_check_text_assembly IMPLEMENTATION.
       ENDIF.
 
       IF previous_row IS NOT INITIAL
-          AND <token>-row > previous_row
-          AND <token>-str = '|'.
+          AND <token>-row > previous_row.
         multiple_lines = abap_true.
       ENDIF.
 
       previous_row = <token>-row.
     ENDLOOP.
 
-    IF has_ampersand = abap_false
+    IF ( has_ampersand = abap_false
         OR has_literal = abap_false
-        OR has_identifier = abap_false
-        OR multiple_lines = abap_true.
+        OR has_identifier = abap_false )
+        OR ( has_ampersand = abap_true
+        AND has_pipe = abap_true
+        AND multiple_lines = abap_true ).
       RETURN.
     ENDIF.
 
