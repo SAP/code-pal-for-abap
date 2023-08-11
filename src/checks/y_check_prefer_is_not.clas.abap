@@ -72,15 +72,15 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
           IF is_standard_function( ref_scan->tokens[ position + 2 ] ).
             CONTINUE.
           ENDIF.
-
-          IF is_predicative_method( tokens          = ref_scan->tokens
-                                    statement       = statement
-                                    position_of_not = position + 1 ).
-            CONTINUE.
-          ENDIF.
         CATCH cx_sy_itab_line_not_found.
           CONTINUE.
       ENDTRY.
+
+      IF is_predicative_method( tokens          = ref_scan->tokens
+                                statement       = statement
+                                position_of_not = position + 1 ).
+        CONTINUE.
+      ENDIF.
 
       DATA(check_configuration) = detect_check_configuration( statement ).
 
