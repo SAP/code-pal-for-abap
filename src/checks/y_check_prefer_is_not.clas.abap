@@ -5,8 +5,11 @@ CLASS y_check_prefer_is_not DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
   PROTECTED SECTION.
     METHODS inspect_tokens REDEFINITION.
 
-    METHODS is_standard_function IMPORTING token TYPE stokesx
+    METHODS is_standard_function IMPORTING token         TYPE stokesx
                                  RETURNING VALUE(result) TYPE abap_bool.
+
+    METHODS is_predicative_method IMPORTING token         TYPE stokesx
+                                  RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 
@@ -50,12 +53,17 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
       ENDTRY.
 
       TRY.
-          IF is_standard_function( ref_scan->tokens[ position + 2 ] ) = abap_true.
+          IF is_standard_function( ref_scan->tokens[ position + 2 ] ).
+            CONTINUE.
+          ENDIF.
+
+          IF is_predicative_method( ref_scan->tokens[ position + 2 ] ).
             CONTINUE.
           ENDIF.
         CATCH cx_sy_itab_line_not_found.
           CONTINUE.
       ENDTRY.
+
 
       DATA(check_configuration) = detect_check_configuration( statement ).
 
@@ -74,5 +82,8 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
                       OR token-str CP 'MATCHES*' ).
   ENDMETHOD.
 
+  METHOD is_predicative_method.
+    result = xsdbool( token-str CP '*(' ).
+  ENDMETHOD.
 
 ENDCLASS.
