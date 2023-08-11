@@ -134,7 +134,7 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
         open_brackets = open_brackets + 1.
       ENDIF.
 
-      IF current_string = ')'.
+      IF current_string CP ')*'.
         open_brackets = open_brackets - 1.
       ENDIF.
     ENDWHILE.

@@ -615,3 +615,59 @@ CLASS ltc_predicative_nested IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS ltc_method_return_structure DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_method_return_structure IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     TYPES: BEGIN OF ty_structure,' )
+      ( '              comp TYPE i,' )
+      ( '            END OF ty_structure.' )
+      ( '     METHODS get_structure RETURNING VALUE(result) TYPE ty_structure. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD get_structure. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->get_structure( )-comp = 1.' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     TYPES: BEGIN OF ty_structure,' )
+      ( '              comp TYPE i,' )
+      ( '            END OF ty_structure.' )
+      ( '     METHODS get_structure RETURNING VALUE(result) TYPE ty_structure. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD get_structure. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->get_structure( )-comp = 1.  "#EC PREFER_IS_NOT' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
