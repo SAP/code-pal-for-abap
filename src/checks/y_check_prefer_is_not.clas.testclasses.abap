@@ -529,3 +529,89 @@ CLASS ltc_predicative_method IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS ltc_predicative_with_param DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_predicative_with_param IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active IMPORTING num TYPE i RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->is_active( 3 ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS ltc_two_predicative_methods DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_two_predicative_methods IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->is_active( ) AND NOT object->is_active( ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_predicative_nested DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_predicative_nested IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active IMPORTING nested TYPE abap_bool RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->is_active( object->is_active( abap_true ) ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
