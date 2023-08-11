@@ -1,4 +1,4 @@
-CLASS y_check_text_assembly DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC .
+CLASS y_check_text_assembly DEFINITION PUBLIC INHERITING FROM y_check_base CREATE PUBLIC.
   PUBLIC SECTION.
     METHODS constructor.
 
@@ -26,24 +26,40 @@ CLASS y_check_text_assembly IMPLEMENTATION.
 
   METHOD inspect_tokens.
     DATA(has_ampersand) = abap_false.
+    DATA(has_pipe) = abap_false.
     DATA(has_literal) = abap_false.
     DATA(has_identifier) = abap_false.
+    DATA(multiple_lines) = abap_false.
+
+    DATA previous_row TYPE int4.
 
     LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM statement-from TO statement-to.
+        FROM statement-from TO statement-to.
       IF <token>-str = '&&'.
         has_ampersand = abap_true.
+      ELSEIF <token>-str = '|'.
+        has_pipe = abap_true.
       ELSEIF <token>-type = scan_token_type-literal.
         has_literal = abap_true.
       ELSEIF <token>-type = scan_token_type-identifier
-      AND sy-tabix <> statement-from.
+          AND sy-tabix <> statement-from.
         has_identifier = abap_true.
       ENDIF.
+
+      IF previous_row IS NOT INITIAL
+          AND <token>-row > previous_row.
+        multiple_lines = abap_true.
+      ENDIF.
+
+      previous_row = <token>-row.
     ENDLOOP.
 
-    IF has_ampersand = abap_false
-    OR has_literal = abap_false
-    OR has_identifier = abap_false.
+    IF ( has_ampersand = abap_false
+        OR has_literal = abap_false
+        OR has_identifier = abap_false )
+        OR ( has_ampersand = abap_true
+        AND has_pipe = abap_true
+        AND multiple_lines = abap_true ).
       RETURN.
     ENDIF.
 
