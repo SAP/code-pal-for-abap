@@ -616,6 +616,34 @@ CLASS ltc_predicative_nested IMPLEMENTATION.
 
 ENDCLASS.
 
+CLASS ltc_new_predicative DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_new_predicative IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   IF NOT NEW y_example_class( )->is_active( ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltc_method_return_structure DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_with_issue REDEFINITION.

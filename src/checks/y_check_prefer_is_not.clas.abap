@@ -22,11 +22,11 @@ CLASS y_check_prefer_is_not DEFINITION PUBLIC INHERITING FROM y_check_base CREAT
   PRIVATE SECTION.
     METHODS get_position_closing_bracket
       IMPORTING
-        tokens          TYPE stokesx_tab
-        statement       TYPE sstmnt
-        position_of_not TYPE syst_tabix
+        tokens                   TYPE stokesx_tab
+        statement                TYPE sstmnt
+        position_of_open_bracket TYPE syst_tabix
       RETURNING
-        VALUE(result)   TYPE i.
+        VALUE(result)            TYPE i.
 
 ENDCLASS.
 
@@ -98,14 +98,21 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_predicative_method.
-    IF tokens[ position_of_not + 1 ]-str NP '*('.
+    DATA(position_to_check) = position_of_not + 1.
+
+    IF tokens[ position_to_check ]-str = 'NEW'.
+      position_to_check = position_to_check + 1.
+    ENDIF.
+
+    IF tokens[ position_to_check ]-str NP '*('.
       " This is not the start of a method call
       RETURN.
     ENDIF.
 
-    DATA(position_closing_bracket) = get_position_closing_bracket( tokens          = tokens
-                                                                   statement       = statement
-                                                                   position_of_not = position_of_not ).
+    DATA(position_closing_bracket) = get_position_closing_bracket(
+                                         tokens                   = tokens
+                                         statement                = statement
+                                         position_of_open_bracket = position_to_check ).
 
     IF position_closing_bracket = statement-to.
       " Nothing follows the closing bracket
@@ -124,7 +131,7 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
 
   METHOD get_position_closing_bracket.
     DATA(open_brackets) = 1.
-    result = position_of_not + 1.
+    result = position_of_open_bracket.
 
     WHILE open_brackets <> 0 AND result <= statement-to.
       result = result + 1.
