@@ -157,6 +157,82 @@ CLASS ltc_not_value IMPLEMENTATION.
 
 ENDCLASS.
 
+CLASS ltc_not_method DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_cut REDEFINITION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_without_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_not_method IMPLEMENTATION.
+
+  METHOD get_cut.
+    result ?= NEW y_check_prefer_is_not( ).
+  ENDMETHOD.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS get_number RETURNING VALUE(result) TYPE i. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD get_number. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->get_number( ) = 1.' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS get_number RETURNING VALUE(result) TYPE i. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD get_number. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF object->get_number( ) <> 1.' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS get_number RETURNING VALUE(result) TYPE i. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD get_number. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->get_number( ) = 1. "#EC PREFER_IS_NOT' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltc_and DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
@@ -420,6 +496,205 @@ CLASS ltc_contains_any_of IMPLEMENTATION.
 
       ( ' START-OF-SELECTION. ' )
       ( |   ASSERT NOT contains_any_of( val = 'a123e' sub = '123' ). | )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_predicative_method DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_predicative_method IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->is_active( ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_predicative_with_param DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_predicative_with_param IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active IMPORTING num TYPE i RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->is_active( 3 ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS ltc_two_predicative_methods DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_two_predicative_methods IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->is_active( ) AND NOT object->is_active( ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_predicative_nested DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_predicative_nested IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active IMPORTING nested TYPE abap_bool RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->is_active( object->is_active( abap_true ) ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_new_predicative DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_new_predicative IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS is_active RETURNING VALUE(result) TYPE abap_bool. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD is_active. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   IF NOT NEW y_example_class( )->is_active( ).' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_method_return_structure DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+    METHODS get_code_with_exemption REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_method_return_structure IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     TYPES: BEGIN OF ty_structure,' )
+      ( '              comp TYPE i,' )
+      ( '            END OF ty_structure.' )
+      ( '     METHODS get_structure RETURNING VALUE(result) TYPE ty_structure. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD get_structure. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->get_structure( )-comp = 1.' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
+    ).
+  ENDMETHOD.
+
+  METHOD get_code_with_exemption.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     TYPES: BEGIN OF ty_structure,' )
+      ( '              comp TYPE i,' )
+      ( '            END OF ty_structure.' )
+      ( '     METHODS get_structure RETURNING VALUE(result) TYPE ty_structure. ' )
+      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD get_structure. ' )
+      ( '   ENDMETHOD. ' )
+      ( ' ENDCLASS. ' )
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   DATA(object) = NEW y_example_class( ). ' )
+      ( '   IF NOT object->get_structure( )-comp = 1.  "#EC PREFER_IS_NOT' )
+      ( '     count = 1. ' )
+      ( '   ENDIF. ' )
     ).
   ENDMETHOD.
 
