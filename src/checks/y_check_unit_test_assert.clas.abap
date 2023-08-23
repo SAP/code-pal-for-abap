@@ -157,7 +157,7 @@ CLASS y_check_unit_test_assert IMPLEMENTATION.
     TRY.
         DATA(previous_token) = ref_scan->tokens[ position - 1 ].
         DATA(next_token) = ref_scan->tokens[ position + 1 ].
-        result = xsdbool( previous_token-str CP '*[' AND next_token-str CP ']*').
+        result = xsdbool( previous_token-str CP '*[' AND next_token-str CP ']*' ).
       CATCH cx_sy_itab_line_not_found.
         result = abap_false.
         RETURN.
