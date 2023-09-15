@@ -21,7 +21,7 @@
 - [Database Access in Unit-Test](checks/db-access-in-ut.md)
 - [Deprecated Classes](checks/deprecated-classes.md)
 - [Deprecated Key Word](checks/deprecated-key-word.md)
-- [Empty Catch](checks/empty_catch.md)
+- [Empty Catch](checks/empty-catch.md)
 - [Empty IF Branches](checks/empty-if-branches.md)
 - [Empty Procedure](checks/empty-procedure.md)
 - [Equals Sign Chaining](checks/equals-sign-chaining.md)
