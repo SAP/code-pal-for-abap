@@ -6,7 +6,9 @@
 
 This tool provides a set of checks to help adhering to the [Clean ABAP style guide](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md). While not all recommendations from the guide can be checked by static code analysis and in certain situations strict adherence to the guide might not be recommended, this provides robust automated support at least for a subset of recommendations.
 
-❣️ It's **free** and **open-source**.
+It's **free** and **open-source**.
+
+This is the legacy version supporting local checks on check systems starting with SAP_BASIS release 7.40. For the remote-enabled version for ABAP Cloud, see the [Cloud Edition](https://github.com/SAP/code-pal-for-abap-cloud). 
 
 ## Features
 
@@ -22,7 +24,7 @@ This tool provides a set of checks to help adhering to the [Clean ABAP style gui
   - Validity period;
   - Allow / Deny exemption.
 
-⚠️ Severities set to `Notification` / `Priority 3` by default ([#368](https://github.com/SAP/code-pal-for-abap/issues/368)).
+Severities set to `Notification` / `Priority 3` by default ([#368](https://github.com/SAP/code-pal-for-abap/issues/368)).
 
 ## Set of Checks
 
@@ -31,7 +33,6 @@ This tool provides a set of checks to help adhering to the [Clean ABAP style gui
 ## Dependencies
 - Since Version 1.00 - SAP NetWeaver **7.40 SP8** or higher
 - [abapGit](https://docs.abapgit.org/)
-- :new: [SAP Note 2527903 - Remote analysis (for check system)](https://launchpad.support.sap.com/#/notes/2527903)
 
 ## How-to Guides
 
