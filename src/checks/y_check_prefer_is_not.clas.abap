@@ -43,9 +43,6 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
     settings-threshold = 0.
     settings-documentation = |{ c_docs_path-checks }prefer-is-not-to-not-is.md|.
 
-    relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-if ) ).
-    relevant_structure_types = VALUE #(  ).
-
     set_check_message( 'Prefer IS NOT to NOT IS!' ).
   ENDMETHOD.
 
@@ -56,7 +53,8 @@ CLASS y_check_prefer_is_not IMPLEMENTATION.
                OR str = 'ELSEIF'
                OR str = 'AND'
                OR str = 'OR'
-               OR str = 'ASSERT'.
+               OR str = 'ASSERT'
+               or str = 'CHECK'.
 
       DATA(position) = sy-tabix.
 
