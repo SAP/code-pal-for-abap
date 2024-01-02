@@ -50,6 +50,44 @@ CLASS ltc_not_is_initial IMPLEMENTATION.
 
 ENDCLASS.
 
+CLASS ltc_assert DEFINITION INHERITING FROM ltc_not_is_initial FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_assert IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   ASSERT NOT count IS INITIAL. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltc_check DEFINITION INHERITING FROM ltc_not_is_initial FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_with_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_check IMPLEMENTATION.
+
+  METHOD get_code_with_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA(count) = 0. ' )
+      ( '   ASSERT NOT count IS INITIAL. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltc_not_contains_pattern DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
@@ -156,45 +194,6 @@ CLASS ltc_not_value IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
-
-CLASS ltc_not_value_assert DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_code_with_issue REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_not_value_assert IMPLEMENTATION.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( 'REPORT y_example. ' )
-
-      ( ' START-OF-SELECTION.      ' )
-      ( '   DATA(count) = 0. ' )
-      ( |   ASSERT NOT count = 0. | )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS ltc_not_value_check DEFINITION INHERITING FROM ltc_not_value FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
-  PROTECTED SECTION.
-    METHODS get_code_with_issue REDEFINITION.
-ENDCLASS.
-
-CLASS ltc_not_value_check IMPLEMENTATION.
-
-  METHOD get_code_with_issue.
-    result = VALUE #(
-      ( 'REPORT y_example. ' )
-
-      ( ' START-OF-SELECTION.      ' )
-      ( '   DATA(count) = 0. ' )
-      ( |   CHECK NOT count = 0. | )
-    ).
-  ENDMETHOD.
-
-ENDCLASS.
-
 
 CLASS ltc_not_method DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
