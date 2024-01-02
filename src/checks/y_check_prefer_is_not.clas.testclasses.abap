@@ -82,7 +82,7 @@ CLASS ltc_check IMPLEMENTATION.
 
       ( ' START-OF-SELECTION.      ' )
       ( '   DATA(count) = 0. ' )
-      ( '   ASSERT NOT count IS INITIAL. ' )
+      ( '   CHECK NOT count IS INITIAL. ' )
     ).
   ENDMETHOD.
 
