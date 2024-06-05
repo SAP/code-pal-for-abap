@@ -4,7 +4,7 @@
 
 ### What is the intent of the check?
 
-Default table keys (declared by the `WITH DEFAULT KEY` clause in a table definition) can lead to obscure mistakes because they ignore numeric data types and they make it the intent of the key unclear. `SORT` and `DELETE ADJACENT` statements without explicit field list will resort to the primary key of the internal table, which in the case of default keys can lead to unexpected results, in particular in combination with `READ TABLE ... BINARY SEARCH` statements.
+Default table keys (declared by the `WITH DEFAULT KEY` clause in a table definition) can lead to obscure mistakes because they ignore numeric data types and they make the intent of the key unclear. `SORT` and `DELETE ADJACENT` statements without explicit field list will resort to the primary key of the internal table, which in the case of default keys can lead to unexpected results, in particular in combination with `READ TABLE ... BINARY SEARCH` statements.
 
 Therefore, this check searches for internal table definitions that declare a default table key. 
 
