@@ -15,11 +15,11 @@ This check searches for the statements starting with the following keywords:
 
 ### How to solve the issue?
 
-Please `MOVE` by a normal assignment statement using `=` and `TRANSLATE` by an equivalent functional expression using [string functions}(https://help.sap.com/doc/abapdocu_755_index_htm/7.55/en-US/abenprocess_functions.htm).
+Replace `MOVE` by a normal assignment statement using `=` and `TRANSLATE` by an equivalent functional expression using [string functions}(https://help.sap.com/doc/abapdocu_755_index_htm/7.55/en-US/abenprocess_functions.htm).
 
 ### What to do in case of exception?
 
-In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC DEPRECATED_KEY` which should placed right after the statement:
+In exceptional cases, you can suppress this finding by using the pseudo comment `"#EC DEPRECATED_KEY` which should be placed right after the statement:
 
 ```abap
 MOVE ….  "#EC DEPRECATED_KEY
