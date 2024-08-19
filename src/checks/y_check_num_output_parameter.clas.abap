@@ -28,7 +28,7 @@ CLASS y_check_num_output_parameter IMPLEMENTATION.
 
     relevant_structure_types = VALUE #( ).
 
-    set_check_message( 'Number of output parameters must be lower than &2! (&1>=&2)' ).
+    set_check_message( 'Number of output parameters must be less than &2! (but is &1)' ).
   ENDMETHOD.
 
 
