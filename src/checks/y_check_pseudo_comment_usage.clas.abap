@@ -32,8 +32,6 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    has_documentation = abap_false.
-
     settings-disable_on_testcode_selection = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
     settings-disable_threshold_selection = abap_true.
@@ -41,6 +39,7 @@ CLASS y_check_pseudo_comment_usage IMPLEMENTATION.
     settings-apply_on_test_code = abap_true.
     settings-apply_on_productive_code = abap_true.
     settings-ignore_pseudo_comments = abap_true.
+    settings-documentation = |{ c_docs_path-checks }pseudo-comment-usage.md|.
 
     relevant_statement_types = VALUE #( BASE relevant_statement_types
                                       ( scan_struc_stmnt_type-class_definition )
