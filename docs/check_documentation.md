@@ -45,6 +45,7 @@
 - [Prefer CASE to ELSEIF](checks/prefer-case-to-elseif.md)
 - [Prefer RETURNING to EXPORTING](checks/prefer-returning-to-exporting.md)
 - [Prefer IS NOT to NOT IS](checks/prefer-is-not-to-not-is.md)
+- [Prefer INSERT INTO TABLE to APPEND TO](checks/prefer-insert-into-to-append.md)
 - [Prefer LINE_EXISTS or LINE_INDEX to READ TABLE or LOOP AT](checks/prefer-line-exists.md)
 - [Prefer NEW to CREATE OBJECT](checks/prefer-new-to-create-object.md)
 - [Prefer Pragmas to Pseudo Comments](checks/prefer-pragmas-to-pseudo-comments.md)
