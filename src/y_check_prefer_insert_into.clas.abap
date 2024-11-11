@@ -21,7 +21,7 @@ CLASS y_check_prefer_insert_into IMPLEMENTATION.
     settings-pseudo_comment = '"#EC PREF_INSERT_INT' ##NO_TEXT.
     settings-disable_threshold_selection = abap_true.
     settings-threshold = 0.
-    settings-documentation = |{ c_docs_path-checks }prefer-insert-into.md|.
+    settings-documentation = |{ c_docs_path-checks }prefer-insert-into-to-append.md|.
 
     set_check_message( 'Prefer INSERT INTO TABLE to APPEND TO.' ).
 
