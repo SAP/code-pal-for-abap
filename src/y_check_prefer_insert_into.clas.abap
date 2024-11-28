@@ -33,7 +33,8 @@ CLASS y_check_prefer_insert_into IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF next2( p_word1 = 'SORTED' p_word2 = 'BY' ) IS NOT INITIAL.
+    IF next2( p_word1 = 'SORTED' 
+              p_word2 = 'BY' ) IS NOT INITIAL.
       RETURN.
     ENDIF.
 
