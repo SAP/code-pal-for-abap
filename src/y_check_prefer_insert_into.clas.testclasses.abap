@@ -15,19 +15,19 @@ CLASS ltc_append_to IMPLEMENTATION.
   METHOD get_code_without_issue.
 
     result = VALUE #(
-      ( ' REPORT y_example. ' )
+      ( ' REPORT y_example.' )
 
-      ( ' CLASS y_example DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example. ' )
-      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example DEFINITION.' )
+      ( '   PUBLIC SECTION.' )
+      ( '     METHODS example.' )
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( ' CLASS y_example IMPLEMENTATION.' )
       ( '   METHOD example.' )
-      ( '     DATA prefer_insert_into_table TYPE TABLE OF string. ' )
-      ( '     INSERT `example` INTO TABLE prefer_insert_into_table. ' )
+      ( '     DATA prefer_insert_into_table TYPE TABLE OF string.' )
+      ( '     INSERT `example` INTO TABLE prefer_insert_into_table.' )
       ( '   ENDMETHOD.' )
-      ( ' ENDCLASS. ' )
+      ( ' ENDCLASS.' )
     ).
 
   ENDMETHOD.
@@ -35,19 +35,19 @@ CLASS ltc_append_to IMPLEMENTATION.
   METHOD get_code_with_exemption.
 
     result = VALUE #(
-      ( ' REPORT y_example. ' )
+      ( ' REPORT y_example.' )
 
-      ( ' CLASS y_example DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example. ' )
-      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example DEFINITION.' )
+      ( '   PUBLIC SECTION.' )
+      ( '     METHODS example.' )
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( ' CLASS y_example IMPLEMENTATION.' )
       ( '   METHOD example.' )
-      ( '     DATA prefer_insert_into_table TYPE TABLE OF string. ' )
+      ( '     DATA prefer_insert_into_table TYPE TABLE OF string.' )
       ( '     APPEND `example` TO prefer_insert_into_table. "#EC PREF_INSERT_INT' )
       ( '   ENDMETHOD.' )
-      ( ' ENDCLASS. ' )
+      ( ' ENDCLASS.' )
     ).
 
   ENDMETHOD.
@@ -55,19 +55,19 @@ CLASS ltc_append_to IMPLEMENTATION.
   METHOD get_code_with_issue.
 
     result = VALUE #(
-      ( ' REPORT y_example. ' )
+      ( ' REPORT y_example.' )
 
-      ( ' CLASS y_example DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example. ' )
-      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example DEFINITION.' )
+      ( '   PUBLIC SECTION.' )
+      ( '     METHODS example.' )
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( ' CLASS y_example IMPLEMENTATION.' )
       ( '   METHOD example.' )
-      ( '     DATA prefer_insert_into_table TYPE TABLE OF string. ' )
+      ( '     DATA prefer_insert_into_table TYPE TABLE OF string.' )
       ( '     APPEND `example` TO prefer_insert_into_table.' )
       ( '   ENDMETHOD.' )
-      ( ' ENDCLASS. ' )
+      ( ' ENDCLASS.' )
     ).
 
   ENDMETHOD.
@@ -87,20 +87,20 @@ CLASS ltc_append_initial_line IMPLEMENTATION.
 
   METHOD get_code_with_issue.
     result = VALUE #(
-      ( ' REPORT y_example. ' )
+      ( ' REPORT y_example.' )
 
-      ( ' CLASS y_example DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example. ' )
-      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example DEFINITION.' )
+      ( '   PUBLIC SECTION.' )
+      ( '     METHODS example.' )
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( ' CLASS y_example IMPLEMENTATION.' )
       ( '   METHOD example.' )
-      ( '     DATA prefer_insert_into_table TYPE TABLE OF string. ' )
-      ( '     FIELD-SYMBOLS <example> TYPE string. ' )
+      ( '     DATA prefer_insert_into_table TYPE TABLE OF string.' )
+      ( '     FIELD-SYMBOLS <example> TYPE string.' )
       ( '     APPEND INITIAL LINE TO prefer_insert_into_table ASSIGNING <example>.' )
       ( '   ENDMETHOD.' )
-      ( ' ENDCLASS. ' )
+      ( ' ENDCLASS.' )
     ).
   ENDMETHOD.
 
@@ -115,24 +115,53 @@ CLASS ltc_append_lines_of IMPLEMENTATION.
 
   METHOD get_code_with_issue.
     result = VALUE #(
-      ( ' REPORT y_example. ' )
+      ( ' REPORT y_example.' )
 
-      ( ' CLASS y_example DEFINITION. ' )
-      ( '   PUBLIC SECTION. ' )
-      ( '     METHODS example. ' )
-      ( ' ENDCLASS. ' )
+      ( ' CLASS y_example DEFINITION.' )
+      ( '   PUBLIC SECTION.' )
+      ( '     METHODS example.' )
+      ( ' ENDCLASS.' )
 
-      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( ' CLASS y_example IMPLEMENTATION.' )
       ( '   METHOD example.' )
-      ( '     DATA prefer_insert_into_table TYPE TABLE OF string. ' )
-      ( '     DATA example_table TYPE TABLE OF string. ' )
+      ( '     DATA prefer_insert_into_table TYPE TABLE OF string.' )
+      ( '     DATA example_table TYPE TABLE OF string.' )
       ( '     APPEND LINES OF example_table TO prefer_insert_into_table.' )
       ( '   ENDMETHOD.' )
-      ( ' ENDCLASS. ' )
+      ( ' ENDCLASS.' )
     ).
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS ltc_append_sorted_by DEFINITION INHERITING FROM ltc_append_to FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_append_sorted_by IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example.' )
+
+      ( ' CLASS y_example DEFINITION.' )
+      ( '   PUBLIC SECTION.' )
+      ( '     METHODS example.' )
+      ( ' ENDCLASS.' )
+
+      ( ' CLASS y_example IMPLEMENTATION.' )
+      ( '   METHOD example.' )
+      ( '     DATA prefer_insert_into_table TYPE TABLE OF sflight.' )
+      ( '     DATA example_line TYPE sflight.' )
+      ( '     APPEND example_line TO prefer_insert_into_table SORTED BY fldate.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS.' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
 
 CLASS ltc_select DEFINITION INHERITING FROM ltc_append_to FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
