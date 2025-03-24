@@ -1,8 +1,0 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: code pal for ABAP
-Upstream-Contact: code pal for ABAP team (@SAP/code-pal-for-abap-team)
-Source: https://github.com/SAP/code-pal-for-abap
-
-Files: *
-Copyright: 2021 SAP SE or an SAP affiliate company and code pal for ABAP contributors
-License: Apache-2.0
