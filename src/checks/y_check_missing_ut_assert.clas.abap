@@ -23,8 +23,6 @@ CLASS y_check_missing_ut_assert IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    " As long as pseudo comment is not supported at unit test code, the option is deactivated
-*    settings-pseudo_comment                = '"#EC MISS_UT_ASSERT'.
     settings-disable_threshold_selection   = abap_true.
     settings-disable_on_testcode_selection = abap_true.
     settings-disable_on_prodcode_selection = abap_true.
