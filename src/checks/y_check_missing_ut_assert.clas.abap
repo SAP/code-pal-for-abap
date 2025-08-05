@@ -31,6 +31,7 @@ CLASS y_check_missing_ut_assert IMPLEMENTATION.
     settings-threshold                     = 0.
     settings-prio                          = c_warning.
     settings-documentation                 = |{ c_docs_path-checks }unit_test_missing_assert.md|.
+    settings-pseudo_comment                = '"#EC CI_MISS_ASSERT'.
 
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-class_definition )
                                         ( scan_struc_stmnt_type-method ) ).

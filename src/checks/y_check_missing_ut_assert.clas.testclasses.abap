@@ -51,11 +51,11 @@ CLASS local_test_class IMPLEMENTATION.
                       ( ' CLASS y_example_class DEFINITION FOR TESTING. ' )
                       ( '   PUBLIC SECTION. ' )
                       ( '   PROTECTED SECTION. ' )
-                      ( '     METHODS test FOR TESTING.  "#EC MISS_UT_ASSERT ' )
+                      ( '     METHODS test FOR TESTING.' )
                       ( ' ENDCLASS. ' )
 
                       ( ' CLASS y_example_class IMPLEMENTATION. ' )
-                      ( '   METHOD test. ' )
+                      ( '   METHOD test. "#EC CI_MISS_ASSERT ' )
                       ( '     RETURN. ' )
                       ( '   ENDMETHOD. ' )
                       ( ' ENDCLASS. ' ) ).
