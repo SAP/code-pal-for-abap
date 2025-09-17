@@ -61,7 +61,7 @@ CLASS y_check_max_nesting_depth IMPLEMENTATION.
     settings-pseudo_comment = '"#EC CI_NESTING' ##NO_TEXT.
     settings-documentation = |{ c_docs_path-checks }maximum-nesting-depth.md|.
 
-    set_check_message( 'Nesting depth must be lower than &2! (&1>=&2)' ).
+    set_check_message( 'Nesting depth should be lower than &2! (&1>=&2)' ).
   ENDMETHOD.
 
 

@@ -36,7 +36,7 @@ CLASS Y_CHECK_NUM_EXEC_STATEMENTS IMPLEMENTATION.
 
     add_obj_type( c_type_program ).
 
-    set_check_message( 'Number of executable statements must be lower than &2! (&1>=&2)' ).
+    set_check_message( 'Number of executable statements should be lower than &2! (&1>=&2)' ).
   ENDMETHOD.
 
 
