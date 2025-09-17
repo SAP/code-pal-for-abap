@@ -45,7 +45,7 @@ CLASS y_check_comment_usage IMPLEMENTATION.
                                         ( scan_struc_stmnt_type-function )
                                         ( scan_struc_stmnt_type-module ) ).
 
-    set_check_message( 'Percentage of comments must be lower than &3% of the productive code! (&2%>=&3%) (&1 lines found)' ).
+    set_check_message( 'Percentage of comments should be lower than &3% of the productive code! (&2%>=&3%) (&1 lines found)' ).
   ENDMETHOD.
 
 

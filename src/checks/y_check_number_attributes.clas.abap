@@ -38,7 +38,7 @@ CLASS y_check_number_attributes IMPLEMENTATION.
 
     relevant_structure_types = VALUE #( ).
 
-    set_check_message( 'Number of attributes must be lower than &2! (&1>=&2)' ).
+    set_check_message( 'Number of attributes should be lower than &2! (&1>=&2)' ).
   ENDMETHOD.
 
 

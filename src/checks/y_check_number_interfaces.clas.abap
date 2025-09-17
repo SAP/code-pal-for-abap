@@ -30,7 +30,7 @@ CLASS y_check_number_interfaces IMPLEMENTATION.
 
     relevant_structure_types = VALUE #( ).
 
-    set_check_message( 'Number of interfaces must be lower than &2! (&1>=&2)' ).
+    set_check_message( 'Number of interfaces should be lower than &2! (&1>=&2)' ).
   ENDMETHOD.
 
 

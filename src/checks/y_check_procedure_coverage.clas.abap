@@ -25,7 +25,7 @@ CLASS y_check_procedure_coverage IMPLEMENTATION.
     settings-ignore_pseudo_comments = abap_true.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
-    set_check_message( 'Procedure Coverage must be higher than &2%! (&1%<=&2%)' ).
+    set_check_message( 'Procedure coverage should be higher than &2%! (&1%<=&2%)' ).
   ENDMETHOD.
 
 

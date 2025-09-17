@@ -25,7 +25,7 @@ CLASS y_check_branch_coverage IMPLEMENTATION.
     settings-ignore_pseudo_comments = abap_true.
     settings-documentation = |{ c_docs_path-checks }unit-test-coverages.md|.
 
-    set_check_message( 'Branch Coverage must be higher than &2%! (&1%<=&2%)' ).
+    set_check_message( 'Branch Coverage should be higher than &2%! (&1%<=&2%)' ).
   ENDMETHOD.
 
 
