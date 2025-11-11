@@ -120,7 +120,7 @@ CLASS y_check_base DEFINITION PUBLIC ABSTRACT
                                    RAISING cx_sy_range_out_of_bounds.
 
   PRIVATE SECTION.
-    METHODS do_attributes_exist  RETURNING VALUE(result) TYPE abap_bool.
+    METHODS profile_is_active_for_user  RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS instantiate_objects.
 
@@ -172,7 +172,8 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     settings-documentation = |{ c_docs_path-main }check_documentation.md|.
     settings-ignore_pseudo_comments = abap_false.
 
-    has_attributes = do_attributes_exist( ).
+    has_attributes = abap_true.
+    attributes_ok = abap_true.
 
     relevant_statement_types = VALUE #( ( scan_struc_stmnt_type-form )
                                         ( scan_struc_stmnt_type-method )
@@ -244,14 +245,13 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD do_attributes_exist.
+  METHOD profile_is_active_for_user.
     TRY.
         DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
-        attributes_ok = xsdbool( profiles IS INITIAL ).
+        result = xsdbool( profiles IS NOT INITIAL ).
       CATCH ycx_entry_not_found.
-        attributes_ok = abap_true.
+        result = abap_true.
     ENDTRY.
-    result = attributes_ok.
   ENDMETHOD.
 
 
@@ -355,6 +355,11 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
   METHOD if_ci_test~query_attributes.
     DATA sci_attributes TYPE sci_atttab.
     DATA message(72) TYPE c.
+
+    if profile_is_active_for_user( ).
+      message 'Settings cannot be maintained while a profile is active for the current user'(prf) type 'I'.
+      return.
+    endif.
 
     READ TABLE check_configurations INTO DATA(check_configuration) INDEX 1.
     IF sy-subrc <> 0 AND use_default_attributes = abap_true.
@@ -535,7 +540,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
     ENDIF.
 
     " Profile
-    IF has_attributes = abap_false.
+    IF profile_is_active_for_user( ).
       TRY.
           check_configurations = clean_code_manager->read_check_customizing( myname ).
         CATCH ycx_no_check_customizing.
