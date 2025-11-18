@@ -250,7 +250,7 @@ CLASS Y_CHECK_BASE IMPLEMENTATION.
         DATA(profiles) = y_profile_manager=>create( )->select_profiles( sy-uname ).
         result = xsdbool( profiles IS NOT INITIAL ).
       CATCH ycx_entry_not_found.
-        result = abap_true.
+        result = abap_false.
     ENDTRY.
   ENDMETHOD.
 

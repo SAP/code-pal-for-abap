@@ -356,7 +356,6 @@ CLASS y_profile_manager IMPLEMENTATION.
     LOOP AT result ASSIGNING FIELD-SYMBOL(<line>) WHERE username <> username AND is_standard = abap_true.
       <line>-username = username.
     ENDLOOP.
-    UNASSIGN <line>.
   ENDMETHOD.
 
 
