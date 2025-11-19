@@ -61,3 +61,4 @@
 - [Text Assembly](checks/text-assembly.md)
 - [Unit-Test Coverages (Statement, Branch and Procedure)](checks/unit-test-coverages.md)
 - [Unit-Test Assert Validator](checks/unit_test_assert.md)
+- [Unit-Test Missing Assert](checks/unit_test_missing_assert.md)
