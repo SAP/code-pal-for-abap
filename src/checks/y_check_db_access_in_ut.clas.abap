@@ -29,6 +29,8 @@ CLASS y_check_db_access_in_ut DEFINITION PUBLIC INHERITING FROM y_check_base CRE
                  qsql_cl TYPE char40 VALUE 'CL_OSQL_TEST_ENVIRONMENT',
                  cds_if  TYPE char40 VALUE 'IF_CDS_TEST_ENVIRONMENT',
                  cds_cl  TYPE char40 VALUE 'CL_CDS_TEST_ENVIRONMENT',
+                 amdp_if TYPE char40 VALUE 'IF_AMDP_TEST_ENVIRONMENT',
+                 amdp_cl TYPE char40 VALUE 'CL_AMDP_TEST_ENVIRONMENT',
                END OF framework.
 
     CONSTANTS: BEGIN OF keys,
@@ -172,11 +174,13 @@ CLASS Y_CHECK_DB_ACCESS_IN_UT IMPLEMENTATION.
     LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>)
     FROM structure_wa-stmnt_from TO structure_wa-stmnt_to.
       LOOP AT ref_scan->tokens TRANSPORTING NO FIELDS
-      FROM <statement>-from TO <statement>-to
-      WHERE str = framework-qsql_if
-      OR str = framework-qsql_cl
-      OR str = framework-cds_if
-      OR str = framework-cds_cl.
+        FROM <statement>-from TO <statement>-to
+          WHERE str = framework-qsql_if
+            OR str = framework-qsql_cl
+            OR str = framework-cds_if
+            OR str = framework-cds_cl
+            OR str = framework-amdp_if
+            OR str = framework-amdp_cl.
         result = abap_true.
         RETURN.
       ENDLOOP.
