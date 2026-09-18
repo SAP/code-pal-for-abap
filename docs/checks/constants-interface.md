@@ -4,7 +4,7 @@
 
 ### What is the intent of the check?
 
-This check is meant to prevent the creation of interfaces whose sole purpose is to define constants. You should usually prefer [enumeration classes](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-enumeration-classes-to-constants-interfaces) to interfaces that only declare constants.
+This check is meant to prevent the creation of interfaces whose sole purpose is to define constants. You should usually prefer [enumeration classes](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md#prefer-enum-to-constants-interfaces) to interfaces that only declare constants.
 
 ### How does the check work?
 
