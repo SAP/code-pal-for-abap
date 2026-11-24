@@ -69,6 +69,37 @@ ENDCLASS.
 
 
 
+CLASS ltc_classic_exceptions DEFINITION INHERITING FROM ltc_create_object FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_classic_exceptions IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example IMPLEMENTATION. ' )
+      ( '   METHOD example.' )
+      ( '     DATA alv TYPE REF TO cl_gui_alv_grid. ' )
+      ( '     CREATE OBJECT alv' )
+      ( '       EXPORTING i_parent = container' )
+      ( '       EXCEPTIONS error_cntl_create = 1 others = 5. ' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
 CLASS ltc_dynamic_object_with_param DEFINITION INHERITING FROM ltc_create_object FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_code_without_issue REDEFINITION.

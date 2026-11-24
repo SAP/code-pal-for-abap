@@ -39,11 +39,21 @@ CLASS y_check_prefer_new_to_crt_obj IMPLEMENTATION.
         )
         ELSE abap_false ).
     DATA(has_dynamic_typing) = xsdbool( next1( 'TYPE' ) CA '()' ).
+    DATA(has_exceptions) = abap_false.
+    DATA(token_index) = statement-from.
+    WHILE token_index <= statement-to.
+      IF get_token_abs( token_index ) = 'EXCEPTIONS'.
+        has_exceptions = abap_true.
+        EXIT.
+      ENDIF.
+      token_index = token_index + 1.
+    ENDWHILE.
 
     IF has_keyword = abap_true AND
        is_rap_testing_call = abap_false AND
        is_ole_call = abap_false AND
-       has_dynamic_typing = abap_false.
+       has_dynamic_typing = abap_false AND
+       has_exceptions = abap_false.
       DATA(check_configuration) = detect_check_configuration( statement ).
 
       raise_error( statement_level = statement-level
