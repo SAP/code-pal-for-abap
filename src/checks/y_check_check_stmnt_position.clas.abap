@@ -14,7 +14,6 @@ CLASS y_check_check_stmnt_position DEFINITION PUBLIC INHERITING FROM y_check_bas
                                RETURNING VALUE(result) TYPE abap_bool.
 
     METHODS is_check_in_loop IMPORTING structure     TYPE sstruc
-                                       check         TYPE sstmnt
                              RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
@@ -42,8 +41,7 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
     CHECK has_wrong_position( structure = structure
                               check = statement ) = abap_true.
 
-    CHECK is_check_in_loop( structure = structure
-                            check = statement ) = abap_false.
+    CHECK is_check_in_loop( structure ) = abap_false.
 
     DATA(check_configuration) = detect_check_configuration( statement ).
 
@@ -89,14 +87,21 @@ CLASS y_check_check_stmnt_position IMPLEMENTATION.
 
 
   METHOD is_check_in_loop.
-    DATA(scope) = ref_scan->statements[ structure-stmnt_from ].
+    DATA(current) = structure.
 
-    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>)
-    FROM scope-from TO check-from
-    WHERE str = 'LOOP'
-    OR str = 'ENDLOOP'.
-      result = xsdbool( <token>-str = 'LOOP' ).
-    ENDLOOP.
+    DO.
+      DATA(scope) = ref_scan->statements[ current-stmnt_from ].
+      DATA(token) = get_token_abs( scope-from ).
+      IF token = 'LOOP' OR token = 'DO' OR token = 'WHILE'.
+        result = abap_true.
+        RETURN.
+      ENDIF.
+
+      IF current-back <= 0.
+        RETURN.
+      ENDIF.
+      current = ref_scan->structures[ current-back ].
+    ENDDO.
   ENDMETHOD.
 
 ENDCLASS.
