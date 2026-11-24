@@ -204,6 +204,138 @@ CLASS ltc_in_loop IMPLEMENTATION.
 ENDCLASS.
 
 
+CLASS ltc_after_nested_loop DEFINITION INHERITING FROM ltc_before_loop FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_after_nested_loop IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example.' )
+      ( '     DATA outer TYPE TABLE OF tadir.' )
+      ( '     DATA inner TYPE TABLE OF tadir.' )
+      ( '     LOOP AT outer ASSIGNING FIELD-SYMBOL(<outer>).' )
+      ( '       LOOP AT inner ASSIGNING FIELD-SYMBOL(<inner>).' )
+      ( '       ENDLOOP.' )
+      ( '       CHECK <outer>-delflag = abap_true.' )
+      ( '     ENDLOOP.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_in_case_in_loop DEFINITION INHERITING FROM ltc_before_loop FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_in_case_in_loop IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example.' )
+      ( '     DATA tadir TYPE TABLE OF tadir.' )
+      ( '     LOOP AT tadir ASSIGNING FIELD-SYMBOL(<tadir>).' )
+      ( '       CASE <tadir>-delflag.' )
+      ( '         WHEN abap_true.' )
+      ( '           CHECK <tadir>-devclass = ''$TMP''.' )
+      ( '       ENDCASE.' )
+      ( '     ENDLOOP.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_in_case_in_do DEFINITION INHERITING FROM ltc_before_loop FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_in_case_in_do IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example.' )
+      ( '     DO 4 TIMES.' )
+      ( '       DO 6 TIMES.' )
+      ( '         CASE sy-index.' )
+      ( '           WHEN 1.' )
+      ( '             CHECK sy-index = 1.' )
+      ( '           WHEN OTHERS.' )
+      ( '         ENDCASE.' )
+      ( '       ENDDO.' )
+      ( '     ENDDO.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_in_while DEFINITION INHERITING FROM ltc_before_loop FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_in_while IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( ' REPORT y_example. ' )
+
+      ( ' CLASS y_example_class DEFINITION. ' )
+      ( '   PUBLIC SECTION. ' )
+      ( '     METHODS example. ' )
+      ( ' ENDCLASS. ' )
+
+      ( ' CLASS y_example_class IMPLEMENTATION. ' )
+      ( '   METHOD example.' )
+      ( '     DATA counter TYPE i.' )
+      ( '     WHILE counter < 4.' )
+      ( '       counter = counter + 1.' )
+      ( '       CHECK counter = 2.' )
+      ( '     ENDWHILE.' )
+      ( '   ENDMETHOD.' )
+      ( ' ENDCLASS. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
 CLASS ltc_inline_data_declaration DEFINITION INHERITING FROM y_unit_test_base FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
   PROTECTED SECTION.
     METHODS get_cut REDEFINITION.
