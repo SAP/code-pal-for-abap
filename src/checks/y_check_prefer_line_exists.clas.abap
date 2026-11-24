@@ -9,6 +9,9 @@ CLASS y_check_prefer_line_exists DEFINITION PUBLIC INHERITING FROM y_check_base 
     METHODS:
       get_valid_last_token  IMPORTING last_token              TYPE stokesx
                             RETURNING VALUE(valid_last_token) TYPE abap_bool,
+      has_non_eq_condition  IMPORTING statement_from           TYPE i
+                                      statement_to             TYPE i
+                            RETURNING VALUE(result)            TYPE abap_bool,
       get_valid_first_token IMPORTING first_token              TYPE string
                             RETURNING VALUE(valid_first_token) TYPE abap_bool.
 
@@ -56,6 +59,11 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    IF has_non_eq_condition( statement_from = statement-from
+                             statement_to = statement-to ).
+      RETURN.
+    ENDIF.
+
     IF keyword = 'LOOP'.
       DATA(loop_structure) = ref_scan->structures[ stmnt_from = index type = scan_struc_type-iteration ].
       LOOP AT ref_scan->statements ASSIGNING FIELD-SYMBOL(<statement>) FROM loop_structure-stmnt_from TO loop_structure-stmnt_to.
@@ -77,6 +85,22 @@ CLASS y_check_prefer_line_exists IMPLEMENTATION.
                  statement_index = index
                  statement_from = statement-from
                  check_configuration = check_configuration ).
+  ENDMETHOD.
+
+  METHOD has_non_eq_condition.
+    " A table expression only supports equality on its keys, so conditions
+    " with any other operator cannot be rewritten to LINE_EXISTS or LINE_INDEX.
+    LOOP AT ref_scan->tokens ASSIGNING FIELD-SYMBOL(<token>) FROM statement_from TO statement_to.
+      IF <token>-type = scan_token_type-literal.
+        CONTINUE.
+      ENDIF.
+      IF <token>-str = '<>' OR <token>-str = '<' OR <token>-str = '>' OR <token>-str = '<=' OR <token>-str = '>='
+      OR <token>-str = 'NE' OR <token>-str = 'LT' OR <token>-str = 'GT' OR <token>-str = 'LE' OR <token>-str = 'GE'
+      OR <token>-str = 'OR' OR <token>-str = 'NOT' OR <token>-str = 'BETWEEN' OR <token>-str = 'IS'.
+        result = abap_true.
+        RETURN.
+      ENDIF.
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD get_valid_first_token.

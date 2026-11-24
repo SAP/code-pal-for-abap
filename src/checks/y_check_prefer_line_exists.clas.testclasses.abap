@@ -188,3 +188,78 @@ CLASS ltc_loop_with_content IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+
+CLASS ltc_loop_non_eq_key DEFINITION INHERITING FROM ltc_loop_at FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS: get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_loop_non_eq_key IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA tadir TYPE TABLE OF tadir. ' )
+      ( '   DATA exists TYPE abap_bool. ' )
+
+      ( |   LOOP AT tadir TRANSPORTING NO FIELDS WHERE object = 'CLAS' AND obj_name <> 'Y_EXAMPLE'. | )
+      ( '     exists = abap_true. ' )
+      ( '     EXIT. ' )
+      ( '   ENDLOOP. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_loop_non_eq_ne DEFINITION INHERITING FROM ltc_loop_at FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS: get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_loop_non_eq_ne IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA tadir TYPE TABLE OF tadir. ' )
+      ( '   DATA exists TYPE abap_bool. ' )
+
+      ( |   LOOP AT tadir TRANSPORTING NO FIELDS WHERE obj_name NE 'Y_EXAMPLE'. | )
+      ( '     exists = abap_true. ' )
+      ( '     EXIT. ' )
+      ( '   ENDLOOP. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS ltc_loop_or_condition DEFINITION INHERITING FROM ltc_loop_at FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
+  PROTECTED SECTION.
+    METHODS: get_code_without_issue REDEFINITION.
+ENDCLASS.
+
+CLASS ltc_loop_or_condition IMPLEMENTATION.
+
+  METHOD get_code_without_issue.
+    result = VALUE #(
+      ( 'REPORT y_example. ' )
+
+      ( ' START-OF-SELECTION.      ' )
+      ( '   DATA tadir TYPE TABLE OF tadir. ' )
+      ( '   DATA exists TYPE abap_bool. ' )
+
+      ( |   LOOP AT tadir TRANSPORTING NO FIELDS WHERE object = 'CLAS' OR object = 'INTF'. | )
+      ( '     exists = abap_true. ' )
+      ( '     EXIT. ' )
+      ( '   ENDLOOP. ' )
+    ).
+  ENDMETHOD.
+
+ENDCLASS.
